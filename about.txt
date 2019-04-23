@@ -13,3 +13,13 @@ in this way, they are also tested in the scheme of a
 couple of Christlike attributes. Namely: obedience (there
 will be ppl in the game who tell the player to not do
 something)
+
+--Controls--
+For this game, in order to play on keyboard (the standard
+way that at least I'LL play this thing), because it's a
+platformer, we will use:
+-wasd for movement				// Will be a joystick in the virtual controller
+-j for run or action			// Will be "Button1"
+-k for action (prob. jump)		// Will be "Button2"
+
+

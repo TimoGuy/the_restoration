@@ -13,6 +13,10 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
+					<Add directory="include/Players/" />
+					<Add directory="include/Rooms/" />
+					<Add directory="include/Shape" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +26,10 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
+					<Add directory="include/Players/" />
+					<Add directory="include/Rooms/" />
+					<Add directory="include/Shape" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -31,7 +39,23 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Linker>
+			<Add option="-lSDL2" />
+		</Linker>
 		<Unit filename="about.txt" />
+		<Unit filename="include/GameLoop.h" />
+		<Unit filename="include/Object.h" />
+		<Unit filename="include/Players/TestGameObj.h" />
+		<Unit filename="include/Rooms/Room.h" />
+		<Unit filename="include/Rooms/TestRoom.h" />
+		<Unit filename="include/Shape/Quad.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/GameLoop.cpp" />
+		<Unit filename="src/Object.cpp" />
+		<Unit filename="src/Players/TestGameObj.cpp" />
+		<Unit filename="src/Rooms/Room.cpp" />
+		<Unit filename="src/Rooms/TestRoom.cpp" />
+		<Unit filename="src/Shape/Quad.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
