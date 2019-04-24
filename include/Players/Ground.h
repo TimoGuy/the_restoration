@@ -1,6 +1,6 @@
 #pragma once
 #include <Object.h>
-
+#include "Quad.h"
 
 class Ground : public Object
 {
@@ -9,9 +9,10 @@ class Ground : public Object
         virtual ~Ground();
 
         void Update() {}
-        void Render() {}
+        void Render();
 
     protected:
 
     private:
+    	Quad* image;
 };
