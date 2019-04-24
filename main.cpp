@@ -3,10 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include "GameLoop.h"
-
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 576
-#define TITLE "the_restoration"
+#include "defs.h"
 
 SDL_Window* window;
 SDL_GLContext glContext;

@@ -14,7 +14,7 @@ class ObjectFactory
     public:
         static ObjectFactory& GetObjectFactory();    // SINGLETON!!!! BANZAI!!!
 
-        Object* Build(std::string const& key) const;
+        Object* Build(std::string const& key, int gx, int gy) const;
 
     private:
 

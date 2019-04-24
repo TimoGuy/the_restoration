@@ -5,7 +5,7 @@
 class Ground : public Object
 {
     public:
-        Ground();
+        Ground(int gx, int gy);
         virtual ~Ground();
 
         void Update() {}

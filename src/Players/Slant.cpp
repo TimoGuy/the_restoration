@@ -1,7 +1,7 @@
 #include "Slant.h"
 #include <stdio.h>
 
-Slant::Slant()
+Slant::Slant(int gx, int gy) : Object(gx, gy)
 {
     //ctor
     printf("Slant built!\n");

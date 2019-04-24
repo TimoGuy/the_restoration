@@ -7,13 +7,14 @@
 class Object
 {
     public:
-        Object();
+        Object(int gx, int gy);
         virtual ~Object();
 
         virtual void Update() = 0;
         virtual void Render() = 0;
 
     protected:
+        float x, y;
 
     private:
 };

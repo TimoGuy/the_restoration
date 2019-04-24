@@ -1,7 +1,7 @@
 #include "Ground.h"
 #include <stdio.h>
 
-Ground::Ground()
+Ground::Ground(int gx, int gy) : Object(gx, gy)
 {
     //
     printf("Ground built!\n");

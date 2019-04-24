@@ -4,7 +4,7 @@
 class Slant : public Object
 {
     public:
-        Slant();
+        Slant(int gx, int gy);
         virtual ~Slant();
 
         void Update() {}

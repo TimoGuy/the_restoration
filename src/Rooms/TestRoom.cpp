@@ -119,7 +119,7 @@ void TestRoom::SwitchLevelIO(std::string name)
             ss[1].str() + std::string(",") +
             ss[2].str();
 
-        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str());
+        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % width), (int)(i / width));
         if (_new != NULL)
             gameObjects.push_back(_new);        // Adds the returned built object!
 

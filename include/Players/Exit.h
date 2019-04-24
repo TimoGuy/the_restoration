@@ -5,7 +5,7 @@
 class Exit : public Object
 {
     public:
-        Exit();
+        Exit(int gx, int gy);
         virtual ~Exit();
 
         void Update() {}

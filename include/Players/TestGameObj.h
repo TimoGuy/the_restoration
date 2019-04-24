@@ -6,7 +6,7 @@
 class TestGameObj : public Object
 {
     public:
-        TestGameObj();
+        TestGameObj(int gx, int gy);
         virtual ~TestGameObj();
 
         void Update();
@@ -16,7 +16,6 @@ class TestGameObj : public Object
 
     private:
     	Quad* image;
-    	float x, y;
 
 //    	static const bool registeredObj = ObjectFactory.GetObjectFactory().Register("Bar", objectBuilder<TestGameObj>);
 };

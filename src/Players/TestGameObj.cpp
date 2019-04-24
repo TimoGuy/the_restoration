@@ -2,12 +2,11 @@
 #include <stdio.h>
 #include "InputManager.h"
 
-
-TestGameObj::TestGameObj()
+TestGameObj::TestGameObj(int gx, int gy) : Object(gx, gy)
 {
     // Make image
     image = new Quad(32, 48);
-    printf("Player built!\n");
+    printf("Player built! at %i,%i\n", gx, gy);
 }
 
 TestGameObj::~TestGameObj()
