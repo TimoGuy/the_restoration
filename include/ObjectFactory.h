@@ -12,7 +12,7 @@ class Object;
 class ObjectFactory
 {
     public:
-        ObjectFactory& GetObjectFactory();    // SINGLETON!!!! BANZAI!!!
+        static ObjectFactory& GetObjectFactory();    // SINGLETON!!!! BANZAI!!!
 
         Object* Build(std::string const& key) const;
 

@@ -7,6 +7,7 @@ TestGameObj::TestGameObj()
 {
     // Make image
     image = new Quad(32, 48);
+    printf("Player built!\n");
 }
 
 TestGameObj::~TestGameObj()

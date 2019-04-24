@@ -4,6 +4,7 @@
 #include "Object.h"
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 
 // Hopefully this is where 90% of the game
 // will happen! Load a file via IO and then go!
@@ -22,7 +23,7 @@ class TestRoom : public Room
     protected:
 
     private:
-        Object* player;
+        std::vector<Object*> gameObjects;
 
 
         // Level-loading
