@@ -41,17 +41,30 @@
 		</Compiler>
 		<Linker>
 			<Add option="-lSDL2" />
+			<Add option="-lGL" />
+			<Add option="-lGLEW" />
+			<Add option="-I /home/timo/workspace/boost_1_70_0" />
 		</Linker>
 		<Unit filename="about.txt" />
 		<Unit filename="include/GameLoop.h" />
+		<Unit filename="include/InputManager.h" />
+		<Unit filename="include/Lib/Texture.h" />
+		<Unit filename="include/Lib/stb_image.h" />
 		<Unit filename="include/Object.h" />
+		<Unit filename="include/ObjectFactory.h" />
 		<Unit filename="include/Players/TestGameObj.h" />
 		<Unit filename="include/Rooms/Room.h" />
 		<Unit filename="include/Rooms/TestRoom.h" />
 		<Unit filename="include/Shape/Quad.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/GameLoop.cpp" />
+		<Unit filename="src/InputManager.cpp" />
+		<Unit filename="src/Lib/Texture.cpp" />
+		<Unit filename="src/Lib/stb_image.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/Object.cpp" />
+		<Unit filename="src/ObjectFactory.cpp" />
 		<Unit filename="src/Players/TestGameObj.cpp" />
 		<Unit filename="src/Rooms/Room.cpp" />
 		<Unit filename="src/Rooms/TestRoom.cpp" />

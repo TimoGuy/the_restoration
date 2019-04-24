@@ -27,7 +27,7 @@ Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)
     }
 
     // Generate mipmaps!!!!! (req. glew.h)
-    glGenerateMipmap(GL_TEXTURE_2D);
+//    glGenerateMipmap(GL_TEXTURE_2D);          // TODO go back and update the opengl 1.2 to glew!!! Then enable this!!!
 
     // Use mipmaps and enable texture clamping
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

@@ -6,6 +6,15 @@ Game created by Timothy Bennett
 Started at 			2019/04/18 22:00
 Alpha reached at 	20
 
+
+
+
+
+
+
+
+
+
 --About the Game--
 Most games are skill-based. This is a game that is so,
 however there is a twist: not only is the player tested
@@ -13,6 +22,15 @@ in this way, they are also tested in the scheme of a
 couple of Christlike attributes. Namely: obedience (there
 will be ppl in the game who tell the player to not do
 something)
+
+
+
+
+
+
+
+
+
 
 --Controls--
 For this game, in order to play on keyboard (the standard
@@ -23,3 +41,56 @@ platformer, we will use:
 -k for action (prob. jump)		// Will be "Button2"
 
 
+
+
+
+
+
+
+
+
+
+--Level Editor--
+Make a png, and if it's special, start the file name w/
+"s_%%%%_" w/ %%%% being a number indicating which special it is,
+but other than that, you can put anything you want!*
+(NOTE: THE LAST SECTION OF THE FILENAME SHOULD BE THE 'n_' section)
+
+If there's a door (which there will definitely be one),
+you can add (at the beginning) "e_%%%%_" w/ %%%% representing
+the name of the level. You can add as many exits you want, just
+keep in mind the order is found in the pixels as well! (1 px for
+the exit). 
+
+
+
+*This is the naming scheme:
+
+EXAMPLE: s_2_e_jojos_e_unity_n_hawsoo.png
+
+So here we have:
+-a SPECIAL #2 (the level is modified by the internal
+code there, eh),
+-2 exits, the first one being to the level "jojos",
+and the second leading to the level "unity"
+-and finally, the name of the level is a one-word
+"hawsoo"... the level name would have to be one-word
+I'd imagine
+
+
+LEVEL EDITOR KEY
+-Note: I tried making a factory, but if you want to add a new object,
+make sure to register it, hard-coded in ObjectFactory.cpp
+
+r,g,b
+255,216,0 (Yellow = player start position if respawning (has only 1))
+0,0,0 (Black = ground)
+38,127,0 (Drk Green = exit)
+
+160,160,160 (Gray = slant (may be hard to implement, since there needs
+to be some neighbor calculations!!!))
+
+255,255,255 (White = nothing)
+
+--Tech--
+This program uses SDL2, OpenGL, (will use) GLEW, and dirent.h

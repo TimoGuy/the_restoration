@@ -1,4 +1,8 @@
 #pragma once
+#include "ObjectFactory.h"
+
+// Every object should be able to be inputted
+// into the level editor (mspaint)
 
 class Object
 {
@@ -13,3 +17,15 @@ class Object
 
     private:
 };
+
+/*
+
+ONEGAI!!!!!!!
+Please, for the sake of the level editor IO,
+Add any objects you make into the factory so
+it can read it!
+
+static const bool registeredBar = GetFooFactory().Register("Bar", fooBuilder<Bar>);
+
+
+*/

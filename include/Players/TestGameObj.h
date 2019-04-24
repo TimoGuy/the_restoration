@@ -17,4 +17,6 @@ class TestGameObj : public Object
     private:
     	Quad* image;
     	float x, y;
+
+//    	static const bool registeredObj = ObjectFactory.GetObjectFactory().Register("Bar", objectBuilder<TestGameObj>);
 };

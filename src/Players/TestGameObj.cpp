@@ -19,7 +19,7 @@ void TestGameObj::Update()
 	// Adjust according to input
 	x += InputManager::Instance().x();
 	y += InputManager::Instance().y();
-	printf("%f     %f\n", x, y);
+	// printf("%f     %f\n", x, y);
 }
 
 void TestGameObj::Render()
