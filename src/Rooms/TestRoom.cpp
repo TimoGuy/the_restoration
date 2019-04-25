@@ -8,6 +8,8 @@
 #include "ObjectFactory.h"
 #include <iterator>
 #include <sstream>
+#include <SDL2/SDL_opengl.h>
+#include <algorithm>
 
 TestRoom::TestRoom()
 {
@@ -27,9 +29,15 @@ TestRoom::TestRoom()
 
     SwitchLevelIO("testlvl");
 
-
-
-
+    for (int i = 0; i < gameObjects.size(); i++)
+    {
+        // Look for the player!!!
+        if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
+        {
+            camFocusObj = gameObjects.at(i);
+            break;
+        }
+    }
 
 
 
@@ -55,15 +63,61 @@ void TestRoom::Update()
         gameObjects.at(it)->Update();
     }
 //    player->Update();
+
+
+
+
+
+
+
+
+
+    // Update camera
+    camX = camFocusObj->getX() - (SCREEN_WIDTH / 2);
+    camY = camFocusObj->getY() - (SCREEN_HEIGHT / 2);
+
+    // Cap it to the center if it's too large
+    bool lockX = false, lockY = false;
+    int w = SCREEN_WIDTH / GRID_SIZE,
+        h = SCREEN_HEIGHT / GRID_SIZE;
+    if (w >= gWidth)
+    {
+        lockX = true;
+        camX = ((gWidth * GRID_SIZE) - SCREEN_WIDTH) / 2;
+    }
+    if (h >= gHeight)
+    {
+        lockY = true;
+        camY = ((gHeight * GRID_SIZE) - SCREEN_HEIGHT) / 2;
+    }
+
+
+
+    // Clamp it to the edges
+    if (!lockX)
+    {
+        camX = std::max(0, std::min((int)camX + SCREEN_WIDTH, gWidth * GRID_SIZE));
+    }
+    if (!lockY)
+    {
+        camY = std::max(0, std::min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
+    }
 }
 
 void TestRoom::Render()
 {
+    // Set the camera
+    glTranslatef(-camX, -camY, 0.0f);
+
+    // Pry a render for everyone!
     for (int it = 0; it != gameObjects.size(); ++it)
     {
         gameObjects.at(it)->Render();
     }
 //    player->Render();
+
+    // Undo the camera
+    glTranslatef(camX, camY, 0.0f);
 }
 
 
@@ -84,10 +138,10 @@ void TestRoom::SwitchLevelIO(std::string name)
 
     // Load a level
     int comp;
-    int width, height;
+//    width, height;        // These are member variables now
     const std::string& fileName = currentDir + levelName;
     int req = STBI_rgb;
-    unsigned char* imgData = stbi_load(fileName.c_str(), &width, &height, &comp, req);
+    unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
 
     if (imgData == NULL)
     {
@@ -103,7 +157,7 @@ void TestRoom::SwitchLevelIO(std::string name)
     //
     // convert the pixels to objects yall!
     int i = 0;
-    while (i < width * height)
+    while (i < gWidth * gHeight)
     {
         // We'll assume it's STBI_rgb
         std::string out_string;
@@ -119,7 +173,7 @@ void TestRoom::SwitchLevelIO(std::string name)
             ss[1].str() + std::string(",") +
             ss[2].str();
 
-        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % width), (int)(i / width));
+        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth));
         if (_new != NULL)
             gameObjects.push_back(_new);        // Adds the returned built object!
 

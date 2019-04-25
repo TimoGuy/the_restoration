@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include "defs.h"
 
 // Hopefully this is where 90% of the game
 // will happen! Load a file via IO and then go!
@@ -30,4 +31,9 @@ class TestRoom : public Room
         std::string currentLvl;
 
         static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename), and the directory of the levels!
+
+        // For the camera
+        int gWidth, gHeight;        // The grid's width and height
+        float camX = 0, camY = 0;   // Make this the same coords as the player!
+        Object* camFocusObj;        // This is the pointer to the player, eh!
 };
