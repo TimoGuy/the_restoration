@@ -92,5 +92,14 @@ to be some neighbor calculations!!!))
 
 255,255,255 (White = nothing)
 
+
+
+
+
+
 --Tech--
 This program uses SDL2, OpenGL, (will use) GLEW, and dirent.h
+
+
+Okay, so about Quad.h/.cpp, this is for drawing images only! If
+you want a bounding box, use Object.h's "BoundBox" struct right there!

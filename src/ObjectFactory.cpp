@@ -52,7 +52,7 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
 
 
 
-Object* ObjectFactory::Build(std::string const& key, int gx, int gy) const
+Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) const
 {
     // I apologize... this is all hard-coded in!
     switch ((*s_mapStringValues)[key.c_str()])
@@ -62,19 +62,19 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy) const
         break;
 
     case evPlayer:       // The Player!!!
-        return new TestGameObj(gx, gy);
+        return new TestGameObj(gx, gy, rm);
         break;
 
     case evGround:           // Ground
-        return new Ground(gx, gy);
+        return new Ground(gx, gy, rm);
         break;
 
     case evExit:        // Exits (doors)
-        return new Exit(gx, gy);
+        return new Exit(gx, gy, rm);
         break;
 
     case evSlant:     // Slants (try to pass something in to calculate the slant eh!
-        return new Slant(gx, gy);
+        return new Slant(gx, gy, rm);
         break;
 
     default:

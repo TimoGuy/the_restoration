@@ -1,13 +1,25 @@
 #pragma once
 #include "ObjectFactory.h"
+#include "Room.h"
+#include "Quad.h"
 
 // Every object should be able to be inputted
 // into the level editor (mspaint)
 
+struct BoundBox
+{
+    float x;
+    float y;
+    float width;
+    float height;
+};
+
+class Room;
+
 class Object
 {
     public:
-        Object(int gx, int gy);
+        Object(int gx, int gy, Room* rm);
         virtual ~Object();
 
         virtual void Update() = 0;
@@ -16,8 +28,11 @@ class Object
         float getX() { return x; }
         float getY() { return y; }
 
+        virtual bool IsColliding(BoundBox* box) = 0;
+
     protected:
         float x, y;
+        Room* room;
 
     private:
 };

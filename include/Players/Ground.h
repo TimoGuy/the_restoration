@@ -5,11 +5,13 @@
 class Ground : public Object
 {
     public:
-        Ground(int gx, int gy);
+        Ground(int gx, int gy, Room* rm);
         virtual ~Ground();
 
         void Update() {}
         void Render();
+
+        bool IsColliding(BoundBox* box);
 
     protected:
 

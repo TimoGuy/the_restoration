@@ -27,7 +27,8 @@ TestRoom::TestRoom()
 
 
 
-    SwitchLevelIO("testlvl");
+    SwitchLevelIO("jojo");
+
 
     for (int i = 0; i < gameObjects.size(); i++)
     {
@@ -39,6 +40,7 @@ TestRoom::TestRoom()
         }
     }
 
+    // Make the collision map!
 
 
 
@@ -149,7 +151,13 @@ void TestRoom::SwitchLevelIO(std::string name)
         return;
     }
 
-
+    // Initialize the Collision Map
+    collisionMap = new Object*[gWidth * gHeight];
+    for (int uu = 0; uu < gWidth * gHeight; uu++)
+    {
+//        printf("%i\n", collisionMap[uu]);
+        collisionMap[uu] = NULL;
+    }
 
     // Yeah so hopefully you kept 'req' at STBI_rgb,
     // bc we're gonna use the 3 values to get the objects
@@ -173,7 +181,7 @@ void TestRoom::SwitchLevelIO(std::string name)
             ss[1].str() + std::string(",") +
             ss[2].str();
 
-        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth));
+        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
         if (_new != NULL)
             gameObjects.push_back(_new);        // Adds the returned built object!
 

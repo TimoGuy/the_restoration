@@ -33,7 +33,6 @@ class TestRoom : public Room
         static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename), and the directory of the levels!
 
         // For the camera
-        int gWidth, gHeight;        // The grid's width and height
         float camX = 0, camY = 0;   // Make this the same coords as the player!
         Object* camFocusObj;        // This is the pointer to the player, eh!
 };
