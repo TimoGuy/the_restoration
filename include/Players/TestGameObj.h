@@ -29,6 +29,4 @@ class TestGameObj : public Object
         bool isOnGround = false;
         float nerfer = 0;
         float highestHsp = 0;
-
-//    	static const bool registeredObj = ObjectFactory.GetObjectFactory().Register("Bar", objectBuilder<TestGameObj>);
 };

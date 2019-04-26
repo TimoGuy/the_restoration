@@ -13,20 +13,7 @@
 
 TestRoom::TestRoom()
 {
-    // Set up
-//    player = new TestGameObj();
-
-
-
-
-
-
     // TEST CODE to load a level
-//    Texture level(std::string(".data/testlvl.png"), STBI_rgb);
-
-
-
-
     SwitchLevelIO("jojo");
 
 
@@ -39,13 +26,6 @@ TestRoom::TestRoom()
             break;
         }
     }
-
-    // Make the collision map!
-
-
-
-
-
 }
 
 TestRoom::~TestRoom()
@@ -60,11 +40,11 @@ TestRoom::~TestRoom()
 
 void TestRoom::Update()
 {
+    // Update all objects
     for (int it = 0; it != gameObjects.size(); ++it)
     {
         gameObjects.at(it)->Update();
     }
-//    player->Update();
 
 
 
@@ -111,12 +91,11 @@ void TestRoom::Render()
     // Set the camera
     glTranslatef(-camX, -camY, 0.0f);
 
-    // Pry a render for everyone!
+    // Call a render for everyone!
     for (int it = 0; it != gameObjects.size(); ++it)
     {
         gameObjects.at(it)->Render();
     }
-//    player->Render();
 
     // Undo the camera
     glTranslatef(camX, camY, 0.0f);
@@ -140,7 +119,6 @@ void TestRoom::SwitchLevelIO(std::string name)
 
     // Load a level
     int comp;
-//    width, height;        // These are member variables now
     const std::string& fileName = currentDir + levelName;
     int req = STBI_rgb;
     unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
@@ -151,11 +129,10 @@ void TestRoom::SwitchLevelIO(std::string name)
         return;
     }
 
-    // Initialize the Collision Map
+    // Initialize the Collision Map as EMPTY!!!!
     collisionMap = new Object*[gWidth * gHeight];
     for (int uu = 0; uu < gWidth * gHeight; uu++)
     {
-//        printf("%i\n", collisionMap[uu]);
         collisionMap[uu] = NULL;
     }
 
@@ -173,7 +150,6 @@ void TestRoom::SwitchLevelIO(std::string name)
         ss[0] << (int)imgData[(i * 3)];
         ss[1] << (int)imgData[(i * 3) + 1];
         ss[2] << (int)imgData[(i * 3) + 2];
-//        out_string = ss.str();
 
 
         std::string colorId =
@@ -187,33 +163,6 @@ void TestRoom::SwitchLevelIO(std::string name)
 
         i++;
     }
-
-
-
-
-    // Print out the values of the image
-    /*std::ofstream myfile;
-    myfile.open ("example.txt");
-
-    int i = 0;
-    while (i < width * height)
-    {
-//        printf("%i, %i, %i\n", imgData[(i * 3) + 0], imgData[(i * 3) + 1], imgData[(i * 3) + 2]);
-        if (req == STBI_rgb)
-        {
-//            printf("rgb\n");
-            myfile << (int)imgData[(i * 3) + 0] << ",  \t" << (int)imgData[(i * 3) + 1] << ",  \t" << (int)imgData[(i * 3) + 2] << "\n";
-        }
-        else if (req == STBI_rgb_alpha)
-        {
-//            printf("rgba\n");
-            myfile << (int)imgData[(i * 4) + 0] << ",  \t" << (int)imgData[(i * 4) + 1] << ",  \t" << (int)imgData[(i * 4) + 2] << ",  \t" << (int)imgData[(i * 4) + 3] << "\n";
-        }
-        i++;
-    }
-
-
-    myfile.close();*/
 
 
     // Free loaded image

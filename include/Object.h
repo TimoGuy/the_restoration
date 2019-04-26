@@ -3,8 +3,6 @@
 #include "Room.h"
 #include "Quad.h"
 
-// Every object should be able to be inputted
-// into the level editor (mspaint)
 
 struct BoundBox
 {
@@ -16,6 +14,22 @@ struct BoundBox
 
 class Room;
 
+
+
+
+
+
+
+
+// Every object should be able to be inputted
+// into the level editor (mspaint)
+//
+// In order to add an object, add its id in
+// ObjectFactory.cpp into
+// 1. the enum 'StringValue',
+// 2. inside the 'ObjectFactory::GetObjectFactory()',
+// 3. the enum entry into the big switch in the
+//      'ObjectFactory::Build(...)' method
 class Object
 {
     public:
@@ -36,15 +50,3 @@ class Object
 
     private:
 };
-
-/*
-
-ONEGAI!!!!!!!
-Please, for the sake of the level editor IO,
-Add any objects you make into the factory so
-it can read it!
-
-static const bool registeredBar = GetFooFactory().Register("Bar", fooBuilder<Bar>);
-
-
-*/

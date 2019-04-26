@@ -3,7 +3,7 @@
 
 InputManager::InputManager()
 {
-    //
+    //ctor
 }
 
 InputManager::~InputManager()
@@ -26,21 +26,21 @@ void InputManager::ProcessInput(GameLoop* g)
             // Exit the game loop
             g->TerminateLoop();
         }
-        else if (e.type == SDL_WINDOWEVENT)
-        {
-            // Window events
-            switch (e.window.event)
-            {
-                case SDL_WINDOWEVENT_SIZE_CHANGED:
-                    //Reshape(e.window.data1, e.window.data2);
-                    break;
-            }
-        }
+        // else if (e.type == SDL_WINDOWEVENT)
+        // {
+        //     // Window events
+        //     switch (e.window.event)
+        //     {
+        //         case SDL_WINDOWEVENT_SIZE_CHANGED:
+        //             Reshape(e.window.data1, e.window.data2);
+        //             break;
+        //     }
+        // }
         else
         {
             // Handle the keyboard
 
-            // ESCAPE TO QUIT???
+            // ESCAPE TO QUIT
             if (e.type == SDL_KEYUP &&
                 e.key.keysym.sym == SDLK_ESCAPE)
             {
@@ -50,8 +50,6 @@ void InputManager::ProcessInput(GameLoop* g)
 
 
             // Handle "controller" events
-//            ControllerManager.Instance().ProcessInput(e);
-
 
             // KEYBOARD INPUT CHECK... See project's ReadMe!!!!!
             if (e.type == SDL_KEYDOWN)
@@ -130,8 +128,4 @@ void InputManager::ProcessInput(GameLoop* g)
     if (kUp == kDown) _y = 0;
     else if (kUp && !kDown) _y = -1.0f;
     else if(!kUp && kDown) _y = 1.0f;
-
-
-
-
 }

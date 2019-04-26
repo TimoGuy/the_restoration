@@ -1,6 +1,5 @@
 #include "TestGameObj.h"
 #include <stdio.h>
-//#include <vector>
 #include "InputManager.h"
 #include "defs.h"
 #include <cmath>
@@ -37,7 +36,6 @@ void TestGameObj::Update()
         else
         {
             float chg = FRICTION * copysignf(1.0f, hsp);
-//            printf("%f\n", copysignf(1.0f, hsp));
             hsp -= chg;
         }
 	}
@@ -53,22 +51,8 @@ void TestGameObj::Update()
         vsp -= JUMP_HEIGHT - nerfer;
     }
 
-
-//	vsp += InputManager::Instance().y()*5;
-	// printf("%f     %f\n", x, y);
-
-    vsp += GRAV;        // Gravity!
-
-
-
-
-
-    // Fun stuff (Check the fastest you go! (hsp))
-//    if (abs(hsp) > highestHsp)
-//    {
-//        printf("New record! Fastest is: %f\n", highestHsp = abs(hsp));
-//    }
-    // Conclusion: you can go up to like 35.... maybe??
+    // Gravity!
+    vsp += GRAV;
 
 
 
@@ -85,6 +69,9 @@ void TestGameObj::Update()
 
     int gx = centX / GRID_SIZE,     // gx and gy mean that this is where
         gy = centY / GRID_SIZE;     // the center of the obj lies in the collision grid
+
+
+
 
 
 
@@ -111,29 +98,13 @@ void TestGameObj::Update()
             {
                 tempCollisionsToCheck.push_back(tempColl);
             }
-
-//            printf("%i,%i ", ngx, ngy);
         }
-//        printf("\n");
     }
 
 
 
 
 
-
-
-
-
-
-
-
-
-    // Update x and y
-//    x += hsp;
-//    y += vsp;
-//
-//
 
 
 
@@ -175,10 +146,6 @@ void TestGameObj::Update()
     }
     else if (tVsp > 0)
     {
-//        if (vsp < 0)
-//        {
-//            int donothing = 0;
-//        }
         // Ran into something... let's see!
         for (tVsp -= 1; tVsp > 0; tVsp--)
         {
@@ -198,18 +165,9 @@ void TestGameObj::Update()
 
 
 
-    // FOR TESTING
-//    hsp = vsp = 0;
-
-
-
-
-
-
 
     // Check states
     isOnGround = CollideAtPos(x, y + 1, &tempCollisionsToCheck);
-//    if (isOnGround) printf("On the ground!\n");
 }
 
 void TestGameObj::Render()
@@ -230,14 +188,11 @@ bool TestGameObj::CollideAtPos(float futX, float futY, std::vector<Object*>* col
     for (int i = 0; i < collisionsToCheck->size(); i++)
     {
         BoundBox b = { futX, futY, image->GetWidth(), image->GetHeight() };
-        if (collisionsToCheck->at(i)->IsColliding(&b))    // TODO: later I'd assume that 'image' will not be the bounding box
+        if (collisionsToCheck->at(i)->IsColliding(&b))
         {
             // Collided!
-//            printf("Collision!!! %i\t%i\n", ____i++, collisionsToCheck.size());
             return true;
-//            break;
         }
     }
-//    printf("\n\n\n\n\n\n\n\n\n");
     return false;
 }

@@ -30,7 +30,7 @@ class TestRoom : public Room
         // Level-loading
         std::string currentLvl;
 
-        static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename), and the directory of the levels!
+        static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename (w/out the 'n_')), and the directory of the levels!
 
         // For the camera
         float camX = 0, camY = 0;   // Make this the same coords as the player!

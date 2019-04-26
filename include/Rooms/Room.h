@@ -4,7 +4,7 @@
 
 class Object;
 
-class Room// : public Object
+class Room
 {
     public:
         Room();
