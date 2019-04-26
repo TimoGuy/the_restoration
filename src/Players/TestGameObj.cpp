@@ -66,8 +66,8 @@ void TestGameObj::Update()
 
 
     // Check collision
-    float centX = x + PLAYER_WIDTH / 2,
-        centY = y + PLAYER_HEIGHT / 2;
+    float centX = x + hsp + PLAYER_WIDTH / 2,
+        centY = y + vsp + PLAYER_HEIGHT / 2;
 
     int gx = centX / GRID_SIZE,     // gx and gy mean that this is where
         gy = centY / GRID_SIZE;     // the center of the obj lies in the collision grid
@@ -127,18 +127,19 @@ void TestGameObj::Update()
 
 
     // Try updating x (from hsp)
-    if (!CollideAtPos(x + hsp, y, &tempCollisionsToCheck))
+    int tHsp = ceil(abs(hsp));
+    if (!CollideAtPos(x + tHsp * copysignf(1.0f, hsp), y, &tempCollisionsToCheck))
     {
         // It's safe!
-        x += hsp;
+        x += tHsp * copysignf(1.0f, hsp);
     }
-    else
+    else if (tHsp > 0)
     {
         // Ran into something... let's see!
-        for (int tHsp = std::abs(hsp) - 1; tHsp > 0; tHsp--)
+        for (tHsp -= 1; tHsp > 0; tHsp--)
         {
             // Roll back 1 at a time and see if no collision
-            float newX = x + tHsp * copysignf(1.0f, hsp);
+            int newX = round(x) + tHsp * copysignf(1.0f, hsp);
             if (!CollideAtPos(newX, y, &tempCollisionsToCheck))
             {
                 // Update!
@@ -152,18 +153,23 @@ void TestGameObj::Update()
     }
 
     // Try updating y (from vsp)
-    if (!CollideAtPos(x, y + vsp, &tempCollisionsToCheck))
+    int tVsp = ceil(abs(vsp));
+    if (!CollideAtPos(x, y + tVsp * copysignf(1.0f, vsp), &tempCollisionsToCheck))
     {
         // It's safe!
-        y += vsp;
+        y += tVsp * copysignf(1.0f, vsp);
     }
-    else
+    else if (tVsp > 0)
     {
+        if (vsp < 0)
+        {
+            int donothing = 0;
+        }
         // Ran into something... let's see!
-        for (int tVsp = std::abs(vsp) - 1; tVsp > 0; tVsp--)
+        for (tVsp -= 1; tVsp > 0; tVsp--)
         {
             // Roll back 1 at a time and see if no collision
-            float newY = y + tVsp * copysignf(1.0f, vsp);
+            int newY = round(y) + tVsp * copysignf(1.0f, vsp);
             if (!CollideAtPos(x, newY, &tempCollisionsToCheck))
             {
                 // Update!
