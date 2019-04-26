@@ -98,7 +98,7 @@ void TestRoom::Update()
     // Clamp it to the edges
     if (!lockX)
     {
-        camX = std::max(0, std::min((int)camX + SCREEN_WIDTH, gWidth * GRID_SIZE));
+        camX = std::max(0, std::min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
     }
     if (!lockY)
     {
