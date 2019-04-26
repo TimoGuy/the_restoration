@@ -36,8 +36,8 @@ class InputManager
         // NOTE: neg. is left or up, pos. is right or down
 
         // Next: action buttons
-        bool _b1;       // Attack or Action
-        bool _b2;       // Dash or Jump?? (I dont really know...)
+        bool _b1 = false;       // Attack or Action
+        bool _b2 = false;       // Dash or Jump?? (I dont really know...)
 
 
         // Well, I only use these functions eh.

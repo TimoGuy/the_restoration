@@ -22,15 +22,35 @@ TestGameObj::~TestGameObj()
 
 // Grav should be somewhere between 0.5 and 1.0
 #define GRAV 0.5f
+#define FRICTION 0.5f
+#define JUMP_HEIGHT 3
 
 void TestGameObj::Update()
 {
 	// Adjust according to input
-	hsp += InputManager::Instance().x()*5;
-	vsp += InputManager::Instance().y()*5;
+	hsp += InputManager::Instance().x();
+	if (InputManager::Instance().x() == 0 &&
+        hsp != 0)
+	{
+        if (abs(hsp) < FRICTION) { hsp = 0; }
+        else
+        {
+            float chg = FRICTION * copysignf(1.0f, hsp);
+//            printf("%f\n", copysignf(1.0f, hsp));
+            hsp -= chg;
+        }
+	}
+
+	if (InputManager::Instance().b2())
+	{
+        printf("Jumping!\n");
+        vsp -= JUMP_HEIGHT;
+    }
+
+//	vsp += InputManager::Instance().y()*5;
 	// printf("%f     %f\n", x, y);
 
-//    vsp += GRAV;
+    vsp += GRAV;        // Gravity!
 
 
 
@@ -78,9 +98,9 @@ void TestGameObj::Update()
                 tempCollisionsToCheck.push_back(tempColl);
             }
 
-            printf("%i,%i ", ngx, ngy);
+//            printf("%i,%i ", ngx, ngy);
         }
-        printf("\n");
+//        printf("\n");
     }
 
 
@@ -159,7 +179,7 @@ void TestGameObj::Update()
 
 
     // FOR TESTING
-    hsp = vsp = 0;
+//    hsp = vsp = 0;
 
 
 }
