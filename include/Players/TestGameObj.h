@@ -25,5 +25,9 @@ class TestGameObj : public Object
 
         bool CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck);
 
+        // States
+        bool isOnGround = false;
+        float nerfer = 0;
+
 //    	static const bool registeredObj = ObjectFactory.GetObjectFactory().Register("Bar", objectBuilder<TestGameObj>);
 };

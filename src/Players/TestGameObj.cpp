@@ -23,7 +23,7 @@ TestGameObj::~TestGameObj()
 // Grav should be somewhere between 0.5 and 1.0
 #define GRAV 0.5f
 #define FRICTION 0.5f
-#define JUMP_HEIGHT 3
+#define JUMP_HEIGHT 7.5f
 
 void TestGameObj::Update()
 {
@@ -41,10 +41,10 @@ void TestGameObj::Update()
         }
 	}
 
-	if (InputManager::Instance().b2())
+	if (InputManager::Instance().b2() && isOnGround)
 	{
         printf("Jumping!\n");
-        vsp -= JUMP_HEIGHT;
+        vsp -= JUMP_HEIGHT - nerfer;
     }
 
 //	vsp += InputManager::Instance().y()*5;
@@ -161,10 +161,10 @@ void TestGameObj::Update()
     }
     else if (tVsp > 0)
     {
-        if (vsp < 0)
-        {
-            int donothing = 0;
-        }
+//        if (vsp < 0)
+//        {
+//            int donothing = 0;
+//        }
         // Ran into something... let's see!
         for (tVsp -= 1; tVsp > 0; tVsp--)
         {
@@ -188,6 +188,14 @@ void TestGameObj::Update()
 //    hsp = vsp = 0;
 
 
+
+
+
+
+
+    // Check states
+    isOnGround = CollideAtPos(x, y + 1, &tempCollisionsToCheck);
+//    if (isOnGround) printf("On the ground!\n");
 }
 
 void TestGameObj::Render()
