@@ -24,6 +24,7 @@ TestGameObj::~TestGameObj()
 #define GRAV 0.5f
 #define FRICTION 0.5f
 #define JUMP_HEIGHT 7.5f
+#define MAX_HSP 35.0f
 
 void TestGameObj::Update()
 {
@@ -41,11 +42,17 @@ void TestGameObj::Update()
         }
 	}
 
+    // Limit hsp
+    hsp = std::min(std::max(hsp, -MAX_HSP), MAX_HSP);
+
+
+    // Jump!
 	if (InputManager::Instance().b2() && isOnGround)
 	{
         printf("Jumping!\n");
         vsp -= JUMP_HEIGHT - nerfer;
     }
+
 
 //	vsp += InputManager::Instance().y()*5;
 	// printf("%f     %f\n", x, y);
@@ -55,6 +62,13 @@ void TestGameObj::Update()
 
 
 
+
+    // Fun stuff (Check the fastest you go! (hsp))
+//    if (abs(hsp) > highestHsp)
+//    {
+//        printf("New record! Fastest is: %f\n", highestHsp = abs(hsp));
+//    }
+    // Conclusion: you can go up to like 35.... maybe??
 
 
 
