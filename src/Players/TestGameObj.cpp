@@ -1,8 +1,9 @@
 #include "TestGameObj.h"
 #include <stdio.h>
-#include <vector>
+//#include <vector>
 #include "InputManager.h"
 #include "defs.h"
+#include <cmath>
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 48
@@ -95,40 +96,100 @@ void TestGameObj::Update()
 
 
     // Update x and y
-    x += hsp;
-    y += vsp;
+//    x += hsp;
+//    y += vsp;
+//
+//
 
+
+
+
+
+
+    // Try updating x (from hsp)
+    if (!CollideAtPos(x + hsp, y, &tempCollisionsToCheck))
+    {
+        // It's safe!
+        x += hsp;
+    }
+    else
+    {
+        // Ran into something... let's see!
+        for (int tHsp = std::abs(hsp) - 1; tHsp > 0; tHsp--)
+        {
+            // Roll back 1 at a time and see if no collision
+            float newX = x + tHsp * copysignf(1.0f, hsp);
+            if (!CollideAtPos(newX, y, &tempCollisionsToCheck))
+            {
+                // Update!
+                x = newX;
+                break;
+            }
+        }
+
+        // Collided so let's get this thing stopping...
+        hsp = 0;
+    }
+
+    // Try updating y (from vsp)
+    if (!CollideAtPos(x, y + vsp, &tempCollisionsToCheck))
+    {
+        // It's safe!
+        y += vsp;
+    }
+    else
+    {
+        // Ran into something... let's see!
+        for (int tVsp = std::abs(vsp) - 1; tVsp > 0; tVsp--)
+        {
+            // Roll back 1 at a time and see if no collision
+            float newY = y + tVsp * copysignf(1.0f, vsp);
+            if (!CollideAtPos(x, newY, &tempCollisionsToCheck))
+            {
+                // Update!
+                y = newY;
+                break;
+            }
+        }
+
+        // Collided so let's get this thing stopping...
+        vsp = 0;
+    }
+
+
+
+    // FOR TESTING
     hsp = vsp = 0;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // And then see if collided!
-    for (int i = 0; i < tempCollisionsToCheck.size(); i++)
-    {
-        BoundBox b = { x, y, image->GetWidth(), image->GetHeight() };
-        if (tempCollisionsToCheck.at(i)->IsColliding(&b))    // TODO: later I'd assume that 'image' will not be the bounding box
-        {
-            // Collided!
-            printf("Collision!!! %i\t%i\n", ____i++, tempCollisionsToCheck.size());
-            break;
-        }
-    }
-    printf("\n\n\n\n\n\n\n\n\n");
 }
 
 void TestGameObj::Render()
 {
 	image->Render(x, y);
+}
+
+
+
+
+
+
+
+
+bool TestGameObj::CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck)
+{
+    // And then see if collided!
+    for (int i = 0; i < collisionsToCheck->size(); i++)
+    {
+        BoundBox b = { futX, futY, image->GetWidth(), image->GetHeight() };
+        if (collisionsToCheck->at(i)->IsColliding(&b))    // TODO: later I'd assume that 'image' will not be the bounding box
+        {
+            // Collided!
+//            printf("Collision!!! %i\t%i\n", ____i++, collisionsToCheck.size());
+            return true;
+//            break;
+        }
+    }
+//    printf("\n\n\n\n\n\n\n\n\n");
+    return false;
 }
