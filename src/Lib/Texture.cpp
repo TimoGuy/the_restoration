@@ -30,7 +30,8 @@ Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)
 //    glGenerateMipmap(GL_TEXTURE_2D);          // TODO go back and update the opengl 1.2 to glew!!! Then enable this!!!
 
     // Use mipmaps and enable texture clamping
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);       // TODO: get mipmapping, eh!
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -56,6 +57,6 @@ void Texture::Bind(unsigned int unit)
     }
 
     // Bind and set
-    glActiveTexture(GL_TEXTURE0 + unit);
+//    glActiveTexture(GL_TEXTURE0 + unit);      // Maybe this is only for opengl 3+
     glBindTexture(GL_TEXTURE_2D, m_texture);
 }

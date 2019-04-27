@@ -89,6 +89,7 @@ void TestRoom::Update()
 void TestRoom::Render()
 {
     // Set the camera
+    glLoadIdentity();
     glTranslatef(-camX, -camY, 0.0f);
 
     // Call a render for everyone!
@@ -96,9 +97,6 @@ void TestRoom::Render()
     {
         gameObjects.at(it)->Render();
     }
-
-    // Undo the camera
-    glTranslatef(camX, camY, 0.0f);
 }
 
 

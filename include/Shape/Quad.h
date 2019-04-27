@@ -1,9 +1,11 @@
 #pragma once
+#include "Lib/Texture.h"
 
 class Quad
 {
     public:
         Quad(float width, float height);
+        Quad(float width, float height, Texture* tex);
 //        Quad(float width, float height, Image);           TODO: make a textured quad constructor
         virtual ~Quad();
 
@@ -16,8 +18,8 @@ class Quad
         void SetHeight(float height) { height = _height; }
         float GetHeight() { return _height; }
 
-        // void SetImage(Image image) { image = _image; }
-        // float GetImage() { return _image; }
+        void SetImage(Texture* image) { image = _image; }
+        Texture* GetImage() { return _image; }
 
 
     protected:
@@ -25,5 +27,5 @@ class Quad
     private:
         float _width;
         float _height;
-//        Image* _image;
+        Texture* _image = NULL;
 };

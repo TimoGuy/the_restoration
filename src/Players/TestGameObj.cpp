@@ -10,13 +10,16 @@
 TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Object(gx, gy, rm)
 {
     // Make image
-    image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT);
+    Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
+    image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
     printf("Player built! at %i,%i\n", gx, gy);
+
 }
 
 TestGameObj::~TestGameObj()
 {
     //dtor
+    delete image;
 }
 
 // Grav should be somewhere between 0.5 and 1.0
@@ -167,7 +170,7 @@ void TestGameObj::Update()
 
 
     // Check states
-    isOnGround = CollideAtPos(x, y + 1, &tempCollisionsToCheck);
+    isOnGround = CollideAtPos(round(x), round(y) + 1, &tempCollisionsToCheck);
 }
 
 void TestGameObj::Render()
