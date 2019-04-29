@@ -1,8 +1,16 @@
+#ifdef __unix__
 #include "TestGameObj.h"
 #include "Hazard.h"
-#include <stdio.h>
 #include "InputManager.h"
 #include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Players/TestGameObj.h"
+#include "../../include/InputManager.h"
+#include "../../include/defs.h"
+#include <algorithm>
+#endif
+
+#include <stdio.h>
 #include <cmath>
 
 #define PLAYER_WIDTH 32
@@ -14,6 +22,7 @@ TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Object(gx, gy, rm)
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
     printf("Player built! at %i,%i\n", gx, gy);
+	y -= 16;
 
 
     startX = x;

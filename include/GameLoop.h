@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef __unix__
 #include <SDL2/SDL.h>
+#elif defined(_WIN32) || defined(WIN32)
+#include <SDL.h>
+#endif
 
 class GameLoop
 {

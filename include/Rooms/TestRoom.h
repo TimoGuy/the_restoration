@@ -1,11 +1,18 @@
 #pragma once
 
+#ifdef __unix__
 #include "Rooms/Room.h"
 #include "Object.h"
+#include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Rooms/Room.h"
+#include "../../include/Object.h"
+#include "../../include/defs.h"
+#endif
+
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include "defs.h"
 
 // Hopefully this is where 90% of the game
 // will happen! Load a file via IO and then go!

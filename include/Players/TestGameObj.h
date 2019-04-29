@@ -1,7 +1,12 @@
 #pragma once
-
+#ifdef __unix__
 #include "Object.h"
 #include "Shape/Quad.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../Object.h"
+#include "../Shape/Quad.h"
+#endif
+
 #include <vector>
 
 class TestGameObj : public Object
@@ -13,7 +18,7 @@ class TestGameObj : public Object
         void Update();
         void Render();
 
-        bool IsColliding(BoundBox* box) { }
+		bool IsColliding(BoundBox* box) { return false; }
 
     protected:
 

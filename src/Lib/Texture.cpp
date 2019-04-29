@@ -1,4 +1,8 @@
+#ifdef __unix__
 #include "Lib/Texture.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Lib/Texture.h"
+#endif
 #include <stdio.h>
 
 Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)

@@ -1,7 +1,14 @@
+#ifdef __unix__
 #include "GameLoop.h"
 #include "Rooms/TestRoom.h"
 #include <SDL2/SDL_opengl.h>
 #include "InputManager.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../include/GameLoop.h"
+#include "../include/Rooms/TestRoom.h"
+#include <SDL_opengl.h>
+#include "../include/InputManager.h"
+#endif
 
 GameLoop::GameLoop(SDL_Window* window)
 {

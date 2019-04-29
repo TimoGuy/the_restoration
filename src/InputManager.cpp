@@ -1,5 +1,10 @@
+#ifdef __unix__
 #include "InputManager.h"
 #include "SDL2/SDL.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../include/InputManager.h"
+#include <SDL.h>
+#endif
 
 InputManager::InputManager()
 {
