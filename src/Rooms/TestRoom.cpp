@@ -1,14 +1,25 @@
+#ifdef __unix__
 #include "TestRoom.h"
 #include "Players/TestGameObj.h"
 #include "Lib/Texture.h"
 #include <unistd.h>
-#include <iostream>
-#include <fstream>
 #include <dirent.h>
 #include "ObjectFactory.h"
+#include <SDL2/SDL_opengl.h>
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Rooms/TestRoom.h"
+#include "../../include/Players/TestGameObj.h"
+#include "../../include/Lib/Texture.h"
+//#include <io.h>
+#include "../../include/Lib/dirent.h"
+#include "../../include/ObjectFactory.h"
+#include <SDL_opengl.h>
+#endif
+
+#include <iostream>
+#include <fstream>
 #include <iterator>
 #include <sstream>
-#include <SDL2/SDL_opengl.h>
 #include <algorithm>
 
 TestRoom::TestRoom()
@@ -78,11 +89,19 @@ void TestRoom::Update()
     // Clamp it to the edges
     if (!lockX)
     {
+//#ifdef __unix__
         camX = std::max(0, std::min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
+//#elif defined(_WIN32) || defined(WIN32)
+		//camX = max(0, min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
+//#endif
     }
     if (!lockY)
     {
+//#ifdef __unix__
         camY = std::max(0, std::min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
+//#elif defined(_WIN32) || defined(WIN32)
+//		camY = max(0, min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
+//#endif
     }
 }
 
@@ -106,7 +125,12 @@ void TestRoom::Render()
 void TestRoom::SwitchLevelIO(std::string name)
 {
     // Find/Search for the requested level (within the 'n_...' form-factor)
+#ifdef __unix__
     std::string currentDir = std::string(get_current_dir_name()) + std::string("/.data/levels/");
+#elif defined(_WIN32) || defined(WIN32)
+	std::string currentDir = std::string(".data/levels/");
+#endif
+
     printf("Levels are stored in:\n%s\n\n", currentDir.c_str());
     std::string levelName = TestRoom::FindLevelIO(name, currentDir);
 //    if (levelName.)           // TODO implement the error checking someway....

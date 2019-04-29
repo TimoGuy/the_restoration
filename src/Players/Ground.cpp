@@ -1,6 +1,12 @@
+#ifdef __unix__
 #include "Ground.h"
-#include <stdio.h>
 #include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Players/Ground.h"
+#include "../../include/defs.h"
+#endif
+
+#include <stdio.h>
 
 Ground::Ground(int gx, int gy, Room* rm) : Object(gx, gy, rm)
 {

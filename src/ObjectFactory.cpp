@@ -1,9 +1,19 @@
+#ifdef __unix__
 #include "ObjectFactory.h"
 
 #include "TestGameObj.h"
 #include "Ground.h"
 #include "Exit.h"
 #include "Slant.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../include/ObjectFactory.h"
+
+#include "../include/Players/TestGameObj.h"
+#include "../include/Players/Ground.h"
+#include "../include/Players/Exit.h"
+#include "../include/Players/Slant.h"
+#endif
+
 #include <stdio.h>
 #include <map>
 

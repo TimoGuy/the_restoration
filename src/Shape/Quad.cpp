@@ -1,6 +1,13 @@
+#ifdef __unix__
 #include "Quad.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Shape/Quad.h"			// WOWEE windows is wEIRD!!!
+#include <SDL.h>
+#include <SDL_opengl.h>
+#endif
+
 
 Quad::Quad(float width, float height)
 {

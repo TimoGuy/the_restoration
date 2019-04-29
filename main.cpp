@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef __unix__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include "GameLoop.h"
 #include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include "include\GameLoop.h"
+#include "include\defs.h"
+#endif
 
 SDL_Window* window;
 SDL_GLContext glContext;

@@ -1,7 +1,15 @@
+#ifdef __unix__
 #include "TestGameObj.h"
-#include <stdio.h>
 #include "InputManager.h"
 #include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Players/TestGameObj.h"
+#include "../../include/InputManager.h"
+#include "../../include/defs.h"
+#include <algorithm>
+#endif
+
+#include <stdio.h>
 #include <cmath>
 
 #define PLAYER_WIDTH 32
