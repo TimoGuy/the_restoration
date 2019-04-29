@@ -21,6 +21,7 @@ Ground::Ground(int gx, int gy, Room* rm) : Object(gx, gy, rm)
 Ground::~Ground()
 {
     //dtor
+	delete image;
 }
 
 void Ground::Render()

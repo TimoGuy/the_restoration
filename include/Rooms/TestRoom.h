@@ -26,7 +26,7 @@ class TestRoom : public Room
         void Update();
         void Render();
 
-        void SwitchLevelIO(std::string name);       // This is the thing after the "n_"
+        bool SwitchLevelIO(std::string name);       // This is the thing after the "n_"
 
     protected:
 

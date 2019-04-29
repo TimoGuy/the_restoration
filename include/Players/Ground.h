@@ -19,7 +19,7 @@ class Ground : public Object
         bool IsColliding(BoundBox* box);
 
     protected:
+    	Quad* image;
 
     private:
-    	Quad* image;
 };

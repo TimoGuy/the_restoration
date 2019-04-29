@@ -1,5 +1,10 @@
+#ifdef __unix__
 #include "Hazard.h"
 #include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Players/Hazard.h"
+#include "../../include/defs.h"
+#endif
 
 Hazard::Hazard(int gx, int gy, Room* rm) : Object(gx, gy, rm)
 {

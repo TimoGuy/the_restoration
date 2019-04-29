@@ -14,6 +14,8 @@ struct BoundBox
 {
     float x;
     float y;
+	float prevx;
+	float prevy;
     float width;
     float height;
 };

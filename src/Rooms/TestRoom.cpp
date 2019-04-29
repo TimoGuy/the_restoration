@@ -25,9 +25,15 @@
 TestRoom::TestRoom()
 {
     // TEST CODE to load a level
-//    SwitchLevelIO("jojo");
-    SwitchLevelIO("test");
+	bool success;
+	success = SwitchLevelIO("jojo");
+    //success = SwitchLevelIO("test");
 
+	if (!success)
+	{
+		printf("ERROR: Room was not created, because level switching did not succeed\n");
+		return;
+	}
 
     for (int i = 0; i < gameObjects.size(); i++)
     {
@@ -123,7 +129,7 @@ void TestRoom::Render()
 
 
 
-void TestRoom::SwitchLevelIO(std::string name)
+bool TestRoom::SwitchLevelIO(std::string name)
 {
     // Find/Search for the requested level (within the 'n_...' form-factor)
 #ifdef __unix__
@@ -134,11 +140,11 @@ void TestRoom::SwitchLevelIO(std::string name)
 
     printf("Levels are stored in:\n%s\n\n", currentDir.c_str());
     std::string levelName = TestRoom::FindLevelIO(name, currentDir);
-//    if (levelName.)           // TODO implement the error checking someway....
-//    {
-//        printf("ERROR: Unable to switch levels... no file was found with the level name %s\n", name);
-//        return;
-//    }
+    if (levelName.empty())           // Error checking....
+    {
+        printf("ERROR: Unable to switch levels... no file was found with the level name \"%s\"\n", name.c_str());
+        return false;
+    }
 
     // Load a level
     int comp;
@@ -149,7 +155,7 @@ void TestRoom::SwitchLevelIO(std::string name)
     if (imgData == NULL)
     {
         printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
-        return;
+        return false;
     }
 
     // Initialize the Collision Map as EMPTY!!!!
@@ -190,6 +196,7 @@ void TestRoom::SwitchLevelIO(std::string name)
 
     // Free loaded image
     stbi_image_free(imgData);
+	return true;
 }
 
 
@@ -224,7 +231,7 @@ std::string TestRoom::FindLevelIO(std::string name, std::string dir)         // 
     }
 
 
-
-    return NULL;
+	printf("ERROR: Could not find level \"%s\"\n", name.c_str());
+    return std::string();
 }
 

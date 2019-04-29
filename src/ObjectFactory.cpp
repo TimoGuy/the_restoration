@@ -13,6 +13,8 @@
 #include "../include/Players/Ground.h"
 #include "../include/Players/Exit.h"
 #include "../include/Players/Slant.h"
+#include "../include/Players/Hazard.h"
+#include "../include/Players/TopSideCollGround.h"
 #endif
 
 #include <stdio.h>
@@ -29,6 +31,8 @@ enum StringValue
     evSlant,
 
     evHazard,
+
+	evTopSideCollGround,
 
     evEnd
 };
@@ -53,7 +57,8 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
         (*s_mapStringValues)["0,0,0"] = evGround;
         (*s_mapStringValues)["38,127,0"] = evExit;
         (*s_mapStringValues)["160,160,160"] = evSlant;
-        (*s_mapStringValues)["255,0,0"] = evHazard;
+		(*s_mapStringValues)["255,0,0"] = evHazard;
+		(*s_mapStringValues)["100,100,100"] = evTopSideCollGround;
         (*s_mapStringValues)["end"] = evEnd;
 
         printf("Init Object map!!\n");
@@ -94,6 +99,10 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) c
     case evHazard:
         return new Hazard(gx, gy, rm);
         break;
+
+	case evTopSideCollGround:
+		return new TopSideCollGround(gx, gy, rm);
+		break;
 
     default:
         printf("The color \"%s\" is invalid inside of \'ObjectFactory.cpp\'\'s list...\n", key.c_str());

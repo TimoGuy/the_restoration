@@ -131,8 +131,10 @@
     <ClInclude Include="..\include\ObjectFactory.h" />
     <ClInclude Include="..\include\Players\Exit.h" />
     <ClInclude Include="..\include\Players\Ground.h" />
+    <ClInclude Include="..\include\Players\Hazard.h" />
     <ClInclude Include="..\include\Players\Slant.h" />
     <ClInclude Include="..\include\Players\TestGameObj.h" />
+    <ClInclude Include="..\include\Players\TopSideCollGround.h" />
     <ClInclude Include="..\include\Rooms\Room.h" />
     <ClInclude Include="..\include\Rooms\TestRoom.h" />
     <ClInclude Include="..\include\Shape\Quad.h" />
@@ -147,8 +149,10 @@
     <ClCompile Include="..\src\ObjectFactory.cpp" />
     <ClCompile Include="..\src\Players\Exit.cpp" />
     <ClCompile Include="..\src\Players\Ground.cpp" />
+    <ClCompile Include="..\src\Players\Hazard.cpp" />
     <ClCompile Include="..\src\Players\Slant.cpp" />
     <ClCompile Include="..\src\Players\TestGameObj.cpp" />
+    <ClCompile Include="..\src\Players\TopSideCollGround.cpp" />
     <ClCompile Include="..\src\Rooms\Room.cpp" />
     <ClCompile Include="..\src\Rooms\TestRoom.cpp" />
     <ClCompile Include="..\src\Shape\Quad.cpp" />

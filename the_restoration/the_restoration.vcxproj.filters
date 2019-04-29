@@ -81,6 +81,12 @@
     <ClInclude Include="..\include\Lib\Texture.h">
       <Filter>Header Files\Lib</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Players\Hazard.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Players\TopSideCollGround.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Lib\Texture.cpp">
@@ -124,6 +130,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Lib\stb_image.c">
       <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\Hazard.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\TopSideCollGround.cpp">
+      <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

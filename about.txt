@@ -103,3 +103,16 @@ This program uses SDL2, OpenGL, (will use) GLEW, and dirent.h
 
 Okay, so about Quad.h/.cpp, this is for drawing images only! If
 you want a bounding box, use Object.h's "BoundBox" struct right there!
+
+
+
+
+
+
+--For Cross-platform support--
+
+Copy and paste this:
+
+#ifdef __unix__
+#elif defined(_WIN32) || defined(WIN32)
+#endif

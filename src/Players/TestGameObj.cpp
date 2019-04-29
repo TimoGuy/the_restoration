@@ -5,6 +5,7 @@
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/TestGameObj.h"
+#include "../../include/Players/Hazard.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
 #include <algorithm>
@@ -93,7 +94,7 @@ void TestGameObj::Update()
 
 
 
-    // It's probably good to check the current position and the 8 around it!
+    // It's probably good to check the current position (within the collision chart) and the 8 around it!
     int ngx, ngy;
     std::vector<Object*> tempCollisionsToCheck;
     for (int _x = -1; _x <= 1; _x++)
@@ -148,6 +149,11 @@ void TestGameObj::Update()
         y = startY;
         hsp = vsp = 0;
     }
+
+
+
+
+
 
 
 
@@ -234,7 +240,7 @@ bool TestGameObj::CollideAtPos(float futX, float futY, std::vector<Object*>* col
     // And then see if collided!
     for (int i = 0; i < collisionsToCheck->size(); i++)
     {
-        BoundBox b = { futX, futY, image->GetWidth(), image->GetHeight() };
+        BoundBox b = { futX, futY, x, y, image->GetWidth(), image->GetHeight() };
         if (collisionsToCheck->at(i)->IsColliding(&b))
         {
             // Collided!
