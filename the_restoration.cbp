@@ -17,6 +17,7 @@
 					<Add directory="include/Players/" />
 					<Add directory="include/Rooms/" />
 					<Add directory="include/Shape" />
+					<Add directory="include/Players" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -30,6 +31,7 @@
 					<Add directory="include/Players/" />
 					<Add directory="include/Rooms/" />
 					<Add directory="include/Shape" />
+					<Add directory="include/Players" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -54,6 +56,7 @@
 		<Unit filename="include/ObjectFactory.h" />
 		<Unit filename="include/Players/Exit.h" />
 		<Unit filename="include/Players/Ground.h" />
+		<Unit filename="include/Players/Hazard.h" />
 		<Unit filename="include/Players/Slant.h" />
 		<Unit filename="include/Players/TestGameObj.h" />
 		<Unit filename="include/Rooms/Room.h" />
@@ -71,6 +74,7 @@
 		<Unit filename="src/ObjectFactory.cpp" />
 		<Unit filename="src/Players/Exit.cpp" />
 		<Unit filename="src/Players/Ground.cpp" />
+		<Unit filename="src/Players/Hazard.cpp" />
 		<Unit filename="src/Players/Slant.cpp" />
 		<Unit filename="src/Players/TestGameObj.cpp" />
 		<Unit filename="src/Rooms/Room.cpp" />
