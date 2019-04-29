@@ -21,7 +21,7 @@ TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Object(gx, gy, rm)
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
     printf("Player built! at %i,%i\n", gx, gy);
-
+	y -= 16;
 }
 
 TestGameObj::~TestGameObj()
