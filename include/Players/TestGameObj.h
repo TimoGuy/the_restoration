@@ -24,9 +24,13 @@ class TestGameObj : public Object
     	int ____i = 0;
 
         bool CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck);
+        bool CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck, Object*& returnObjCollided);
+
 
         // States
         bool isOnGround = false;
         float nerfer = 0;
         float highestHsp = 0;
+
+        float startX = 0, startY = 0;
 };

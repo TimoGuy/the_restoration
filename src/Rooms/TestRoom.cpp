@@ -14,7 +14,8 @@
 TestRoom::TestRoom()
 {
     // TEST CODE to load a level
-    SwitchLevelIO("jojo");
+//    SwitchLevelIO("jojo");
+    SwitchLevelIO("test");
 
 
     for (int i = 0; i < gameObjects.size(); i++)

@@ -1,4 +1,5 @@
 #include "TestGameObj.h"
+#include "Hazard.h"
 #include <stdio.h>
 #include "InputManager.h"
 #include "defs.h"
@@ -14,6 +15,9 @@ TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Object(gx, gy, rm)
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
     printf("Player built! at %i,%i\n", gx, gy);
 
+
+    startX = x;
+    startY = y;
 }
 
 TestGameObj::~TestGameObj()
@@ -109,9 +113,36 @@ void TestGameObj::Update()
 
 
 
+    // CHECK FOR COLLISION W/ NPCs/HAZARDS/DOORS/etc.
+
+    bool die = false;
+    Object* tempCollision = NULL;
+    if (CollideAtPos(x + hsp, y + vsp, &tempCollisionsToCheck, tempCollision))
+    {
+        // Check for hazards
+        if (dynamic_cast<Hazard*>(tempCollision) != NULL)
+        {
+            // Awesome!    Now you die!
+            die = true;
+        }
+    }
+
+    if (y > room->getGHeight() * GRID_SIZE)
+    {
+        // Fell out of the screen!!?!?!?
+        die = true;
+    }
+
+    if (die)
+    {
+        x = startX;
+        y = startY;
+        hsp = vsp = 0;
+    }
 
 
 
+    // THIS IS COLLISION W/ GROUND SECTION
 
 
     // Try updating x (from hsp)
@@ -183,9 +214,13 @@ void TestGameObj::Render()
 
 
 
-
-
 bool TestGameObj::CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck)
+{
+    Object* useless = NULL;
+    return CollideAtPos(futX, futY, collisionsToCheck, useless);
+}
+
+bool TestGameObj::CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck, Object*& returnObjCollided)
 {
     // And then see if collided!
     for (int i = 0; i < collisionsToCheck->size(); i++)
@@ -194,6 +229,7 @@ bool TestGameObj::CollideAtPos(float futX, float futY, std::vector<Object*>* col
         if (collisionsToCheck->at(i)->IsColliding(&b))
         {
             // Collided!
+            returnObjCollided = collisionsToCheck->at(i);
             return true;
         }
     }

@@ -4,6 +4,7 @@
 #include "Ground.h"
 #include "Exit.h"
 #include "Slant.h"
+#include "Hazard.h"
 #include <stdio.h>
 #include <map>
 
@@ -16,6 +17,8 @@ enum StringValue
     evGround,
     evExit,
     evSlant,
+
+    evHazard,
 
     evEnd
 };
@@ -40,6 +43,7 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
         (*s_mapStringValues)["0,0,0"] = evGround;
         (*s_mapStringValues)["38,127,0"] = evExit;
         (*s_mapStringValues)["160,160,160"] = evSlant;
+        (*s_mapStringValues)["255,0,0"] = evHazard;
         (*s_mapStringValues)["end"] = evEnd;
 
         printf("Init Object map!!\n");
@@ -59,7 +63,7 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) c
     {
     case evNotDefined:
         // This is white... so just a blank spot!
-        break;
+        return NULL;
 
     case evPlayer:       // The Player!!!
         return new TestGameObj(gx, gy, rm);
@@ -75,6 +79,10 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) c
 
     case evSlant:     // Slants (try to pass something in to calculate the slant eh!
         return new Slant(gx, gy, rm);
+        break;
+
+    case evHazard:
+        return new Hazard(gx, gy, rm);
         break;
 
     default:
