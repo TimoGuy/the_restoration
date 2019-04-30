@@ -34,6 +34,10 @@ class InputManager
     private:
         InputManager();
 
+		// FOR JOYSTICK USE
+		SDL_GameController* controller;
+		int numJoysticks = 0;
+
         // This is the virtual controller input per-se!
         // First: joystick
         float _x = 0;

@@ -4,23 +4,51 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/InputManager.h"
 #include <SDL.h>
+#include <stdio.h>
+#include <algorithm>
 #endif
 
 InputManager::InputManager()
 {
-    //ctor
+    // Try initializing 1 joystick (gamecontroller)!
+	if ((numJoysticks = SDL_NumJoysticks()) < 1)
+	{
+		printf("No joysticks!!\n");
+	}
+	else
+	{
+		for (int i = 0; i < numJoysticks; i++)
+		{
+			if (SDL_IsGameController(i))
+			{
+				// Get first compatible one!
+				controller = SDL_GameControllerOpen(i);
+				break;
+			}
+		}
+
+		if (controller == NULL)
+		{
+			printf("No compatible game controllers!!\n");
+			return;
+		}
+		else
+		{
+			printf("Controller Name: %s\n", SDL_GameControllerName(controller));
+		}
+	}
 }
 
 InputManager::~InputManager()
 {
     //dtor
+	SDL_GameControllerClose(controller);
 }
 
 void InputManager::ProcessInput(GameLoop* g)
 {
     // Poll those events!!!!
     SDL_Event e;
-    // TODO: Figure out some joystick overrides keyboard system!
 
 
     while(SDL_PollEvent(&e) != 0)
@@ -121,16 +149,56 @@ void InputManager::ProcessInput(GameLoop* g)
             }
 
 
+
+			// HANDLE THE GAMECONTROLLER
+#define JOYSTICK_MAX_RADIUS 32767.0f
+#define JOYSTICK_RAD_DEADZONE 0.18f
+			else if (e.type == SDL_CONTROLLERAXISMOTION)
+			{
+				if (e.caxis.which ==
+					SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller)))		// First controller
+				{
+					if (e.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)		// X axis
+					{
+						_x = std::min(1.0f, std::max(-1.0f, e.caxis.value / JOYSTICK_MAX_RADIUS));
+						if (std::abs(_x) < JOYSTICK_RAD_DEADZONE)
+						{
+							// DEADZONE it!
+							_x = 0;
+						}
+						//else
+						//{
+						//	// Testing eh!
+						//	printf("X Axis: %f\n", _x);
+						//}
+					}
+				}
+
+			}
+			else if (e.type == SDL_CONTROLLERBUTTONDOWN)
+			{
+				// Press buttons!
+				if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+					_b2 = true;
+			}
+			else if (e.type == SDL_CONTROLLERBUTTONUP)
+			{
+				// Release
+				if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+					_b2 = false;
+			}
         }
     }
 
+	if (controller == NULL)			// If there's no gamecontroller, then keyboard is the big boss hoe!
+	{
+		// ESPECIALLY FOR KEYBOARD... since the variables need some refining eh.
+		if (kLeft == kRight) _x = 0;   // If both are pressed it cancels
+		else if (kLeft && !kRight) _x = -1.0f;
+		else if (!kLeft && kRight) _x = 1.0f;
 
-    // ESPECIALLY FOR KEYBOARD... since the variables need some refining eh.
-    if (kLeft == kRight) _x = 0;   // If both are pressed it cancels
-    else if (kLeft && !kRight) _x = -1.0f;
-    else if(!kLeft && kRight) _x = 1.0f;
-
-    if (kUp == kDown) _y = 0;
-    else if (kUp && !kDown) _y = -1.0f;
-    else if(!kUp && kDown) _y = 1.0f;
+		if (kUp == kDown) _y = 0;
+		else if (kUp && !kDown) _y = -1.0f;
+		else if (!kUp && kDown) _y = 1.0f;
+	}
 }

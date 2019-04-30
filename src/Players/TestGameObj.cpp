@@ -64,7 +64,7 @@ void TestGameObj::Update()
     // Jump!
 	if (InputManager::Instance().b2() && isOnGround)
 	{
-        printf("Jumping!\n");
+        //printf("Jumping!\n");
         vsp -= JUMP_HEIGHT - nerfer;
     }
 
@@ -217,6 +217,9 @@ void TestGameObj::Update()
 
     // Check states
     isOnGround = CollideAtPos(round(x), round(y) + 1, &tempCollisionsToCheck);
+
+	// TEST
+	//printf("%f,%f\n", x, y);
 }
 
 void TestGameObj::Render()
