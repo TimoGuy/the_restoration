@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-Ground::Ground(int gx, int gy, Room* rm) : Object(gx, gy, rm)
+Ground::Ground(int gx, int gy, Room* rm) : Object(gx, gy, rm, true)
 {
     // Init
     printf("Ground built!\n");

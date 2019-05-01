@@ -3,8 +3,8 @@
 #include "Object.h"
 #include "Room.h"
 #elif defined(_WIN32) || defined(WIN32)
-#include "Object.h"
-#include "Rooms\Room.h"
+//#include "Object.h"
+//#include "Rooms\Room.h"
 #endif
 
 #include <functional>

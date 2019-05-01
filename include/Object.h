@@ -7,6 +7,7 @@
 #include "ObjectFactory.h"
 #include "Rooms\Room.h"
 #include "Shape\Quad.h"
+#include <vector>
 #endif
 
 
@@ -41,7 +42,7 @@ class Room;
 class Object
 {
     public:
-        Object(int gx, int gy, Room* rm);
+        Object(int gx, int gy, Room* rm, bool isSolid);
         virtual ~Object();
 
         virtual void Update() = 0;
@@ -49,12 +50,15 @@ class Object
 
         float getX() { return x; }
         float getY() { return y; }
+		bool IsSolid() { return _isSolid; }
 
         virtual bool IsColliding(BoundBox* box) = 0;
 
     protected:
         float x, y;
         Room* room;
+
+		bool _isSolid;
 
     private:
 };

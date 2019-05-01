@@ -3,13 +3,13 @@
 #include "Object.h"
 #include "Shape/Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
-#include "../Object.h"
+#include "Entity.h"
 #include "../Shape/Quad.h"
 #endif
 
 #include <vector>
 
-class TestGameObj : public Object
+class TestGameObj : public Entity
 {
     public:
         TestGameObj(int gx, int gy, Room* rm);
@@ -23,13 +23,7 @@ class TestGameObj : public Object
     protected:
 
     private:
-    	Quad* image;
-
-    	float hsp = 0, vsp = 0;
     	int ____i = 0;
-
-        bool CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck);
-        bool CollideAtPos(float futX, float futY, std::vector<Object*>* collisionsToCheck, Object*& returnObjCollided);
 
 
         // States

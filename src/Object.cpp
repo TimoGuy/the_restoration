@@ -6,7 +6,7 @@
 #include "../include/defs.h"
 #endif
 
-Object::Object(int gx, int gy, Room* rm)
+Object::Object(int gx, int gy, Room* rm, bool isSolid)
 {
     // As you can tell,
     // gx/y means the positioning
@@ -15,6 +15,7 @@ Object::Object(int gx, int gy, Room* rm)
     x = gx * GRID_SIZE;
     y = gy * GRID_SIZE;
     room = rm;
+	_isSolid = isSolid;
 }
 
 Object::~Object()

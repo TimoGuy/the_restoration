@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-Slant::Slant(int gx, int gy, Room* rm) : Object(gx, gy, rm)
+Slant::Slant(int gx, int gy, Room* rm) : Object(gx, gy, rm, true)
 {
     //ctor
     printf("Slant built!\n");

@@ -90,6 +90,9 @@ r,g,b
 160,160,160 (Gray = slant (may be hard to implement, since there needs
 to be some neighbor calculations!!!))
 
+255,0,0 Hazard
+100,100,100 TopSideCollGround
+
 255,255,255 (White = nothing)
 
 
@@ -116,3 +119,9 @@ Copy and paste this:
 #ifdef __unix__
 #elif defined(_WIN32) || defined(WIN32)
 #endif
+
+
+
+
+--BUGS--
+-You can jump on HAZARDS if you hold a.

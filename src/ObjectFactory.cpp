@@ -9,12 +9,15 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/ObjectFactory.h"
 
-#include "../include/Players/TestGameObj.h"
 #include "../include/Players/Ground.h"
 #include "../include/Players/Exit.h"
 #include "../include/Players/Slant.h"
 #include "../include/Players/Hazard.h"
 #include "../include/Players/TopSideCollGround.h"
+
+#include "../include/Players/Entity.h"
+#include "../include/Players/TestGameObj.h"
+#include "../include/Players/TestEnemy.h"
 #endif
 
 #include <stdio.h>
@@ -33,6 +36,8 @@ enum StringValue
     evHazard,
 
 	evTopSideCollGround,
+
+	evEnemy1,
 
     evEnd
 };
@@ -59,6 +64,7 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
         (*s_mapStringValues)["160,160,160"] = evSlant;
 		(*s_mapStringValues)["255,0,0"] = evHazard;
 		(*s_mapStringValues)["100,100,100"] = evTopSideCollGround;
+		(*s_mapStringValues)["255,174,201"] = evEnemy1;
         (*s_mapStringValues)["end"] = evEnd;
 
         printf("Init Object map!!\n");
@@ -102,6 +108,10 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) c
 
 	case evTopSideCollGround:
 		return new TopSideCollGround(gx, gy, rm);
+		break;
+
+	case evEnemy1:
+		return new TestEnemy(gx, gy, rm);
 		break;
 
     default:

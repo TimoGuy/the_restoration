@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-Exit::Exit(int gx, int gy, Room* rm) : Object(gx, gy, rm)
+Exit::Exit(int gx, int gy, Room* rm) : Object(gx, gy, rm, false)
 {
     //ctor
     printf("Exit built!\n");
