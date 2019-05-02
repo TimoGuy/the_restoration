@@ -23,12 +23,13 @@ class TestGameObj : public Entity
     protected:
 
     private:
-    	int ____i = 0;
-
 
         // States
-        bool isOnGround = false;
-        float nerfer = 0;
+		int numJumps = 0;
+		int maxJumps = 2;	// Default: 1 for only 1 jump eh.
+		bool wasJumpBtnAlreadyPressed = false;
+        
+        float nerfer = 0;	// DEBUGGING VARIABLE
         float highestHsp = 0;
 
         float startX = 0, startY = 0;

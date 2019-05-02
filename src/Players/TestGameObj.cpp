@@ -61,11 +61,12 @@ void TestGameObj::Update()
 
 
     // Jump!
-	if (InputManager::Instance().b2() && isOnGround)
+	if (InputManager::Instance().b2() && numJumps > 0 && !wasJumpBtnAlreadyPressed)
 	{
-        //printf("Jumping!\n");
-        vsp -= JUMP_HEIGHT - nerfer;
+        vsp = -JUMP_HEIGHT - nerfer;
+		numJumps--;
     }
+	wasJumpBtnAlreadyPressed = InputManager::Instance().b2();
 
     // Gravity!
     vsp += GRAV;
@@ -131,11 +132,19 @@ void TestGameObj::Update()
 
 
 
-    // Check states
-    isOnGround = CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true);
+    // CHECK STATES
 
-	// TEST
-	//printf("%f,%f\n", x, y);
+	// If can jump (the difference is that
+	// even after you fall off of the world,
+	// you can still jump once (or how many
+	// jumps you have unlocked))
+	//
+	// Bc now it's more of a rocket-jumping game!
+	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
+	{
+		numJumps = maxJumps;	// Reset number of jumps you can do
+		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
+	}
 }
 
 void TestGameObj::Render()
