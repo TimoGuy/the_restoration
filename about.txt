@@ -87,8 +87,13 @@ r,g,b
 0,0,0 (Black = ground)
 38,127,0 (Drk Green = exit)
 
-160,160,160 (Gray = slant (may be hard to implement, since there needs
-to be some neighbor calculations!!!))
+0,162,232 (Blue = slant (right) (may be hard to implement, since there needs
+	to be some neighbor calculations!!!))
+153,217,234 (Light Blue = slant (left))
+LEFT means the slope is negative
+RIGHT means it's positive!!!
+
+
 
 255,0,0 Hazard
 100,100,100 TopSideCollGround

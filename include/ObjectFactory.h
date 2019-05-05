@@ -24,6 +24,11 @@ class ObjectFactory
 
         Object* Build(std::string const& key, int gx, int gy, Room* rm) const;
 
-    private:
-
+    private:		
+		// This is only for the slant creation code...
+		// Basically, if the last added thing is the right
+		// kind of slant, then continue the slant
+		static int previousStringValue;		// The enum values are already pointing to int's anyways...
+		static Object* previousSlant;		// You're going to edit this slant if needed...
+		// TODO: for extending the slant, you gotta know if the pixel for the slant isn't just wrapping around the screen!!!!! Or else there'll be some problems
 };

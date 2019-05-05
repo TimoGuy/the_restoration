@@ -31,7 +31,9 @@ enum StringValue
     evPlayer,
     evGround,
     evExit,
-    evSlant,
+
+	evSlantRight,
+	evSlantLeft,
 
     evHazard,
 
@@ -43,10 +45,8 @@ enum StringValue
 };
 static std::map<std::string, StringValue>* s_mapStringValues = NULL;
 
-
-
-
-
+int ObjectFactory::previousStringValue = -1;
+Object* ObjectFactory::previousSlant = nullptr;
 
 
 // Singleton initialization
@@ -61,7 +61,8 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
         (*s_mapStringValues)["255,216,0"] = evPlayer;
         (*s_mapStringValues)["0,0,0"] = evGround;
         (*s_mapStringValues)["38,127,0"] = evExit;
-        (*s_mapStringValues)["160,160,160"] = evSlant;
+		(*s_mapStringValues)["0,162,232"] = evSlantRight;
+		(*s_mapStringValues)["153,217,234"] = evSlantLeft;
 		(*s_mapStringValues)["255,0,0"] = evHazard;
 		(*s_mapStringValues)["100,100,100"] = evTopSideCollGround;
 		(*s_mapStringValues)["255,174,201"] = evEnemy1;
@@ -80,38 +81,62 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
 Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) const
 {
     // I apologize... this is all hard-coded in!
+	Object* retObj = NULL;
     switch ((*s_mapStringValues)[key.c_str()])
     {
     case evNotDefined:
         // This is white... so just a blank spot!
-        return NULL;
+		retObj = NULL;
+		break;
 
     case evPlayer:       // The Player!!!
-        return new TestGameObj(gx, gy, rm);
+		retObj = new TestGameObj(gx, gy, rm);
         break;
 
     case evGround:           // Ground
-        return new Ground(gx, gy, rm);
+		retObj = new Ground(gx, gy, rm);
         break;
 
     case evExit:        // Exits (doors)
-        return new Exit(gx, gy, rm);
+		retObj = new Exit(gx, gy, rm);
         break;
 
-    case evSlant:     // Slants (try to pass something in to calculate the slant eh!
-        return new Slant(gx, gy, rm);
-        break;
+	case evSlantRight:
+		if (previousStringValue != evSlantRight)
+		{
+			previousSlant = new Slant(gx, gy, rm, false);
+			retObj = previousSlant;
+		}
+		else
+		{
+			// Extend the current slant!
+			((Slant*)previousSlant)->Extend1BlockToTheRight(gx, gy, rm);
+		}
+		break;
+
+	case evSlantLeft:
+		if (previousStringValue != evSlantLeft)
+		{
+			previousSlant = new Slant(gx, gy, rm, true);
+			retObj = previousSlant;
+		}
+		else
+		{
+			// Extend the current slant!
+			((Slant*)previousSlant)->Extend1BlockToTheRight(gx, gy, rm);
+		}
+		break;
 
     case evHazard:
-        return new Hazard(gx, gy, rm);
+		retObj = new Hazard(gx, gy, rm);
         break;
 
 	case evTopSideCollGround:
-		return new TopSideCollGround(gx, gy, rm);
+		retObj = new TopSideCollGround(gx, gy, rm);
 		break;
 
 	case evEnemy1:
-		return new TestEnemy(gx, gy, rm);
+		retObj = new TestEnemy(gx, gy, rm);
 		break;
 
     default:
@@ -119,5 +144,9 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) c
         break;
     }
 
-    return NULL;
+	// Update the previous key
+	previousStringValue = (*s_mapStringValues)[key.c_str()];
+
+	// Spit it out, BOBBUSS!!
+    return retObj;
 }

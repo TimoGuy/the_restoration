@@ -7,14 +7,27 @@
 class Slant : public Object
 {
     public:
-        Slant(int gx, int gy, Room* rm);
+        Slant(int gx, int gy, Room* rm, bool isLeft);
         virtual ~Slant();
 
         void Update() {}
-        void Render() {}
+		void Render();
 
-		bool IsColliding(BoundBox* box) { return false; }
+		bool IsColliding(BoundBox* otherBox);
+
+		void Extend1BlockToTheRight(int newGx, int newGy, Room* rm);
+
     protected:
 
     private:
+#define SLANT_PROPERTIES_MAX_BLOCKS 4
+		struct Point { float x, y; };
+		struct Box { Point min, max; };
+
+		int originalGy;
+		bool _isLeft;
+		int _blocks;		// The max should be 4 (aka 1, 2, 3, and 4 are your options eh)
+		Point _start, _end;		// Always have the _start be left of the _end...
+
+		bool isCool = false;		// TODO: This is just a rendering TEST to see visually if the slants are colliding
 };
