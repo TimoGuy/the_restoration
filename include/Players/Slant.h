@@ -28,6 +28,4 @@ class Slant : public Object
 		bool _isLeft;
 		int _blocks;		// The max should be 4 (aka 1, 2, 3, and 4 are your options eh)
 		Point _start, _end;		// Always have the _start be left of the _end...
-
-		bool isCool = false;		// TODO: This is just a rendering TEST to see visually if the slants are colliding
 };

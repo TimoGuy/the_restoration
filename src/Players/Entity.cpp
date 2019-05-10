@@ -1,6 +1,7 @@
 #include "..\..\include\Players\Entity.h"
 #include "../../include/defs.h"
 
+#include "../../include/Players/Slant.h"		// Hope I can include this!!!
 
 
 Entity::Entity(int gx, int gy, Room* rm)
@@ -57,38 +58,75 @@ void Entity::SeeNeighborCollisionObjects(float centerX, float centerY, std::vect
 	}
 }
 
+
+#define ENTITY_MAX_CLIMB_HEIGHT 35.0f
+// Well, really the thing above should be the maxest max_hsp, that way you can still go up the slant
+// Or you could try lowering this and then move the testing cursor closer (x-wise) to the prev. position
+// And if there's a free space, then SLOW the player down! (That's an idea, but wait wait wait to implement...)
+
 void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float width, float height, std::vector<Object*>* collisionsToCheck)
 {
 	// THIS IS COLLISION W/ GROUND SECTION
 
 
-	// Try updating x (from hsp)
+	// Try updating x (from hsp)				// EDIT: we'll add the ability to see if collided into a slant or not! This only happens if you're RUBBING into it though!
 	int tHsp = ceil(abs(hspeed));
-	if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y, width, height, collisionsToCheck, true))
+	Object* tempCollision = NULL;
+	if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y, width, height, collisionsToCheck, tempCollision, true))
 	{
 		// It's safe!
 		x += tHsp * copysignf(1.0f, hspeed);
 	}
 	else if (tHsp > 0)
 	{
-		// Ran into something... let's see!
-		for (tHsp -= 1; tHsp > 0; tHsp--)
+		bool successClimb = false;
+
+#pragma region Slant_climbing!!!
+		if (dynamic_cast<Slant*>(tempCollision) != NULL)
 		{
-			// Roll back 1 at a time and see if no collision
-			int newX = round(x) + tHsp * copysignf(1.0f, hspeed);
-			if (!CollideAtPos(newX, y, width, height, collisionsToCheck, true))
+			// So now we know, it's a slant! Let's see if we can climb up this thing!!!
+			for (int offY = -1; offY >= -ENTITY_MAX_CLIMB_HEIGHT; offY--)
 			{
-				// Update!
-				x = newX;
-				break;
+				// Check just the 1 slope's collision eh!
+				BoundBox b = { x + tHsp * copysignf(1.0f, hspeed), y + offY, x, y, width, height };
+				if (!tempCollision->IsColliding(&b))
+				{
+					// Success! Make vspeed as high as it needs to be!!!!!!!
+					vsp += offY;
+
+					// It's safe!
+					x += tHsp * copysignf(1.0f, hspeed);
+					successClimb = true;
+					break;
+				}
 			}
 		}
+#pragma endregion
 
-		// Collided so let's get this thing stopping...
-		hspeed = 0;
+		if (!successClimb)
+		{
+			// Ran into something... let's see!
+			for (tHsp -= 1; tHsp > 0; tHsp--)
+			{
+				// Roll back 1 at a time and see if no collision
+				int newX = round(x) + tHsp * copysignf(1.0f, hspeed);
+				if (!CollideAtPos(newX, y, width, height, collisionsToCheck, true))
+				{
+					// Update!
+					x = newX;
+					break;
+				}
+			}
+
+			// Collided so let's get this thing stopping...
+			hspeed = 0;
+		}
 	}
 
-	// Try updating y (from vsp)
+
+
+
+	// Try updating y (from vsp)										// NOTE: the value 'vsp' could be modified by the ramp climbing back here!
 	int tVsp = ceil(abs(vspeed));
 	if (!CollideAtPos(x, y + tVsp * copysignf(1.0f, vspeed), width, height, collisionsToCheck, true))
 	{

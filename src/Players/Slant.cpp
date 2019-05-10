@@ -6,7 +6,7 @@
 #endif
 
 #include <stdio.h>
-
+#include <algorithm>
 
 
 
@@ -48,15 +48,7 @@ void Slant::Render()
 	glDisable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, NULL);
 
-	if (isCool)
-	{
-		glColor3f(0, 1, 0);
-		isCool = false;
-	}
-	else
-	{
-		glColor3f(1, 1, 1);
-	}
+	glColor3f(1, 1, 1);			// Color of the ground (WHITE I know!!!)
 
 	// Draw it!!!!
 	glBegin(GL_LINES);
@@ -66,6 +58,8 @@ void Slant::Render()
 
 	glEnd();
 }
+
+
 
 
 
@@ -79,38 +73,42 @@ bool Slant::IsColliding(BoundBox* otherBox)
 	box.min.y = otherBox->y;
 
 	// Calc slope and y-offset
-	float m = (_end.y - _start.y) / (_end.x - _start.x) * -1.0f;	// It turns out negative for some reason, so let's edit that!
-	//float b = _start.y - m * _start.x;		// Now we have the y=mx+b formula!!! And don't have to calc the sine cosine stuff.
+	float m = (_end.y - _start.y) / (_end.x - _start.x) * -1.0f;	// Now we have the y=mx+b formula!!! And don't have to calc the sine cosine stuff.
 
 
-											// Calc any top or bottom collision
-	if (m > 0)				// Upwards
+	// First see if horizontally the object would collide
+	if (box.min.x > _end.x ||
+		box.max.x < _start.x)
+		return false;
+
+
+	// Calc any top or bottom collision
+	if (m > 0)				// Upwards SLANT
 	{
-		float y = (box.max.x - _start.x) * m /*+ b*/ + _start.y;
-		// TEST
-		//printf("y=%f\nm=%f\n"/*b=%f\n*/"box.max.x=%f\nbox.max.y=%f\n\n\n\n", y, m, /*b,*/ box.max.x, box.max.y);
+		float y = (std::min(box.max.x, _end.x) - _start.x) * -m + _start.y;		// Reverse m because y is flipped here!
 
 		if (y < box.max.y &&
 			y > box.min.y)
 		{
-			printf("Hey ho!\n");
-			isCool = true;
 			return true;
 		}
 	}
 	else if (m < 0)			// Downwards
 	{
 		// Get left side Checked
-		float y = box.min.x * m/* + b*/;
+		float y = (std::max(box.min.x, _start.x) - _start.x) * -m + _start.y;		// Reverse m because y is flipped here!
 
 		if (y < box.max.y &&
 			y > box.min.y)
+		{
 			return true;
+		}
 	}
 	else /*if (m == 0)*/	// Straight
 	{
-		/*if (b < box.max.y &&
-			b > box.min.y)*/
+		float y = 0;
+		if (y < box.max.y &&
+			y > box.min.y)
 			return true;
 	}
 
