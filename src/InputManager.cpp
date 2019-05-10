@@ -180,8 +180,8 @@ void InputManager::ProcessInput(GameLoop* g)
 				// Press buttons!
 				if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
 					_b2 = true;
-				else if (e.cbutton.button == SDL_CONTROLLER_BUTTON_X)
-					SDL_Delay(250);
+				/*else if (e.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+					SDL_Delay(250);*/
 			}
 			else if (e.type == SDL_CONTROLLERBUTTONUP)
 			{

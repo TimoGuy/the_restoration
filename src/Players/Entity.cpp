@@ -87,12 +87,14 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 			// So now we know, it's a slant! Let's see if we can climb up this thing!!!
 			for (int offY = -1; offY >= -ENTITY_MAX_CLIMB_HEIGHT; offY--)
 			{
-				// Check just the 1 slope's collision eh!
-				BoundBox b = { x + tHsp * copysignf(1.0f, hspeed), y + offY, x, y, width, height };
-				if (!tempCollision->IsColliding(&b))
+				// Make sure to check all the area in case if there're more slopes!!!
+				if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y + offY, width, height, collisionsToCheck, true))
 				{
 					// Success! Make vspeed as high as it needs to be!!!!!!!
-					vsp += offY;
+					//vsp += offY;
+					vsp += offY / 4.25f;
+					y += offY;
+					hsp = hsp * 0.9985f;
 
 					// It's safe!
 					x += tHsp * copysignf(1.0f, hspeed);

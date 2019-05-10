@@ -95,6 +95,14 @@ void TestGameObj::Update()
     // CHECK FOR COLLISION W/ NPCs/HAZARDS/DOORS/etc.
 
     bool die = false;
+	
+	// TEST: if pressed 'j' then you'd automagically respawn
+	if (InputManager::Instance().b1())
+	{
+		die = true;
+	}
+
+
     Object* tempCollision = NULL;
     if (CollideAtPos(x + hsp, y + vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, tempCollision, false))
     {
