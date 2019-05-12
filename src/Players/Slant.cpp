@@ -125,7 +125,7 @@ void Slant::Extend1BlockToTheRight(int newGx, int newGy, Room* rm)
 		// Not gonna happen
 		return;
 
-
+	printf("\tSlant was extended by 1!!\n");
 
 	// Move the right point to the right more
 	_blocks++;

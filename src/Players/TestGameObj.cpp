@@ -4,8 +4,10 @@
 #include "InputManager.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
 #include "../../include/Players/Hazard.h"
+#include "../../include/Players/Exit.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
 #include <algorithm>
@@ -13,6 +15,8 @@
 
 #include <stdio.h>
 #include <cmath>
+
+//class TestRoom;
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 48
@@ -93,7 +97,6 @@ void TestGameObj::Update()
 
 
     // CHECK FOR COLLISION W/ NPCs/HAZARDS/DOORS/etc.
-
     bool die = false;
 	
 	// TEST: if pressed 'j' then you'd automagically respawn
@@ -112,6 +115,21 @@ void TestGameObj::Update()
             // Awesome!    Now you die!
             die = true;
         }
+
+		// Check for exits
+		else if (dynamic_cast<Exit*>(tempCollision) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
+		{
+			// Already determined we're colliding, so...
+			// See if it wants to trigger
+			if (((Exit*)tempCollision)->IsDesiringToTrigger())
+			{
+				// Go to that room!!!!
+				((TestRoom*)room)->SwitchLevelAndSetUpLevelForPlayer(((Exit*)tempCollision)->GetNewRoomID());
+
+				// Game over for YOU... there will be a new player created, so don't worry!!!
+				return;
+			}
+		}
     }
 
     if (y > room->getGHeight() * GRID_SIZE)

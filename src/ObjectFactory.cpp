@@ -98,7 +98,7 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) c
         break;
 
     case evExit:        // Exits (doors)
-		retObj = new Exit(gx, gy, rm);
+		retObj = new Exit(gx, gy, false, std::string("fitt"), rm);		// TODO: FIRST: we will just load the level with no params... l9r we'll add those.
         break;
 
 	case evSlantRight:

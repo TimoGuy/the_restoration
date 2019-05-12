@@ -27,10 +27,14 @@ class TestRoom : public Room
         void Render();
 
         bool SwitchLevelIO(std::string name);       // This is the thing after the "n_"
+		void SwitchLevelAndSetUpLevelForPlayer(std::string name);	// This should be what the user uses!!!
 
     protected:
 
     private:
+		void Destruct();
+
+
         std::vector<Object*> gameObjects;
 
 

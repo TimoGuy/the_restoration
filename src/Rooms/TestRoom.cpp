@@ -24,36 +24,12 @@
 
 TestRoom::TestRoom()
 {
-    // TEST CODE to load a level
-	bool success;
-	success = SwitchLevelIO("jojo");
-    //success = SwitchLevelIO("test");
-
-	if (!success)
-	{
-		printf("ERROR: Room was not created, because level switching did not succeed\n");
-		return;
-	}
-
-    for (int i = 0; i < gameObjects.size(); i++)
-    {
-        // Look for the player!!!
-        if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
-        {
-            camFocusObj = gameObjects.at(i);
-            break;
-        }
-    }
+	SwitchLevelAndSetUpLevelForPlayer("jojo");
 }
 
 TestRoom::~TestRoom()
 {
-    // Tear down all the objects in the object list
-    for (int it = 0; it != gameObjects.size(); ++it)
-    {
-        delete gameObjects.at(it);
-    }
-    gameObjects.clear();
+	Destruct();
 }
 
 void TestRoom::Update()
@@ -198,6 +174,59 @@ bool TestRoom::SwitchLevelIO(std::string name)
     stbi_image_free(imgData);
 	return true;
 }
+
+
+
+
+
+
+
+
+
+void TestRoom::SwitchLevelAndSetUpLevelForPlayer(std::string name)
+{
+	// Clear things up first!!!
+	Destruct();
+
+
+	// TEST CODE to load a level
+	bool success;
+	success = SwitchLevelIO(name);
+	//success = SwitchLevelIO("test");
+
+	if (!success)
+	{
+		printf("ERROR: Room was not created, because level switching did not succeed\n");
+		return;
+	}
+
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		// Look for the player!!!
+		if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
+		{
+			camFocusObj = gameObjects.at(i);
+			break;
+		}
+	}
+}
+
+void TestRoom::Destruct()
+{
+	// Tear down all the objects in the object list
+	for (int it = 0; it != gameObjects.size(); ++it)
+	{
+		delete gameObjects.at(it);
+	}
+	gameObjects.clear();
+}
+
+
+
+
+
+
+
 
 
 
