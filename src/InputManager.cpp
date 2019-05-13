@@ -8,6 +8,16 @@
 #include <algorithm>
 #endif
 
+const bool & InputManager::reloadRoom()
+{
+	if (_reloadRoom)
+	{
+		_reloadRoom = false;
+		return true;
+	}
+	return _reloadRoom;
+}
+
 InputManager::InputManager()
 {
     // Try initializing 1 joystick (gamecontroller)!
@@ -114,6 +124,10 @@ void InputManager::ProcessInput(GameLoop* g)
                 case SDLK_k:
                     _b2 = true;
                     break;
+
+				case SDLK_r:
+					_reloadRoom = true;		// FOR DEBUG: there's no keyup event, btw.
+					break;
                 }
             }
             else if (e.type == SDL_KEYUP)
@@ -171,6 +185,15 @@ void InputManager::ProcessInput(GameLoop* g)
 						//	// Testing eh!
 						//	printf("X Axis: %f\n", _x);
 						//}
+					}
+					else if (e.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)		// Y axis
+					{
+						_y = std::min(1.0f, std::max(-1.0f, e.caxis.value / JOYSTICK_MAX_RADIUS));
+						if (std::abs(_y) < JOYSTICK_RAD_DEADZONE)
+						{
+							// DEADZONE it!
+							_y = 0;
+						}
 					}
 				}
 

@@ -7,6 +7,7 @@
 #include "ObjectFactory.h"
 #include <SDL2/SDL_opengl.h>
 #elif defined(_WIN32) || defined(WIN32)
+#include "../../include/InputManager.h"
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
 #include "../../include/Lib/Texture.h"
@@ -21,6 +22,7 @@
 #include <iterator>
 #include <sstream>
 #include <algorithm>
+#include <string>
 
 TestRoom::TestRoom()
 {
@@ -99,6 +101,22 @@ void TestRoom::Render()
     {
         gameObjects.at(it)->Render();
     }
+
+
+
+	// FOR DEBUG: check if the room needs to be reloaded
+	if (InputManager::Instance().reloadRoom())		// This is a check, but after 1 check the inside variable turns off, so no worries.
+	{
+		RequestLevelSwitch(currentLvl);
+	}
+
+	// Switch rooms if requested (after everything has finished computing, hence the end of the Render() function)
+	if (!pleaseSwitchLevelsToThisOne.empty())
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+		SwitchLevelAndSetUpLevelForPlayer(pleaseSwitchLevelsToThisOne);
+		pleaseSwitchLevelsToThisOne.clear();
+	}
 }
 
 
@@ -115,8 +133,8 @@ bool TestRoom::SwitchLevelIO(std::string name)
 #endif
 
     printf("Levels are stored in:\n%s\n\n", currentDir.c_str());
-    std::string levelName = TestRoom::FindLevelIO(name, currentDir);
-    if (levelName.empty())           // Error checking....
+    std::string levelFilename = TestRoom::FindLevelIO(name, currentDir);
+    if (levelFilename.empty())           // Error checking....
     {
         printf("ERROR: Unable to switch levels... no file was found with the level name \"%s\"\n", name.c_str());
         return false;
@@ -124,7 +142,7 @@ bool TestRoom::SwitchLevelIO(std::string name)
 
     // Load a level
     int comp;
-    const std::string& fileName = currentDir + levelName;
+    const std::string& fileName = currentDir + levelFilename;
     int req = STBI_rgb;
     unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
 
@@ -169,10 +187,18 @@ bool TestRoom::SwitchLevelIO(std::string name)
         i++;
     }
 
+	// Remember what level you're on!
+	currentLvl = name;
+	currentLvlFilename = levelFilename;		// TODO: This way we can parse and get the code from the filename!
 
     // Free loaded image
     stbi_image_free(imgData);
 	return true;
+}
+
+void TestRoom::RequestLevelSwitch(std::string name)
+{
+	pleaseSwitchLevelsToThisOne = name;
 }
 
 

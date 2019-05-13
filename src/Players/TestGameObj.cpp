@@ -124,7 +124,7 @@ void TestGameObj::Update()
 			if (((Exit*)tempCollision)->IsDesiringToTrigger())
 			{
 				// Go to that room!!!!
-				((TestRoom*)room)->SwitchLevelAndSetUpLevelForPlayer(((Exit*)tempCollision)->GetNewRoomID());
+				((TestRoom*)room)->RequestLevelSwitch(((Exit*)tempCollision)->GetNewRoomID());
 
 				// Game over for YOU... there will be a new player created, so don't worry!!!
 				return;

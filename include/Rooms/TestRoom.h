@@ -27,7 +27,7 @@ class TestRoom : public Room
         void Render();
 
         bool SwitchLevelIO(std::string name);       // This is the thing after the "n_"
-		void SwitchLevelAndSetUpLevelForPlayer(std::string name);	// This should be what the user uses!!!
+		void RequestLevelSwitch(std::string name);	// This should be what the user uses!!!
 
     protected:
 
@@ -40,7 +40,10 @@ class TestRoom : public Room
 
         // Level-loading
         std::string currentLvl;
+		std::string currentLvlFilename;
 
+		std::string pleaseSwitchLevelsToThisOne;	// Hopefully this is initialized as empty...
+		void SwitchLevelAndSetUpLevelForPlayer(std::string name);	// This switches and then loads the new room
         static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename (w/out the 'n_')), and the directory of the levels!
 
         // For the camera
