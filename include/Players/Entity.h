@@ -20,6 +20,6 @@ protected:
 	void UpdateGroundCollisionVelocity(float & hspeed, float & vspeed, float width, float height, std::vector<Object*>* collisionsToCheck);
 
 	bool CollideAtPos(float futX, float futY, float width, float height, std::vector<Object*>* collisionsToCheck, bool onlySolids);
-	bool CollideAtPos(float futX, float futY, float width, float height, std::vector<Object*>* collisionsToCheck, Object*& returnObjCollided, bool onlySolids);
+	bool CollideAtPos(float futX, float futY, float width, float height, std::vector<Object*>* collisionsToCheck, std::vector<Object*>& returnObjsCollided, bool onlySolids);
 };
 

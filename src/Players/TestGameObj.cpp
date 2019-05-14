@@ -106,28 +106,31 @@ void TestGameObj::Update()
 	}
 
 
-    Object* tempCollision = NULL;
-    if (CollideAtPos(x + hsp, y + vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, tempCollision, false))
+    std::vector<Object*> tempCollisions;
+    if (CollideAtPos(x + hsp, y + vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, tempCollisions, false))
     {
-        // Check for hazards
-        if (dynamic_cast<Hazard*>(tempCollision) != NULL)
-        {
-            // Awesome!    Now you die!
-            die = true;
-        }
-
-		// Check for exits
-		else if (dynamic_cast<Exit*>(tempCollision) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
+		for (int i = 0; i < tempCollisions.size(); i++)
 		{
-			// Already determined we're colliding, so...
-			// See if it wants to trigger
-			if (((Exit*)tempCollision)->IsDesiringToTrigger())
+			// Check for hazards
+			if (dynamic_cast<Hazard*>(tempCollisions.at(i)) != NULL)
 			{
-				// Go to that room!!!!
-				((TestRoom*)room)->RequestLevelSwitch(((Exit*)tempCollision)->GetNewRoomID());
+				// Awesome!    Now you die!
+				die = true;
+			}
 
-				// Game over for YOU... there will be a new player created, so don't worry!!!
-				return;
+			// Check for exits
+			else if (dynamic_cast<Exit*>(tempCollisions.at(i)) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
+			{
+				// Already determined we're colliding, so...
+				// See if it wants to trigger
+				if (((Exit*)tempCollisions.at(i))->IsDesiringToTrigger())
+				{
+					// Go to that room!!!!
+					((TestRoom*)room)->RequestLevelSwitch(((Exit*)tempCollisions.at(i))->GetNewRoomID());
+
+					// Game over for YOU... there will be a new player created, so don't worry!!!
+					return;
+				}
 			}
 		}
     }

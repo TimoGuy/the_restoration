@@ -27,11 +27,13 @@ void Hazard::Render()
 	image->Render(x, y);
 }
 
+// The buffer's there to make the size a little smaller
+#define HAZARD_BUFFER 4
 bool Hazard::IsColliding(BoundBox* box)
 {
     // Use 'image' as the bounding box and test collision!
-    return x < box->x + box->width &&
-       x + image->GetWidth() > box->x &&
-       y < box->y + box->height &&
-       y + image->GetHeight() > box->y;
+    return x + HAZARD_BUFFER < box->x + box->width &&
+       x + image->GetWidth() - HAZARD_BUFFER > box->x &&
+       y + HAZARD_BUFFER < box->y + box->height &&
+       y + image->GetHeight() - HAZARD_BUFFER > box->y;
 }

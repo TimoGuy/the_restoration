@@ -71,8 +71,8 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 
 	// Try updating x (from hsp)				// EDIT: we'll add the ability to see if collided into a slant or not! This only happens if you're RUBBING into it though!
 	int tHsp = ceil(abs(hspeed));
-	Object* tempCollision = NULL;
-	if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y, width, height, collisionsToCheck, tempCollision, true))
+	std::vector<Object*> tempCollisions;
+	if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y, width, height, collisionsToCheck, tempCollisions, true))
 	{
 		// It's safe!
 		x += tHsp * copysignf(1.0f, hspeed);
@@ -82,25 +82,32 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 		bool successClimb = false;
 
 #pragma region Slant_climbing!!!
-		if (dynamic_cast<Slant*>(tempCollision) != NULL)
+		for (int i = 0; i < tempCollisions.size(); i++)
 		{
-			// So now we know, it's a slant! Let's see if we can climb up this thing!!!
-			for (int offY = -1; offY >= -ENTITY_MAX_CLIMB_HEIGHT; offY--)
+			if (dynamic_cast<Slant*>(tempCollisions.at(i)) != NULL)
 			{
-				// Make sure to check all the area in case if there're more slopes!!!
-				if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y + offY, width, height, collisionsToCheck, true))
+				// So now we know, there's a slant! Let's see if we can climb up this thing!!!
+				for (int offY = -1; offY >= -ENTITY_MAX_CLIMB_HEIGHT; offY--)
 				{
-					// Success! Make vspeed as high as it needs to be!!!!!!!
-					//vsp += offY;
-					vsp += offY / 4.25f;
-					y += offY;
-					hsp = hsp * 0.9985f;
+					// Make sure to check all the area in case if there're more slopes!!!
+					if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y + offY, width, height, collisionsToCheck, true))
+					{
+						// Success! Make vspeed as high as it needs to be!!!!!!!
+						//vsp += offY;
+						vsp += offY / 4.25f;
+						y += offY;
+						hsp = hsp * 0.9985f;
 
-					// It's safe!
-					x += tHsp * copysignf(1.0f, hspeed);
-					successClimb = true;
-					break;
+						// It's safe!
+						x += tHsp * copysignf(1.0f, hspeed);
+						successClimb = true;
+						break;
+					}
 				}
+
+				// Break out of big loop too.
+				// I'm sorry, it's just easier this way...
+				break;
 			}
 		}
 #pragma endregion
@@ -165,13 +172,14 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 
 bool Entity::CollideAtPos(float futX, float futY, float width, float height, std::vector<Object*>* collisionsToCheck, bool onlySolids)
 {
-	Object* useless = NULL;
+	std::vector<Object*> useless;		// So this is just... well, useless eh!
 	return CollideAtPos(futX, futY, width, height, collisionsToCheck, useless, onlySolids);
 }
 
-bool Entity::CollideAtPos(float futX, float futY, float width, float height, std::vector<Object*>* collisionsToCheck, Object*& returnObjCollided, bool onlySolids)
+bool Entity::CollideAtPos(float futX, float futY, float width, float height, std::vector<Object*>* collisionsToCheck, std::vector<Object*>& returnObjsCollided, bool onlySolids)
 {
 	// And then see if collided!
+	bool collided = false;
 	for (int i = 0; i < collisionsToCheck->size(); i++)
 	{
 		BoundBox b = { futX, futY, x, y, width, height };
@@ -179,10 +187,10 @@ bool Entity::CollideAtPos(float futX, float futY, float width, float height, std
 			(!onlySolids || collisionsToCheck->at(i)->IsSolid()))
 		{
 			// Collided!
-			returnObjCollided = collisionsToCheck->at(i);
-			return true;
+			returnObjsCollided.push_back(collisionsToCheck->at(i));
+			collided = true;
 		}
 	}
-	return false;
+	return collided;
 }
 

@@ -66,6 +66,8 @@ bool GameLoop::Execute()
             // Delay for next frame
             SDL_Delay((unsigned int)targetTime - SDL_GetTicks());
         }
+
+		//SDL_Delay(1000 / 30);		// Clamp to <30 fps for debugging
     }
 
     return true;
