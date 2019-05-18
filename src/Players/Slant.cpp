@@ -118,8 +118,9 @@ bool Slant::IsColliding(BoundBox* otherBox)
 
 
 
-void Slant::Extend1BlockToTheRight(int newGx, int newGy, Room* rm)
+void Slant::Extend1BlockToTheRight(int newGx, int newGy)
 {
+	// Because texturing problems, we'll limit number of length for a slant...
 	if (_blocks >= SLANT_PROPERTIES_MAX_BLOCKS ||
 		originalGy != newGy)
 		// Not gonna happen
@@ -132,5 +133,5 @@ void Slant::Extend1BlockToTheRight(int newGx, int newGy, Room* rm)
 	_end.x += GRID_SIZE;
 
 	// Add myself to the new spots I take up too!!!
-	rm->getCollisionMap()[rm->getGWidth() * newGy + newGx] = this;
+	room->getCollisionMap()[room->getGWidth() * newGy + newGx] = this;
 }

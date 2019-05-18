@@ -16,13 +16,13 @@ class Quad
         void Render(float x, float y);
 
         // Getters and Setters
-        void SetWidth(float width) { width = _width; }
+        void SetWidth(float width) { _width = width; }
         float GetWidth() { return _width; }
 
-        void SetHeight(float height) { height = _height; }
+        void SetHeight(float height) { _height = height; }
         float GetHeight() { return _height; }
 
-        void SetImage(Texture* image) { image = _image; }
+        void SetImage(Texture* image) { _image = image; }
         Texture* GetImage() { return _image; }
 
 

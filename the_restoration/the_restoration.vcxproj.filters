@@ -93,6 +93,9 @@
     <ClInclude Include="..\include\Players\TestEnemy.h">
       <Filter>Header Files\Players</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Players\MovingPlatGround.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Lib\Texture.cpp">
@@ -147,6 +150,9 @@
       <Filter>Source Files\Players</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Players\TestEnemy.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\MovingPlatGround.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>

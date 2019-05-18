@@ -15,7 +15,7 @@ class Slant : public Object
 
 		bool IsColliding(BoundBox* otherBox);
 
-		void Extend1BlockToTheRight(int newGx, int newGy, Room* rm);
+		void Extend1BlockToTheRight(int newGx, int newGy);
 
     protected:
 

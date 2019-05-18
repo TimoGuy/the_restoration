@@ -33,4 +33,6 @@ class TestGameObj : public Entity
         float highestHsp = 0;
 
         float startX = 0, startY = 0;
+
+		int outHsp, outVsp;		// Outside forces will be int's, really!
 };

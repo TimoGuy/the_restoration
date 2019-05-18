@@ -8,6 +8,7 @@
 #include "../../include/Players/TestGameObj.h"
 #include "../../include/Players/Hazard.h"
 #include "../../include/Players/Exit.h"
+#include "../../include/Players/MovingPlatGround.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
 #include <algorithm>
@@ -132,6 +133,18 @@ void TestGameObj::Update()
 					return;
 				}
 			}
+
+			// Check for moving platforms
+			else if (dynamic_cast<MovingPlatGround*>(tempCollisions.at(i)) != NULL)
+			{
+				// Add hsp to me!!!! (unless if hitting it from below, then you'd just hit your head!)
+				//if (vsp - ((MovingPlatGround*)tempCollisions.at(i))->GetHsp() >= 0)
+				{
+					// This means still, or downwards (in comparison to the moving obj!!)
+					outHsp = ((MovingPlatGround*)tempCollisions.at(i))->GetHsp();
+					outVsp = ((MovingPlatGround*)tempCollisions.at(i))->GetVsp();
+				}
+			}
 		}
     }
 
@@ -156,7 +169,11 @@ void TestGameObj::Update()
 
 
     // Update vsp and hsp
+	hsp += outHsp;
+	vsp += outVsp;
 	UpdateGroundCollisionVelocity(hsp, vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck);
+	hsp -= outHsp;
+	vsp -= outVsp;
 
 
 
@@ -174,6 +191,9 @@ void TestGameObj::Update()
 		numJumps = maxJumps;	// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 	}
+
+	// Reset outside forces
+	outHsp = outVsp = 0;
 }
 
 void TestGameObj::Render()

@@ -133,6 +133,7 @@
     <ClInclude Include="..\include\Players\Exit.h" />
     <ClInclude Include="..\include\Players\Ground.h" />
     <ClInclude Include="..\include\Players\Hazard.h" />
+    <ClInclude Include="..\include\Players\MovingPlatGround.h" />
     <ClInclude Include="..\include\Players\Slant.h" />
     <ClInclude Include="..\include\Players\TestEnemy.h" />
     <ClInclude Include="..\include\Players\TestGameObj.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="..\src\Players\Exit.cpp" />
     <ClCompile Include="..\src\Players\Ground.cpp" />
     <ClCompile Include="..\src\Players\Hazard.cpp" />
+    <ClCompile Include="..\src\Players\MovingPlatGround.cpp" />
     <ClCompile Include="..\src\Players\Slant.cpp" />
     <ClCompile Include="..\src\Players\TestEnemy.cpp" />
     <ClCompile Include="..\src\Players\TestGameObj.cpp" />

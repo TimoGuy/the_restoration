@@ -107,6 +107,14 @@ void TestRoom::Render()
 	// FOR DEBUG: check if the room needs to be reloaded
 	if (InputManager::Instance().reloadRoom())		// This is a check, but after 1 check the inside variable turns off, so no worries.
 	{
+		// EDIT: Make it so that you can change the level to test using <iostream>
+		std::cout << "Please enter the new level\'s name (or blank for current level): ";
+		std::string newLvl;
+		std::getline(std::cin, newLvl);
+		if (!newLvl.empty())
+			currentLvl = newLvl;
+
+		// Change the level to 
 		RequestLevelSwitch(currentLvl);
 	}
 
@@ -232,6 +240,11 @@ void TestRoom::SwitchLevelAndSetUpLevelForPlayer(std::string name)
 		if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
 		{
 			camFocusObj = gameObjects.at(i);
+
+			// Sort the player to the very back
+			// This way, the player will always be updated late!
+			gameObjects.erase(gameObjects.begin() + i);
+			gameObjects.push_back(camFocusObj);
 			break;
 		}
 	}
