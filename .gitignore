@@ -319,3 +319,4 @@ paket-files/
 .idea/
 *.sln.iml
 
+DatesPrinter/
