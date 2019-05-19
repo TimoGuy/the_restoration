@@ -4,9 +4,10 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/InputManager.h"
 #include <SDL.h>
-#include <stdio.h>
-#include <algorithm>
 #endif
+#include <stdio.h>
+#include <cmath>
+#include <algorithm>
 
 const bool & InputManager::reloadRoom()
 {

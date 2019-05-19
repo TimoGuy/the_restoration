@@ -1,5 +1,6 @@
 #ifdef __unix__
 #include "Slant.h"
+#include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Slant.h"
 #include "../../include/defs.h"

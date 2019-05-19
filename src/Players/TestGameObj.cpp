@@ -1,6 +1,9 @@
 #ifdef __unix__
+#include "TestRoom.h"
 #include "TestGameObj.h"
 #include "Hazard.h"
+#include "Exit.h"
+#include "MovingPlatGround.h"
 #include "InputManager.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
@@ -11,11 +14,11 @@
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
-#include <algorithm>
 #endif
 
 #include <stdio.h>
 #include <cmath>
+#include <algorithm>
 
 //class TestRoom;
 
@@ -37,7 +40,7 @@ TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Entity(gx, gy, rm)
 
 TestGameObj::~TestGameObj()
 {
-    
+
 }
 
 // Grav should be somewhere between 0.5 and 1.0
@@ -99,7 +102,7 @@ void TestGameObj::Update()
 
     // CHECK FOR COLLISION W/ NPCs/HAZARDS/DOORS/etc.
     bool die = false;
-	
+
 	// TEST: if pressed 'j' then you'd automagically respawn
 	if (InputManager::Instance().b1())
 	{

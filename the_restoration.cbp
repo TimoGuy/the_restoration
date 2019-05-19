@@ -40,6 +40,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++0x" />
 		</Compiler>
 		<Linker>
 			<Add option="-lSDL2" />
@@ -54,11 +55,15 @@
 		<Unit filename="include/Lib/stb_image.h" />
 		<Unit filename="include/Object.h" />
 		<Unit filename="include/ObjectFactory.h" />
+		<Unit filename="include/Players/Entity.h" />
 		<Unit filename="include/Players/Exit.h" />
 		<Unit filename="include/Players/Ground.h" />
 		<Unit filename="include/Players/Hazard.h" />
+		<Unit filename="include/Players/MovingPlatGround.h" />
 		<Unit filename="include/Players/Slant.h" />
+		<Unit filename="include/Players/TestEnemy.h" />
 		<Unit filename="include/Players/TestGameObj.h" />
+		<Unit filename="include/Players/TopSideCollGround.h" />
 		<Unit filename="include/Rooms/Room.h" />
 		<Unit filename="include/Rooms/TestRoom.h" />
 		<Unit filename="include/Shape/Quad.h" />
@@ -72,11 +77,15 @@
 		</Unit>
 		<Unit filename="src/Object.cpp" />
 		<Unit filename="src/ObjectFactory.cpp" />
+		<Unit filename="src/Players/Entity.cpp" />
 		<Unit filename="src/Players/Exit.cpp" />
 		<Unit filename="src/Players/Ground.cpp" />
 		<Unit filename="src/Players/Hazard.cpp" />
+		<Unit filename="src/Players/MovingPlatGround.cpp" />
 		<Unit filename="src/Players/Slant.cpp" />
+		<Unit filename="src/Players/TestEnemy.cpp" />
 		<Unit filename="src/Players/TestGameObj.cpp" />
+		<Unit filename="src/Players/TopSideCollGround.cpp" />
 		<Unit filename="src/Rooms/Room.cpp" />
 		<Unit filename="src/Rooms/TestRoom.cpp" />
 		<Unit filename="src/Shape/Quad.cpp" />

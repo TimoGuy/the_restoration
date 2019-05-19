@@ -1,5 +1,10 @@
+#ifdef __unix__
+#include "TestEnemy.h"
+#include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TestEnemy.h"
 #include "../../include/defs.h"
+#endif
 
 
 TestEnemy::TestEnemy(int gx, int gy, Room* rm)

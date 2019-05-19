@@ -1,6 +1,6 @@
 #pragma once
 #ifdef __unix__
-#include "Object.h"
+#include "Entity.h"
 #include "Shape/Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "Entity.h"
@@ -28,7 +28,7 @@ class TestGameObj : public Entity
 		int numJumps = 0;
 		int maxJumps = 2;	// Default: 1 for only 1 jump eh.
 		bool wasJumpBtnAlreadyPressed = false;
-        
+
         float nerfer = 0;	// DEBUGGING VARIABLE
         float highestHsp = 0;
 

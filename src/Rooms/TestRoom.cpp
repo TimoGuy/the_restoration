@@ -1,4 +1,5 @@
 #ifdef __unix__
+#include "InputManager.h"
 #include "TestRoom.h"
 #include "Players/TestGameObj.h"
 #include "Lib/Texture.h"
@@ -114,7 +115,7 @@ void TestRoom::Render()
 		if (!newLvl.empty())
 			currentLvl = newLvl;
 
-		// Change the level to 
+		// Change the level to
 		RequestLevelSwitch(currentLvl);
 	}
 
@@ -245,6 +246,7 @@ void TestRoom::SwitchLevelAndSetUpLevelForPlayer(std::string name)
 			// This way, the player will always be updated late!
 			gameObjects.erase(gameObjects.begin() + i);
 			gameObjects.push_back(camFocusObj);
+			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
 			break;
 		}
 	}
