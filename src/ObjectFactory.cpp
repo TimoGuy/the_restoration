@@ -54,7 +54,7 @@ enum StringValue
 static std::map<std::string, StringValue>* s_mapStringValues = NULL;
 
 int ObjectFactory::previousStringValue = -1;
-Object* ObjectFactory::previousObj = nullptr;
+Object* ObjectFactory::previousObj = NULL;
 
 
 // Singleton initialization

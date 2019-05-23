@@ -11,6 +11,7 @@
 #endif
 
 #include <cmath>
+#include <algorithm>
 
 
 Entity::Entity(int gx, int gy, Room* rm)

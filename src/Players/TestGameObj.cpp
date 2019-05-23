@@ -52,6 +52,7 @@ TestGameObj::~TestGameObj()
 void TestGameObj::Update()
 {
 	// Adjust according to input
+	printf("X is %f!!!\n", InputManager::Instance().x());
 	hsp += InputManager::Instance().x();
 	if (InputManager::Instance().x() == 0 &&
         hsp != 0)
@@ -106,6 +107,7 @@ void TestGameObj::Update()
 	// TEST: if pressed 'j' then you'd automagically respawn
 	if (InputManager::Instance().b1())
 	{
+//        printf("You dyed!!\n");
 		die = true;
 	}
 
@@ -201,6 +203,7 @@ void TestGameObj::Update()
 
 void TestGameObj::Render()
 {
+//    printf("Rendering Player!!!\n");
 	image->Render(x, y);
 }
 
