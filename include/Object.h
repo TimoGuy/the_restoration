@@ -49,6 +49,8 @@ class Object
         virtual void Update() = 0;
         virtual void Render() = 0;
 
+        void SetGridCoords(int gx, int gy);
+
         float getX() { return x; }
         float getY() { return y; }
 		bool IsSolid() { return _isSolid; }

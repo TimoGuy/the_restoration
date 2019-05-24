@@ -222,9 +222,18 @@ bool TestRoom::SwitchLevelIO(std::string name)
 void TestRoom::RequestLevelSwitch(std::string name)
 {
 	pleaseSwitchLevelsToThisOne = name;
+    customEnter = false;
 }
 
+void TestRoom::RequestLevelSwitch(std::string name, int playerGX, int playerGY)
+{
+    RequestLevelSwitch(name);
 
+    // Now start dinking around!
+    customEnter = true;
+    ceGX = playerGX;
+    ceGY = playerGY;
+}
 
 
 
@@ -261,6 +270,12 @@ void TestRoom::SwitchLevelAndSetUpLevelForPlayer(std::string name)
 			gameObjects.erase(gameObjects.begin() + i);
 			gameObjects.push_back(camFocusObj);
 			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
+
+			if (customEnter)
+			{
+                // Change the coords
+                ((TestGameObj*)camFocusObj)->SetGridCoords(ceGX, ceGY);
+			}
 			break;
 		}
 	}

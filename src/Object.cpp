@@ -12,8 +12,7 @@ Object::Object(int gx, int gy, Room* rm, bool isSolid)
     // gx/y means the positioning
     // within the picture grid (1 block
     // is 32x32 pixels
-    x = gx * GRID_SIZE;
-    y = gy * GRID_SIZE;
+    SetGridCoords(gx, gy);
     room = rm;
 	_isSolid = isSolid;
 }
@@ -21,4 +20,13 @@ Object::Object(int gx, int gy, Room* rm, bool isSolid)
 Object::~Object()
 {
     //dtor
+}
+
+
+
+
+void Object::SetGridCoords(int gx, int gy)
+{
+    x = gx * GRID_SIZE;
+    y = gy * GRID_SIZE;
 }

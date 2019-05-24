@@ -28,6 +28,7 @@ class TestRoom : public Room
 
         bool SwitchLevelIO(std::string name);       // This is the thing after the "n_"
 		void RequestLevelSwitch(std::string name);	// This should be what the user uses!!!
+		void RequestLevelSwitch(std::string name, int playerGX, int playerGY);	// This should be what the user uses!!!
 
     protected:
 
@@ -50,4 +51,8 @@ class TestRoom : public Room
         // For the camera
         float camX = 0, camY = 0;   // Make this the same coords as the player!
         Object* camFocusObj;        // This is the pointer to the player, eh!
+
+        // For custom entering
+        bool customEnter = false;
+        int ceGX, ceGY;
 };

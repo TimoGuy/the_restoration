@@ -131,8 +131,14 @@ void TestGameObj::Update()
 				// See if it wants to trigger
 				if (((Exit*)tempCollisions.at(i))->IsDesiringToTrigger())
 				{
+                    std::string newRmID = ((Exit*)tempCollisions.at(i))->GetNewRoomID();
+
 					// Go to that room!!!!
-					((TestRoom*)room)->RequestLevelSwitch(((Exit*)tempCollisions.at(i))->GetNewRoomID());
+					int ceGX, ceGY;
+					if (((Exit*)tempCollisions.at(i))->GetCustomCoords(ceGX, ceGY))
+                        ((TestRoom*)room)->RequestLevelSwitch(newRmID, ceGX, ceGY);
+					else
+                        ((TestRoom*)room)->RequestLevelSwitch(newRmID);
 
 					// Game over for YOU... there will be a new player created, so don't worry!!!
 					return;

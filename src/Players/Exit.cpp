@@ -80,6 +80,31 @@ void Exit::Render()
 
 
 
+void Exit::SetEntranceCoords(int gx, int gy)
+{
+    customEnter = true;
+    ceGX = gx;
+    ceGY = gy;
+
+    // That's it, I suppose...
+    // We'll have to change the entrance code for the player eh...
+}
+
+
+
+bool Exit::GetCustomCoords(int& gx, int& gy)        // This'll edit the variables, warning you!!! (it's a dipstick function)
+{
+    if (!customEnter)
+        return false;
+
+    // Now insert the gx,gy etc.
+    gx = ceGX;
+    gy = ceGY;
+
+    return true;
+}
+
+
 
 bool Exit::IsColliding(BoundBox* box)
 {

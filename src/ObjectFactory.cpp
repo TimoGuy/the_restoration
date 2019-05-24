@@ -129,7 +129,7 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
         if (pos < 0)
         {
             // Break out and print error
-            printf("ERROR:: Not enough \'e\' params in level to create an exit...\n");
+            printf("\n\nERROR:: Not enough \'e\' params in level to create an exit...\n\n\n");
             break;
         }
 
@@ -138,8 +138,43 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
         std::istringstream(rmParams->at(pos + 1)) >> touchTrigger;
 		retObj = new Exit(gx, gy, touchTrigger, rmParams->at(pos + 2), rm);
 
+        int end = 3;
+		if (rmParams->at(pos + 3) != std::string("e") &&
+            rmParams->at(pos + 3) != std::string("n"))
+        {
+            end = 4;    // A fourth param...
+
+            // Parse from the x value (i.e. has a 123x456 to display coords)
+            int ceGX, ceGY;
+
+            std::string token;
+            std::istringstream tokenStream(rmParams->at(pos + 3));
+            int times = 0;
+            while (std::getline(tokenStream, token, 'x') &&
+                times <= 1)
+            {
+                if (times == 0)     // X axis
+                {
+                    std::istringstream(token) >> ceGX;
+                }
+                else if (times == 1)    // Y axis
+                {
+                    std::istringstream(token) >> ceGY;
+                }
+
+                times++;
+            }
+
+            printf("\n\n\tCustom entrance for %i,%i\n\n\n", ceGX, ceGY);
+            ((Exit*)retObj)->SetEntranceCoords(ceGX, ceGY);
+        }
+        else
+        {
+            printf("\tNo custom exit code found\n");
+        }
+
         // Remove those values
-        rmParams->erase(rmParams->begin() + pos, rmParams->begin() + pos + 3);
+        rmParams->erase(rmParams->begin() + pos, rmParams->begin() + pos + end);
 
         break;
     }
