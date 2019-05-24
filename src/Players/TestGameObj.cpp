@@ -36,6 +36,7 @@ TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Entity(gx, gy, rm)
 
     startX = x;
     startY = y;
+    outHsp = outVsp = 0;
 }
 
 TestGameObj::~TestGameObj()
@@ -52,7 +53,6 @@ TestGameObj::~TestGameObj()
 void TestGameObj::Update()
 {
 	// Adjust according to input
-//	printf("X is %f!!!\n", InputManager::Instance().x());
 	hsp += InputManager::Instance().x();
 	if (InputManager::Instance().x() == 0 &&
         hsp != 0)

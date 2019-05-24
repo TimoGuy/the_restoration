@@ -110,7 +110,6 @@ void InputManager::ProcessInput(GameLoop* g)
 
                 case SDLK_a:
                     kLeft = true;
-                    printf("\t\tLEFT!\n");
                     break;
 
                 case SDLK_d:
