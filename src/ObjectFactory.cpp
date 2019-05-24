@@ -107,10 +107,15 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
 		retObj = new Ground(gx, gy, rm);
         break;
 
-    case evExit:        // Exits (doors)
 
+
+
+
+
+    case evExit:        // Exits (doors)
+    {
         // Get the first 'e' code from the params
-        int pos;
+        int pos = -1;
         for (int i = 0; i < rmParams->size(); i++)
         {
             if (rmParams->at(i) == std::string("e"))
@@ -121,7 +126,14 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
             }
         }
 
+        if (pos < 0)
+        {
+            // Break out and print error
+            printf("ERROR:: Not enough \'e\' params in level to create an exit...\n");
+            break;
+        }
 
+        // Create the exit object
         bool touchTrigger;
         std::istringstream(rmParams->at(pos + 1)) >> touchTrigger;
 		retObj = new Exit(gx, gy, touchTrigger, rmParams->at(pos + 2), rm);
@@ -130,6 +142,10 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
         rmParams->erase(rmParams->begin() + pos, rmParams->begin() + pos + 3);
 
         break;
+    }
+
+
+
 
 	case evSlantRight:
 		if (previousStringValue != evSlantRight)
