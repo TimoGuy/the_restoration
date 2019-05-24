@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
 // See
 // https://stackoverflow.com/questions/5450742/is-it-possible-in-c-to-loop-over-all-subclasses-of-an-abstract-class
@@ -22,9 +23,9 @@ class ObjectFactory
     public:
         static ObjectFactory& GetObjectFactory();    // SINGLETON!!!! BANZAI!!!
 
-        Object* Build(std::string const& key, int gx, int gy, Room* rm) const;
+        Object* Build(std::string const& key, std::vector<std::string>* rmParams, int gx, int gy, Room* rm) const;
 
-    private:		
+    private:
 		// This is only for the slant creation code...
 		// Basically, if the last added thing is the right
 		// kind of slant, then continue the slant

@@ -153,6 +153,28 @@ bool TestRoom::SwitchLevelIO(std::string name)
         return false;
     }
 
+    // Initialize / empty the token/params list
+    tokens.clear();
+
+	// Remember what level you're on!
+	currentLvl = name;
+	currentLvlFilename = levelFilename;
+
+	// This way we can parse and get the code from the filename!
+    std::string token;
+    std::istringstream tokenStream(currentLvlFilename);
+
+    printf("\nPrinting out level param data...\n");
+    while (std::getline(tokenStream, token, '_'))
+    {
+        printf("%s\n", token.c_str());
+        tokens.push_back(token);        // Add into level's params
+    }
+    printf("\n\n\n\n");
+
+
+
+
     // Initialize the Collision Map as EMPTY!!!!
     collisionMap = new Object*[gWidth * gHeight];
     for (int uu = 0; uu < gWidth * gHeight; uu++)
@@ -181,16 +203,16 @@ bool TestRoom::SwitchLevelIO(std::string name)
             ss[1].str() + std::string(",") +
             ss[2].str();
 
-        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
+        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), &tokens, (int)(i % gWidth), (int)(i / gWidth), this);
         if (_new != NULL)
             gameObjects.push_back(_new);        // Adds the returned built object!
 
         i++;
     }
 
-	// Remember what level you're on!
-	currentLvl = name;
-	currentLvlFilename = levelFilename;		// TODO: This way we can parse and get the code from the filename!
+
+
+
 
     // Free loaded image
     stbi_image_free(imgData);

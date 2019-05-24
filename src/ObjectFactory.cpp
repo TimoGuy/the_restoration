@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 #include <map>
+#include <sstream>
 
 // The Registered 'Objects'
 enum StringValue
@@ -86,8 +87,8 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
 
 
 
-
-Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) const
+//                                                       ↆEvery time you use a param, delete it!
+Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* rmParams, int gx, int gy, Room* rm) const
 {
     // I apologize... this is all hard-coded in!
 	Object* retObj = NULL;
@@ -107,7 +108,27 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, Room* rm) c
         break;
 
     case evExit:        // Exits (doors)
-		retObj = new Exit(gx, gy, false, std::string("fitt"), rm);		// TODO: FIRST: we will just load the level with no params... l9r we'll add those.
+
+        // Get the first 'e' code from the params
+        int pos;
+        for (int i = 0; i < rmParams->size(); i++)
+        {
+            if (rmParams->at(i) == std::string("e"))
+            {
+                // Start here and just start reading the string thru to get values!
+                pos = i;
+                break;
+            }
+        }
+
+
+        bool touchTrigger;
+        std::istringstream(rmParams->at(pos + 1)) >> touchTrigger;
+		retObj = new Exit(gx, gy, touchTrigger, rmParams->at(pos + 2), rm);
+
+        // Remove those values
+        rmParams->erase(rmParams->begin() + pos, rmParams->begin() + pos + 3);
+
         break;
 
 	case evSlantRight:

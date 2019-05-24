@@ -41,6 +41,7 @@ class TestRoom : public Room
         // Level-loading
         std::string currentLvl;
 		std::string currentLvlFilename;
+        std::vector<std::string> tokens;        // These are the level tokens which dictate its objects within (eg: an exit object's params)
 
 		std::string pleaseSwitchLevelsToThisOne;	// Hopefully this is initialized as empty...
 		void SwitchLevelAndSetUpLevelForPlayer(std::string name);	// This switches and then loads the new room
