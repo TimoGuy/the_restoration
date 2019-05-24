@@ -9,7 +9,7 @@
 #include <cmath>
 #include <algorithm>
 
-const bool & InputManager::reloadRoom()
+bool InputManager::reloadRoom()
 {
 	if (_reloadRoom)
 	{

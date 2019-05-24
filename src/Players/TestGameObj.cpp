@@ -52,7 +52,7 @@ TestGameObj::~TestGameObj()
 void TestGameObj::Update()
 {
 	// Adjust according to input
-	printf("X is %f!!!\n", InputManager::Instance().x());
+//	printf("X is %f!!!\n", InputManager::Instance().x());
 	hsp += InputManager::Instance().x();
 	if (InputManager::Instance().x() == 0 &&
         hsp != 0)
