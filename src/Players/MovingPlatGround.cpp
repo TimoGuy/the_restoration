@@ -7,6 +7,7 @@
 #endif
 
 #include <stdio.h>
+#include <cmath>
 #include <algorithm>
 
 MovingPlatGround::MovingPlatGround(int gx, int gy, Room* rm) : Object(gx, gy, rm, true)
@@ -58,7 +59,7 @@ bool MovingPlatGround::IsColliding(BoundBox* box)
 void MovingPlatGround::Extend1BlockToTheRight(int newGx, int newGy)
 {
 	// NOTE:::::: There'll be no block limit like there is with the slants
-	/*if (_blocks >= SLANT_PROPERTIES_MAX_BLOCKS ||			
+	/*if (_blocks >= SLANT_PROPERTIES_MAX_BLOCKS ||
 		originalGy != newGy)
 		// Not gonna happen
 		return;*/

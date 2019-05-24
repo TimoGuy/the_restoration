@@ -1,5 +1,10 @@
+#ifdef __unix__
+#include "TopSideCollGround.h"
+#include "defs.h"
+#elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TopSideCollGround.h"
 #include "../../include/defs.h"
+#endif
 
 
 

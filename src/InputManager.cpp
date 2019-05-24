@@ -4,11 +4,12 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/InputManager.h"
 #include <SDL.h>
-#include <stdio.h>
-#include <algorithm>
 #endif
+#include <stdio.h>
+#include <cmath>
+#include <algorithm>
 
-const bool & InputManager::reloadRoom()
+bool InputManager::reloadRoom()
 {
 	if (_reloadRoom)
 	{
@@ -215,7 +216,8 @@ void InputManager::ProcessInput(GameLoop* g)
         }
     }
 
-	if (controller == NULL)			// If there's no gamecontroller, then keyboard is the big boss hoe!
+	if (SDL_NumJoysticks() <= 0 ||
+        controller == NULL)			        // If there's no gamecontroller, then keyboard is the big boss hoe!
 	{
 		// ESPECIALLY FOR KEYBOARD... since the variables need some refining eh.
 		if (kLeft == kRight) _x = 0;   // If both are pressed it cancels

@@ -1,7 +1,7 @@
 #pragma once
 #ifdef __unix__
-#include "Object.h"
-#include "Room.h"
+//#include "Object.h"
+//#include "Room.h"
 #elif defined(_WIN32) || defined(WIN32)
 //#include "Object.h"
 //#include "Rooms\Room.h"

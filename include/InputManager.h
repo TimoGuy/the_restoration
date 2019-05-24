@@ -29,8 +29,8 @@ class InputManager
         const bool& b1() const { return _b1; }
 		const bool& b2() const { return _b2; }
 
-		const bool& reloadRoom();	// It's not const bc that way the variable inside can be turned off after 1 call to this function!
-		
+		bool reloadRoom();	// It's not const bc that way the variable inside can be turned off after 1 call to this function!
+
 
     protected:
 

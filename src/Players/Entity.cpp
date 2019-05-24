@@ -1,7 +1,17 @@
+#ifdef __unix__
+#include "Entity.h"
+#include "defs.h"
+
+#include "Slant.h"
+#elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\Entity.h"
 #include "../../include/defs.h"
 
 #include "../../include/Players/Slant.h"		// Hope I can include this!!!
+#endif
+
+#include <cmath>
+#include <algorithm>
 
 
 Entity::Entity(int gx, int gy, Room* rm)

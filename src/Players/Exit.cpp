@@ -1,5 +1,8 @@
 #ifdef __unix__
 #include "Exit.h"
+#include "InputManager.h"
+#include "defs.h"
+#include <SDL2/SDL_opengl.h>
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Exit.h"
 #include "../../include/InputManager.h"

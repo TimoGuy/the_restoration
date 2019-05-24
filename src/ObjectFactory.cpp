@@ -1,11 +1,16 @@
 #ifdef __unix__
 #include "ObjectFactory.h"
 
-#include "TestGameObj.h"
 #include "Ground.h"
 #include "Exit.h"
 #include "Slant.h"
 #include "Hazard.h"
+#include "TopSideCollGround.h"
+#include "MovingPlatGround.h"
+
+#include "Entity.h"
+#include "TestGameObj.h"
+#include "TestEnemy.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/ObjectFactory.h"
 
@@ -49,7 +54,7 @@ enum StringValue
 static std::map<std::string, StringValue>* s_mapStringValues = NULL;
 
 int ObjectFactory::previousStringValue = -1;
-Object* ObjectFactory::previousObj = nullptr;
+Object* ObjectFactory::previousObj = NULL;
 
 
 // Singleton initialization

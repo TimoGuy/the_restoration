@@ -7,8 +7,9 @@
 #include "ObjectFactory.h"
 #include "Rooms\Room.h"
 #include "Shape\Quad.h"
-#include <vector>
 #endif
+
+#include <vector>
 
 
 struct BoundBox

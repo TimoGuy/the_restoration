@@ -1,4 +1,5 @@
 #ifdef __unix__
+#include "InputManager.h"
 #include "TestRoom.h"
 #include "Players/TestGameObj.h"
 #include "Lib/Texture.h"
@@ -31,7 +32,7 @@ TestRoom::TestRoom()
 
 TestRoom::~TestRoom()
 {
-	Destruct();
+	this->Destruct();
 }
 
 void TestRoom::Update()
@@ -74,19 +75,11 @@ void TestRoom::Update()
     // Clamp it to the edges
     if (!lockX)
     {
-//#ifdef __unix__
         camX = std::max(0, std::min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
-//#elif defined(_WIN32) || defined(WIN32)
-		//camX = max(0, min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
-//#endif
     }
     if (!lockY)
     {
-//#ifdef __unix__
         camY = std::max(0, std::min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
-//#elif defined(_WIN32) || defined(WIN32)
-//		camY = max(0, min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
-//#endif
     }
 }
 
@@ -114,7 +107,7 @@ void TestRoom::Render()
 		if (!newLvl.empty())
 			currentLvl = newLvl;
 
-		// Change the level to 
+		// Change the level to
 		RequestLevelSwitch(currentLvl);
 	}
 
@@ -245,6 +238,7 @@ void TestRoom::SwitchLevelAndSetUpLevelForPlayer(std::string name)
 			// This way, the player will always be updated late!
 			gameObjects.erase(gameObjects.begin() + i);
 			gameObjects.push_back(camFocusObj);
+			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
 			break;
 		}
 	}
