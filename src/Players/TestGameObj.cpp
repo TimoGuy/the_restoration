@@ -24,6 +24,7 @@
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 48
+#define PLAYER_YOFF -16
 
 TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Entity(gx, gy, rm)
 {
@@ -31,7 +32,7 @@ TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Entity(gx, gy, rm)
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
     printf("Player built! at %i,%i\n", gx, gy);
-	y -= 16;
+	y += PLAYER_YOFF;
 
 
     startX = x;
@@ -211,5 +212,14 @@ void TestGameObj::Render()
 {
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
+}
+
+
+
+
+void TestGameObj::SetGridCoords(int gx, int gy)
+{
+    x = gx * GRID_SIZE;
+    y = gy * GRID_SIZE + PLAYER_YOFF;
 }
 
