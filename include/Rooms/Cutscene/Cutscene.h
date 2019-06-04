@@ -13,13 +13,25 @@
 // Room is so that the main gameloop can run it.
 // Reaction is so that you do a run() on this thing, and plug it into a TRIGGER.
 
-class Cutscene : public Room, public Reaction
+
+#include "Rooms/Room.h"
+#include "CutsceneObject.h"
+
+#include <vector>
+
+
+class Cutscene : public Room//, public Reaction
 {
     public:
         Cutscene();
         virtual ~Cutscene();
 
+        void Update();
+        void Render();
+
     protected:
 
     private:
+        int ticks;
+        std::vector<CutsceneObject*> objects;
 };

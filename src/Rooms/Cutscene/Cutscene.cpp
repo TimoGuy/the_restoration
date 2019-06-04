@@ -2,7 +2,7 @@
 
 Cutscene::Cutscene()
 {
-    //ctor
+    ticks = 0;
 }
 
 Cutscene::~Cutscene()

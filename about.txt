@@ -117,6 +117,100 @@ you want a bounding box, use Object.h's "BoundBox" struct right there!
 
 
 
+
+
+--Cutscenes--
+So cutscenes are editable too. It's just a tab-delimited file where you add sprites,
+(bc they each have an id) assign them to objects and then give the objects functions
+to call at a certain time stamp. There will be an ending time stamp as well (these are
+tracked in 'ticks', or basically just how many frames based on a 60fps system)
+
+Bc this is possible, (and now triggers can call these cutscenes by 't_c_[name]') it'd be
+really easy to create simple 2D cutscenes for the game!
+
+-How to do 2D animation?
+
+
+[EXAMPLE]
+s	images/jojo.png
+	images/jojo2.png
+	1
+	0
+
+This creates a sprite (the 's'), and w/ a tab, defines the first image. It can stop here,
+for a static image. However, in this example it doesn't, so the enter is pressed, the next line
+is read (bc. the next line starts w/ '\t', not a different char 's' or an 'o' or somewhat).
+It shows another image! A 2 slot array holding both images is made. Then when the images are done,
+the parameters are shown, which is a 1, then a 0.
+
+
+
+
+-How to create an object?
+
+
+[EXAMPLE]
+o	0	0,0
+	0	20	move	0,4
+
+This is similar for the 's', where first you start w/ an 'o' and then tab, define the sprite id
+(first one has 0 id, yeah), then tab, and the starting coordinates (these aren't grid coords, but
+likely they'll be scaled up when there's a higher and higher resolution). After that, you can define
+any command by first pressing enter, tab, then putting the start frame, tab, end tick of the action,
+tab, name of the action, and tab tab tab for any arguments for this function.
+
+If an object won't have a sprite, you put -1 for it.
+
+0,0 is the very center of the screen, by the way.
+
+
+
+-Bagckground music?
+
+[EXAMPLE]
+o	-1	0,0
+	0	2000	music	songs/jojos.ogg	1				// [0, 2000) ticks, repeat (1) the song 'jojos.ogg'
+	2000	2001	end									// [2000, 2001) ticks, end the cutscene.
+
+This could be a cutscene controller. It defines the music played, and then the end of the cutscene.
+Has a very important job, and could centralize things that are global effects, like fade in-out or
+such.
+
+
+
+Just like levels, cutscenes will have a unique code in the filename. You can exit into another cutscene
+(scene switch), or exit into a level. Yay!!! So you can do anything you want!!!
+
+And then, it's just up to YOU if you'll make it!
+
+
+
+
+-Cutscene objects
+They will have all the functions available to them, and they only need x and y coordinates to
+render the images anyways. So extremely simple.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 --For Cross-platform support--
 
 Copy and paste this:
@@ -129,4 +223,10 @@ Copy and paste this:
 
 
 --BUGS--
--You can jump on HAZARDS if you hold a.
+x-You can jump on HAZARDS if you hold a.
+
+--TODO--
+-Change the coding so that for 'exits' they are now called 'triggers' and that they
+will operate on the 't_' flag in the level's code.
+-Make better neighbor calculations for the big 'triggers' object, so that they can join
+together when adjacent from each other.
