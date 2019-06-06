@@ -15,6 +15,7 @@
 
 
 #include "Rooms/Room.h"
+#include "CutsceneSprite.h"
 #include "CutsceneObject.h"
 
 #include <vector>
@@ -23,15 +24,18 @@
 class Cutscene : public Room//, public Reaction
 {
     public:
-        Cutscene();
+        Cutscene(std::string name);
         virtual ~Cutscene();
 
         void Update();
         void Render();
 
+        void End();
+
     protected:
 
     private:
         int ticks;
+        std::vector<CutsceneSprite*> sprites;
         std::vector<CutsceneObject*> objects;
 };

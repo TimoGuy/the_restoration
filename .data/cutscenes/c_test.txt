@@ -1,0 +1,6 @@
+s	209,429	images/jojo.png
+	230,390	images/jojo2.png
+	p100,1
+o	0	0,0
+	0	20	move	0,4
+o	0	500,25

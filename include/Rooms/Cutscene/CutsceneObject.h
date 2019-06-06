@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quad.h"
+#include "CutsceneSprite.h"
 
 #include <string>
 #include <vector>
@@ -8,20 +8,20 @@
 class CutsceneObject
 {
     public:
-        CutsceneObject(int x, int y, Quad* image);
+        CutsceneObject(int x, int y, CutsceneSprite* image);
         virtual ~CutsceneObject();
 
         void Update(int ticks);
-        void Render();
+        void Render(int ticks);
 
-        // TODO: an IO function to create these objects
-        void RegisterFunction(int startTick, std::string func, std::string params);
+        // An IO-friendly function to create these objects
+        void RegisterFunction(int startTick, int endTick, std::string func, std::string params);
 
     protected:
 
     private:
-    	Quad* image;        // Really this should be a SPRITE so that animation is supported..
-        int x, y;
+    	CutsceneSprite* _image;        // So that animation is supported..
+        int _x, _y;
         std::vector<void (*)(int, int, std::string)> functions;
 
         // Functions that a cutscene obj may use!

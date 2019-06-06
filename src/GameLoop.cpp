@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "GameLoop.h"
-#include "Rooms/TestRoom.h"
+//#include "Rooms/TestRoom.h"
+#include "Cutscene.h"
 #include <SDL2/SDL_opengl.h>
 #include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
@@ -18,7 +19,7 @@ GameLoop::GameLoop(SDL_Window* window)
 bool GameLoop::Execute()
 {
     // This will be the Room obj
-    Room* testRoom = new TestRoom();
+    Room* testRoom = new Cutscene("c_test.txt");//new TestRoom();
 
     // This will hold up the thread...
     // I'll be honest, there's really only

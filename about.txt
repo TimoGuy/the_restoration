@@ -132,16 +132,17 @@ really easy to create simple 2D cutscenes for the game!
 
 
 [EXAMPLE]
-s	images/jojo.png
-	images/jojo2.png
-	1
-	0
+s	20,30	images/jojo.png
+	40,40	images/jojo2.png
+	p1,0
 
 This creates a sprite (the 's'), and w/ a tab, defines the first image. It can stop here,
 for a static image. However, in this example it doesn't, so the enter is pressed, the next line
 is read (bc. the next line starts w/ '\t', not a different char 's' or an 'o' or somewhat).
 It shows another image! A 2 slot array holding both images is made. Then when the images are done,
 the parameters are shown, which is a 1, then a 0.
+
+If there's more than 1 image defined here, then the last 2 digit props are expected.
 
 
 
