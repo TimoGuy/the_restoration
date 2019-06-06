@@ -70,6 +70,7 @@
 		<Unit filename="include/Players/TopSideCollGround.h" />
 		<Unit filename="include/Rooms/Cutscene/Cutscene.h" />
 		<Unit filename="include/Rooms/Cutscene/CutsceneObject.h" />
+		<Unit filename="include/Rooms/Cutscene/CutsceneSprite.h" />
 		<Unit filename="include/Rooms/Room.h" />
 		<Unit filename="include/Rooms/TestRoom.h" />
 		<Unit filename="include/Shape/Quad.h" />
@@ -94,6 +95,7 @@
 		<Unit filename="src/Players/TopSideCollGround.cpp" />
 		<Unit filename="src/Rooms/Cutscene/Cutscene.cpp" />
 		<Unit filename="src/Rooms/Cutscene/CutsceneObject.cpp" />
+		<Unit filename="src/Rooms/Cutscene/CutsceneSprite.cpp" />
 		<Unit filename="src/Rooms/Room.cpp" />
 		<Unit filename="src/Rooms/TestRoom.cpp" />
 		<Unit filename="src/Shape/Quad.cpp" />
