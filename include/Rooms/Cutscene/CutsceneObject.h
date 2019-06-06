@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+struct FuncPlusParams;
+
 class CutsceneObject
 {
     public:
@@ -12,7 +14,7 @@ class CutsceneObject
         virtual ~CutsceneObject();
 
         void Update(int ticks);
-        void Render(int ticks);
+        bool Render(int ticks);     // If this functino returns 'false' then it says 'I want to end the cutscene'
 
         // An IO-friendly function to create these objects
         void RegisterFunction(int startTick, int endTick, std::string func, std::string params);
@@ -20,13 +22,40 @@ class CutsceneObject
     protected:
 
     private:
+        bool wantToEnd;
     	CutsceneSprite* _image;        // So that animation is supported..
-        int _x, _y;
-        std::vector<void (*)(int, int, std::string)> functions;
+        int _x, _y;     // Only set these when an action has ended!
+        int dx, dy;     // Any function can play w/ these...
+        std::vector<FuncPlusParams> functions;
+
+
+
 
         // Functions that a cutscene obj may use!
-        // Needs to be (int startTick, std::string params)
+        //
+        // NOTE: they are only executed when currentTick is [startTick, endTick)
+        //
+        // Needs to give the current tick, and the start-end stuff eh!
         // for every func., okay???
-        void Move(int startTick, int endTick, std::string params);
-        void SetCoords(int startTick, int endTick, std::string params);
+        void Move(int currentTick, int startTick, int endTick, std::string params);
+        void SetCoords(int currentTick, int startTick, int endTick, std::string params);
+        void End(int currentTick, int startTick, int endTick, std::string params);
 };
+
+
+
+
+
+
+
+
+
+// Implement it!
+struct FuncPlusParams
+{
+    void (CutsceneObject::*func)(int, int, int, std::string);
+    int startTick;
+    int endTick;
+    std::string params;
+};
+

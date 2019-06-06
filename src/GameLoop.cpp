@@ -19,7 +19,7 @@ GameLoop::GameLoop(SDL_Window* window)
 bool GameLoop::Execute()
 {
     // This will be the Room obj
-    Room* testRoom = new Cutscene("c_test.txt");//new TestRoom();
+    Room* testRoom = new Cutscene("c_test.txt");// new TestRoom();
 
     // This will hold up the thread...
     // I'll be honest, there's really only

@@ -363,9 +363,17 @@ void Cutscene::Update()
 void Cutscene::Render()
 {
     // Only update and render objects
+    bool wantToEndDatte = false;
     for (int i = 0; i < objects.size(); i++)
     {
-        objects.at(i)->Render(ticks);
+        if (!objects.at(i)->Render(ticks))
+            wantToEndDatte = true;
+    }
+
+    // If message is laid up here!
+    if (wantToEndDatte)
+    {
+        End();
     }
 }
 
