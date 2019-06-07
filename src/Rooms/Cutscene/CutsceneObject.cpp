@@ -1,14 +1,17 @@
+#include "Cutscene.h"       // That way don't have to load in the header file!
 #include "CutsceneObject.h"
 #include <sstream>
 #include <cmath>
 
-CutsceneObject::CutsceneObject(int x, int y, CutsceneSprite* image)
+CutsceneObject::CutsceneObject(int x, int y, int spriteId, Cutscene* myCutscene)
 {
     _x = x;
     _y = y;
     dx = dy = 0;
-    _image = image;
+    cutscene = myCutscene;
     wantToEnd = false;
+
+    _image = cutscene->GetSpriteByID(spriteId);
 }
 
 CutsceneObject::~CutsceneObject()
@@ -65,13 +68,15 @@ void CutsceneObject::RegisterFunction
     // Use a switch to see which func should use
     void (CutsceneObject::*newFunc)(int, int, int, std::string);
 
-    // Checks!!!
+    // Checks!!!                                                                            // This is where the cutscene obj functions are registered
     if (func == std::string("move"))
         newFunc = &CutsceneObject::Move;
     else if (func == std::string("snap"))
         newFunc = &CutsceneObject::SetCoords;
     else if (func == std::string("wiggle-x"))
         newFunc = &CutsceneObject::WiggleX;
+    else if (func == std::string("change-sprite"))
+        newFunc = &CutsceneObject::ChangeSprite;
     else if (func == std::string("end"))
         newFunc = &CutsceneObject::End;
 
@@ -107,6 +112,9 @@ void CutsceneObject::RegisterFunction
 }
 
 
+
+
+/////////////////
 // The very many cutscene object actions~~~~!!!!!!
 /////////////////
 void CutsceneObject::Move(int currentTick, int startTick, int endTick, std::string params)
@@ -210,6 +218,16 @@ void CutsceneObject::WiggleX(int currentTick, int startTick, int endTick, std::s
     dx += std::sin(angle) * variance;
 }
 
+
+
+void CutsceneObject::ChangeSprite(int currentTick, int startTick, int endTick, std::string params)
+{
+    // Get the sprite via the cutscene parent object!!!
+    int spriteId;
+    std::istringstream(params) >> spriteId;
+
+    _image = cutscene->GetSpriteByID(spriteId);
+}
 
 
 void CutsceneObject::End(int currentTick, int startTick, int endTick, std::string params)

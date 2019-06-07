@@ -10,7 +10,7 @@ struct FuncPlusParams;
 class CutsceneObject
 {
     public:
-        CutsceneObject(int x, int y, CutsceneSprite* image);
+        CutsceneObject(int x, int y, int spriteId, Cutscene* myCutscene);
         virtual ~CutsceneObject();
 
         void Update(int ticks);
@@ -22,6 +22,8 @@ class CutsceneObject
     protected:
 
     private:
+        Cutscene* cutscene;     // So can load the sprite list toka.
+
         bool wantToEnd;
     	CutsceneSprite* _image;        // So that animation is supported..
         int _x, _y;     // Only set these when an action has ended!
@@ -40,6 +42,7 @@ class CutsceneObject
         void Move(int currentTick, int startTick, int endTick, std::string params);
         void SetCoords(int currentTick, int startTick, int endTick, std::string params);
         void WiggleX(int currentTick, int startTick, int endTick, std::string params);
+        void ChangeSprite(int currentTick, int startTick, int endTick, std::string params);
         void End(int currentTick, int startTick, int endTick, std::string params);
 };
 

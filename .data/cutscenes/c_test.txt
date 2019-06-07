@@ -1,10 +1,13 @@
 s	209,429	images/jojo.png
 	230,390	images/jojo2.png
 	p100,1
+s	500,500	images/znd_guard.png
 o	0	0,0
 	0	100	move	200,455
 o	0	500,25
 	50	150	move	400,455
 	150	150	snap	800,20
 	151	250	wiggle-x	40	2
-	300	310	move	000,00
+	151	250	move	800,500
+	250	250	change-sprite	1
+	250	300	move	400,200

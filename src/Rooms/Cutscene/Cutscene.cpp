@@ -1,4 +1,5 @@
 #include "Cutscene.h"
+#include "CutsceneObject.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -313,7 +314,7 @@ Cutscene::Cutscene(std::string name)
                     if (sprId >= 0)
                         tmpSpr = sprites.at(sprId);
 
-                    nCO = new CutsceneObject(sx, sy, tmpSpr);
+                    nCO = new CutsceneObject(sx, sy, sprId, this);
                     objects.push_back(nCO);
                 }
             }
@@ -380,4 +381,16 @@ void Cutscene::Render()
 void Cutscene::End()
 {
     printf("Cutscene ended\n");
+}
+
+CutsceneSprite* Cutscene::GetSpriteByID(int id)
+{
+    if (id >= 0 && id < sprites.size())
+    {
+        return sprites.at(id);
+    }
+
+    // print out error
+    printf("ERROR: sprite id %i doesn't relate to a sprite inside the list! (size=%i)\n", id, sprites.size());
+    return NULL;
 }

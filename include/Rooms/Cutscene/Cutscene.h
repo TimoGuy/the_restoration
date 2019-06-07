@@ -16,7 +16,7 @@
 
 #include "Rooms/Room.h"
 #include "CutsceneSprite.h"
-#include "CutsceneObject.h"
+class CutsceneObject;
 
 #include <vector>
 
@@ -31,6 +31,8 @@ class Cutscene : public Room//, public Reaction
         void Render();
 
         void End();
+        CutsceneSprite* GetSpriteByID(int id);
+
 
     protected:
 
