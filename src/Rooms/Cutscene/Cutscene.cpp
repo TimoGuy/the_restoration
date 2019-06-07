@@ -168,7 +168,7 @@ Cutscene::Cutscene(std::string name)
                             std::istringstream(token) >> endTick;
                             std::getline(tokenStream, token, '\t');     // Function name!
                             func = token;
-                            std::getline(tokenStream, token, '\t');     // Parameters!
+                            std::getline(tokenStream, token, '\n');     // Parameters!
                             params = token;
                         }
 
@@ -379,5 +379,5 @@ void Cutscene::Render()
 
 void Cutscene::End()
 {
-
+    printf("Cutscene ended\n");
 }

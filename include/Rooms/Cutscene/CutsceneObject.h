@@ -39,6 +39,7 @@ class CutsceneObject
         // for every func., okay???
         void Move(int currentTick, int startTick, int endTick, std::string params);
         void SetCoords(int currentTick, int startTick, int endTick, std::string params);
+        void WiggleX(int currentTick, int startTick, int endTick, std::string params);
         void End(int currentTick, int startTick, int endTick, std::string params);
 };
 

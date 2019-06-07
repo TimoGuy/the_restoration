@@ -1,5 +1,6 @@
 #include "CutsceneObject.h"
 #include <sstream>
+#include <cmath>
 
 CutsceneObject::CutsceneObject(int x, int y, CutsceneSprite* image)
 {
@@ -64,14 +65,21 @@ void CutsceneObject::RegisterFunction
     // Use a switch to see which func should use
     void (CutsceneObject::*newFunc)(int, int, int, std::string);
 
-
-    newFunc = &CutsceneObject::Move;
+    // Checks!!!
+    if (func == std::string("move"))
+        newFunc = &CutsceneObject::Move;
+    else if (func == std::string("snap"))
+        newFunc = &CutsceneObject::SetCoords;
+    else if (func == std::string("wiggle-x"))
+        newFunc = &CutsceneObject::WiggleX;
+    else if (func == std::string("end"))
+        newFunc = &CutsceneObject::End;
 
     // Error
-//    else
+    else
     {
-//        printf("\tERROR: could not find function \"%s\"\n", func.c_str());
-//        return;
+        printf("\tERROR: could not find function \"%s\"\n", func.c_str());
+        return;
     }
 
 
@@ -144,9 +152,65 @@ void CutsceneObject::Move(int currentTick, int startTick, int endTick, std::stri
     dy += (toY - _y) * ratio_booboo;
 }
 
+
+
 void CutsceneObject::SetCoords(int currentTick, int startTick, int endTick, std::string params)
 {
+    // Get the x and y coords (out of params) first of all
+    int toX, toY;
+    {
+        std::string token;
+        std::istringstream tokenStream(params);
+        int times = 0;
+        while (std::getline(tokenStream, token, ',') &&
+            times <= 1)
+        {
+            if (times == 0)     // Width
+            {
+                std::istringstream(token) >> toX;
+            }
+            else if (times == 1)    // Height
+            {
+                std::istringstream(token) >> toY;
+            }
+
+            times++;
+        }
+    }
+
+    _x = toX;
+    _y = toY;
 }
+
+
+
+void CutsceneObject::WiggleX(int currentTick, int startTick, int endTick, std::string params)
+{
+    int variance;
+    int backAndForth;
+
+    {
+        std::string token;
+        std::istringstream tokenStream(params);
+
+        std::getline(tokenStream, token, '\t');     // Check variance
+        std::istringstream(token) >> variance;
+        std::getline(tokenStream, token, '\t');     // Check back and forth kaisuu
+        std::istringstream(token) >> backAndForth;
+    }
+
+
+
+    // Wiggle!
+
+    int distance = endTick - startTick;
+    float bubun = (currentTick - startTick) / (float)distance;
+
+    float angle = bubun * 2.0f * M_PI * backAndForth;
+    dx += std::sin(angle) * variance;
+}
+
+
 
 void CutsceneObject::End(int currentTick, int startTick, int endTick, std::string params)
 {
