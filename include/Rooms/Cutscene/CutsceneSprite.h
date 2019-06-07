@@ -14,7 +14,7 @@ class CutsceneSprite
         void SetTicksPerFrame(int tpf);
         void SetRepeat(bool flag);
 
-        void Render(int x, int y, int ticks);
+        void Render(int x, int y, int ticks, float alpha);
 
     protected:
 

@@ -33,9 +33,11 @@ void CutsceneSprite::SetRepeat(bool flag) { repeat = flag; }
 
 
 
-
-void CutsceneSprite::Render(int x, int y, int ticks)
+void CutsceneSprite::Render(int x, int y, int ticks, float alpha)
 {
+    // Set the color!
+    glColor4f(1, 1, 1, alpha);
+
     if (images.size() == 1)
     {
         images.at(0)->Render(x, y);
@@ -61,5 +63,9 @@ void CutsceneSprite::Render(int x, int y, int ticks)
     }
 
     images.at(currentFrame)->Render(x, y);
+
+
+    // Reset color
+    glColor4f(1, 1, 1, 1);
 }
 

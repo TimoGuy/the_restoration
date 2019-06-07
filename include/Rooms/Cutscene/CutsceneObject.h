@@ -31,6 +31,9 @@ class CutsceneObject
         std::vector<FuncPlusParams> functions;
 
 
+        float sprAlpha;
+
+
 
 
         // Functions that a cutscene obj may use!
@@ -43,6 +46,8 @@ class CutsceneObject
         void SetCoords(int currentTick, int startTick, int endTick, std::string params);
         void WiggleX(int currentTick, int startTick, int endTick, std::string params);
         void ChangeSprite(int currentTick, int startTick, int endTick, std::string params);
+        void FadeIn(int currentTick, int startTick, int endTick, std::string params);
+        void FadeOut(int currentTick, int startTick, int endTick, std::string params);
         void End(int currentTick, int startTick, int endTick, std::string params);
 };
 

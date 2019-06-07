@@ -9,5 +9,7 @@ o	0	500,25
 	150	150	snap	800,20
 	151	250	wiggle-x	40	2
 	151	250	move	800,500
-	250	250	change-sprite	1
-	250	300	move	400,200
+	151	250	fade-out
+	300	300	change-sprite	1
+	300	350	move	400,50
+	300	350	fade-in

@@ -12,6 +12,7 @@ CutsceneObject::CutsceneObject(int x, int y, int spriteId, Cutscene* myCutscene)
     wantToEnd = false;
 
     _image = cutscene->GetSpriteByID(spriteId);
+    sprAlpha = 1;
 }
 
 CutsceneObject::~CutsceneObject()
@@ -50,7 +51,7 @@ bool CutsceneObject::Render(int ticks)
     if (wantToEnd)
         return false;
 
-    _image->Render(_x + dx, _y + dy, ticks);
+    _image->Render(_x + dx, _y + dy, ticks, sprAlpha);
     return true;
 }
 
@@ -77,6 +78,10 @@ void CutsceneObject::RegisterFunction
         newFunc = &CutsceneObject::WiggleX;
     else if (func == std::string("change-sprite"))
         newFunc = &CutsceneObject::ChangeSprite;
+    else if (func == std::string("fade-in"))
+        newFunc = &CutsceneObject::FadeIn;
+    else if (func == std::string("fade-out"))
+        newFunc = &CutsceneObject::FadeOut;
     else if (func == std::string("end"))
         newFunc = &CutsceneObject::End;
 
@@ -227,6 +232,27 @@ void CutsceneObject::ChangeSprite(int currentTick, int startTick, int endTick, s
     std::istringstream(params) >> spriteId;
 
     _image = cutscene->GetSpriteByID(spriteId);
+}
+
+
+void CutsceneObject::FadeIn(int currentTick, int startTick, int endTick, std::string params)
+{
+    // Find alpha (from 0-1)
+    int distance = endTick - startTick;
+    float bubun = (currentTick - startTick) / (float)distance;
+
+    // Apply the alpha
+    sprAlpha = bubun;
+}
+
+void CutsceneObject::FadeOut(int currentTick, int startTick, int endTick, std::string params)
+{
+    // Find alpha (from 1-0)
+    int distance = endTick - startTick;
+    float bubun = (currentTick - startTick) / (float)distance;
+
+    // Apply the alpha
+    sprAlpha = 1 - bubun;
 }
 
 
