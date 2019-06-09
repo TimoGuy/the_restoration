@@ -1,7 +1,8 @@
 s	209,429	images/jojo.png
 	230,390	images/jojo2.png
 	p100,1
-s	500,500	images/znd_guard.png
+s	500,333	images/znd_guard.png
+s	455,100	images/inspirational_message.png
 o	0	0,0
 	0	100	move	200,455
 o	0	500,25
@@ -11,5 +12,9 @@ o	0	500,25
 	151	250	move	800,500
 	151	250	fade-out
 	300	300	change-sprite	1
-	300	350	move	400,50
+	300	350	move-lerp	400,50	14
 	300	350	fade-in
+	500	500	exit-cutscene	n_tut
+o	2	0,200
+	0	50	move-lerp	0,0	13
+	200	200	delete-self

@@ -20,7 +20,7 @@
 class TestRoom : public Room
 {
     public:
-        TestRoom();
+        TestRoom(std::string name);
         virtual ~TestRoom();
 
         void Update();

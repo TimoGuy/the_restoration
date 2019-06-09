@@ -14,7 +14,7 @@ class CutsceneObject
         virtual ~CutsceneObject();
 
         void Update(int ticks);
-        bool Render(int ticks);     // If this functino returns 'false' then it says 'I want to end the cutscene'
+        void Render(int ticks);
 
         // An IO-friendly function to create these objects
         void RegisterFunction(int startTick, int endTick, std::string func, std::string params);
@@ -24,7 +24,6 @@ class CutsceneObject
     private:
         Cutscene* cutscene;     // So can load the sprite list toka.
 
-        bool wantToEnd;
     	CutsceneSprite* _image;        // So that animation is supported..
         int _x, _y;     // Only set these when an action has ended!
         int dx, dy;     // Any function can play w/ these...
@@ -43,12 +42,14 @@ class CutsceneObject
         // Needs to give the current tick, and the start-end stuff eh!
         // for every func., okay???
         void Move(int currentTick, int startTick, int endTick, std::string params);
+        void MoveLerp(int currentTick, int startTick, int endTick, std::string params);
         void SetCoords(int currentTick, int startTick, int endTick, std::string params);
         void WiggleX(int currentTick, int startTick, int endTick, std::string params);
         void ChangeSprite(int currentTick, int startTick, int endTick, std::string params);
         void FadeIn(int currentTick, int startTick, int endTick, std::string params);
         void FadeOut(int currentTick, int startTick, int endTick, std::string params);
-        void End(int currentTick, int startTick, int endTick, std::string params);
+        void DeleteMe(int currentTick, int startTick, int endTick, std::string params);
+        void ExitCutscene(int currentTick, int startTick, int endTick, std::string params);
 };
 
 

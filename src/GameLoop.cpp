@@ -19,7 +19,7 @@ GameLoop::GameLoop(SDL_Window* window)
 bool GameLoop::Execute()
 {
     // This will be the Room obj
-    Room* testRoom = new Cutscene("c_test.txt");// new TestRoom();
+    SetRoom(new Cutscene("c_test.txt", this));// new TestRoom();
 
     // This will hold up the thread...
     // I'll be honest, there's really only
@@ -35,7 +35,7 @@ bool GameLoop::Execute()
         InputManager::Instance().ProcessInput(this);    // If the input desires, 'this' game loop can be terminated from this function!
 
 		// Update
-        testRoom->Update();
+        GetRoom()->Update();
 
 
 
@@ -47,7 +47,7 @@ bool GameLoop::Execute()
         // Setup proj mat
 //        glUniformMatrix4fv(resources::shaderStandard->GetLocProjectMat(), 1, false, (GLfloat*)&resources::projectionMat[0]);
 //        resources::modelViewMat = glm::mat4();
-        testRoom->Render();
+        GetRoom()->Render();
 
 
 
@@ -73,6 +73,15 @@ bool GameLoop::Execute()
 
     return true;
 }
+
+
+
+void GameLoop::SetRoom(Room* newRoom)
+{
+    currentRoom = newRoom;
+}
+Room* GameLoop::GetRoom() { return currentRoom; }
+
 
 GameLoop::~GameLoop()
 {

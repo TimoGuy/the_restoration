@@ -25,9 +25,9 @@
 #include <algorithm>
 #include <string>
 
-TestRoom::TestRoom()
+TestRoom::TestRoom(std::string name)
 {
-	SwitchLevelAndSetUpLevelForPlayer("jojo");
+	SwitchLevelAndSetUpLevelForPlayer(name);
 }
 
 TestRoom::~TestRoom()

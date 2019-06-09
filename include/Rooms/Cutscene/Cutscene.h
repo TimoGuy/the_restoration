@@ -17,6 +17,7 @@
 #include "Rooms/Room.h"
 #include "CutsceneSprite.h"
 class CutsceneObject;
+#include "GameLoop.h"
 
 #include <vector>
 
@@ -24,19 +25,22 @@ class CutsceneObject;
 class Cutscene : public Room//, public Reaction
 {
     public:
-        Cutscene(std::string name);
+        Cutscene(std::string name, GameLoop* gloop);
         virtual ~Cutscene();
 
         void Update();
         void Render();
 
-        void End();
+        void Delete(CutsceneObject* thisObj);
+        void End(Room* nextRoom);
         CutsceneSprite* GetSpriteByID(int id);
 
+        GameLoop* GetGameLoop();
 
     protected:
 
     private:
+        GameLoop* _gloop;
         int ticks;
         std::vector<CutsceneSprite*> sprites;
         std::vector<CutsceneObject*> objects;

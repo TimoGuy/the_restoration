@@ -3,10 +3,12 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
 
-Cutscene::Cutscene(std::string name)
+Cutscene::Cutscene(std::string name, GameLoop* gloop)
 {
     ticks = -1;
+    _gloop = gloop;
 
     // Load up the cutscene objects
     std::string filename = std::string(".data/cutscenes/") + name;
@@ -350,6 +352,11 @@ Cutscene::~Cutscene()
     objects.clear();
 }
 
+
+
+
+
+
 void Cutscene::Update()
 {
     ticks++;        // Since it's init'd as -1, this should be 0 now! (if first time)
@@ -364,22 +371,22 @@ void Cutscene::Update()
 void Cutscene::Render()
 {
     // Only update and render objects
-    bool wantToEndDatte = false;
     for (int i = 0; i < objects.size(); i++)
     {
-        if (!objects.at(i)->Render(ticks))
-            wantToEndDatte = true;
-    }
-
-    // If message is laid up here!
-    if (wantToEndDatte)
-    {
-        End();
+        objects.at(i)->Render(ticks);
     }
 }
 
-void Cutscene::End()
+
+void Cutscene::Delete(CutsceneObject* thisObj)
 {
+    objects.erase(std::remove(objects.begin(), objects.end(), thisObj), objects.end());
+}
+
+void Cutscene::End(Room* nextRoom)
+{
+    // Load this next room and then switch to it!!!
+    _gloop->SetRoom(nextRoom);
     printf("Cutscene ended\n");
 }
 
@@ -393,4 +400,17 @@ CutsceneSprite* Cutscene::GetSpriteByID(int id)
     // print out error
     printf("ERROR: sprite id %i doesn't relate to a sprite inside the list! (size=%i)\n", id, sprites.size());
     return NULL;
+}
+
+
+
+
+
+
+
+
+
+GameLoop* Cutscene::GetGameLoop()
+{
+    return _gloop;
 }
