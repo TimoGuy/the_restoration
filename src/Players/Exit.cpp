@@ -15,7 +15,7 @@
 Exit::Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, Room* rm) : Object(gx, gy, rm, false)
 {
     //ctor
-	printf("Exit built!\tIt leads to \"*n_%s.png\"\n", nextRoomID.c_str());
+	printf("Exit built!\tIt leads to the level \"%s\"\n", nextRoomID.c_str());
 	_isJustTouchToTrigger = isJustTouchToTrigger;
 	_nextRoomID = nextRoomID;
 

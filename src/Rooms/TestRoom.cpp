@@ -160,9 +160,14 @@ bool TestRoom::SwitchLevelIO(std::string name)
 	currentLvl = name;
 	currentLvlFilename = levelFilename;
 
+	// Cut off the beginning I suppose!
+	std::string prefixCutoff = std::string("n_") + currentLvl + std::string(".");
+	int len = currentLvlFilename.size() - prefixCutoff.size() - 4;                  // The '4's referring to the '.png' at the end
+	std::string levelParams = currentLvlFilename.substr(prefixCutoff.size(), len);
+
 	// This way we can parse and get the code from the filename!
     std::string token;
-    std::istringstream tokenStream(currentLvlFilename);
+    std::istringstream tokenStream(levelParams);
 
     printf("\nPrinting out level param data...\n");
     while (std::getline(tokenStream, token, '_'))

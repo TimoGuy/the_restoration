@@ -139,8 +139,8 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
 		retObj = new Exit(gx, gy, touchTrigger, rmParams->at(pos + 2), rm);
 
         int end = 3;
-		if (rmParams->at(pos + 3) != std::string("e") &&
-            rmParams->at(pos + 3) != std::string("n"))
+		if (pos + 3 < rmParams->size() &&
+            rmParams->at(pos + 3) != std::string("e"))
         {
             end = 4;    // A fourth param...
 
