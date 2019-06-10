@@ -309,7 +309,7 @@ std::string TestRoom::FindLevelIO(std::string name, std::string dir)         // 
     DIR* dirPoint = opendir(dir.c_str());
     dirent* entry = readdir(dirPoint);
 
-    std::string searchCriteria = std::string("n_") + std::string(name.c_str()) + std::string(".png");
+    std::string searchCriteria = std::string("n_") + name + std::string(".");
 
     while (entry)
     {
@@ -318,7 +318,7 @@ std::string TestRoom::FindLevelIO(std::string name, std::string dir)         // 
         {
             // REGULAR FILE!!! Check if it matches
             std::string fname = entry->d_name;
-            if (fname.find(searchCriteria, (fname.length() - searchCriteria.length())) != std::string::npos)
+            if (strncmp(fname.c_str(), searchCriteria.c_str(), searchCriteria.size()) == 0)         // This sees if it 'startswith' the searchCrit!
             {
                 // Spit it out!
                 printf("Found level: %s\n\n", fname.c_str());

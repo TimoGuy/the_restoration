@@ -66,7 +66,7 @@ the exit).
 
 *This is the naming scheme:
 
-EXAMPLE: s_2_e_jojos_e_unity_n_hawsoo.png
+EXAMPLE: n_hawsoo.s_2_e_jojos_e_unity.png
 
 So here we have:
 -a SPECIAL #2 (the level is modified by the internal
@@ -76,6 +76,12 @@ and the second leading to the level "unity"
 -and finally, the name of the level is a one-word
 "hawsoo"... the level name would have to be one-word
 I'd imagine
+
+NOTE: EDIT (2019/6/10) the first thing here is the name of the level
+(and ends in a period), and following it are the parameters.
+
+
+
 
 
 LEVEL EDITOR KEY
