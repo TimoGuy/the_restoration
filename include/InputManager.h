@@ -30,7 +30,7 @@ class InputManager
 		const bool& b2() const { return _b2; }
 
 		bool reloadRoom();	// It's not const bc that way the variable inside can be turned off after 1 call to this function!
-
+        bool reloadCutscene();
 
     protected:
 
@@ -53,6 +53,7 @@ class InputManager
 
 		// TEST: For debugging
 		bool _reloadRoom = false;	// This is the 'r' button which will trigger a 'reload the room' signal
+        bool _reloadCutscene = false;
 
 
         // Well, I only use these functions eh.

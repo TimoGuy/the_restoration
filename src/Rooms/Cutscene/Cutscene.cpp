@@ -370,6 +370,9 @@ void Cutscene::Update()
 
 void Cutscene::Render()
 {
+    // Reset trans. matrix
+    glLoadIdentity();
+
     // Only update and render objects
     for (int i = 0; i < objects.size(); i++)
     {
@@ -387,7 +390,6 @@ void Cutscene::End(Room* nextRoom)
 {
     // Load this next room and then switch to it!!!
     _gloop->SetRoom(nextRoom);
-    printf("Cutscene ended\n");
 }
 
 CutsceneSprite* Cutscene::GetSpriteByID(int id)

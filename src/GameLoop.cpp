@@ -11,6 +11,10 @@
 #include "../include/InputManager.h"
 #endif
 
+
+#include <iostream>
+
+
 GameLoop::GameLoop(SDL_Window* window)
 {
     _window = window;
@@ -52,6 +56,36 @@ bool GameLoop::Execute()
 
 
         SDL_GL_SwapWindow(_window);
+
+
+
+
+
+
+
+
+        // FOR DEBUG: check if player wants to trigger a cutscene
+        if (InputManager::Instance().reloadCutscene())		// This is a check, but after 1 check the inside variable turns off, so no worries.
+        {
+            // EDIT: Make it so that you can change the level to test using <iostream>
+            std::cout << "Please enter the cutscene\'s name: ";
+            std::string newCut;
+            std::getline(std::cin, newCut);
+            if (!newCut.empty())
+                // Change the level to
+                SetRoom(new Cutscene(newCut.c_str(), this));
+            else
+                printf("ERROR: Cutscene name was empty!!\n");
+        }
+
+
+
+
+
+
+
+
+
 
 
 

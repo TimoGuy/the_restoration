@@ -19,6 +19,22 @@ bool InputManager::reloadRoom()
 	return _reloadRoom;
 }
 
+bool InputManager::reloadCutscene()
+{
+	if (_reloadCutscene)
+	{
+		_reloadCutscene = false;
+		return true;
+	}
+	return _reloadCutscene;
+}
+
+
+
+
+
+
+
 InputManager::InputManager()
 {
     // Try initializing 1 joystick (gamecontroller)!
@@ -128,6 +144,10 @@ void InputManager::ProcessInput(GameLoop* g)
 
 				case SDLK_r:
 					_reloadRoom = true;		// FOR DEBUG: there's no keyup event, btw.
+					break;
+
+				case SDLK_c:
+					_reloadCutscene = true;		// FOR DEBUG: there's no keyup event, btw.
 					break;
                 }
             }

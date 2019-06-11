@@ -306,6 +306,8 @@ void CutsceneObject::DeleteMe(int currentTick, int startTick, int endTick, std::
 /// Params: name of the next thing to load! (i.e. 'c_%%%%' or 'n_%%%%')
 void CutsceneObject::ExitCutscene(int currentTick, int startTick, int endTick, std::string params)
 {
+    printf("Cutscene ended\n\n\n");
+
     Room* newRoom;
 
     std::string prefixLvl("n_");
