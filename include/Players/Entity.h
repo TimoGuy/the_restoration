@@ -3,7 +3,7 @@
 #include "../Shape/Quad.h"
 #include <vector>
 
-class Room;
+//class Room;
 
 class Entity : public Object
 {

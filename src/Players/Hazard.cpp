@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "Hazard.h"
 #include "defs.h"
+#include "TestRoom.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Hazard.h"
 #include "../../include/defs.h"
@@ -13,7 +14,7 @@ Hazard::Hazard(int gx, int gy, Room* rm) : Object(gx, gy, rm, false)
     image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/hazard_test.png"), STBI_rgb_alpha));
 
     // Add to collision map
-    rm->getCollisionMap()[rm->getGWidth() * gy + gx] = this;
+    ((TestRoom*)rm)->getCollisionMap()[((TestRoom*)rm)->getGWidth() * gy + gx] = this;
 }
 
 Hazard::~Hazard()

@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "defs.h"
 
+#include "TestRoom.h"
+
 #include "Slant.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\Entity.h"
@@ -18,7 +20,7 @@ Entity::Entity(int gx, int gy, Room* rm)
 	: Object(gx, gy, rm, false)
 {
 	hsp = vsp = 0;
-	rm->getEntityList()->push_back(this);	// Adds itself to the entity list of the room
+	((TestRoom*)rm)->getEntityList()->push_back(this);	// Adds itself to the entity list of the room
 }
 
 
@@ -54,12 +56,12 @@ void Entity::SeeNeighborCollisionObjects(float centerX, float centerY, std::vect
 			ngy = gy + _y;
 
 			// Check if the newGridCoord is out of the grid!
-			if (ngx < 0 || ngx > room->getGWidth() - 1 ||
-				ngy < 0 || ngy > room->getGHeight() - 1)
+			if (ngx < 0 || ngx > ((TestRoom*)room)->getGWidth() - 1 ||
+				ngy < 0 || ngy > ((TestRoom*)room)->getGHeight() - 1)
 				continue;
 
-			Object** tempMap = room->getCollisionMap();
-			Object* tempColl = tempMap[room->getGWidth() * ngy + ngx];
+			Object** tempMap = ((TestRoom*)room)->getCollisionMap();
+			Object* tempColl = tempMap[((TestRoom*)room)->getGWidth() * ngy + ngx];
 			if (tempColl != NULL)
 			{
 				neighboringCollisions.push_back(tempColl);

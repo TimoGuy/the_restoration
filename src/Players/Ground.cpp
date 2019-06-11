@@ -1,5 +1,6 @@
 #ifdef __unix__
 #include "Ground.h"
+#include "TestRoom.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Ground.h"
@@ -15,7 +16,7 @@ Ground::Ground(int gx, int gy, Room* rm) : Object(gx, gy, rm, true)
     image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/ground_test.png"), STBI_rgb_alpha));
 
     // Add to collision map
-    rm->getCollisionMap()[rm->getGWidth() * gy + gx] = this;
+    ((TestRoom*)rm)->getCollisionMap()[((TestRoom*)rm)->getGWidth() * gy + gx] = this;
 }
 
 Ground::~Ground()

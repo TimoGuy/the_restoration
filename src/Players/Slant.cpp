@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "Slant.h"
 #include "defs.h"
+#include "TestRoom.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Slant.h"
 #include "../../include/defs.h"
@@ -34,7 +35,7 @@ Slant::Slant(int gx, int gy, Room* rm, bool isLeft) : Object(gx, gy, rm, true)
 	}
 
 	// Add to collision map
-	rm->getCollisionMap()[rm->getGWidth() * gy + gx] = this;
+	((TestRoom*)rm)->getCollisionMap()[((TestRoom*)rm)->getGWidth() * gy + gx] = this;
 }
 
 Slant::~Slant()
@@ -134,5 +135,5 @@ void Slant::Extend1BlockToTheRight(int newGx, int newGy)
 	_end.x += GRID_SIZE;
 
 	// Add myself to the new spots I take up too!!!
-	room->getCollisionMap()[room->getGWidth() * newGy + newGx] = this;
+	((TestRoom*)room)->getCollisionMap()[((TestRoom*)room)->getGWidth() * newGy + newGx] = this;
 }

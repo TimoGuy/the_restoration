@@ -1,5 +1,6 @@
 #ifdef __unix__
 #include "Exit.h"
+#include "TestRoom.h"
 #include "InputManager.h"
 #include "defs.h"
 #include <SDL2/SDL_opengl.h>
@@ -23,7 +24,7 @@ Exit::Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, Ro
 	_width = _height = GRID_SIZE;
 
 	// Add to collision map
-	rm->getCollisionMap()[rm->getGWidth() * gy + gx] = this;
+	((TestRoom*)rm)->getCollisionMap()[((TestRoom*)rm)->getGWidth() * gy + gx] = this;
 
 	_isUpPressed = false;
 	_prevHadUpPressed = false;

@@ -2,7 +2,7 @@
 
 #ifdef __unix__
 #include "Rooms/Room.h"
-#include "Object.h"
+#include "Entity.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/Room.h"
@@ -23,6 +23,13 @@ class TestRoom : public Room
         TestRoom(std::string name);
         virtual ~TestRoom();
 
+
+        Object** getCollisionMap() { return collisionMap; }
+		std::vector<Entity*>* getEntityList() { return &entityList; }
+        int getGWidth() { return gWidth; }
+        int getGHeight() { return gHeight; }
+
+
         void Update();
         void Render();
 
@@ -34,6 +41,13 @@ class TestRoom : public Room
 
     private:
 		void Destruct();
+
+
+        Object** collisionMap;      // This will be an array
+		std::vector<Entity*> entityList;	// Stores all the entities inside of the room!
+        int gWidth, gHeight;        // The grid's width and height
+
+
 
 
         std::vector<Object*> gameObjects;
