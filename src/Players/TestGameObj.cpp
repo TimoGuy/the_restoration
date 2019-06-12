@@ -160,7 +160,7 @@ void TestGameObj::Update()
 		}
     }
 
-    if (y > ((TestRoom*)room)->getGHeight() * GRID_SIZE)
+    if (y > room->getGHeight() * GRID_SIZE)
     {
         // Fell out of the screen!!?!?!?
         die = true;

@@ -24,7 +24,7 @@ Exit::Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, Te
 	_width = _height = GRID_SIZE;
 
 	// Add to collision map
-	((TestRoom*)rm)->getCollisionMap()[((TestRoom*)rm)->getGWidth() * gy + gx] = this;
+	rm->getCollisionMap()[rm->getGWidth() * gy + gx] = this;
 
 	_isUpPressed = false;
 	_prevHadUpPressed = false;

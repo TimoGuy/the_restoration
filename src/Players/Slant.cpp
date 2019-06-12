@@ -35,7 +35,7 @@ Slant::Slant(int gx, int gy, TestRoom* rm, bool isLeft) : Object(gx, gy, rm, tru
 	}
 
 	// Add to collision map
-	((TestRoom*)rm)->getCollisionMap()[((TestRoom*)rm)->getGWidth() * gy + gx] = this;
+	rm->getCollisionMap()[rm->getGWidth() * gy + gx] = this;
 }
 
 Slant::~Slant()
@@ -135,5 +135,5 @@ void Slant::Extend1BlockToTheRight(int newGx, int newGy)
 	_end.x += GRID_SIZE;
 
 	// Add myself to the new spots I take up too!!!
-	((TestRoom*)room)->getCollisionMap()[((TestRoom*)room)->getGWidth() * newGy + newGx] = this;
+	room->getCollisionMap()[room->getGWidth() * newGy + newGx] = this;
 }

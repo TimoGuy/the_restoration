@@ -18,8 +18,8 @@ MovingPlatGround::MovingPlatGround(int gx, int gy, TestRoom* rm) : Object(gx, gy
     image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/ground_test.png"), STBI_rgb_alpha));
 
     // Add to collision map
-	int id = ((TestRoom*)rm)->getGWidth() * gy + gx;
-    ((TestRoom*)rm)->getCollisionMap()[id] = this;
+	int id = rm->getGWidth() * gy + gx;
+    rm->getCollisionMap()[id] = this;
 	collCoords.push_back(id);
 
 	// TESTTTTTTT
@@ -65,15 +65,15 @@ void MovingPlatGround::Extend1BlockToTheRight(int newGx, int newGy)
 		// Not gonna happen
 		return;*/
 
-	printf("\MPG was extended by 1!!\n");
+	printf("\tMPG was extended by 1!!\n");
 
 	// Move the right point to the right more
 	//_blocks++;
 	image->SetWidth(image->GetWidth() + GRID_SIZE);
 
 	// Add myself to the new spots I take up too!!!
-	int id = ((TestRoom*)room)->getGWidth() * newGy + newGx;
-	((TestRoom*)room)->getCollisionMap()[id] = this;
+	int id = room->getGWidth() * newGy + newGx;
+	room->getCollisionMap()[id] = this;
 	collCoords.push_back(id);
 }
 
@@ -89,7 +89,7 @@ void MovingPlatGround::RecalcMyselfToCollisionMap()
 	// Remove the previous coordinates.
 	for (int i = 0; i < collCoords.size(); i++)
 	{
-		((TestRoom*)room)->getCollisionMap()[collCoords[i]] = NULL;	// Release the spot!
+		room->getCollisionMap()[collCoords[i]] = NULL;	// Release the spot!
 	}
 	collCoords.clear();
 
@@ -100,21 +100,21 @@ void MovingPlatGround::RecalcMyselfToCollisionMap()
 	int endGY = (int)std::ceil(y + image->GetHeight() - 1) / GRID_SIZE;
 
 	// Make sure that gx or gy don't get outside of grid room!
-	startGX = std::min(((TestRoom*)room)->getGWidth() - 1, std::max(0, startGX));
-	startGY = std::min(((TestRoom*)room)->getGHeight() - 1, std::max(0, startGY));
-	endGX = std::min(((TestRoom*)room)->getGWidth() - 1, std::max(0, endGX));
-	endGY = std::min(((TestRoom*)room)->getGHeight() - 1, std::max(0, endGY));
+	startGX = std::min(room->getGWidth() - 1, std::max(0, startGX));
+	startGY = std::min(room->getGHeight() - 1, std::max(0, startGY));
+	endGX = std::min(room->getGWidth() - 1, std::max(0, endGX));
+	endGY = std::min(room->getGHeight() - 1, std::max(0, endGY));
 
-	int start = ((TestRoom*)room)->getGWidth() * startGY + startGX;	// This does integer division. (rounds down)
-	int end = ((TestRoom*)room)->getGWidth() * endGY + endGX;
+	int start = room->getGWidth() * startGY + startGX;	// This does integer division. (rounds down)
+	int end = room->getGWidth() * endGY + endGX;
 
 	for (int i = start; i <= end; i++)		// Make sure to check for if 'i' gets outside of the array.
 	{
 		// Don't accidentally delete the already-there collisions!
-		if (((TestRoom*)room)->getCollisionMap()[i] != NULL)
+		if (room->getCollisionMap()[i] != NULL)
 			continue;
 
-		((TestRoom*)room)->getCollisionMap()[i] = this;	// Get this reference right into the collision map!!!!
+		room->getCollisionMap()[i] = this;	// Get this reference right into the collision map!!!!
 		collCoords.push_back(i);
 	}
 }
