@@ -23,7 +23,7 @@ GameLoop::GameLoop(SDL_Window* window)
 bool GameLoop::Execute()
 {
     // This will be the Room obj
-    SetRoom(/*new Cutscene("c_test.txt", this));// */new TestRoom("fitt", this));
+    SetRoom(new Cutscene("c_test.txt", this));
 
     // This will hold up the thread...
     // I'll be honest, there's really only
