@@ -7,16 +7,21 @@
 //#include "../Players/Entity.h"
 #endif
 
+class GameLoop;
+
 class Room
 {
     public:
-        Room();
+        Room(GameLoop* gloop);
         virtual ~Room();
 
         virtual void Update() = 0;
         virtual void Render() = 0;
 
+        GameLoop* GetGameLoop();
+
     protected:
+        GameLoop* _gloop;
 
     private:
 };

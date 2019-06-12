@@ -9,7 +9,7 @@
 class Slant : public Object
 {
     public:
-        Slant(int gx, int gy, Room* rm, bool isLeft);
+        Slant(int gx, int gy, TestRoom* rm, bool isLeft);
         virtual ~Slant();
 
         void Update() {}

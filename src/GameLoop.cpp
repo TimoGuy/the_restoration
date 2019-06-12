@@ -1,6 +1,6 @@
 #ifdef __unix__
 #include "GameLoop.h"
-//#include "Rooms/TestRoom.h"
+#include "Rooms/TestRoom.h"
 #include "Cutscene.h"
 #include <SDL2/SDL_opengl.h>
 #include "InputManager.h"
@@ -23,7 +23,7 @@ GameLoop::GameLoop(SDL_Window* window)
 bool GameLoop::Execute()
 {
     // This will be the Room obj
-    SetRoom(new Cutscene("c_test.txt", this));// new TestRoom();
+    SetRoom(/*new Cutscene("c_test.txt", this));// */new TestRoom("fitt", this));
 
     // This will hold up the thread...
     // I'll be honest, there's really only
@@ -62,7 +62,19 @@ bool GameLoop::Execute()
 
 
 
-
+        // FOR DEBUG: check if the room needs to be reloaded
+        if (InputManager::Instance().reloadRoom())		// This is a check, but after 1 check the inside variable turns off, so no worries.
+        {
+            // EDIT: Make it so that you can change the level to test using <iostream>
+            std::cout << "Please enter the new level\'s name: ";
+            std::string newLvl;
+            std::getline(std::cin, newLvl);
+            if (!newLvl.empty())
+                // Load the level eh
+                SetRoom(new TestRoom(newLvl.c_str(), this));
+            else
+                printf("ERROR: Level name was empty!!\n");
+        }
 
         // FOR DEBUG: check if player wants to trigger a cutscene
         if (InputManager::Instance().reloadCutscene())		// This is a check, but after 1 check the inside variable turns off, so no worries.
@@ -72,14 +84,11 @@ bool GameLoop::Execute()
             std::string newCut;
             std::getline(std::cin, newCut);
             if (!newCut.empty())
-                // Change the level to
+                // Cutscene time!!!
                 SetRoom(new Cutscene(newCut.c_str(), this));
             else
                 printf("ERROR: Cutscene name was empty!!\n");
         }
-
-
-
 
 
 
@@ -112,7 +121,11 @@ bool GameLoop::Execute()
 
 void GameLoop::SetRoom(Room* newRoom)
 {
-    currentRoom = newRoom;
+    // Remove current one
+//    if (currentRoom != NULL)              // TODO:: there's problems w/ delete currentRoom!!!!!!
+//        delete currentRoom;
+
+    currentRoom = newRoom;        // This will shift to the currentRoom when the time is right ;)
 }
 Room* GameLoop::GetRoom() { return currentRoom; }
 

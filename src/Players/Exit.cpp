@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 
-Exit::Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, Room* rm) : Object(gx, gy, rm, false)
+Exit::Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, TestRoom* rm) : Object(gx, gy, rm, false)
 {
     //ctor
 	printf("Exit built!\tIt leads to the level \"%s\"\n", nextRoomID.c_str());

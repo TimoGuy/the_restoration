@@ -35,12 +35,9 @@ class Cutscene : public Room//, public Reaction
         void End(Room* nextRoom);
         CutsceneSprite* GetSpriteByID(int id);
 
-        GameLoop* GetGameLoop();
-
     protected:
 
     private:
-        GameLoop* _gloop;
         int ticks;
         std::vector<CutsceneSprite*> sprites;
         std::vector<CutsceneObject*> objects;

@@ -26,7 +26,7 @@
 #define PLAYER_HEIGHT 48
 #define PLAYER_YOFF -16
 
-TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Entity(gx, gy, rm)
+TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 {
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
@@ -137,9 +137,9 @@ void TestGameObj::Update()
 					// Go to that room!!!!
 					int ceGX, ceGY;
 					if (((Exit*)tempCollisions.at(i))->GetCustomCoords(ceGX, ceGY))
-                        ((TestRoom*)room)->RequestLevelSwitch(newRmID, ceGX, ceGY);
+                        room->GetGameLoop()->SetRoom(new TestRoom(newRmID, room->GetGameLoop(), ceGX, ceGY));
 					else
-                        ((TestRoom*)room)->RequestLevelSwitch(newRmID);
+                        room->GetGameLoop()->SetRoom(new TestRoom(newRmID, room->GetGameLoop()));
 
 					// Game over for YOU... there will be a new player created, so don't worry!!!
 					return;

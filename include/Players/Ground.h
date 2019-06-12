@@ -10,7 +10,7 @@
 class Ground : public Object
 {
     public:
-        Ground(int gx, int gy, Room* rm);
+        Ground(int gx, int gy, TestRoom* rm);
         virtual ~Ground();
 
         void Update() {}

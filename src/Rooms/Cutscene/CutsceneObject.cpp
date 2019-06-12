@@ -18,7 +18,8 @@ CutsceneObject::CutsceneObject(int x, int y, int spriteId, Cutscene* myCutscene)
 
 CutsceneObject::~CutsceneObject()
 {
-    delete _image;
+    if (_image != NULL)
+        delete _image;
 }
 
 
@@ -317,7 +318,7 @@ void CutsceneObject::ExitCutscene(int currentTick, int startTick, int endTick, s
     {
         // The request is a level!!!!
         params.erase(params.begin(), params.begin() + 2);           // Cut off the 'n_' part, since that's how it works eh
-        newRoom = new TestRoom(params);
+        newRoom = new TestRoom(params, cutscene->GetGameLoop());
     }
     else if (strncmp(params.c_str(), prefixCut.c_str(), prefixCut.size()) == 0)
     {

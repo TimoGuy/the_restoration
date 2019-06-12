@@ -16,11 +16,11 @@
 #include <algorithm>
 
 
-Entity::Entity(int gx, int gy, Room* rm)
+Entity::Entity(int gx, int gy, TestRoom* rm)
 	: Object(gx, gy, rm, false)
 {
 	hsp = vsp = 0;
-	((TestRoom*)rm)->getEntityList()->push_back(this);	// Adds itself to the entity list of the room
+	rm->getEntityList()->push_back(this);	// Adds itself to the entity list of the room
 }
 
 

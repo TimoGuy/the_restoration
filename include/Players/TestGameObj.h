@@ -12,7 +12,7 @@
 class TestGameObj : public Entity
 {
     public:
-        TestGameObj(int gx, int gy, Room* rm);
+        TestGameObj(int gx, int gy, TestRoom* rm);
         virtual ~TestGameObj();
 
         void Update();

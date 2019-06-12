@@ -11,7 +11,7 @@
 #include <cmath>
 #include <algorithm>
 
-MovingPlatGround::MovingPlatGround(int gx, int gy, Room* rm) : Object(gx, gy, rm, true)
+MovingPlatGround::MovingPlatGround(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, true)
 {
     // Init
     printf("MPG (Moving Plat Grnd) built!\n");

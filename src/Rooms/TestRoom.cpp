@@ -25,21 +25,81 @@
 #include <algorithm>
 #include <string>
 
-TestRoom::TestRoom(std::string name)
+TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY) : Room(gloop)
 {
-	SwitchLevelAndSetUpLevelForPlayer(name);
+    // Tear down all the objects in the object list
+	for (int it = 0; it != gameObjects.size(); ++it)
+	{
+		delete gameObjects.at(it);
+	}
+	gameObjects.clear();
+
+
+
+
+
+	// TEST CODE to load a level
+	bool success;
+	success = LoadLevelIO(name);
+
+	if (!success)
+	{
+		printf("ERROR: Room was not created, because level switching did not succeed\n");
+		return;
+	}
+
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		// Look for the player!!!
+		if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
+		{
+			camFocusObj = gameObjects.at(i);
+
+			// Sort the player to the very back
+			// This way, the player will always be updated late!
+			gameObjects.erase(gameObjects.begin() + i);
+			gameObjects.push_back(camFocusObj);
+			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
+
+			if (playerGX >= 0 && playerGY >= 0)
+			{
+                // Change the coords
+                ((TestGameObj*)camFocusObj)->SetGridCoords(playerGX, playerGY);
+                printf("\t\t\tPlayer set to custom coords %i,%i\n", playerGX, playerGY);
+			}
+			break;
+		}
+	}
 }
+
+
+
+
 
 TestRoom::~TestRoom()
 {
-	this->Destruct();
+	// Tear down all the objects in the object list
+	for (int it = 0; it != gameObjects.size(); ++it)
+	{
+		delete gameObjects.at(it);
+	}
+	gameObjects.clear();
 }
+
+
+
+
 
 void TestRoom::Update()
 {
     // Update all objects
     for (int it = 0; it != gameObjects.size(); ++it)
     {
+        if (it == gameObjects.size() - 1)
+        {
+            int i = 100;
+            }
+
         gameObjects.at(it)->Update();
     }
 
@@ -95,36 +155,20 @@ void TestRoom::Render()
         gameObjects.at(it)->Render();
     }
 
-
-
-	// FOR DEBUG: check if the room needs to be reloaded
-	if (InputManager::Instance().reloadRoom())		// This is a check, but after 1 check the inside variable turns off, so no worries.
-	{
-		// EDIT: Make it so that you can change the level to test using <iostream>
-		std::cout << "Please enter the new level\'s name (or blank for current level): ";
-		std::string newLvl;
-		std::getline(std::cin, newLvl);
-		if (!newLvl.empty())
-			currentLvl = newLvl;
-
-		// Change the level to
-		RequestLevelSwitch(currentLvl);
-	}
-
 	// Switch rooms if requested (after everything has finished computing, hence the end of the Render() function)
-	if (!pleaseSwitchLevelsToThisOne.empty())
-	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		SwitchLevelAndSetUpLevelForPlayer(pleaseSwitchLevelsToThisOne);
-		pleaseSwitchLevelsToThisOne.clear();
-	}
+//	if (!pleaseSwitchLevelsToThisOne.empty())
+//	{
+//		glClear(GL_COLOR_BUFFER_BIT);
+//		SwitchLevelAndSetUpLevelForPlayer(pleaseSwitchLevelsToThisOne);
+//		pleaseSwitchLevelsToThisOne.clear();
+//	}
 }
 
 
 
 
 
-bool TestRoom::SwitchLevelIO(std::string name)
+bool TestRoom::LoadLevelIO(std::string name)
 {
     // Find/Search for the requested level (within the 'n_...' form-factor)
 #ifdef __unix__
@@ -222,78 +266,6 @@ bool TestRoom::SwitchLevelIO(std::string name)
     // Free loaded image
     stbi_image_free(imgData);
 	return true;
-}
-
-void TestRoom::RequestLevelSwitch(std::string name)
-{
-	pleaseSwitchLevelsToThisOne = name;
-    customEnter = false;
-}
-
-void TestRoom::RequestLevelSwitch(std::string name, int playerGX, int playerGY)
-{
-    RequestLevelSwitch(name);
-
-    // Now start dinking around!
-    customEnter = true;
-    ceGX = playerGX;
-    ceGY = playerGY;
-}
-
-
-
-
-
-
-
-void TestRoom::SwitchLevelAndSetUpLevelForPlayer(std::string name)
-{
-	// Clear things up first!!!
-	Destruct();
-
-
-	// TEST CODE to load a level
-	bool success;
-	success = SwitchLevelIO(name);
-	//success = SwitchLevelIO("test");
-
-	if (!success)
-	{
-		printf("ERROR: Room was not created, because level switching did not succeed\n");
-		return;
-	}
-
-	for (int i = 0; i < gameObjects.size(); i++)
-	{
-		// Look for the player!!!
-		if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
-		{
-			camFocusObj = gameObjects.at(i);
-
-			// Sort the player to the very back
-			// This way, the player will always be updated late!
-			gameObjects.erase(gameObjects.begin() + i);
-			gameObjects.push_back(camFocusObj);
-			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
-
-			if (customEnter)
-			{
-                // Change the coords
-                ((TestGameObj*)camFocusObj)->SetGridCoords(ceGX, ceGY);
-			}
-			break;
-		}
-	}
-}
-
-void TestRoom::Destruct()
-{
-	// Tear down all the objects in the object list
-	for (int it = 0; it != gameObjects.size(); ++it)
-	{
-		delete gameObjects.at(it);
-	}
-	gameObjects.clear();
 }
 
 

@@ -12,7 +12,7 @@
 
 
 
-Slant::Slant(int gx, int gy, Room* rm, bool isLeft) : Object(gx, gy, rm, true)
+Slant::Slant(int gx, int gy, TestRoom* rm, bool isLeft) : Object(gx, gy, rm, true)
 {
     //ctor
     printf("Slant built!\n");

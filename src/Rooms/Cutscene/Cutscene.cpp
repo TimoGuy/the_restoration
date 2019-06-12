@@ -5,10 +5,9 @@
 #include <fstream>
 #include <algorithm>
 
-Cutscene::Cutscene(std::string name, GameLoop* gloop)
+Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
 {
     ticks = -1;
-    _gloop = gloop;
 
     // Load up the cutscene objects
     std::string filename = std::string(".data/cutscenes/") + name;
@@ -404,15 +403,3 @@ CutsceneSprite* Cutscene::GetSpriteByID(int id)
     return NULL;
 }
 
-
-
-
-
-
-
-
-
-GameLoop* Cutscene::GetGameLoop()
-{
-    return _gloop;
-}

@@ -10,7 +10,7 @@
 class Exit : public Object
 {
     public:
-        Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, Room* rm);
+        Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, TestRoom* rm);
         virtual ~Exit();
 
 		void Update();

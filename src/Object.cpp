@@ -6,7 +6,7 @@
 #include "../include/defs.h"
 #endif
 
-Object::Object(int gx, int gy, Room* rm, bool isSolid)
+Object::Object(int gx, int gy, TestRoom* rm, bool isSolid)
 {
     // As you can tell,
     // gx/y means the positioning

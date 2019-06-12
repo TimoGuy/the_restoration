@@ -54,33 +54,41 @@ enum StringValue
 };
 static std::map<std::string, StringValue>* s_mapStringValues = NULL;
 
-int ObjectFactory::previousStringValue = -1;
-Object* ObjectFactory::previousObj = NULL;
+
+
+
+
+
+
+// Constructor
+ObjectFactory::ObjectFactory()
+{
+    // Initialize!!!
+    s_mapStringValues = new std::map<std::string, StringValue>();
+
+    (*s_mapStringValues)["255,255,255"] = evNotDefined;
+    (*s_mapStringValues)["255,216,0"] = evPlayer;
+    (*s_mapStringValues)["0,0,0"] = evGround;
+    (*s_mapStringValues)["38,127,0"] = evExit;
+    (*s_mapStringValues)["0,162,232"] = evSlantRight;
+    (*s_mapStringValues)["153,217,234"] = evSlantLeft;
+    (*s_mapStringValues)["255,0,0"] = evHazard;
+    (*s_mapStringValues)["100,100,100"] = evTopSideCollGround;
+    (*s_mapStringValues)["255,174,201"] = evEnemy1;
+    (*s_mapStringValues)["136,0,21"] = evMovingPlatGround;
+    (*s_mapStringValues)["end"] = evEnd;
+
+    printf("Init Object map!!\n");
+
+    // Default vals
+    previousStringValue = -1;
+    previousObj = NULL;
+}
 
 
 // Singleton initialization
 ObjectFactory& ObjectFactory::GetObjectFactory()
 {
-    if (s_mapStringValues == NULL)
-    {
-        // Initialize!!!
-        s_mapStringValues = new std::map<std::string, StringValue>();
-
-        (*s_mapStringValues)["255,255,255"] = evNotDefined;
-        (*s_mapStringValues)["255,216,0"] = evPlayer;
-        (*s_mapStringValues)["0,0,0"] = evGround;
-        (*s_mapStringValues)["38,127,0"] = evExit;
-		(*s_mapStringValues)["0,162,232"] = evSlantRight;
-		(*s_mapStringValues)["153,217,234"] = evSlantLeft;
-		(*s_mapStringValues)["255,0,0"] = evHazard;
-		(*s_mapStringValues)["100,100,100"] = evTopSideCollGround;
-		(*s_mapStringValues)["255,174,201"] = evEnemy1;
-		(*s_mapStringValues)["136,0,21"] = evMovingPlatGround;
-        (*s_mapStringValues)["end"] = evEnd;
-
-        printf("Init Object map!!\n");
-    }
-
     static ObjectFactory factory;
     return factory;
 }
@@ -88,7 +96,7 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
 
 
 //                                                       ↆEvery time you use a param, delete it!
-Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* rmParams, int gx, int gy, Room* rm) const
+Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* rmParams, int gx, int gy, TestRoom* rm)
 {
     // I apologize... this is all hard-coded in!
 	Object* retObj = NULL;

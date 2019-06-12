@@ -12,7 +12,7 @@
 class Hazard : public Object
 {
     public:
-        Hazard(int gx, int gy, Room* rm);
+        Hazard(int gx, int gy, TestRoom* rm);
         virtual ~Hazard();
 
         void Update() {}

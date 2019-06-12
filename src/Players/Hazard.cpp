@@ -7,7 +7,7 @@
 #include "../../include/defs.h"
 #endif
 
-Hazard::Hazard(int gx, int gy, Room* rm) : Object(gx, gy, rm, false)
+Hazard::Hazard(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, false)
 {
     // Init
     printf("Hazard built!\n");
