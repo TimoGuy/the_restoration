@@ -2,7 +2,7 @@
 #include "TestRoom.h"
 #include "TestGameObj.h"
 #include "Hazard.h"
-#include "Exit.h"
+#include "Trigger.h"
 #include "MovingPlatGround.h"
 #include "InputManager.h"
 #include "defs.h"
@@ -10,7 +10,7 @@
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
 #include "../../include/Players/Hazard.h"
-#include "../../include/Players/Exit.h"
+#include "../../include/Players/Trigger.h"
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
@@ -126,17 +126,17 @@ void TestGameObj::Update()
 			}
 
 			// Check for exits
-			else if (dynamic_cast<Exit*>(tempCollisions.at(i)) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
+			else if (dynamic_cast<Trigger*>(tempCollisions.at(i)) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
 			{
 				// Already determined we're colliding, so...
 				// See if it wants to trigger
-				if (((Exit*)tempCollisions.at(i))->IsDesiringToTrigger())
+				if (((Trigger*)tempCollisions.at(i))->IsDesiringToTrigger())
 				{
-                    std::string newRmID = ((Exit*)tempCollisions.at(i))->GetNewRoomID();
+                    std::string newRmID = ((Trigger*)tempCollisions.at(i))->GetNewRoomID();
 
 					// Go to that room!!!!
 					int ceGX, ceGY;
-					if (((Exit*)tempCollisions.at(i))->GetCustomCoords(ceGX, ceGY))
+					if (((Trigger*)tempCollisions.at(i))->GetCustomCoords(ceGX, ceGY))
                         room->GetGameLoop()->SetRoom(new TestRoom(newRmID, room->GetGameLoop(), ceGX, ceGY));
 					else
                         room->GetGameLoop()->SetRoom(new TestRoom(newRmID, room->GetGameLoop()));

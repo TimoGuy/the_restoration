@@ -1,11 +1,11 @@
 #ifdef __unix__
-#include "Exit.h"
+#include "Trigger.h"
 #include "TestRoom.h"
 #include "InputManager.h"
 #include "defs.h"
 #include <SDL2/SDL_opengl.h>
 #elif defined(_WIN32) || defined(WIN32)
-#include "../../include/Players/Exit.h"
+#include "../../include/Players/Trigger.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
 #include <SDL_opengl.h>
@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 
-Exit::Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, TestRoom* rm) : Object(gx, gy, rm, false)
+Trigger::Trigger(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, TestRoom* rm) : Object(gx, gy, rm, false)
 {
     //ctor
 	printf("Exit built!\tIt leads to the level \"%s\"\n", nextRoomID.c_str());
@@ -30,21 +30,21 @@ Exit::Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, Te
 	_prevHadUpPressed = false;
 }
 
-Exit::~Exit()
+Trigger::~Trigger()
 {
     //dtor
 }
 
 
 
-void Exit::Update()
+void Trigger::Update()
 {
 	// Pass previous input b4 reading new input stream
 	_prevHadUpPressed = _isUpPressed;
 	_isUpPressed = InputManager::Instance().y() < 0;		// Neg. on the y axis means upwards!
 }
 
-void Exit::Render()
+void Trigger::Render()
 {
 
 
@@ -81,7 +81,7 @@ void Exit::Render()
 
 
 
-void Exit::SetEntranceCoords(int gx, int gy)
+void Trigger::SetEntranceCoords(int gx, int gy)
 {
     customEnter = true;
     ceGX = gx;
@@ -93,7 +93,7 @@ void Exit::SetEntranceCoords(int gx, int gy)
 
 
 
-bool Exit::GetCustomCoords(int& gx, int& gy)        // This'll edit the variables, warning you!!! (it's a dipstick function)
+bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the variables, warning you!!! (it's a dipstick function)
 {
     if (!customEnter)
         return false;
@@ -107,7 +107,7 @@ bool Exit::GetCustomCoords(int& gx, int& gy)        // This'll edit the variable
 
 
 
-bool Exit::IsColliding(BoundBox* box)
+bool Trigger::IsColliding(BoundBox* box)
 {
 	// If it's colliding, check if it's the kind of exit
 	// where by touching, you go, or you have to press up!
@@ -140,13 +140,13 @@ bool Exit::IsColliding(BoundBox* box)
 
 
 
-bool Exit::IsDesiringToTrigger()
+bool Trigger::IsDesiringToTrigger()
 {
 	return _isJustTouchToTrigger ||
 		(!_prevHadUpPressed && _isUpPressed);
 }
 
-std::string Exit::GetNewRoomID()
+std::string Trigger::GetNewRoomID()
 {
 	return _nextRoomID;
 }

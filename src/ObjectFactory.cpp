@@ -2,7 +2,7 @@
 #include "ObjectFactory.h"
 
 #include "Ground.h"
-#include "Exit.h"
+#include "Trigger.h"
 #include "Slant.h"
 #include "Hazard.h"
 #include "TopSideCollGround.h"
@@ -15,7 +15,7 @@
 #include "../include/ObjectFactory.h"
 
 #include "../include/Players/Ground.h"
-#include "../include/Players/Exit.h"
+#include "../include/Players/Trigger.h"
 #include "../include/Players/Slant.h"
 #include "../include/Players/Hazard.h"
 #include "../include/Players/TopSideCollGround.h"
@@ -144,7 +144,7 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
         // Create the exit object
         bool touchTrigger;
         std::istringstream(rmParams->at(pos + 1)) >> touchTrigger;
-		retObj = new Exit(gx, gy, touchTrigger, rmParams->at(pos + 2), rm);
+		retObj = new Trigger(gx, gy, touchTrigger, rmParams->at(pos + 2), rm);
 
         int end = 3;
 		if (pos + 3 < rmParams->size() &&
@@ -174,7 +174,7 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
             }
 
             printf("\n\n\tCustom entrance for %i,%i\n\n\n", ceGX, ceGY);
-            ((Exit*)retObj)->SetEntranceCoords(ceGX, ceGY);
+            ((Trigger*)retObj)->SetEntranceCoords(ceGX, ceGY);
         }
         else
         {

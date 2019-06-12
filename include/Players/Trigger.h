@@ -7,11 +7,11 @@
 
 #include <string>
 
-class Exit : public Object
+class Trigger : public Object
 {
     public:
-        Exit(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, TestRoom* rm);
-        virtual ~Exit();
+        Trigger(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, TestRoom* rm);
+        virtual ~Trigger();
 
 		void Update();
 		void Render();
