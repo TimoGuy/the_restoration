@@ -57,5 +57,5 @@ class TestRoom : public Room
 
         // For the camera
         float camX = 0, camY = 0;   // Make this the same coords as the player!
-        Object* camFocusObj;        // This is the pointer to the player, eh!
+        Object* camFocusObj = NULL;        // This is the pointer to the player, eh!
 };

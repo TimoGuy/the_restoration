@@ -35,6 +35,8 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 	gameObjects.clear();
 
 
+	// Init
+	camFocusObj == NULL;
 
 
 
@@ -109,7 +111,9 @@ void TestRoom::Update()
 
 
 
-
+    // Is there cam?
+    if (camFocusObj == NULL)
+        return;
 
     // Update camera
     camX = camFocusObj->getX() - (SCREEN_WIDTH / 2);
