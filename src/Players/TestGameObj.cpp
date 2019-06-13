@@ -132,17 +132,9 @@ void TestGameObj::Update()
 				// See if it wants to trigger
 				if (((Trigger*)tempCollisions.at(i))->IsDesiringToTrigger())
 				{
-                    std::string newRmID = ((Trigger*)tempCollisions.at(i))->GetNewRoomID();
-
-					// Go to that room!!!!
-					int ceGX, ceGY;
-					if (((Trigger*)tempCollisions.at(i))->GetCustomCoords(ceGX, ceGY))
-                        room->GetGameLoop()->SetRoom(new TestRoom(newRmID, room->GetGameLoop(), ceGX, ceGY));
-					else
-                        room->GetGameLoop()->SetRoom(new TestRoom(newRmID, room->GetGameLoop()));
-
-					// Game over for YOU... there will be a new player created, so don't worry!!!
-					return;
+                    // Go to that next room!!!!!
+                    room->GetGameLoop()->SetRoom(((Trigger*)tempCollisions.at(i))->GetNextEvent());
+                    return;
 				}
 			}
 

@@ -60,7 +60,6 @@
 		<Unit filename="include/Object.h" />
 		<Unit filename="include/ObjectFactory.h" />
 		<Unit filename="include/Players/Entity.h" />
-		<Unit filename="include/Players/Exit.h" />
 		<Unit filename="include/Players/Ground.h" />
 		<Unit filename="include/Players/Hazard.h" />
 		<Unit filename="include/Players/MovingPlatGround.h" />
@@ -68,6 +67,7 @@
 		<Unit filename="include/Players/TestEnemy.h" />
 		<Unit filename="include/Players/TestGameObj.h" />
 		<Unit filename="include/Players/TopSideCollGround.h" />
+		<Unit filename="include/Players/Trigger.h" />
 		<Unit filename="include/Rooms/Cutscene/Cutscene.h" />
 		<Unit filename="include/Rooms/Cutscene/CutsceneObject.h" />
 		<Unit filename="include/Rooms/Cutscene/CutsceneSprite.h" />
@@ -85,7 +85,6 @@
 		<Unit filename="src/Object.cpp" />
 		<Unit filename="src/ObjectFactory.cpp" />
 		<Unit filename="src/Players/Entity.cpp" />
-		<Unit filename="src/Players/Exit.cpp" />
 		<Unit filename="src/Players/Ground.cpp" />
 		<Unit filename="src/Players/Hazard.cpp" />
 		<Unit filename="src/Players/MovingPlatGround.cpp" />
@@ -93,6 +92,7 @@
 		<Unit filename="src/Players/TestEnemy.cpp" />
 		<Unit filename="src/Players/TestGameObj.cpp" />
 		<Unit filename="src/Players/TopSideCollGround.cpp" />
+		<Unit filename="src/Players/Trigger.cpp" />
 		<Unit filename="src/Rooms/Cutscene/Cutscene.cpp" />
 		<Unit filename="src/Rooms/Cutscene/CutsceneObject.cpp" />
 		<Unit filename="src/Rooms/Cutscene/CutsceneSprite.cpp" />

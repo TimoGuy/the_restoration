@@ -37,7 +37,7 @@ enum StringValue
 
     evPlayer,
     evGround,
-    evExit,
+    evTrigger,
 
 	evSlantRight,
 	evSlantLeft,
@@ -69,7 +69,7 @@ ObjectFactory::ObjectFactory()
     (*s_mapStringValues)["255,255,255"] = evNotDefined;
     (*s_mapStringValues)["255,216,0"] = evPlayer;
     (*s_mapStringValues)["0,0,0"] = evGround;
-    (*s_mapStringValues)["38,127,0"] = evExit;
+    (*s_mapStringValues)["38,127,0"] = evTrigger;
     (*s_mapStringValues)["0,162,232"] = evSlantRight;
     (*s_mapStringValues)["153,217,234"] = evSlantLeft;
     (*s_mapStringValues)["255,0,0"] = evHazard;
@@ -120,13 +120,13 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
 
 
 
-    case evExit:        // Exits (doors)
+    case evTrigger:        // Triggers (usu. exits or doors)
     {
         // Get the first 'e' code from the params
         int pos = -1;
         for (int i = 0; i < rmParams->size(); i++)
         {
-            if (rmParams->at(i) == std::string("e"))
+            if (rmParams->at(i) == std::string("t"))
             {
                 // Start here and just start reading the string thru to get values!
                 pos = i;
@@ -137,26 +137,41 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
         if (pos < 0)
         {
             // Break out and print error
-            printf("\n\nERROR:: Not enough \'e\' params in level to create an exit...\n\n\n");
+            printf("\n\nERROR:: Not enough \'t\' params in level to create an exit...\n\n\n");
             break;
         }
 
-        // Create the exit object
-        bool touchTrigger;
-        std::istringstream(rmParams->at(pos + 1)) >> touchTrigger;
-		retObj = new Trigger(gx, gy, touchTrigger, rmParams->at(pos + 2), rm);
 
-        int end = 3;
-		if (pos + 3 < rmParams->size() &&
-            rmParams->at(pos + 3) != std::string("e"))
+        // Grab values
+        bool touchTrigger;
+            std::istringstream(rmParams->at(pos + 1)) >> touchTrigger;
+        std::string eventTagType = rmParams->at(pos + 2);
+        std::string eventName = rmParams->at(pos + 3);
+
+        bool custEntr = false;
+        std::string custEntrCoords;
+        if (eventTagType == "n" &&                             // Check if a game level type
+            pos + 4 < rmParams->size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
+            rmParams->at(pos + 4) != std::string("t"))
         {
-            end = 4;    // A fourth param...
+            custEntr = true;
+            custEntrCoords = rmParams->at(pos + 4);
+        }
+
+
+        // Create the trigger object
+		retObj = new Trigger(gx, gy, touchTrigger, eventTagType + "_" + eventName, rm);
+
+        int end = 4;
+		if (custEntr)
+        {
+            end = 5;    // A fifth param...             (it's the custom entrance coords!!!)
 
             // Parse from the x value (i.e. has a 123x456 to display coords)
             int ceGX, ceGY;
 
             std::string token;
-            std::istringstream tokenStream(rmParams->at(pos + 3));
+            std::istringstream tokenStream(custEntrCoords);
             int times = 0;
             while (std::getline(tokenStream, token, 'x') &&
                 times <= 1)
@@ -173,7 +188,7 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
                 times++;
             }
 
-            printf("\n\n\tCustom entrance for %i,%i\n\n\n", ceGX, ceGY);
+            printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
             ((Trigger*)retObj)->SetEntranceCoords(ceGX, ceGY);
         }
         else
@@ -181,7 +196,7 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
             printf("\tNo custom exit code found\n");
         }
 
-        // Remove those values
+        // Remove those values for future params!
         rmParams->erase(rmParams->begin() + pos, rmParams->begin() + pos + end);
 
         break;

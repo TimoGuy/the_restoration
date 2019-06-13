@@ -317,7 +317,6 @@ void CutsceneObject::ExitCutscene(int currentTick, int startTick, int endTick, s
     if (strncmp(params.c_str(), prefixLvl.c_str(), prefixLvl.size()) == 0)
     {
         // The request is a level!!!!
-        params.erase(params.begin(), params.begin() + 2);           // Cut off the 'n_' part, since that's how it works eh
         newRoom = new TestRoom(params, cutscene->GetGameLoop());
     }
     else if (strncmp(params.c_str(), prefixCut.c_str(), prefixCut.size()) == 0)

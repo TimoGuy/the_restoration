@@ -209,7 +209,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 	currentLvlFilename = levelFilename;
 
 	// Cut off the beginning I suppose!
-	std::string prefixCutoff = std::string("n_") + currentLvl + std::string(".");
+	std::string prefixCutoff = currentLvl + std::string(".");
 	int len = currentLvlFilename.size() - prefixCutoff.size() - 4;                  // The '4's referring to the '.png' at the end
 	std::string levelParams = currentLvlFilename.substr(prefixCutoff.size(), len);
 
@@ -290,7 +290,7 @@ std::string TestRoom::FindLevelIO(std::string name, std::string dir)         // 
     DIR* dirPoint = opendir(dir.c_str());
     dirent* entry = readdir(dirPoint);
 
-    std::string searchCriteria = std::string("n_") + name + std::string(".");
+    std::string searchCriteria = name + std::string(".");
 
     while (entry)
     {

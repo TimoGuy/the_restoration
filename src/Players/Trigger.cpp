@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "Trigger.h"
 #include "TestRoom.h"
+#include "Cutscene.h"
 #include "InputManager.h"
 #include "defs.h"
 #include <SDL2/SDL_opengl.h>
@@ -13,12 +14,12 @@
 
 #include <stdio.h>
 
-Trigger::Trigger(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoomID, TestRoom* rm) : Object(gx, gy, rm, false)
+Trigger::Trigger(int gx, int gy, bool isJustTouchToTrigger, std::string nextEventID, TestRoom* rm) : Object(gx, gy, rm, false)
 {
     //ctor
-	printf("Exit built!\tIt leads to the level \"%s\"\n", nextRoomID.c_str());
+	printf("Trigger built!\tIt leads to the event \"%s\"\n", nextEventID.c_str());
 	_isJustTouchToTrigger = isJustTouchToTrigger;
-	_nextRoomID = nextRoomID;
+	_nextEventID = nextEventID;
 
 	// Set default dimensions eh
 	_width = _height = GRID_SIZE;
@@ -28,6 +29,9 @@ Trigger::Trigger(int gx, int gy, bool isJustTouchToTrigger, std::string nextRoom
 
 	_isUpPressed = false;
 	_prevHadUpPressed = false;
+
+	// Default val is -1 anyways
+	ceGX = ceGY = -1;
 }
 
 Trigger::~Trigger()
@@ -83,7 +87,6 @@ void Trigger::Render()
 
 void Trigger::SetEntranceCoords(int gx, int gy)
 {
-    customEnter = true;
     ceGX = gx;
     ceGY = gy;
 
@@ -95,14 +98,28 @@ void Trigger::SetEntranceCoords(int gx, int gy)
 
 bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the variables, warning you!!! (it's a dipstick function)
 {
-    if (!customEnter)
-        return false;
-
     // Now insert the gx,gy etc.
     gx = ceGX;
     gy = ceGY;
 
-    return true;
+    return ceGX >= 0 || ceGY >= 0;
+}
+
+
+
+Room* Trigger::GetNextEvent()
+{
+    // Check what type of event
+    switch (GetNewEventID()[0])
+    {
+    case 'c':
+        return new Cutscene(GetNewEventID(), room->GetGameLoop());
+        break;
+
+    case 'n':
+        return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
+        break;
+    }
 }
 
 
@@ -146,7 +163,7 @@ bool Trigger::IsDesiringToTrigger()
 		(!_prevHadUpPressed && _isUpPressed);
 }
 
-std::string Trigger::GetNewRoomID()
+std::string Trigger::GetNewEventID()
 {
-	return _nextRoomID;
+	return _nextEventID;
 }
