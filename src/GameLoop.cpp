@@ -23,7 +23,7 @@ GameLoop::GameLoop(SDL_Window* window)
 bool GameLoop::Execute()
 {
     // This will be the Room obj
-    SetRoom(new Cutscene("c_first.txt", this));     // This is the beginning thing of the game eh!
+    SetRoom(new Cutscene("c_first", this));     // This is the beginning thing of the game eh!
 
     // This will hold up the thread...
     // I'll be honest, there's really only

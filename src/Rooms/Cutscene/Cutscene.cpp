@@ -14,7 +14,7 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
 
     // Load all sprites and objects!
     std::string line;
-    std::ifstream myfile(filename.c_str());
+    std::ifstream myfile(filename + ".txt");
     if (myfile.is_open())
     {
         std::cout << "Reading cutscene file:\n";
@@ -330,7 +330,11 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
         printf("\nCutscene loaded.\n");
         myfile.close();
     }
-
+    else
+    {
+        // ERROR CODE FOR FILE NOT EXISTING
+        printf("ERROR: cutscene file for \"%s\" simply does not exist boi.\n", (filename + ".txt").c_str());
+    }
 
 
 }
