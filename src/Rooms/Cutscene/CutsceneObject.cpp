@@ -304,9 +304,36 @@ void CutsceneObject::DeleteMe(int currentTick, int startTick, int endTick, std::
     delete this;
 }
 
+
+
+
+
 /// Params: name of the next thing to load! (i.e. 'c_%%%%' or 'n_%%%%')
 void CutsceneObject::ExitCutscene(int currentTick, int startTick, int endTick, std::string params)
 {
+    std::istringstream tokenStream(params);
+
+    std::string filename;
+    std::getline(tokenStream, filename, '\t');
+
+    int gx = -1, gy = -1;
+    {
+        std::string extraCoords;
+        std::getline(tokenStream, extraCoords, '\t');
+
+        if (!extraCoords.empty())
+        {
+            std::string coordPart;
+            std::istringstream tokenStream(extraCoords);
+
+            std::getline(tokenStream, coordPart, ',');
+            std::istringstream(coordPart) >> gx;
+            std::getline(tokenStream, coordPart, ',');
+            std::istringstream(coordPart) >> gy;
+        }
+    }
+
+
     printf("Cutscene ended\n\n\n");
 
     Room* newRoom;
@@ -314,15 +341,15 @@ void CutsceneObject::ExitCutscene(int currentTick, int startTick, int endTick, s
     std::string prefixLvl("n_");
     std::string prefixCut("c_");
     bool i;
-    if (strncmp(params.c_str(), prefixLvl.c_str(), prefixLvl.size()) == 0)
+    if (strncmp(filename.c_str(), prefixLvl.c_str(), prefixLvl.size()) == 0)
     {
         // The request is a level!!!!
-        newRoom = new TestRoom(params, cutscene->GetGameLoop());
+        newRoom = new TestRoom(filename, cutscene->GetGameLoop(), gx, gy);
     }
-    else if (strncmp(params.c_str(), prefixCut.c_str(), prefixCut.size()) == 0)
+    else if (strncmp(filename.c_str(), prefixCut.c_str(), prefixCut.size()) == 0)
     {
         // It's another cutscene!!!
-        newRoom = new Cutscene(params + std::string(".txt"), cutscene->GetGameLoop());
+        newRoom = new Cutscene(filename + std::string(".txt"), cutscene->GetGameLoop());
     }
 
     // Error checking..

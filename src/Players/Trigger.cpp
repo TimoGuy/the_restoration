@@ -110,7 +110,7 @@ bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the varia
 Room* Trigger::GetNextEvent()
 {
     // Check what type of event
-    switch (GetNewEventID()[0])
+    switch (GetNewEventID().at(0))
     {
     case 'c':
         return new Cutscene(GetNewEventID(), room->GetGameLoop());
@@ -120,6 +120,8 @@ Room* Trigger::GetNextEvent()
         return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
         break;
     }
+
+    return NULL;
 }
 
 

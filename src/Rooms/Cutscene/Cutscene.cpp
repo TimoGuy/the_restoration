@@ -170,7 +170,7 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
                             std::istringstream(token) >> endTick;
                             std::getline(tokenStream, token, '\t');     // Function name!
                             func = token;
-                            std::getline(tokenStream, token, '\n');     // Parameters!
+                            std::getline(tokenStream, token, '\n');     // Parameters (to EOL)!
                             params = token;
                         }
 

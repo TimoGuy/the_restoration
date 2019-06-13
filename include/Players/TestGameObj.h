@@ -19,6 +19,7 @@ class TestGameObj : public Entity
         void Render();
 
         void SetGridCoords(int gx, int gy);     // This func is getting overriden eh
+		void UpdateStartCoords();
 
 		bool IsColliding(BoundBox* box) { return false; }
 

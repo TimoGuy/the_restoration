@@ -14,7 +14,7 @@ o	0	500,25
 	300	300	change-sprite	1
 	300	350	move-lerp	400,50	14
 	300	350	fade-in
-	400	400	exit-cutscene	n_tut
+	400	400	exit-cutscene	n_tut	45,45
 o	2	0,200
 	0	50	move-lerp	0,0	13
 	200	200	delete-self

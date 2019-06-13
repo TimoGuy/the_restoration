@@ -67,6 +67,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 			{
                 // Change the coords
                 ((TestGameObj*)camFocusObj)->SetGridCoords(playerGX, playerGY);
+                ((TestGameObj*)camFocusObj)->UpdateStartCoords();
                 printf("\t\t\tPlayer set to custom coords %i,%i\n", playerGX, playerGY);
 			}
 			break;

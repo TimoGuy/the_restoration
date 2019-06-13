@@ -215,3 +215,9 @@ void TestGameObj::SetGridCoords(int gx, int gy)
     y = gy * GRID_SIZE + PLAYER_YOFF;
 }
 
+void TestGameObj::UpdateStartCoords()
+{
+    startX = x;
+    startY = y;
+}
+
