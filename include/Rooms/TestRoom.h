@@ -51,7 +51,7 @@ class TestRoom : public Room
         // Level-loading
         std::string currentLvl;
 		std::string currentLvlFilename;
-        std::vector<std::string> tokens;        // These are the level tokens which dictate its objects within (eg: an exit object's params)
+        std::vector<std::string> rmParams;        // These are the level tokens which dictate its objects within (eg: an exit object's params)
 
         static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename (w/out the 'n_')), and the directory of the levels!
 

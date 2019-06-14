@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "TestRoom.h"
 #include "Players/TestGameObj.h"
+#include "Trigger.h"
 #include "Lib/Texture.h"
 #include <unistd.h>
 #include <dirent.h>
@@ -50,6 +51,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 		return;
 	}
 
+	// To set up the player
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
 		// Look for the player!!!
@@ -71,6 +73,98 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
                 printf("\t\t\tPlayer set to custom coords %i,%i\n", playerGX, playerGY);
 			}
 			break;
+		}
+	}
+
+
+    // To set up the triggers!
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		// Look for a trigger, tigger!!!
+		if (dynamic_cast<Trigger*>(gameObjects.at(i)) != NULL)
+		{
+            // Found!!!
+            Trigger* tmpTrigger = (Trigger*)gameObjects.at(i);
+
+            if (tmpTrigger->NeedsSetup())   // If already setup, then will skip
+            {
+                // Get the first 't' code from the params
+                int pos = -1;
+                for (int i = 0; i < rmParams.size(); i++)
+                {
+                    if (rmParams.at(i) == std::string("t"))
+                    {
+                        // Start here and just start reading the string thru to get values!
+                        pos = i;
+                        break;
+                    }
+                }
+
+                if (pos < 0)
+                {
+                    // Break out and print error
+                    printf("\n\nERROR:: Not enough \'t\' params in level to create an exit...\n\n\n");
+                    break;
+                }
+
+
+                // Grab values
+                bool touchTrigger;
+                    std::istringstream(rmParams.at(pos + 1)) >> touchTrigger;
+                std::string eventTagType = rmParams.at(pos + 2);
+                std::string eventName = rmParams.at(pos + 3);
+
+                bool custEntr = false;
+                std::string custEntrCoords;
+                if (eventTagType == "n" &&                             // Check if a game level type
+                    pos + 4 < rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
+                    rmParams.at(pos + 4) != std::string("t"))
+                {
+                    custEntr = true;
+                    custEntrCoords = rmParams.at(pos + 4);
+                }
+
+
+                // Set up the trigger object to be a master, and it will find all its slaves.
+                tmpTrigger->SetEventIDAndSetMaster(eventTagType + "_" + eventName, touchTrigger);
+
+                int end = 4;
+                if (custEntr)
+                {
+                    end = 5;    // A fifth param...             (it's the custom entrance coords!!!)
+
+                    // Parse from the x value (i.e. has a 123x456 to display coords)
+                    int ceGX, ceGY;
+
+                    std::string token;
+                    std::istringstream tokenStream(custEntrCoords);
+                    int times = 0;
+                    while (std::getline(tokenStream, token, 'x') &&
+                        times <= 1)
+                    {
+                        if (times == 0)     // X axis
+                        {
+                            std::istringstream(token) >> ceGX;
+                        }
+                        else if (times == 1)    // Y axis
+                        {
+                            std::istringstream(token) >> ceGY;
+                        }
+
+                        times++;
+                    }
+
+                    printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
+                    tmpTrigger->SetEntranceCoords(ceGX, ceGY);
+                }
+                else
+                {
+                    printf("\tNo custom exit code found\n");
+                }
+
+                // Remove those values for future params-checking!
+                rmParams.erase(rmParams.begin() + pos, rmParams.begin() + pos + end);
+            }
 		}
 	}
 }
@@ -159,14 +253,6 @@ void TestRoom::Render()
     {
         gameObjects.at(it)->Render();
     }
-
-	// Switch rooms if requested (after everything has finished computing, hence the end of the Render() function)
-//	if (!pleaseSwitchLevelsToThisOne.empty())
-//	{
-//		glClear(GL_COLOR_BUFFER_BIT);
-//		SwitchLevelAndSetUpLevelForPlayer(pleaseSwitchLevelsToThisOne);
-//		pleaseSwitchLevelsToThisOne.clear();
-//	}
 }
 
 
@@ -203,7 +289,7 @@ bool TestRoom::LoadLevelIO(std::string name)
     }
 
     // Initialize / empty the token/params list
-    tokens.clear();
+    rmParams.clear();
 
 	// Remember what level you're on!
 	currentLvl = name;
@@ -222,7 +308,7 @@ bool TestRoom::LoadLevelIO(std::string name)
     while (std::getline(tokenStream, token, '_'))
     {
         printf("%s\n", token.c_str());
-        tokens.push_back(token);        // Add into level's params
+        rmParams.push_back(token);        // Add into level's params to be used l8r!!
     }
     printf("\n\n\n\n");
 
@@ -257,7 +343,7 @@ bool TestRoom::LoadLevelIO(std::string name)
             ss[1].str() + std::string(",") +
             ss[2].str();
 
-        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), &tokens, (int)(i % gWidth), (int)(i / gWidth), this);
+        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
         if (_new != NULL)
             gameObjects.push_back(_new);        // Adds the returned built object!
 

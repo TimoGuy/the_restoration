@@ -19,7 +19,7 @@ class ObjectFactory
     public:
         static ObjectFactory& GetObjectFactory();    // SINGLETON!!!! BANZAI!!!
 
-        Object* Build(std::string const& key, std::vector<std::string>* rmParams, int gx, int gy, TestRoom* rm);
+        Object* Build(std::string const& key, int gx, int gy, TestRoom* rm);
 
     private:
         ObjectFactory();

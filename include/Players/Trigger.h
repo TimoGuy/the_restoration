@@ -12,7 +12,7 @@ class Room;
 class Trigger : public Object
 {
     public:
-        Trigger(int gx, int gy, bool isJustTouchToTrigger, std::string nextEventID, TestRoom* rm);
+        Trigger(int gx, int gy, TestRoom* rm);
         virtual ~Trigger();
 
 		void Update();
@@ -27,11 +27,25 @@ class Trigger : public Object
 
 		bool IsDesiringToTrigger();
 
+		void SetEventIDAndSetMaster(std::string nextEventID, bool isJustTouchToTrigger);      // This sets up the master and then goes thru and finds all slaves (neighboring triggers)
 		std::string GetNewEventID();
+
+		void SetMasterTriggerAndSetSlave(Trigger* masterTrig);
+
+		bool NeedsSetup();          // Checks if either a master (has event id) or if a slave (has a master)
+
+		void SetColliding(bool flag);
+		bool IsColliding();
 
     protected:
 
     private:
+        void SetupSlaveRecur(int gx, int gy);       // Workings: 1: am I a slave?!?! then pass it on
+
+
+
+        Trigger* _masterTrigger = NULL;        // If slave, will have ptr to master, if master, NULL
+
 		bool _isJustTouchToTrigger;
 		std::string _nextEventID;       // Include the 'c_' or 'n_' tags too please!
 
@@ -39,11 +53,9 @@ class Trigger : public Object
 		bool _isUpPressed;			// Just makes code look butter eh!
 		bool _prevHadUpPressed;		// You want to keep track of this, that way you don't get ppl holding up to get into the door!
 
+		// Only the master trigger would mess w/ this!
+		bool isColliding = false;
 
 		// For custom entrance positions
         int ceGX, ceGY;
-
-
-		// TODO: ONLY FOR TESTIGN
-		bool isColliding = false;
 };

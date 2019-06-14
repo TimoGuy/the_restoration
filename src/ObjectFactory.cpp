@@ -94,9 +94,7 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
 }
 
 
-
-//                                                       ↆEvery time you use a param, delete it!
-Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* rmParams, int gx, int gy, TestRoom* rm)
+Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* rm)
 {
     // I apologize... this is all hard-coded in!
 	Object* retObj = NULL;
@@ -121,86 +119,9 @@ Object* ObjectFactory::Build(std::string const& key, std::vector<std::string>* r
 
 
     case evTrigger:        // Triggers (usu. exits or doors)
-    {
-        // Get the first 'e' code from the params
-        int pos = -1;
-        for (int i = 0; i < rmParams->size(); i++)
-        {
-            if (rmParams->at(i) == std::string("t"))
-            {
-                // Start here and just start reading the string thru to get values!
-                pos = i;
-                break;
-            }
-        }
-
-        if (pos < 0)
-        {
-            // Break out and print error
-            printf("\n\nERROR:: Not enough \'t\' params in level to create an exit...\n\n\n");
-            break;
-        }
-
-
-        // Grab values
-        bool touchTrigger;
-            std::istringstream(rmParams->at(pos + 1)) >> touchTrigger;
-        std::string eventTagType = rmParams->at(pos + 2);
-        std::string eventName = rmParams->at(pos + 3);
-
-        bool custEntr = false;
-        std::string custEntrCoords;
-        if (eventTagType == "n" &&                             // Check if a game level type
-            pos + 4 < rmParams->size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
-            rmParams->at(pos + 4) != std::string("t"))
-        {
-            custEntr = true;
-            custEntrCoords = rmParams->at(pos + 4);
-        }
-
-
         // Create the trigger object
-		retObj = new Trigger(gx, gy, touchTrigger, eventTagType + "_" + eventName, rm);
-
-        int end = 4;
-		if (custEntr)
-        {
-            end = 5;    // A fifth param...             (it's the custom entrance coords!!!)
-
-            // Parse from the x value (i.e. has a 123x456 to display coords)
-            int ceGX, ceGY;
-
-            std::string token;
-            std::istringstream tokenStream(custEntrCoords);
-            int times = 0;
-            while (std::getline(tokenStream, token, 'x') &&
-                times <= 1)
-            {
-                if (times == 0)     // X axis
-                {
-                    std::istringstream(token) >> ceGX;
-                }
-                else if (times == 1)    // Y axis
-                {
-                    std::istringstream(token) >> ceGY;
-                }
-
-                times++;
-            }
-
-            printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
-            ((Trigger*)retObj)->SetEntranceCoords(ceGX, ceGY);
-        }
-        else
-        {
-            printf("\tNo custom exit code found\n");
-        }
-
-        // Remove those values for future params!
-        rmParams->erase(rmParams->begin() + pos, rmParams->begin() + pos + end);
-
+		retObj = new Trigger(gx, gy, rm);
         break;
-    }
 
 
 

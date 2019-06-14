@@ -14,12 +14,9 @@
 
 #include <stdio.h>
 
-Trigger::Trigger(int gx, int gy, bool isJustTouchToTrigger, std::string nextEventID, TestRoom* rm) : Object(gx, gy, rm, false)
+Trigger::Trigger(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, false)
 {
-    //ctor
-	printf("Trigger built!\tIt leads to the event \"%s\"\n", nextEventID.c_str());
-	_isJustTouchToTrigger = isJustTouchToTrigger;
-	_nextEventID = nextEventID;
+    _isJustTouchToTrigger = false;
 
 	// Set default dimensions eh
 	_width = _height = GRID_SIZE;
@@ -43,6 +40,8 @@ Trigger::~Trigger()
 
 void Trigger::Update()
 {
+    isColliding = false;		// Just reset just in case...
+
 	// Pass previous input b4 reading new input stream
 	_prevHadUpPressed = _isUpPressed;
 	_isUpPressed = InputManager::Instance().y() < 0;		// Neg. on the y axis means upwards!
@@ -50,13 +49,10 @@ void Trigger::Update()
 
 void Trigger::Render()
 {
-
-
-	if (isColliding)
+	if (IsColliding())
 	{
 		// Ready to enter!!!
 		glColor3f(0.15f, 0.5f, 0);
-		isColliding = false;		// Just reset just in case...
 	}
 	else
 	{
@@ -109,50 +105,49 @@ bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the varia
 
 Room* Trigger::GetNextEvent()
 {
-    // Check what type of event
-    switch (GetNewEventID().at(0))
+    if (_masterTrigger == NULL)
     {
-    case 'c':
-        return new Cutscene(GetNewEventID(), room->GetGameLoop());
-        break;
+        // Check what type of event
+        switch (GetNewEventID().at(0))
+        {
+        case 'c':
+            return new Cutscene(GetNewEventID(), room->GetGameLoop());
+            break;
 
-    case 'n':
-        return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
-        break;
+        case 'n':
+            return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
+            break;
+
+        default:
+            return NULL;
+            break;
+        }
     }
-
-    return NULL;
+    else
+    {
+        // If a slave, all info is pulled from master.
+        return _masterTrigger->GetNextEvent();
+    }
 }
 
 
 
 bool Trigger::IsColliding(BoundBox* box)
 {
-	// If it's colliding, check if it's the kind of exit
-	// where by touching, you go, or you have to press up!
-	/*if (!_isJustTouchToTrigger)
-	{
-		if (!_prevHadUpPressed &&
-			_isUpPressed)
-		{
-			// You may continue, good sir!
-		}
-		else
-		{
-			// So it wasn't up... failed attempt!
-			return false;
-		}
-	}*/
-
-	// NOTE: shouldn't the player be handling this?? The only person USING
-	// the exits is the player entity...
-
-
 	// Okay, time for the real collision check!
-	return isColliding = x < box->x + box->width &&
+	bool col = x < box->x + box->width &&
 		x + _width > box->x &&
 		y < box->y + box->height &&
 		y + _height > box->y;
+
+    if (col)
+    {
+        // Report to master
+        SetColliding(col);
+    }
+
+    // Return value FROM Master!!
+    return IsColliding();
 }
 
 
@@ -165,7 +160,115 @@ bool Trigger::IsDesiringToTrigger()
 		(!_prevHadUpPressed && _isUpPressed);
 }
 
+
+
+
+
+
+
+void Trigger::SetEventIDAndSetMaster(std::string nextEventID, bool isJustTouchToTrigger)
+{
+	printf("Trigger-group set up!\tIt leads to the event \"%s\"\n", nextEventID.c_str());
+	_isJustTouchToTrigger = isJustTouchToTrigger;
+	_nextEventID = nextEventID;
+
+	// So it's a master now
+	_masterTrigger = NULL;      // Just in case
+
+    // FIND ALL NEIGHBORING TRIGGERS!!!!
+    // And set them up to be slaves!!!!!
+    // Start w/ nearby
+    int gx = x / GRID_SIZE;
+    int gy = y / GRID_SIZE;
+    SetupSlaveRecur(gx - 1, gy);
+    SetupSlaveRecur(gx, gy + 1);
+    SetupSlaveRecur(gx + 1, gy);
+}
+
+void Trigger::SetupSlaveRecur(int gx, int gy)
+{
+    // Check if in bounds
+    if (gx >= 0 && gx < room->getGWidth() &&
+        gy >= 0 && gy < room->getGHeight())
+    {
+        // Are you a Trigger.h???
+        Object* tmp = room->getCollisionMap()[room->getGWidth() * gy + gx];
+        if (dynamic_cast<Trigger*>(tmp) != NULL)
+        {
+            // Yay! Now let's see if you're set up
+            Trigger* tmpTrigger = (Trigger*)tmp;
+
+            if (tmpTrigger->NeedsSetup())
+            {
+                // Awesome!!!! NOW YOU'RE MY SLAVE
+                tmpTrigger->SetMasterTriggerAndSetSlave(this);
+
+                // So since this one was a good one,
+                // LET'S RECURSE!!!!
+                SetupSlaveRecur(gx - 1, gy);
+                SetupSlaveRecur(gx, gy + 1);
+                SetupSlaveRecur(gx + 1, gy);
+            }
+        }
+    }
+}
+
+void Trigger::SetMasterTriggerAndSetSlave(Trigger* masterTrig)
+{
+    printf("\tslave in trigger-group found!\n");
+    _masterTrigger = masterTrig;
+    _nextEventID = "";
+    _isJustTouchToTrigger = masterTrig->_isJustTouchToTrigger;
+}
+
+
+
+
 std::string Trigger::GetNewEventID()
 {
 	return _nextEventID;
+}
+
+
+
+
+bool Trigger::NeedsSetup()
+{
+    if (_masterTrigger != NULL)
+    {
+        // It's a slave
+        return false;
+    }
+    else if (!GetNewEventID().empty())
+    {
+        // It's a master
+        return false;
+    }
+
+    // I guess if it's neither, then it needs set up
+    return true;
+}
+
+void Trigger::SetColliding(bool flag)
+{
+    if (_masterTrigger == NULL)
+    {
+        isColliding = flag;
+    }
+    else
+    {
+        _masterTrigger->isColliding = flag;
+    }
+}
+
+bool Trigger::IsColliding()
+{
+    if (_masterTrigger == NULL)
+    {
+        return isColliding;
+    }
+    else
+    {
+        return _masterTrigger->isColliding;
+    }
 }
