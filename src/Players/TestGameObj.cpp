@@ -2,7 +2,7 @@
 #include "TestRoom.h"
 #include "TestGameObj.h"
 #include "Hazard.h"
-#include "Exit.h"
+#include "Trigger.h"
 #include "MovingPlatGround.h"
 #include "InputManager.h"
 #include "defs.h"
@@ -10,7 +10,7 @@
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
 #include "../../include/Players/Hazard.h"
-#include "../../include/Players/Exit.h"
+#include "../../include/Players/Trigger.h"
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
@@ -26,7 +26,7 @@
 #define PLAYER_HEIGHT 48
 #define PLAYER_YOFF -16
 
-TestGameObj::TestGameObj(int gx, int gy, Room* rm) : Entity(gx, gy, rm)
+TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 {
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
@@ -126,23 +126,15 @@ void TestGameObj::Update()
 			}
 
 			// Check for exits
-			else if (dynamic_cast<Exit*>(tempCollisions.at(i)) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
+			else if (dynamic_cast<Trigger*>(tempCollisions.at(i)) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
 			{
 				// Already determined we're colliding, so...
 				// See if it wants to trigger
-				if (((Exit*)tempCollisions.at(i))->IsDesiringToTrigger())
+				if (((Trigger*)tempCollisions.at(i))->IsDesiringToTrigger())
 				{
-                    std::string newRmID = ((Exit*)tempCollisions.at(i))->GetNewRoomID();
-
-					// Go to that room!!!!
-					int ceGX, ceGY;
-					if (((Exit*)tempCollisions.at(i))->GetCustomCoords(ceGX, ceGY))
-                        ((TestRoom*)room)->RequestLevelSwitch(newRmID, ceGX, ceGY);
-					else
-                        ((TestRoom*)room)->RequestLevelSwitch(newRmID);
-
-					// Game over for YOU... there will be a new player created, so don't worry!!!
-					return;
+                    // Go to that next room!!!!!
+                    room->GetGameLoop()->SetRoom(((Trigger*)tempCollisions.at(i))->GetNextEvent());
+                    return;
 				}
 			}
 
@@ -221,5 +213,11 @@ void TestGameObj::SetGridCoords(int gx, int gy)
 {
     x = gx * GRID_SIZE;
     y = gy * GRID_SIZE + PLAYER_YOFF;
+}
+
+void TestGameObj::UpdateStartCoords()
+{
+    startX = x;
+    startY = y;
 }
 

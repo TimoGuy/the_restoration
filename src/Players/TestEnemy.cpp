@@ -7,7 +7,7 @@
 #endif
 
 
-TestEnemy::TestEnemy(int gx, int gy, Room* rm)
+TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 	: Entity(gx, gy, rm)
 {
 	// Init

@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "MovingPlatGround.h"
 #include "defs.h"
+#include "TestRoom.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/defs.h"
@@ -10,7 +11,7 @@
 #include <cmath>
 #include <algorithm>
 
-MovingPlatGround::MovingPlatGround(int gx, int gy, Room* rm) : Object(gx, gy, rm, true)
+MovingPlatGround::MovingPlatGround(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, true)
 {
     // Init
     printf("MPG (Moving Plat Grnd) built!\n");
@@ -64,7 +65,7 @@ void MovingPlatGround::Extend1BlockToTheRight(int newGx, int newGy)
 		// Not gonna happen
 		return;*/
 
-	printf("\MPG was extended by 1!!\n");
+	printf("\tMPG was extended by 1!!\n");
 
 	// Move the right point to the right more
 	//_blocks++;

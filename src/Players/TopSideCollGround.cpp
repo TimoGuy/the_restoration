@@ -8,7 +8,7 @@
 
 
 
-TopSideCollGround::TopSideCollGround(int gx, int gy, Room* rm) : Ground(gx, gy, rm)
+TopSideCollGround::TopSideCollGround(int gx, int gy, TestRoom* rm) : Ground(gx, gy, rm)
 {
 	// Override image! even though it's already been loaded....
 	delete image;

@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "Slant.h"
 #include "defs.h"
+#include "TestRoom.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Slant.h"
 #include "../../include/defs.h"
@@ -11,7 +12,7 @@
 
 
 
-Slant::Slant(int gx, int gy, Room* rm, bool isLeft) : Object(gx, gy, rm, true)
+Slant::Slant(int gx, int gy, TestRoom* rm, bool isLeft) : Object(gx, gy, rm, true)
 {
     //ctor
     printf("Slant built!\n");

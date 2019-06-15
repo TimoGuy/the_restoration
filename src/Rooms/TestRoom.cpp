@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "TestRoom.h"
 #include "Players/TestGameObj.h"
+#include "Trigger.h"
 #include "Lib/Texture.h"
 #include <unistd.h>
 #include <dirent.h>
@@ -25,21 +26,177 @@
 #include <algorithm>
 #include <string>
 
-TestRoom::TestRoom()
+TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY) : Room(gloop)
 {
-	SwitchLevelAndSetUpLevelForPlayer("jojo");
+    // Tear down all the objects in the object list
+	for (int it = 0; it != gameObjects.size(); ++it)
+	{
+		delete gameObjects.at(it);
+	}
+	gameObjects.clear();
+
+
+	// Init
+	camFocusObj == NULL;
+
+
+
+	// TEST CODE to load a level
+	bool success;
+	success = LoadLevelIO(name);
+
+	if (!success)
+	{
+		printf("ERROR: Room was not created, because level switching did not succeed\n");
+		return;
+	}
+
+	// To set up the player
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		// Look for the player!!!
+		if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
+		{
+			camFocusObj = gameObjects.at(i);
+
+			// Sort the player to the very back
+			// This way, the player will always be updated late!
+			gameObjects.erase(gameObjects.begin() + i);
+			gameObjects.push_back(camFocusObj);
+			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
+
+			if (playerGX >= 0 && playerGY >= 0)
+			{
+                // Change the coords
+                ((TestGameObj*)camFocusObj)->SetGridCoords(playerGX, playerGY);
+                ((TestGameObj*)camFocusObj)->UpdateStartCoords();
+                printf("\t\t\tPlayer set to custom coords %i,%i\n", playerGX, playerGY);
+			}
+			break;
+		}
+	}
+
+
+    // To set up the triggers!
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		// Look for a trigger, tigger!!!
+		if (dynamic_cast<Trigger*>(gameObjects.at(i)) != NULL)
+		{
+            // Found!!!
+            Trigger* tmpTrigger = (Trigger*)gameObjects.at(i);
+
+            if (tmpTrigger->NeedsSetup())   // If already setup, then will skip
+            {
+                // Get the first 't' code from the params
+                int pos = -1;
+                for (int i = 0; i < rmParams.size(); i++)
+                {
+                    if (rmParams.at(i) == std::string("t"))
+                    {
+                        // Start here and just start reading the string thru to get values!
+                        pos = i;
+                        break;
+                    }
+                }
+
+                if (pos < 0)
+                {
+                    // Break out and print error
+                    printf("\n\nERROR:: Not enough \'t\' params in level to create an exit...\n\n\n");
+                    break;
+                }
+
+
+                // Grab values
+                bool touchTrigger;
+                    std::istringstream(rmParams.at(pos + 1)) >> touchTrigger;
+                std::string eventTagType = rmParams.at(pos + 2);
+                std::string eventName = rmParams.at(pos + 3);
+
+                bool custEntr = false;
+                std::string custEntrCoords;
+                if (eventTagType == "n" &&                             // Check if a game level type
+                    pos + 4 < rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
+                    rmParams.at(pos + 4) != std::string("t"))
+                {
+                    custEntr = true;
+                    custEntrCoords = rmParams.at(pos + 4);
+                }
+
+
+                // Set up the trigger object to be a master, and it will find all its slaves.
+                tmpTrigger->SetEventIDAndSetMaster(eventTagType + "_" + eventName, touchTrigger);
+
+                int end = 4;
+                if (custEntr)
+                {
+                    end = 5;    // A fifth param...             (it's the custom entrance coords!!!)
+
+                    // Parse from the x value (i.e. has a 123x456 to display coords)
+                    int ceGX, ceGY;
+
+                    std::string token;
+                    std::istringstream tokenStream(custEntrCoords);
+                    int times = 0;
+                    while (std::getline(tokenStream, token, 'x') &&
+                        times <= 1)
+                    {
+                        if (times == 0)     // X axis
+                        {
+                            std::istringstream(token) >> ceGX;
+                        }
+                        else if (times == 1)    // Y axis
+                        {
+                            std::istringstream(token) >> ceGY;
+                        }
+
+                        times++;
+                    }
+
+                    printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
+                    tmpTrigger->SetEntranceCoords(ceGX, ceGY);
+                }
+                else
+                {
+                    printf("\tNo custom exit code found\n");
+                }
+
+                // Remove those values for future params-checking!
+                rmParams.erase(rmParams.begin() + pos, rmParams.begin() + pos + end);
+            }
+		}
+	}
 }
+
+
+
+
 
 TestRoom::~TestRoom()
 {
-	this->Destruct();
+	// Tear down all the objects in the object list
+	for (int it = 0; it != gameObjects.size(); ++it)
+	{
+		delete gameObjects.at(it);
+	}
+	gameObjects.clear();
 }
+
+
+
+
 
 void TestRoom::Update()
 {
     // Update all objects
     for (int it = 0; it != gameObjects.size(); ++it)
     {
+        if (it == gameObjects.size() - 1)
+        {
+            int i = 100;
+            }
+
         gameObjects.at(it)->Update();
     }
 
@@ -49,7 +206,9 @@ void TestRoom::Update()
 
 
 
-
+    // Is there cam?
+    if (camFocusObj == NULL)
+        return;
 
     // Update camera
     camX = camFocusObj->getX() - (SCREEN_WIDTH / 2);
@@ -94,37 +253,13 @@ void TestRoom::Render()
     {
         gameObjects.at(it)->Render();
     }
-
-
-
-	// FOR DEBUG: check if the room needs to be reloaded
-	if (InputManager::Instance().reloadRoom())		// This is a check, but after 1 check the inside variable turns off, so no worries.
-	{
-		// EDIT: Make it so that you can change the level to test using <iostream>
-		std::cout << "Please enter the new level\'s name (or blank for current level): ";
-		std::string newLvl;
-		std::getline(std::cin, newLvl);
-		if (!newLvl.empty())
-			currentLvl = newLvl;
-
-		// Change the level to
-		RequestLevelSwitch(currentLvl);
-	}
-
-	// Switch rooms if requested (after everything has finished computing, hence the end of the Render() function)
-	if (!pleaseSwitchLevelsToThisOne.empty())
-	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		SwitchLevelAndSetUpLevelForPlayer(pleaseSwitchLevelsToThisOne);
-		pleaseSwitchLevelsToThisOne.clear();
-	}
 }
 
 
 
 
 
-bool TestRoom::SwitchLevelIO(std::string name)
+bool TestRoom::LoadLevelIO(std::string name)
 {
     // Find/Search for the requested level (within the 'n_...' form-factor)
 #ifdef __unix__
@@ -154,21 +289,26 @@ bool TestRoom::SwitchLevelIO(std::string name)
     }
 
     // Initialize / empty the token/params list
-    tokens.clear();
+    rmParams.clear();
 
 	// Remember what level you're on!
 	currentLvl = name;
 	currentLvlFilename = levelFilename;
 
+	// Cut off the beginning I suppose!
+	std::string prefixCutoff = currentLvl + std::string(".");
+	int len = currentLvlFilename.size() - prefixCutoff.size() - 4;                  // The '4's referring to the '.png' at the end
+	std::string levelParams = currentLvlFilename.substr(prefixCutoff.size(), len);
+
 	// This way we can parse and get the code from the filename!
     std::string token;
-    std::istringstream tokenStream(currentLvlFilename);
+    std::istringstream tokenStream(levelParams);
 
     printf("\nPrinting out level param data...\n");
     while (std::getline(tokenStream, token, '_'))
     {
         printf("%s\n", token.c_str());
-        tokens.push_back(token);        // Add into level's params
+        rmParams.push_back(token);        // Add into level's params to be used l8r!!
     }
     printf("\n\n\n\n");
 
@@ -203,7 +343,7 @@ bool TestRoom::SwitchLevelIO(std::string name)
             ss[1].str() + std::string(",") +
             ss[2].str();
 
-        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), &tokens, (int)(i % gWidth), (int)(i / gWidth), this);
+        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
         if (_new != NULL)
             gameObjects.push_back(_new);        // Adds the returned built object!
 
@@ -217,78 +357,6 @@ bool TestRoom::SwitchLevelIO(std::string name)
     // Free loaded image
     stbi_image_free(imgData);
 	return true;
-}
-
-void TestRoom::RequestLevelSwitch(std::string name)
-{
-	pleaseSwitchLevelsToThisOne = name;
-    customEnter = false;
-}
-
-void TestRoom::RequestLevelSwitch(std::string name, int playerGX, int playerGY)
-{
-    RequestLevelSwitch(name);
-
-    // Now start dinking around!
-    customEnter = true;
-    ceGX = playerGX;
-    ceGY = playerGY;
-}
-
-
-
-
-
-
-
-void TestRoom::SwitchLevelAndSetUpLevelForPlayer(std::string name)
-{
-	// Clear things up first!!!
-	Destruct();
-
-
-	// TEST CODE to load a level
-	bool success;
-	success = SwitchLevelIO(name);
-	//success = SwitchLevelIO("test");
-
-	if (!success)
-	{
-		printf("ERROR: Room was not created, because level switching did not succeed\n");
-		return;
-	}
-
-	for (int i = 0; i < gameObjects.size(); i++)
-	{
-		// Look for the player!!!
-		if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
-		{
-			camFocusObj = gameObjects.at(i);
-
-			// Sort the player to the very back
-			// This way, the player will always be updated late!
-			gameObjects.erase(gameObjects.begin() + i);
-			gameObjects.push_back(camFocusObj);
-			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
-
-			if (customEnter)
-			{
-                // Change the coords
-                ((TestGameObj*)camFocusObj)->SetGridCoords(ceGX, ceGY);
-			}
-			break;
-		}
-	}
-}
-
-void TestRoom::Destruct()
-{
-	// Tear down all the objects in the object list
-	for (int it = 0; it != gameObjects.size(); ++it)
-	{
-		delete gameObjects.at(it);
-	}
-	gameObjects.clear();
 }
 
 
@@ -309,7 +377,7 @@ std::string TestRoom::FindLevelIO(std::string name, std::string dir)         // 
     DIR* dirPoint = opendir(dir.c_str());
     dirent* entry = readdir(dirPoint);
 
-    std::string searchCriteria = std::string("n_") + std::string(name.c_str()) + std::string(".png");
+    std::string searchCriteria = name + std::string(".");
 
     while (entry)
     {
@@ -318,7 +386,7 @@ std::string TestRoom::FindLevelIO(std::string name, std::string dir)         // 
         {
             // REGULAR FILE!!! Check if it matches
             std::string fname = entry->d_name;
-            if (fname.find(searchCriteria, (fname.length() - searchCriteria.length())) != std::string::npos)
+            if (strncmp(fname.c_str(), searchCriteria.c_str(), searchCriteria.size()) == 0)         // This sees if it 'startswith' the searchCrit!
             {
                 // Spit it out!
                 printf("Found level: %s\n\n", fname.c_str());

@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "GameLoop.h"
 #include "Rooms/TestRoom.h"
+#include "Cutscene.h"
 #include <SDL2/SDL_opengl.h>
 #include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
@@ -10,6 +11,10 @@
 #include "../include/InputManager.h"
 #endif
 
+
+#include <iostream>
+
+
 GameLoop::GameLoop(SDL_Window* window)
 {
     _window = window;
@@ -18,7 +23,7 @@ GameLoop::GameLoop(SDL_Window* window)
 bool GameLoop::Execute()
 {
     // This will be the Room obj
-    Room* testRoom = new TestRoom();
+    SetRoom(new Cutscene("c_first", this));     // This is the beginning thing of the game eh!
 
     // This will hold up the thread...
     // I'll be honest, there's really only
@@ -34,7 +39,7 @@ bool GameLoop::Execute()
         InputManager::Instance().ProcessInput(this);    // If the input desires, 'this' game loop can be terminated from this function!
 
 		// Update
-        testRoom->Update();
+        GetRoom()->Update();
 
 
 
@@ -46,11 +51,50 @@ bool GameLoop::Execute()
         // Setup proj mat
 //        glUniformMatrix4fv(resources::shaderStandard->GetLocProjectMat(), 1, false, (GLfloat*)&resources::projectionMat[0]);
 //        resources::modelViewMat = glm::mat4();
-        testRoom->Render();
+        GetRoom()->Render();
 
 
 
         SDL_GL_SwapWindow(_window);
+
+
+
+
+
+
+        // FOR DEBUG: check if the room needs to be reloaded
+        if (InputManager::Instance().reloadRoom())		// This is a check, but after 1 check the inside variable turns off, so no worries.
+        {
+            // EDIT: Make it so that you can change the level to test using <iostream>
+            std::cout << "Please enter the new level\'s name: ";
+            std::string newLvl;
+            std::getline(std::cin, newLvl);
+            if (!newLvl.empty())
+                // Load the level eh
+                SetRoom(new TestRoom(newLvl.c_str(), this));
+            else
+                printf("ERROR: Level name was empty!!\n");
+        }
+
+        // FOR DEBUG: check if player wants to trigger a cutscene
+        if (InputManager::Instance().reloadCutscene())		// This is a check, but after 1 check the inside variable turns off, so no worries.
+        {
+            // EDIT: Make it so that you can change the level to test using <iostream>
+            std::cout << "Please enter the cutscene\'s name: ";
+            std::string newCut;
+            std::getline(std::cin, newCut);
+            if (!newCut.empty())
+                // Cutscene time!!!
+                SetRoom(new Cutscene(newCut.c_str(), this));
+            else
+                printf("ERROR: Cutscene name was empty!!\n");
+        }
+
+
+
+
+
+
 
 
 
@@ -72,6 +116,19 @@ bool GameLoop::Execute()
 
     return true;
 }
+
+
+
+void GameLoop::SetRoom(Room* newRoom)
+{
+    // Remove current one
+//    if (currentRoom != NULL)              // TODO:: there's problems w/ delete currentRoom!!!!!!
+//        delete currentRoom;
+
+    currentRoom = newRoom;        // This will shift to the currentRoom when the time is right ;)
+}
+Room* GameLoop::GetRoom() { return currentRoom; }
+
 
 GameLoop::~GameLoop()
 {

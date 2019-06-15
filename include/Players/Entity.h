@@ -1,14 +1,14 @@
 #pragma once
-#include "../Object.h"
-#include "../Shape/Quad.h"
+#include "Object.h"
+#include "Quad.h"
 #include <vector>
 
-class Room;
+//class Room;
 
 class Entity : public Object
 {
 public:
-	Entity(int gx, int gy, Room* rm);
+	Entity(int gx, int gy, TestRoom* rm);
 	~Entity();
 
 protected:

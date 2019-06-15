@@ -1,12 +1,13 @@
 #ifdef __unix__
 #include "Hazard.h"
 #include "defs.h"
+#include "TestRoom.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Hazard.h"
 #include "../../include/defs.h"
 #endif
 
-Hazard::Hazard(int gx, int gy, Room* rm) : Object(gx, gy, rm, false)
+Hazard::Hazard(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, false)
 {
     // Init
     printf("Hazard built!\n");

@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "defs.h"
 
+#include "TestRoom.h"
+
 #include "Slant.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\Entity.h"
@@ -14,7 +16,7 @@
 #include <algorithm>
 
 
-Entity::Entity(int gx, int gy, Room* rm)
+Entity::Entity(int gx, int gy, TestRoom* rm)
 	: Object(gx, gy, rm, false)
 {
 	hsp = vsp = 0;

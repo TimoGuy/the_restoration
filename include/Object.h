@@ -1,7 +1,7 @@
 #pragma once
 #ifdef __unix__
 #include "ObjectFactory.h"
-#include "Room.h"
+//#include "TestRoom.h"
 #include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "ObjectFactory.h"
@@ -22,7 +22,7 @@ struct BoundBox
     float height;
 };
 
-class Room;
+class TestRoom;
 
 
 
@@ -43,7 +43,7 @@ class Room;
 class Object
 {
     public:
-        Object(int gx, int gy, Room* rm, bool isSolid);
+        Object(int gx, int gy, TestRoom* rm, bool isSolid);
         virtual ~Object();
 
         virtual void Update() = 0;
@@ -59,7 +59,7 @@ class Object
 
     protected:
         float x, y;
-        Room* room;
+        TestRoom* room;
 
 		bool _isSolid;
 

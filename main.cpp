@@ -64,7 +64,7 @@ bool Setup()
     glOrtho(0.0, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0, 1.0, -1.0);
 
     //Initialize Modelview Matrix
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // GL properties

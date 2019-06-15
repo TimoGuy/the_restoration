@@ -5,7 +5,7 @@ class TestEnemy :
 	public Entity
 {
 public:
-	TestEnemy(int gx, int gy, Room* rm);
+	TestEnemy(int gx, int gy, TestRoom* rm);
 	virtual ~TestEnemy();
 
 	void Update();

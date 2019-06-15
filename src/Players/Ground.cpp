@@ -1,5 +1,6 @@
 #ifdef __unix__
 #include "Ground.h"
+#include "TestRoom.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Ground.h"
@@ -8,7 +9,7 @@
 
 #include <stdio.h>
 
-Ground::Ground(int gx, int gy, Room* rm) : Object(gx, gy, rm, true)
+Ground::Ground(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, true)
 {
     // Init
     printf("Ground built!\n");

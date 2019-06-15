@@ -12,7 +12,7 @@
 class MovingPlatGround : public Object
 {
     public:
-		MovingPlatGround(int gx, int gy, Room* rm);
+		MovingPlatGround(int gx, int gy, TestRoom* rm);
         virtual ~MovingPlatGround();
 
 		void Update();

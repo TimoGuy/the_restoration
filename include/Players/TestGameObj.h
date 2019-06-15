@@ -12,13 +12,14 @@
 class TestGameObj : public Entity
 {
     public:
-        TestGameObj(int gx, int gy, Room* rm);
+        TestGameObj(int gx, int gy, TestRoom* rm);
         virtual ~TestGameObj();
 
         void Update();
         void Render();
 
         void SetGridCoords(int gx, int gy);     // This func is getting overriden eh
+		void UpdateStartCoords();
 
 		bool IsColliding(BoundBox* box) { return false; }
 

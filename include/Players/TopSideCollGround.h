@@ -4,7 +4,7 @@ class TopSideCollGround :
 	public Ground
 {
 public:
-	TopSideCollGround(int gx, int gy, Room* rm);
+	TopSideCollGround(int gx, int gy, TestRoom* rm);
 	~TopSideCollGround();
 
 	bool IsColliding(BoundBox* box) override;
