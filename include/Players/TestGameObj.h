@@ -32,6 +32,8 @@ class TestGameObj : public Entity
 		int maxJumps = 2;	// Default: 1 for only 1 jump eh.
 		bool wasJumpBtnAlreadyPressed = false;
 
+		int framesOfInvincibility = 0;      // This counts down until 0, wherewith you are not invincible anymore
+
         float nerfer = 0;	// DEBUGGING VARIABLE
         float highestHsp = 0;
 
