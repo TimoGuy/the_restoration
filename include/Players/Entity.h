@@ -11,6 +11,8 @@ public:
 	Entity(int gx, int gy, TestRoom* rm);
 	~Entity();
 
+	virtual void YouLose(Entity* accordingToMe) = 0;
+
 protected:
 	float hsp, vsp;
 	Quad* image;

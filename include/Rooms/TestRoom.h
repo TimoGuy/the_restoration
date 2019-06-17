@@ -26,6 +26,7 @@ class TestRoom : public Room
 
         Object** getCollisionMap() { return collisionMap; }
 		std::vector<Entity*>* getEntityList() { return &entityList; }
+		void RemoveEntity(Entity* thisObj);
         int getGWidth() { return gWidth; }
         int getGHeight() { return gHeight; }
 

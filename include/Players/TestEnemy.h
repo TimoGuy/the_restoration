@@ -12,5 +12,10 @@ public:
 	void Render();
 
 	bool IsColliding(BoundBox* box);
+
+	void YouLose(Entity* accordingToMe);
+
+private:
+    float life;
 };
 

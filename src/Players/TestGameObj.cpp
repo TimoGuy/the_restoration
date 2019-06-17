@@ -51,6 +51,10 @@ TestGameObj::~TestGameObj()
 #define JUMP_HEIGHT 7.5f
 #define MAX_HSP 35.0f
 
+#define KNOCKBACK_HSP 10.0f
+#define KNOCKBACK_VSP -4.0f
+#define HURT_FRAMES 60
+
 void TestGameObj::Update()
 {
 	// Adjust according to input
@@ -126,7 +130,7 @@ void TestGameObj::Update()
 			}
 
 			// Check for exits
-			else if (dynamic_cast<Trigger*>(tempCollisions.at(i)) != NULL)			// TODO: Maybe have the exit code handle room-switching?? Play around w/ it, and definitely do some thinking on the structure of the code systems!!!
+			else if (dynamic_cast<Trigger*>(tempCollisions.at(i)) != NULL)
 			{
 				// Already determined we're colliding, so...
 				// See if it wants to trigger
@@ -151,6 +155,44 @@ void TestGameObj::Update()
 			}
 		}
     }
+
+
+    // Cycle thru all entities and react eh
+    if (framesOfInvincibility <= 0)
+    {
+        for (int i = 0; i < room->getEntityList()->size(); i++)
+        {
+            Entity* ent;
+            if ((ent = room->getEntityList()->at(i)) != this)
+            {
+                // It's not me, so let's interact!!!
+                BoundBox b = { x + hsp, y + vsp, x, y, image->GetWidth(), image->GetHeight() };
+                if (ent->IsColliding(&b))
+                {
+                    // Hit the enemy!!!! (or you got hit???)
+
+                    // Now, did the player win or did the enemy?
+                    if (ent->getY() - GRID_SIZE >= b.prevy)
+                    {
+                        // Means was originally above the enemy, so the player wins!
+                        hsp = 0;
+                        vsp = -vsp;
+                        ent->YouLose(this);
+                    }
+                    else
+                    {
+                        // Do youlose() on yourself eh!
+                        this->YouLose(ent);
+                    }
+                }
+            }
+        }
+    }
+//    else
+//        printf("You\'re invincible!!! %i\n", framesOfInvincibility);
+
+
+
 
     if (y > room->getGHeight() * GRID_SIZE)
     {
@@ -198,13 +240,41 @@ void TestGameObj::Update()
 
 	// Reset outside forces
 	outHsp = outVsp = 0;
+	framesOfInvincibility--;
 }
 
 void TestGameObj::Render()
 {
+    if (framesOfInvincibility <= 0)
+    {
+        glColor4f(1, 1, 1, 1);
+    }
+    else
+    {
+        glColor4f(1, 1, 1, 0.5f);
+    }
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
 }
+
+
+
+void TestGameObj::YouLose(Entity* accordingToMe)
+{
+    // Enemy won :====(
+    float sign = 1;
+    if (x + hsp < accordingToMe->getX() ||
+        hsp > 0)
+    {
+        sign = -1;  // If mvng right, want to shoot left as an 'ouch!'
+    }
+
+    hsp = KNOCKBACK_HSP * sign;
+    vsp = KNOCKBACK_VSP;
+
+    framesOfInvincibility = HURT_FRAMES;
+}
+
 
 
 

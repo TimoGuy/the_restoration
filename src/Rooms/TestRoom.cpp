@@ -176,6 +176,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 TestRoom::~TestRoom()
 {
 	// Tear down all the objects in the object list
+	// (no need for the entity list to be touched eh)
 	for (int it = 0; it != gameObjects.size(); ++it)
 	{
 		delete gameObjects.at(it);
@@ -185,18 +186,29 @@ TestRoom::~TestRoom()
 
 
 
+void TestRoom::RemoveEntity(Entity* thisObj)
+{
+    // Remove from entity list
+    entityList.erase(
+        std::remove(entityList.begin(),
+            entityList.end(), thisObj),
+            entityList.end());
+
+    // And from gameObject list too!
+    gameObjects.erase(
+        std::remove(gameObjects.begin(),
+            gameObjects.end(), thisObj),
+            gameObjects.end());
+}
+
+
 
 
 void TestRoom::Update()
 {
     // Update all objects
-    for (int it = 0; it != gameObjects.size(); ++it)
+    for (int it = 0; it < gameObjects.size(); ++it)
     {
-        if (it == gameObjects.size() - 1)
-        {
-            int i = 100;
-            }
-
         gameObjects.at(it)->Update();
     }
 
@@ -249,7 +261,7 @@ void TestRoom::Render()
     glTranslatef(-camX, -camY, 0.0f);
 
     // Call a render for everyone!
-    for (int it = 0; it != gameObjects.size(); ++it)
+    for (int it = 0; it < gameObjects.size(); ++it)
     {
         gameObjects.at(it)->Render();
     }
