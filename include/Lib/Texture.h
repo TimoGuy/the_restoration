@@ -15,7 +15,8 @@
 class Texture
 {
 public:
-    Texture(const std::string& fileName, int desiredChannelsSTBI);
+    Texture(const std::string& fileName, int desiredChannelsSTBI);                      // Image-based
+    Texture( const std::string& text, const std::string& fontFileName, int _size);      // Font-based
     virtual ~Texture();
 
     void Bind(unsigned int unit);
@@ -27,4 +28,6 @@ private:
     GLuint m_texture;
 
     int width, height;
+
+    void GenOpenGLTex(unsigned char* imgData, int comp);
 };
