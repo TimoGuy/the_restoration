@@ -169,16 +169,13 @@ void TestGameObj::Update()
                 BoundBox b = { x + hsp, y + vsp, x, y, image->GetWidth(), image->GetHeight() };
                 if (ent->IsColliding(&b))
                 {
-                    // Hit the enemy!!!!
-
-
-
-                    // TODO: ADD THE YOULOSE(); function to this!
+                    // Hit the enemy!!!! (or you got hit???)
 
                     // Now, did the player win or did the enemy?
                     if (ent->getY() - GRID_SIZE >= b.prevy)
                     {
                         // Means was originally above the enemy, so the player wins!
+                        hsp = 0;
                         vsp = -vsp;
                         ent->YouLose(this);
                     }
