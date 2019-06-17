@@ -23,6 +23,8 @@ class TestGameObj : public Entity
 
 		bool IsColliding(BoundBox* box) { return false; }
 
+		void YouLose(Entity* accordingToMe);
+
     protected:
 
     private:

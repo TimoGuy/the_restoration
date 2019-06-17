@@ -166,26 +166,33 @@ void TestGameObj::Update()
             if ((ent = room->getEntityList()->at(i)) != this)
             {
                 // It's not me, so let's interact!!!
-                BoundBox b = { x + hsp, y + vsp, 0, 0, image->GetWidth(), image->GetHeight() };
+                BoundBox b = { x + hsp, y + vsp, x, y, image->GetWidth(), image->GetHeight() };
                 if (ent->IsColliding(&b))
                 {
                     // Hit the enemy!!!!
-                    float sign = 1;
-                    if (x + hsp < ent->getX())
+
+
+
+                    // TODO: ADD THE YOULOSE(); function to this!
+
+                    // Now, did the player win or did the enemy?
+                    if (ent->getY() - GRID_SIZE >= b.prevy)
                     {
-                        sign = -1;  // If mvng right, want to shoot left as an 'ouch!'
+                        // Means was originally above the enemy, so the player wins!
+                        vsp = -vsp;
+                        ent->YouLose(this);
                     }
-
-                    hsp = KNOCKBACK_HSP * sign;
-                    vsp = KNOCKBACK_VSP;
-
-                    framesOfInvincibility = HURT_FRAMES;
+                    else
+                    {
+                        // Do youlose() on yourself eh!
+                        this->YouLose(ent);
+                    }
                 }
             }
         }
     }
-    else
-        printf("You\'re invincible!!! %i\n", framesOfInvincibility);
+//    else
+//        printf("You\'re invincible!!! %i\n", framesOfInvincibility);
 
 
 
@@ -252,6 +259,25 @@ void TestGameObj::Render()
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
 }
+
+
+
+void TestGameObj::YouLose(Entity* accordingToMe)
+{
+    // Enemy won :====(
+    float sign = 1;
+    if (x + hsp < accordingToMe->getX() ||
+        hsp > 0)
+    {
+        sign = -1;  // If mvng right, want to shoot left as an 'ouch!'
+    }
+
+    hsp = KNOCKBACK_HSP * sign;
+    vsp = KNOCKBACK_VSP;
+
+    framesOfInvincibility = HURT_FRAMES;
+}
+
 
 
 
