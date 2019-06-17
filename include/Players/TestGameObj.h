@@ -28,6 +28,7 @@ class TestGameObj : public Entity
     protected:
 
     private:
+        Quad* pf;
 
         // States
 		int numJumps = 0;

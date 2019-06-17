@@ -31,6 +31,10 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
+
+    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 50);
+    pf = new Quad(100, 50, tempTex);
+
     printf("Player built! at %i,%i\n", gx, gy);
 	y += PLAYER_YOFF;
 
@@ -255,6 +259,7 @@ void TestGameObj::Render()
     }
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
+	pf->Render(x + 100, y);
 }
 
 

@@ -26,7 +26,7 @@ Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)
     // Free loaded image
     stbi_image_free(imgData);
 
-    printf("Texture \"%s\" loaded\n", fileName.c_str());
+//    printf("Texture \"%s\" loaded\n", fileName.c_str());
 }
 
 
@@ -47,7 +47,7 @@ Texture::Texture(const std::string& text, const std::string& fontFileName, int f
     if (surf == nullptr)
     {
         TTF_CloseFont(font);
-        printf("Font-texture could not initialize! TTF_Error: %s\n", SDL_GetError());
+        printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
         return;
     }
 
@@ -55,7 +55,12 @@ Texture::Texture(const std::string& text, const std::string& fontFileName, int f
     SDL_FreeSurface(surf);
     TTF_CloseFont(font);
 
+    width = surf->w;
+    height = surf->h;
+
     GenOpenGLTex((unsigned char*)surf->pixels, STBI_rgb_alpha);
+
+    printf("Font and text \"%s\" loaded\n", fontFileName.c_str());
 }
 
 
