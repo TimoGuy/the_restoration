@@ -9,13 +9,15 @@
 class Textbox : public Object
 {
     public:
-        Textbox(std::string text, int fontSize, TestRoom* rm);
+        Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm);
         virtual ~Textbox();
 
         void Update();
         void Render();
 
         bool IsColliding(BoundBox* box) { return false; }
+
+        void SetCoords(float x, float y);
 
     protected:
 

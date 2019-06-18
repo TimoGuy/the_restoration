@@ -17,6 +17,7 @@
 #include "../../include/defs.h"
 #endif
 
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <cmath>
 #include <algorithm>
@@ -35,7 +36,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 
 //    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 28);
 //    pf = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
-    pf = new Textbox(std::string("Hello\nWorld!!\nHow are you doing?\nI'm doing okay, I suppose."), 28, room);
+    pf = new Textbox(x, y, std::string("Hello\nWorld!!\nHow are you doing?\nI'm doing okay, I suppose."), 28, room);
 
     printf("Player built! at %i,%i\n", gx, gy);
 	y += PLAYER_YOFF;
@@ -261,6 +262,7 @@ void TestGameObj::Render()
     }
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
+	pf->SetCoords(x, y + 111);
 	pf->Render();
 }
 

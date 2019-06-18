@@ -2,9 +2,19 @@
 #include <algorithm>
 #include <sstream>
 
-Textbox::Textbox(std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm, false)
+Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm, false)
 {
+    // Directly set the variables
+    SetCoords(x, y);
     _fontSize = fontSize;
+
+    // Open the font
+    TTF_Font *font = TTF_OpenFont(".data/fonts/CATHSGBR.TTF", _fontSize);
+    if (font == nullptr)
+    {
+        printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
+        return;
+    }
 
     // Get the text divied up!
     lines = std::count(text.begin(), text.end(), '\n') + 1;
@@ -20,11 +30,12 @@ Textbox::Textbox(std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm
         _textLines[i] = token;
 
         // Create quads for each line
-        Texture* tempTex = new Texture(_textLines[i], ".data/fonts/CATHSGBR.TTF", _fontSize);
+        Texture* tempTex = new Texture(_textLines[i], font);
         _renderingText[i] = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
     }
 
-    //
+    // Clean up!
+    TTF_CloseFont(font);
 }
 
 Textbox::~Textbox()
@@ -41,6 +52,13 @@ void Textbox::Render()
 {
     for (int i = 0; i < lines; i++)
     {
-        _renderingText[i]->Render(1400, 1500 + _fontSize * i);
+        _renderingText[i]->Render(x, y + _fontSize * i);
     }
+}
+
+
+void Textbox::SetCoords(float x, float y)
+{
+    this->x = x;
+    this->y = y;
 }
