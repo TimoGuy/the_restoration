@@ -50,7 +50,7 @@
 			<Add option="-lSDL2" />
 			<Add option="-lGL" />
 			<Add option="-lGLEW" />
-			<Add option="-I /home/timo/workspace/boost_1_70_0" />
+			<Add option="-lSDL2_ttf" />
 		</Linker>
 		<Unit filename="about.txt" />
 		<Unit filename="include/GameLoop.h" />
@@ -66,6 +66,7 @@
 		<Unit filename="include/Players/Slant.h" />
 		<Unit filename="include/Players/TestEnemy.h" />
 		<Unit filename="include/Players/TestGameObj.h" />
+		<Unit filename="include/Players/Textbox.h" />
 		<Unit filename="include/Players/TopSideCollGround.h" />
 		<Unit filename="include/Players/Trigger.h" />
 		<Unit filename="include/Rooms/Cutscene/Cutscene.h" />
@@ -91,6 +92,7 @@
 		<Unit filename="src/Players/Slant.cpp" />
 		<Unit filename="src/Players/TestEnemy.cpp" />
 		<Unit filename="src/Players/TestGameObj.cpp" />
+		<Unit filename="src/Players/Textbox.cpp" />
 		<Unit filename="src/Players/TopSideCollGround.cpp" />
 		<Unit filename="src/Players/Trigger.cpp" />
 		<Unit filename="src/Rooms/Cutscene/Cutscene.cpp" />
