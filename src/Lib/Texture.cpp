@@ -43,7 +43,7 @@ Texture::Texture(const std::string& text, const std::string& fontFileName, int f
 
     //We need to first render to a surface as that's what TTF_RenderText
     //returns, then load that surface into a texture
-    SDL_Surface *surf = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{1, 1, 1, 1});
+    SDL_Surface *surf = TTF_RenderText_Blended(font, text.c_str(), { 255, 255, 255, 255 });
     if (surf == nullptr)
     {
         TTF_CloseFont(font);
@@ -55,6 +55,7 @@ Texture::Texture(const std::string& text, const std::string& fontFileName, int f
     SDL_FreeSurface(surf);
     TTF_CloseFont(font);
 
+    // Setup the params that will be used in generating the opengl texture.
     width = surf->w;
     height = surf->h;
 

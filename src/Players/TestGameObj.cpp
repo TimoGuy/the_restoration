@@ -5,6 +5,7 @@
 #include "Trigger.h"
 #include "MovingPlatGround.h"
 #include "InputManager.h"
+#include "Textbox.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
@@ -32,8 +33,9 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
 
-    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 50);
-    pf = new Quad(100, 50, tempTex);
+//    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 28);
+//    pf = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
+    pf = new Textbox(std::string("Hello\nWorld!!\nHow are you doing?\nI'm doing okay, I suppose."), 28, room);
 
     printf("Player built! at %i,%i\n", gx, gy);
 	y += PLAYER_YOFF;
@@ -259,7 +261,7 @@ void TestGameObj::Render()
     }
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
-	pf->Render(x + 100, y);
+	pf->Render();
 }
 
 
