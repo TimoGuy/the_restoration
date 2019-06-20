@@ -25,9 +25,7 @@
 
 Textbox::Textbox(float x, float y, std::string text, int fontSize, const std::function<void()>& lambda, TestRoom* rm) : Object(0, 0, rm, false)
 {
-    // Set coords
-    this->x = x;
-    this->y = y;
+    // Setup!
     _fontSize = fontSize;
     _lambda = lambda;
 
@@ -101,6 +99,9 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, const std::fu
 
     // Save original height
     originalHeight = height;
+
+    // Finally, set coords!
+    SetXY(x, y);
 }
 
 Textbox::~Textbox()
@@ -142,7 +143,7 @@ void Textbox::Render()
         masterAlphaOff = (float)(ticks - exitTicks) / EXIT_TICKS * -1.5f;   // Starts at zero and goes down to -1.5 eh!
         masterYoff = -EXIT_MAX_YOFF * (1.0f - (float)(EXIT_TICKS - (ticks - exitTicks)) / EXIT_TICKS);
     }
-    else if (exitTicks >= 0 &&
+    else if (exitTicks > ENTER_TICKS &&
              ticks - exitTicks > EXIT_TICKS)
     {
         // You're invisible, let's delete yah!
@@ -221,8 +222,9 @@ void Textbox::Render()
 
 void Textbox::SetXY(float x, float y)
 {
-    this->x = x;
-    this->y = y;
+    // Finally, adjust coords so that textbox is centered
+    this->x = x - (background->GetWidth() / 2);
+    this->y = y - (originalHeight / 2);
 }
 
 bool Textbox::DeleteMe()
