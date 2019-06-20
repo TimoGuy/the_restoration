@@ -63,7 +63,7 @@ class CutsceneObject
 // Implement it!
 struct FuncPlusParams
 {
-    void (CutsceneObject::*func)(int, int, int, std::string);
+    void (CutsceneObject::*func)(int, int, int, std::string);       // Needs to be under CutsceneObject:: so that it can capture a member function!
     int startTick;
     int endTick;
     std::string params;

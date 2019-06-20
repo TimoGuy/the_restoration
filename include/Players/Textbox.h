@@ -5,12 +5,13 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 
 
 class Textbox : public Object
 {
     public:
-        Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm);
+        Textbox(float x, float y, std::string text, int fontSize, const std::function<void()>& lambda, TestRoom* rm);
         virtual ~Textbox();
 
         void Update();
@@ -25,7 +26,16 @@ class Textbox : public Object
     protected:
 
     private:
+        void OnExitRequest();       bool execOnExit = false;
+        std::function<void()> _lambda;
+
+
         int ticks = 0;
+
+        float masterAlphaOff = 0;
+        float masterYoff = 0;
+
+        int exitTicks = -1;     // Will check if less than 0 first!
 
 
         int _fontSize;
@@ -33,6 +43,7 @@ class Textbox : public Object
 
         std::vector<std::string> _textLines;
         std::vector<Quad*> _renderingText;
+        std::vector<float> _textAlpha;
 
         Quad* background;
 };

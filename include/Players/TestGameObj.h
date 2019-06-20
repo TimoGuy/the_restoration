@@ -28,7 +28,7 @@ class TestGameObj : public Entity
     protected:
 
     private:
-        Textbox* pf;
+        std::vector<Textbox*> pf;
 
         // States
 		int numJumps = 0;

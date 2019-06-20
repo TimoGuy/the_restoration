@@ -24,13 +24,10 @@ Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)
 
     // Free loaded image
     stbi_image_free(imgData);
-
-//    printf("Texture \"%s\" loaded\n", fileName.c_str());
 }
 
 
 //-----------------------------------------------------------------------------
-TTF_Font* font = nullptr;
 Texture::Texture(const std::string& text, TTF_Font* font)
 {
     // Check the font
@@ -40,8 +37,8 @@ Texture::Texture(const std::string& text, TTF_Font* font)
         return;
     }
 
-    //We need to first render to a surface as that's what TTF_RenderText
-    //returns, then load that surface into a texture
+    // We need to first render to a surface as that's what TTF_RenderText
+    // returns, then load that surface into a texture
     SDL_Surface *surf = TTF_RenderUTF8_Blended(font, text.c_str(), { 255, 255, 255, 255 });
     if (surf == nullptr)
     {
@@ -56,8 +53,7 @@ Texture::Texture(const std::string& text, TTF_Font* font)
 
     if (width == 0 && height == 0)
     {
-        printf("ERROR! Texture size is 0x0!!!\n\tSetting to 100x100...\n");
-        width = height = 100;
+        printf("ERROR! Texture size is 0x0!!!\n");
     }
 
     GenOpenGLTex((unsigned char*)surf->pixels, STBI_rgb_alpha);

@@ -36,7 +36,14 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 
 //    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 28);
 //    pf = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
-    pf = new Textbox(x, y, std::string("Hello\nWorld!!\nHow are you doing?\nI'm doing okay, I suppose."), 28, room);
+    auto testLambda = []() {};
+    auto glambda = [&](void)
+    {
+        printf("Hey Arnold!\n");
+        pf.push_back(new Textbox(x, y, std::string("Jojos is back for\nanother!"), 28, testLambda, room));
+    };
+
+    pf.push_back(new Textbox(x, y, std::string("Hello\nWorld!!\nHow are you doing?\nI'm doing okay, I suppose."), 28, glambda, room));
 
     printf("Player built! at %i,%i\n", gx, gy);
 	y += PLAYER_YOFF;
@@ -249,7 +256,8 @@ void TestGameObj::Update()
 	outHsp = outVsp = 0;
 	framesOfInvincibility--;
 
-	pf->Update();
+    for (int i = 0; i < pf.size(); i++)
+        pf.at(i)->Update();
 }
 
 void TestGameObj::Render()
@@ -264,8 +272,12 @@ void TestGameObj::Render()
     }
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
-	pf->SetXY(x, y);
-	pf->Render();
+
+	for (int i = 0; i < pf.size(); i++)
+	{
+        pf.at(i)->SetXY(x, y);
+        pf.at(i)->Render();
+	}
 }
 
 

@@ -1,4 +1,5 @@
 #include "Textbox.h"
+#include "InputManager.h"
 #include <algorithm>
 #include <sstream>
 
@@ -6,17 +7,28 @@
 
 
 // Variables eh
+    // SPEED_DAMPER ---- slow breathing->300, worried->70||75, frightened->10
 #define SPEED_DAMPER 300.0f
+    // WAVE_AMPLITUDE ---- slow breathing->2.5, worried->1.25, frightened->0.5
 #define WAVE_AMPLITUDE 2.5f
 #define PADDING 10
 
+#define EVERY_X_TICKS_NEW_WORD 20
+#define ALPHA_INCREASE 0.02f
+
+#define ENTER_TICKS 50
+#define ENTER_MAX_YOFF 25
+#define EXIT_TICKS 50
+#define EXIT_MAX_YOFF 50
+
 float originalHeight = 0;
-Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm, false)
+Textbox::Textbox(float x, float y, std::string text, int fontSize, const std::function<void()>& lambda, TestRoom* rm) : Object(0, 0, rm, false)
 {
     // Set coords
     this->x = x;
     this->y = y;
     _fontSize = fontSize;
+    _lambda = lambda;
 
     // Open the font
     TTF_Font* font = TTF_OpenFont(".data/fonts/CATHSGBR.TTF", _fontSize);
@@ -30,10 +42,14 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm)
     std::string token;
     std::istringstream tokenStream(text);
 
+
+
     float width = 0, height = 0;
     int lines = 0;
 
-    // Grab each individual line!
+
+
+    // Grab each individual line! (Uses the same font over and over eh!)
     while (std::getline(tokenStream, token, '\n'))
     {
         lines++;
@@ -49,6 +65,7 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm)
             // Create quads for each line
             Texture* tempTex = new Texture(subToken + " ", font);
             _renderingText.push_back(new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex));
+            _textAlpha.push_back(0);    // Set at transparent so that it can fade in eh.
 
             tempWidth += tempTex->GetWidth();
         }
@@ -59,9 +76,13 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm)
         // Add delimiter for rendering.
         _textLines.push_back("\n");
         _renderingText.push_back(NULL);
+        _textAlpha.push_back(-1);
     }
 
+
+    // Clean up.
     TTF_CloseFont(font);
+
 
 
 
@@ -90,27 +111,54 @@ void Textbox::Update()
 {
     // Increase ticks and move thru the text!
     ticks++;
+
+    // Check if exit textbox was pressed!
+    if (InputManager::Instance().b1())
+    {
+        exitTicks = ticks;
+    }
 }
 
 
 void Textbox::Render()
 {
+    // Enter in the textbox!!!
+    if (ticks <= ENTER_TICKS)
+    {
+        // Fade and shift in!
+        masterAlphaOff = (float)ticks / ENTER_TICKS - 1.0f;
+        masterYoff = ENTER_MAX_YOFF * (float)(ENTER_TICKS - ticks) / ENTER_TICKS;
+    }
+    else if (exitTicks > ENTER_TICKS &&     // The exit ticks need to be after it's all done loading, hence the ENTER_TICKS
+             ticks - exitTicks <= EXIT_TICKS)
+    {
+        // You're exiting now.. (this func. only runs once then disallows another run)
+        OnExitRequest();
+
+        // Yeah!!! Now it's the reverse!
+        masterAlphaOff = (float)(ticks - exitTicks) / EXIT_TICKS * -1.5f;   // Starts at zero and goes down to -1.5 eh!
+        masterYoff = -EXIT_MAX_YOFF * (1.0f - (float)(EXIT_TICKS - (ticks - exitTicks)) / EXIT_TICKS);
+    }
+
+
     // Render the bg
 
-    glColor4f(0, 0, 0, 0.5f);
-    background->Render(x, y);
+    glColor4f(0, 0, 0, 0.5f + masterAlphaOff);
+    background->Render(x, y + masterYoff);
 
     background->SetHeight(originalHeight);
 
 
-    // RENDER TEXT!!!!
-    glColor4f(1, 1, 1, 1);
 
+
+
+
+    // RENDER TEXT!!!!
     float addToHeight = 0;
 
     int offset = 0;
     int line = 0;
-    for (int i = 0; i < _textLines.size() && i < ticks / 5; i++)
+    for (int i = 0; i < _textLines.size() && i < ticks / EVERY_X_TICKS_NEW_WORD; i++)
     {
         if (_textLines.at(i) == "\n")
         {
@@ -139,13 +187,17 @@ void Textbox::Render()
 
 
 
-
+            // Set the alpha
+            float* alpha = &_textAlpha.at(i);
+            *alpha += ALPHA_INCREASE;            // Increase until 1 eh
+            *alpha = std::min(*alpha, 1.0f);
+            glColor4f(1, 1, 1, *alpha + masterAlphaOff);
 
 
 
 
             // Actually render eh.
-            _renderingText.at(i)->Render(rendX, rendY);
+            _renderingText.at(i)->Render(rendX, rendY + masterYoff);
             offset += _renderingText.at(i)->GetWidth();         // Offset the width (includes space!)
 
 
@@ -162,4 +214,23 @@ void Textbox::SetXY(float x, float y)
 {
     this->x = x;
     this->y = y;
+}
+
+
+
+
+
+void Textbox::OnExitRequest()
+{
+    if (execOnExit)
+    {
+        // Already run once eh.
+        return;
+    }
+
+    // Make it so can't be run again eh.
+    execOnExit = true;
+
+    // Run that function!!!
+    _lambda();
 }
