@@ -31,14 +31,13 @@ Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)
 
 //-----------------------------------------------------------------------------
 TTF_Font* font = nullptr;
-Texture::Texture(const std::string& text, const std::string& fontFileName, int fontSize)
+Texture::Texture(const std::string& text, TTF_Font* font)
 {
-    //Open the font
+    // Check the font
     if (font == nullptr)
     {
-        font = TTF_OpenFont(fontFileName.c_str(), fontSize);
-//        printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
-//        return;
+        printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
+        return;
     }
 
     //We need to first render to a surface as that's what TTF_RenderText
@@ -67,7 +66,6 @@ Texture::Texture(const std::string& text, const std::string& fontFileName, int f
 
     // Clean up the surface
     SDL_FreeSurface(surf);
-//    TTF_CloseFont(font);
 }
 
 

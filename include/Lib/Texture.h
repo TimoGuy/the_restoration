@@ -17,7 +17,7 @@ class Texture
 {
 public:
     Texture(const std::string& fileName, int desiredChannelsSTBI);                          // Image-based
-    Texture( const std::string& text, const std::string& fontFileName, int fontSize);                        // Font-based
+    Texture( const std::string& text, TTF_Font* font);                                      // Font-based
     virtual ~Texture();
 
     void Bind(unsigned int unit);

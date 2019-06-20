@@ -19,7 +19,7 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm)
     _fontSize = fontSize;
 
     // Open the font
-    TTF_Font *font = TTF_OpenFont(".data/fonts/CATHSGBR.TTF", _fontSize);
+    TTF_Font* font = TTF_OpenFont(".data/fonts/CATHSGBR.TTF", _fontSize);
     if (font == nullptr)
     {
         printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
@@ -47,7 +47,7 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm)
             _textLines.push_back(subToken + " ");       // Add a space, el paco!
 
             // Create quads for each line
-            Texture* tempTex = new Texture(subToken + " ", ".data/fonts/CATHSGBR.TTF", _fontSize);
+            Texture* tempTex = new Texture(subToken + " ", font);
             _renderingText.push_back(new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex));
 
             tempWidth += tempTex->GetWidth();
@@ -61,7 +61,7 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm)
         _renderingText.push_back(NULL);
     }
 
-
+    TTF_CloseFont(font);
 
 
 
