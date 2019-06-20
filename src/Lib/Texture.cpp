@@ -30,8 +30,17 @@ Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)
 
 
 //-----------------------------------------------------------------------------
-Texture::Texture(const std::string& text, TTF_Font* font)
+TTF_Font* font = nullptr;
+Texture::Texture(const std::string& text, const std::string& fontFileName, int fontSize)
 {
+    //Open the font
+    if (font == nullptr)
+    {
+        font = TTF_OpenFont(fontFileName.c_str(), fontSize);
+//        printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
+//        return;
+    }
+
     //We need to first render to a surface as that's what TTF_RenderText
     //returns, then load that surface into a texture
     SDL_Surface *surf = TTF_RenderUTF8_Blended(font, text.c_str(), { 255, 255, 255, 255 });
@@ -41,9 +50,6 @@ Texture::Texture(const std::string& text, TTF_Font* font)
         printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
         return;
     }
-
-    // Clean up the surface
-    SDL_FreeSurface(surf);
 
     // Setup the params that will be used in generating the opengl texture.
     width = surf->w;
@@ -57,7 +63,11 @@ Texture::Texture(const std::string& text, TTF_Font* font)
 
     GenOpenGLTex((unsigned char*)surf->pixels, STBI_rgb_alpha);
 
-    printf("Font and text \"%s\" loaded\n\twidth=%i\theight=%i\n", fontFileName.c_str(), width, height);
+    printf("Font and text \"%s\" loaded\n\twidth=%i\theight=%i\n", text.c_str(), width, height);
+
+    // Clean up the surface
+    SDL_FreeSurface(surf);
+//    TTF_CloseFont(font);
 }
 
 

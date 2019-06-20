@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <sstream>
 
-Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm, false)
 
 
 
@@ -12,6 +11,7 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm)
 #define PADDING 10
 
 float originalHeight = 0;
+Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm, false)
 {
     // Set coords
     this->x = x;
