@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <sstream>
 
+Textbox::Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm, false)
 
 
 
@@ -11,12 +12,19 @@
 #define PADDING 10
 
 float originalHeight = 0;
-Textbox::Textbox(int x, int y, std::string text, int fontSize, TestRoom* rm) : Object(0, 0, rm, false)
 {
     // Set coords
     this->x = x;
     this->y = y;
     _fontSize = fontSize;
+
+    // Open the font
+    TTF_Font *font = TTF_OpenFont(".data/fonts/CATHSGBR.TTF", _fontSize);
+    if (font == nullptr)
+    {
+        printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
+        return;
+    }
 
     // Get the text divied up!
     std::string token;

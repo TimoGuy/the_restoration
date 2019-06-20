@@ -10,7 +10,7 @@
 class Textbox : public Object
 {
     public:
-        Textbox(int x, int y, std::string text, int fontSize, TestRoom* rm);
+        Textbox(float x, float y, std::string text, int fontSize, TestRoom* rm);
         virtual ~Textbox();
 
         void Update();
@@ -19,6 +19,8 @@ class Textbox : public Object
         void SetXY(float x, float y);
 
         bool IsColliding(BoundBox* box) { return false; }
+
+        void SetCoords(float x, float y);
 
     protected:
 
