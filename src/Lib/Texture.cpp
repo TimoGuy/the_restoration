@@ -1,7 +1,6 @@
 #ifdef __unix__
 #include "Lib/Texture.h"
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_system.h>
 #include <SDL2/SDL_ttf.h>
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Lib/Texture.h"
@@ -43,7 +42,7 @@ Texture::Texture(const std::string& text, const std::string& fontFileName, int f
 
     //We need to first render to a surface as that's what TTF_RenderText
     //returns, then load that surface into a texture
-    SDL_Surface *surf = TTF_RenderText_Blended(font, text.c_str(), { 255, 255, 255, 255 });
+    SDL_Surface *surf = TTF_RenderUTF8_Blended(font, text.c_str(), { 255, 255, 255, 255 });
     if (surf == nullptr)
     {
         TTF_CloseFont(font);
@@ -59,9 +58,15 @@ Texture::Texture(const std::string& text, const std::string& fontFileName, int f
     width = surf->w;
     height = surf->h;
 
+    if (width == 0 && height == 0)
+    {
+        printf("ERROR! Texture size is 0x0!!!\n\tSetting to 100x100...\n");
+        width = height = 100;
+    }
+
     GenOpenGLTex((unsigned char*)surf->pixels, STBI_rgb_alpha);
 
-    printf("Font and text \"%s\" loaded\n", fontFileName.c_str());
+    printf("Font and text \"%s\" loaded\n\twidth=%i\theight=%i\n", fontFileName.c_str(), width, height);
 }
 
 
