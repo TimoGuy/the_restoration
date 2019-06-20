@@ -21,7 +21,8 @@
 #define EXIT_TICKS 50
 #define EXIT_MAX_YOFF 50
 
-float originalHeight = 0;
+
+
 Textbox::Textbox(float x, float y, std::string text, int fontSize, const std::function<void()>& lambda, TestRoom* rm) : Object(0, 0, rm, false)
 {
     // Set coords
@@ -113,7 +114,8 @@ void Textbox::Update()
     ticks++;
 
     // Check if exit textbox was pressed!
-    if (InputManager::Instance().b1())
+    if (InputManager::Instance().b1() &&
+        !execOnExit)        // <--- This makes it so that you can't 'resurrect' a dying textbox.h!!!
     {
         exitTicks = ticks;
     }
@@ -130,7 +132,8 @@ void Textbox::Render()
         masterYoff = ENTER_MAX_YOFF * (float)(ENTER_TICKS - ticks) / ENTER_TICKS;
     }
     else if (exitTicks > ENTER_TICKS &&     // The exit ticks need to be after it's all done loading, hence the ENTER_TICKS
-             ticks - exitTicks <= EXIT_TICKS)
+             ticks - exitTicks <= EXIT_TICKS &&
+             ticks != exitTicks)        // <---- This makes it onKeyRelease eh!
     {
         // You're exiting now.. (this func. only runs once then disallows another run)
         OnExitRequest();
@@ -138,6 +141,12 @@ void Textbox::Render()
         // Yeah!!! Now it's the reverse!
         masterAlphaOff = (float)(ticks - exitTicks) / EXIT_TICKS * -1.5f;   // Starts at zero and goes down to -1.5 eh!
         masterYoff = -EXIT_MAX_YOFF * (1.0f - (float)(EXIT_TICKS - (ticks - exitTicks)) / EXIT_TICKS);
+    }
+    else if (exitTicks >= 0 &&
+             ticks - exitTicks > EXIT_TICKS)
+    {
+        // You're invisible, let's delete yah!
+        done = true;        // <---- The garbage collecting variable eh.
     }
 
 
@@ -216,6 +225,10 @@ void Textbox::SetXY(float x, float y)
     this->y = y;
 }
 
+bool Textbox::DeleteMe()
+{
+    return done;
+}
 
 
 
@@ -232,5 +245,8 @@ void Textbox::OnExitRequest()
     execOnExit = true;
 
     // Run that function!!!
-    _lambda();
+    if (_lambda)
+        _lambda();
+    else
+        printf("ERROR: no lambda was stored in message box!\n");
 }

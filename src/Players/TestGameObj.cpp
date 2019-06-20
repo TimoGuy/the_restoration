@@ -36,11 +36,10 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 
 //    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 28);
 //    pf = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
-    auto testLambda = []() {};
     auto glambda = [&](void)
     {
         printf("Hey Arnold!\n");
-        pf.push_back(new Textbox(x, y, std::string("Jojos is back for\nanother!"), 28, testLambda, room));
+        pf.push_back(new Textbox(x, y, std::string("Jojos is back for\nanother!"), 28, std::function<void()>(), room));
     };
 
     pf.push_back(new Textbox(x, y, std::string("Hello\nWorld!!\nHow are you doing?\nI'm doing okay, I suppose."), 28, glambda, room));
@@ -124,11 +123,11 @@ void TestGameObj::Update()
     bool die = false;
 
 	// TEST: if pressed 'j' then you'd automagically respawn
-	if (InputManager::Instance().b1())
+	/*if (InputManager::Instance().b1())
 	{
 //        printf("You dyed!!\n");
 		die = true;
-	}
+	}*/
 
 
     std::vector<Object*> tempCollisions;
@@ -270,13 +269,33 @@ void TestGameObj::Render()
     {
         glColor4f(1, 1, 1, 0.5f);
     }
+
+
+
+
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
 
+
+
+
+
+
+    // Render any message boxes!!!
 	for (int i = 0; i < pf.size(); i++)
 	{
-        pf.at(i)->SetXY(x, y);
+        pf.at(i)->SetXY(x, y - 200);
         pf.at(i)->Render();
+	}
+
+	// Go thru and delete any who want to be deleted
+	for (int i = pf.size() - 1; i >= 0; i--)
+	{
+        if (pf.at(i)->DeleteMe())
+        {
+            // Delete!
+            pf.erase(pf.begin() + i);
+        }
 	}
 }
 

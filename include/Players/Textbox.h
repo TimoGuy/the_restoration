@@ -21,7 +21,7 @@ class Textbox : public Object
 
         bool IsColliding(BoundBox* box) { return false; }
 
-        void SetCoords(float x, float y);
+        bool DeleteMe();
 
     protected:
 
@@ -31,9 +31,11 @@ class Textbox : public Object
 
 
         int ticks = 0;
+        bool done = false;
 
         float masterAlphaOff = 0;
         float masterYoff = 0;
+        float originalHeight = 0;
 
         int exitTicks = -1;     // Will check if less than 0 first!
 
