@@ -21,7 +21,7 @@ class Trigger : public Object
 		void SetEntranceCoords(int gx, int gy);     // This is an optional function, which allows the player to appear anywhere in the room!
         bool GetCustomCoords(int& gx, int& gy);     // If set to custom, then it will automatically make this yeah!
 
-        Room* GetNextEvent();       // This will return either a GameLevel or a Cutscene, etc.
+        Base* GetNextEvent();       // This will return either a GameLevel or a Cutscene or a textbox, etc.
 
 		bool IsColliding(BoundBox* box);
 
@@ -37,9 +37,14 @@ class Trigger : public Object
 		void SetColliding(bool flag);
 		bool IsColliding();
 
+		void DisableMe();
+		bool isDisabled();
+
     protected:
 
     private:
+        bool active = true;
+
         void SetupSlaveRecur(int gx, int gy);       // Workings: 1: am I a slave?!?! then pass it on
 
 

@@ -1,7 +1,7 @@
 #pragma once
 #ifdef __unix__
 #include "Entity.h"
-#include "Shape/Quad.h"
+#include "Textbox.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "Entity.h"
 #include "../Shape/Quad.h"
@@ -28,6 +28,7 @@ class TestGameObj : public Entity
     protected:
 
     private:
+        std::vector<Textbox*> pf;
 
         // States
 		int numJumps = 0;

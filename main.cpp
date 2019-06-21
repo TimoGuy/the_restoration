@@ -4,6 +4,7 @@
 #ifdef __unix__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_ttf.h>
 #include "GameLoop.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
@@ -22,6 +23,12 @@ bool Setup()
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0)
     {
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        return false;
+    }
+
+    if (TTF_Init() < 0)
+    {
+        printf("TTF could not initialize! TTF_Error: %s\n", TTF_GetError());
         return false;
     }
 
@@ -81,6 +88,8 @@ void Destruct()
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
     SDL_Quit();
+
+    TTF_Quit();
 
     window = NULL;
 }

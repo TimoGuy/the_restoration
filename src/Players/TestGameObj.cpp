@@ -5,6 +5,7 @@
 #include "Trigger.h"
 #include "MovingPlatGround.h"
 #include "InputManager.h"
+#include "Textbox.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
@@ -16,6 +17,7 @@
 #include "../../include/defs.h"
 #endif
 
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <cmath>
 #include <algorithm>
@@ -31,6 +33,21 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
+
+
+
+    // Create the tutorial
+    if (!GameLoop::sawTutorial)
+    {
+        auto glambda = [&](void)
+        {
+            printf("Saw tutorial!\n");
+            GameLoop::sawTutorial = true;
+        };
+
+        pf.push_back(new Textbox(x, y, std::string("td_player_tutorial"), 28, glambda, room));
+    }
+
     printf("Player built! at %i,%i\n", gx, gy);
 	y += PLAYER_YOFF;
 
@@ -58,7 +75,11 @@ TestGameObj::~TestGameObj()
 void TestGameObj::Update()
 {
 	// Adjust according to input
-	hsp += InputManager::Instance().x();
+    if (GameLoop::sawTutorial)
+    {
+        hsp += InputManager::Instance().x();
+	}
+
 	if (InputManager::Instance().x() == 0 &&
         hsp != 0)
 	{
@@ -110,11 +131,11 @@ void TestGameObj::Update()
     bool die = false;
 
 	// TEST: if pressed 'j' then you'd automagically respawn
-	if (InputManager::Instance().b1())
+	/*if (InputManager::Instance().b1())
 	{
 //        printf("You dyed!!\n");
 		die = true;
-	}
+	}*/
 
 
     std::vector<Object*> tempCollisions;
@@ -136,9 +157,25 @@ void TestGameObj::Update()
 				// See if it wants to trigger
 				if (((Trigger*)tempCollisions.at(i))->IsDesiringToTrigger())
 				{
-                    // Go to that next room!!!!!
-                    room->GetGameLoop()->SetRoom(((Trigger*)tempCollisions.at(i))->GetNextEvent());
-                    return;
+                    // Trigger the next event eh
+                    Base* nextEv = ((Trigger*)tempCollisions.at(i))->GetNextEvent();
+
+                    if (dynamic_cast<Room*>(nextEv) != NULL)
+                    {
+                        // Go to that next room!!!!!
+                        room->GetGameLoop()->SetRoom((Room*)nextEv);
+                        return;
+                    }
+                    else if (dynamic_cast<Textbox*>(nextEv) != NULL)
+                    {
+                        // Set up a textbox!!!
+                        if (pf.size() == 0)
+                            pf.push_back((Textbox*)nextEv);
+
+                        // To make sure that the trigger doesn't do anything funky!
+                        ((Trigger*)tempCollisions.at(i))->DisableMe();
+                        return;
+                    }
 				}
 			}
 
@@ -241,6 +278,9 @@ void TestGameObj::Update()
 	// Reset outside forces
 	outHsp = outVsp = 0;
 	framesOfInvincibility--;
+
+    for (int i = 0; i < pf.size(); i++)
+        pf.at(i)->Update();
 }
 
 void TestGameObj::Render()
@@ -253,8 +293,34 @@ void TestGameObj::Render()
     {
         glColor4f(1, 1, 1, 0.5f);
     }
+
+
+
+
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
+
+
+
+
+
+
+    // Render any message boxes!!!
+	for (int i = 0; i < pf.size(); i++)
+	{
+        pf.at(i)->SetXY(x, y - 200);
+        pf.at(i)->Render();
+	}
+
+	// Go thru and delete any who want to be deleted
+	for (int i = pf.size() - 1; i >= 0; i--)
+	{
+        if (pf.at(i)->DeleteMe())
+        {
+            // Delete!
+            pf.erase(pf.begin() + i);
+        }
+	}
 }
 
 

@@ -2,6 +2,7 @@
 #ifdef __unix__
 //#include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_ttf.h>
 #elif defined(_WIN32) || defined(WIN32)
 //#include <GL/wglew.h>
 #include <SDL_opengl.h>
@@ -15,7 +16,8 @@
 class Texture
 {
 public:
-    Texture(const std::string& fileName, int desiredChannelsSTBI);
+    Texture(const std::string& fileName, int desiredChannelsSTBI);                          // Image-based
+    Texture( const std::string& text, TTF_Font* font);                                      // Font-based
     virtual ~Texture();
 
     void Bind(unsigned int unit);
@@ -27,4 +29,6 @@ private:
     GLuint m_texture;
 
     int width, height;
+
+    void GenOpenGLTex(unsigned char* imgData, int comp);
 };

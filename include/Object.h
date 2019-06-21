@@ -1,5 +1,6 @@
 #pragma once
 #ifdef __unix__
+#include "Base.h"
 #include "ObjectFactory.h"
 //#include "TestRoom.h"
 #include "Quad.h"
@@ -40,7 +41,7 @@ class TestRoom;
 // 2. inside the 'ObjectFactory::GetObjectFactory()',
 // 3. the enum entry into the big switch in the
 //      'ObjectFactory::Build(...)' method
-class Object
+class Object : public Base
 {
     public:
         Object(int gx, int gy, TestRoom* rm, bool isSolid);

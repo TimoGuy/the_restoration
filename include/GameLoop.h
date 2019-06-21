@@ -19,6 +19,11 @@ class GameLoop
         void SetRoom(Room* newRoom);
         Room* GetRoom();
 
+
+
+        // Variables controlling the game
+        static bool sawTutorial;
+
     protected:
 
     private:
