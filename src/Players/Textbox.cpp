@@ -20,7 +20,7 @@
 #define WAVE_AMPLITUDE 2.5f
 #define PADDING 10
 
-#define EVERY_X_TICKS_NEW_WORD 20
+#define EVERY_X_TICKS_NEW_WORD 10
 #define ALPHA_INCREASE 0.02f
 
 #define ENTER_TICKS 25
@@ -164,6 +164,18 @@ void Textbox::SetupTextbox(float x, float y, std::string text)
         float tempWidth = 0;        // See who's biggest!!
         while (std::getline(subTokenStream, subToken, ' '))
         {
+            // See if there's any delay markers '`' IN THE BEGINNING!!!
+            while (subToken.at(0) == '`')
+            {
+                // Remove the delay marker
+                subToken = subToken.substr(1);
+
+                // Add a dead entry.
+                _textLines.push_back("");
+                _renderingText.push_back(NULL);
+                _textAlpha.push_back(-1);
+            }
+
             _textLines.push_back(subToken + " ");       // Add a space, el paco!
 
             // Create quads for each line
@@ -295,6 +307,11 @@ void Textbox::Render()
             // Newline!!!
             offset = 0;
             line++;
+        }
+        else if (_textLines.at(i).empty())
+        {
+            // Just ignore this one!
+            continue;
         }
         else
         {

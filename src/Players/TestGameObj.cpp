@@ -37,13 +37,17 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 //    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 28);
 //    pf = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
 
-
-    auto glambda = [&](void)
+    // Create the tutorial
+    if (!GameLoop::sawTutorial)
     {
-        printf("Hey Arnold!\n");
-    };
+        auto glambda = [&](void)
+        {
+            printf("Saw tutorial!\n");
+            GameLoop::sawTutorial = true;
+        };
 
-    pf.push_back(new Textbox(x, y, std::string("text_dump.txt"), 28, glambda, room));
+        pf.push_back(new Textbox(x, y, std::string("td_player_tutorial.txt"), 28, glambda, room));
+    }
 
     printf("Player built! at %i,%i\n", gx, gy);
 	y += PLAYER_YOFF;
@@ -72,7 +76,11 @@ TestGameObj::~TestGameObj()
 void TestGameObj::Update()
 {
 	// Adjust according to input
-	hsp += InputManager::Instance().x();
+    if (GameLoop::sawTutorial)
+    {
+        hsp += InputManager::Instance().x();
+	}
+
 	if (InputManager::Instance().x() == 0 &&
         hsp != 0)
 	{

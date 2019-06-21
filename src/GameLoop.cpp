@@ -15,6 +15,15 @@
 #include <iostream>
 
 
+
+// Init game variables
+bool GameLoop::sawTutorial = false;
+
+
+
+
+
+
 GameLoop::GameLoop(SDL_Window* window)
 {
     _window = window;
