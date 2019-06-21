@@ -38,17 +38,12 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 //    pf = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
 
 
-    std::vector<std::string> texts;
-    texts.push_back(std::string("Hello\nWorld!!\nHow are you doing?\nI'm doing okay, I suppose."));
-    texts.push_back(std::string("Jojos is back for\nanother!"));
-    texts.push_back(std::string("And\nanother!"));
-
     auto glambda = [&](void)
     {
         printf("Hey Arnold!\n");
     };
 
-    pf.push_back(new Textbox(x, y, texts, 28, glambda, room));
+    pf.push_back(new Textbox(x, y, std::string("text_dump.txt"), 28, glambda, room));
 
     printf("Player built! at %i,%i\n", gx, gy);
 	y += PLAYER_YOFF;

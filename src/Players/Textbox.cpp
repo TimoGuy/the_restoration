@@ -1,14 +1,18 @@
 #include "Textbox.h"
 #include "InputManager.h"
 #include <algorithm>
+#include <iostream>
 #include <sstream>
+#include <fstream>
 
 
 
 
 // Variables eh
-#define FONT_NAME ".data/fonts/CATHSGBR.TTF"
-//#define FONT_NAME ".data/fonts/"
+//#define FONT_NAME ".data/fonts/CATHSGBR.TTF"
+//#define FONT_NAME ".data/fonts/Sword.ttf"
+#define FONT_NAME ".data/fonts/851MkPOP_002.ttf"
+
 
     // SPEED_DAMPER ---- slow breathing->300, worried->70||75, frightened->10
 #define SPEED_DAMPER 300.0f
@@ -24,6 +28,73 @@
 #define EXIT_TICKS 25
 #define EXIT_MAX_YOFF 50
 
+
+
+std::string theFont = FONT_NAME;
+
+Textbox::Textbox(float x, float y, std::string fileName, int fontSize, const std::function<void()>& lambda, TestRoom* rm) : Object(0, 0, rm, false)
+{
+    // Load text or string
+    std::vector<std::string> texts;
+
+    std::string path = std::string(".data/fonts/") + fileName;
+
+    // Load all fonts and such!
+    std::string line;
+    std::ifstream myfile(path);
+
+    std::string buildingString;
+    if (myfile.is_open())
+    {
+        while (std::getline(myfile, line))
+        {
+            // Load the line
+            if (line.at(0) == 'f')
+            {
+                // Request the font!!! ('f' then '\t', so cut off at 2)
+                theFont = line.substr(2);
+            }
+            else if (line.at(0) == 't')
+            {
+                // Should be 't' then '\t' then the text
+                if (!buildingString.empty())
+                {
+                    // New string! so put old string into the list
+                    texts.push_back(buildingString);
+                }
+
+                // Reset
+                buildingString.clear();
+                buildingString += line.substr(2);       // Remove 't' and '\t', so 2!
+            }
+            else if (line.at(0) == '\t')
+            {
+                // Append to building string.
+                buildingString += "\n" + line.substr(1);       // Remove the '\t'
+            }
+            else
+            {
+                // Just stuff the line in I guess....
+                printf("WARNING: Use the 't\t' system to create text dumps!!!\n");
+                texts.push_back(line);
+            }
+        }
+    }
+
+    // Final stuff eh.
+    texts.push_back(buildingString);
+
+    // Create and spit out!!
+//    return new Textbox(x, y, texts, fontSize, lambda, rm);
+    // Setup!
+    _strings = texts;
+    _fontSize = fontSize;
+    _lambda = lambda;
+
+    // Setup the first textbox!!!!
+    currentString = 0;
+    SetupTextbox(x, y, _strings.at(currentString));
+}
 
 
 Textbox::Textbox(float x, float y, std::vector<std::string> strings, int fontSize, const std::function<void()>& lambda, TestRoom* rm) : Object(0, 0, rm, false)
@@ -64,7 +135,7 @@ void Textbox::SetupTextbox(float x, float y, std::string text)
 
 
     // Open the font
-    TTF_Font* font = TTF_OpenFont(FONT_NAME, _fontSize);
+    TTF_Font* font = TTF_OpenFont(theFont.c_str(), _fontSize);
     if (font == nullptr)
     {
         printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());

@@ -11,6 +11,7 @@
 class Textbox : public Object
 {
     public:
+        Textbox(float x, float y, std::string fileName, int fontSize, const std::function<void()>& lambda, TestRoom* rm);
         Textbox(float x, float y, std::vector<std::string> text, int fontSize, const std::function<void()>& lambda, TestRoom* rm);
         virtual ~Textbox();
 
