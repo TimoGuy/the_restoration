@@ -41,7 +41,7 @@ Textbox::Textbox(float x, float y, std::string fileName, int fontSize, const std
 
     // Load all fonts and such!
     std::string line;
-    std::ifstream myfile(path);
+    std::ifstream myfile(path + ".txt");
 
     std::string buildingString;
     if (myfile.is_open())
@@ -49,7 +49,12 @@ Textbox::Textbox(float x, float y, std::string fileName, int fontSize, const std
         while (std::getline(myfile, line))
         {
             // Load the line
-            if (line.at(0) == 'f')
+            if (line.at(0) == 'q')
+            {
+                // This means quit the reading!
+                break;
+            }
+            else if (line.at(0) == 'f')
             {
                 // Request the font!!! ('f' then '\t', so cut off at 2)
                 theFont = line.substr(2);
@@ -165,7 +170,8 @@ void Textbox::SetupTextbox(float x, float y, std::string text)
         while (std::getline(subTokenStream, subToken, ' '))
         {
             // See if there's any delay markers '`' IN THE BEGINNING!!!
-            while (subToken.at(0) == '`')
+            while (!subToken.empty() &&
+                   subToken.at(0) == '`')
             {
                 // Remove the delay marker
                 subToken = subToken.substr(1);

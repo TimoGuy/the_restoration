@@ -34,8 +34,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
 
-//    tempTex = new Texture("Hello World!!", ".data/fonts/CATHSGBR.TTF", 28);
-//    pf = new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex);
+
 
     // Create the tutorial
     if (!GameLoop::sawTutorial)
@@ -46,7 +45,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
             GameLoop::sawTutorial = true;
         };
 
-        pf.push_back(new Textbox(x, y, std::string("td_player_tutorial.txt"), 28, glambda, room));
+        pf.push_back(new Textbox(x, y, std::string("td_player_tutorial"), 28, glambda, room));
     }
 
     printf("Player built! at %i,%i\n", gx, gy);
@@ -158,9 +157,25 @@ void TestGameObj::Update()
 				// See if it wants to trigger
 				if (((Trigger*)tempCollisions.at(i))->IsDesiringToTrigger())
 				{
-                    // Go to that next room!!!!!
-                    room->GetGameLoop()->SetRoom(((Trigger*)tempCollisions.at(i))->GetNextEvent());
-                    return;
+                    // Trigger the next event eh
+                    Base* nextEv = ((Trigger*)tempCollisions.at(i))->GetNextEvent();
+
+                    if (dynamic_cast<Room*>(nextEv) != NULL)
+                    {
+                        // Go to that next room!!!!!
+                        room->GetGameLoop()->SetRoom((Room*)nextEv);
+                        return;
+                    }
+                    else if (dynamic_cast<Textbox*>(nextEv) != NULL)
+                    {
+                        // Set up a textbox!!!
+                        if (pf.size() == 0)
+                            pf.push_back((Textbox*)nextEv);
+
+                        // To make sure that the trigger doesn't do anything funky!
+                        ((Trigger*)tempCollisions.at(i))->DisableMe();
+                        return;
+                    }
 				}
 			}
 

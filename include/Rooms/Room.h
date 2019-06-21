@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef __unix__
+#include "Base.h"
 //#include "Object.h"
 #elif defined(_WIN32) || defined(WIN32)
 //#include "../Object.h"
@@ -9,7 +10,7 @@
 
 class GameLoop;
 
-class Room
+class Room : public Base
 {
     public:
         Room(GameLoop* gloop);

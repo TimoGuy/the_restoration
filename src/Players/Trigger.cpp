@@ -1,6 +1,7 @@
 #ifdef __unix__
 #include "Trigger.h"
 #include "TestRoom.h"
+#include "Textbox.h"
 #include "Cutscene.h"
 #include "InputManager.h"
 #include "defs.h"
@@ -61,6 +62,10 @@ void Trigger::Render()
 	}
 
 
+	if (isDisabled())
+	{
+        glColor3f(0.5f, 0, 0);
+	}
 
 
 	// Render a quad!!!!
@@ -103,8 +108,11 @@ bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the varia
 
 
 
-Room* Trigger::GetNextEvent()
+Base* Trigger::GetNextEvent()
 {
+    if (isDisabled()) return NULL;
+
+
     if (_masterTrigger == NULL)
     {
         // Check what type of event
@@ -116,6 +124,10 @@ Room* Trigger::GetNextEvent()
 
         case 'n':
             return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
+            break;
+
+        case 'm':
+            return new Textbox(0, 0, GetNewEventID(), 28, std::function<void()>(), room);
             break;
 
         default:
@@ -270,5 +282,30 @@ bool Trigger::IsColliding()
     else
     {
         return _masterTrigger->isColliding;
+    }
+}
+
+
+void Trigger::DisableMe()
+{
+    if (_masterTrigger == NULL)
+    {
+        active = false;
+    }
+    else
+    {
+        _masterTrigger->active = false;
+    }
+}
+
+bool Trigger::isDisabled()
+{
+    if (_masterTrigger == NULL)
+    {
+        return !active;
+    }
+    else
+    {
+        return !_masterTrigger->active;
     }
 }
