@@ -2,7 +2,6 @@ f	.data/fonts/calibri.ttf
 t	Welcome to the game!!!
 	````. `. `. `Let me tell you how to play!
 	``Press 'J' to continue the text
-q
 t	Move left and right using
 	'A' and 'D' respectively eh.
 t	And do it `````RESPECTFULLY too!!
