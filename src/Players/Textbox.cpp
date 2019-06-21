@@ -7,6 +7,9 @@
 
 
 // Variables eh
+#define FONT_NAME ".data/fonts/CATHSGBR.TTF"
+//#define FONT_NAME ".data/fonts/"
+
     // SPEED_DAMPER ---- slow breathing->300, worried->70||75, frightened->10
 #define SPEED_DAMPER 300.0f
     // WAVE_AMPLITUDE ---- slow breathing->2.5, worried->1.25, frightened->0.5
@@ -16,21 +19,52 @@
 #define EVERY_X_TICKS_NEW_WORD 20
 #define ALPHA_INCREASE 0.02f
 
-#define ENTER_TICKS 50
+#define ENTER_TICKS 25
 #define ENTER_MAX_YOFF 25
-#define EXIT_TICKS 50
+#define EXIT_TICKS 25
 #define EXIT_MAX_YOFF 50
 
 
 
-Textbox::Textbox(float x, float y, std::string text, int fontSize, const std::function<void()>& lambda, TestRoom* rm) : Object(0, 0, rm, false)
+Textbox::Textbox(float x, float y, std::vector<std::string> strings, int fontSize, const std::function<void()>& lambda, TestRoom* rm) : Object(0, 0, rm, false)
 {
     // Setup!
+    _strings = strings;
     _fontSize = fontSize;
     _lambda = lambda;
 
+    // Setup the first textbox!!!!
+    currentString = 0;
+    SetupTextbox(x, y, _strings.at(currentString));
+}
+
+Textbox::~Textbox()
+{
+    //dtor
+}
+
+
+void Textbox::SetupTextbox(float x, float y, std::string text)
+{
+    // Init start values
+    ticks = 0;
+    masterAlphaOff = 0;
+    masterYoff = 0;
+    exitTicks = -1;
+    exiting = false;
+
+    for (int i = 0; i < _renderingText.size(); i++)
+    {
+        delete _renderingText.at(i);
+    }
+    _textLines.clear();
+    _renderingText.clear();
+    _textAlpha.clear();
+
+
+
     // Open the font
-    TTF_Font* font = TTF_OpenFont(".data/fonts/CATHSGBR.TTF", _fontSize);
+    TTF_Font* font = TTF_OpenFont(FONT_NAME, _fontSize);
     if (font == nullptr)
     {
         printf("Font-texture could not initialize! TTF_Error: %s\n", TTF_GetError());
@@ -86,7 +120,7 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, const std::fu
 
 
     // Create the actual textbox bg.
-    height = fontSize * lines;      // Calc the height (width is already calc'd)
+    height = _fontSize * lines;      // Calc the height (width is already calc'd)
 
     // Add the padding
 //    x -= PADDING;
@@ -104,19 +138,26 @@ Textbox::Textbox(float x, float y, std::string text, int fontSize, const std::fu
     SetXY(x, y);
 }
 
-Textbox::~Textbox()
-{
-    //dtor
-}
+
+
+
+
 
 void Textbox::Update()
 {
+    // Setup the thing if wanted!!!
+    if (setupReq)
+    {
+        setupReq = false;
+        SetupTextbox(x, y, _strings.at(currentString));
+    }
+
     // Increase ticks and move thru the text!
     ticks++;
 
     // Check if exit textbox was pressed!
     if (InputManager::Instance().b1() &&
-        !execOnExit)        // <--- This makes it so that you can't 'resurrect' a dying textbox.h!!!
+        !exiting)        // <--- This makes it so that you can't 'resurrect' a dying textbox.h!!!
     {
         exitTicks = ticks;
     }
@@ -136,8 +177,7 @@ void Textbox::Render()
              ticks - exitTicks <= EXIT_TICKS &&
              ticks != exitTicks)        // <---- This makes it onKeyRelease eh!
     {
-        // You're exiting now.. (this func. only runs once then disallows another run)
-        OnExitRequest();
+        exiting = true;
 
         // Yeah!!! Now it's the reverse!
         masterAlphaOff = (float)(ticks - exitTicks) / EXIT_TICKS * -1.5f;   // Starts at zero and goes down to -1.5 eh!
@@ -146,8 +186,17 @@ void Textbox::Render()
     else if (exitTicks > ENTER_TICKS &&
              ticks - exitTicks > EXIT_TICKS)
     {
-        // You're invisible, let's delete yah!
-        done = true;        // <---- The garbage collecting variable eh.
+        // You're invisible, let's re-init or delete!!!!
+        currentString++;
+        if (currentString < _strings.size())
+        {
+            setupReq = true;
+        }
+        else
+        {
+            // You're quitting now...
+            OnExitRequest();
+        }
     }
 
 
@@ -237,18 +286,12 @@ bool Textbox::DeleteMe()
 
 void Textbox::OnExitRequest()
 {
-    if (execOnExit)
-    {
-        // Already run once eh.
-        return;
-    }
-
-    // Make it so can't be run again eh.
-    execOnExit = true;
-
     // Run that function!!!
     if (_lambda)
         _lambda();
     else
         printf("ERROR: no lambda was stored in message box!\n");
+
+    // Die
+    done = true;
 }

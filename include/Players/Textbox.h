@@ -11,7 +11,7 @@
 class Textbox : public Object
 {
     public:
-        Textbox(float x, float y, std::string text, int fontSize, const std::function<void()>& lambda, TestRoom* rm);
+        Textbox(float x, float y, std::vector<std::string> text, int fontSize, const std::function<void()>& lambda, TestRoom* rm);
         virtual ~Textbox();
 
         void Update();
@@ -26,7 +26,9 @@ class Textbox : public Object
     protected:
 
     private:
-        void OnExitRequest();       bool execOnExit = false;
+        void SetupTextbox(float x, float y, std::string text);                      bool setupReq = true;
+
+        void OnExitRequest();                                                       bool exiting = false;
         std::function<void()> _lambda;
 
 
@@ -39,9 +41,12 @@ class Textbox : public Object
 
         int exitTicks = -1;     // Will check if less than 0 first!
 
+        // For continuation of textboxes
+        int currentString;
+        std::vector<std::string> _strings;
 
+        // For current textbox
         int _fontSize;
-        std::string _rawText;
 
         std::vector<std::string> _textLines;
         std::vector<Quad*> _renderingText;
