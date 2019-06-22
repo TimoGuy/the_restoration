@@ -27,6 +27,12 @@ class CutsceneObject
     	CutsceneSprite* _image;        // So that animation is supported..
         int _x, _y;     // Only set these when an action has ended!
         int dx, dy;     // Any function can play w/ these...
+
+        float _angle;    // This is the rotation eh!
+        float dAngle;
+
+        float _scale;    // This is the scaling!
+        float dScale;
         std::vector<FuncPlusParams> functions;
 
 
@@ -43,8 +49,11 @@ class CutsceneObject
         // for every func., okay???
         void Move(int currentTick, int startTick, int endTick, std::string params);
         void MoveLerp(int currentTick, int startTick, int endTick, std::string params);
+        void Rotate(int currentTick, int startTick, int endTick, std::string params);
+        void Scale(int currentTick, int startTick, int endTick, std::string params);
         void SetCoords(int currentTick, int startTick, int endTick, std::string params);
         void WiggleX(int currentTick, int startTick, int endTick, std::string params);
+        void WiggleY(int currentTick, int startTick, int endTick, std::string params);
         void ChangeSprite(int currentTick, int startTick, int endTick, std::string params);
         void FadeIn(int currentTick, int startTick, int endTick, std::string params);
         void FadeOut(int currentTick, int startTick, int endTick, std::string params);

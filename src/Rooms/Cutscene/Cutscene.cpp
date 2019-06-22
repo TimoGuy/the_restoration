@@ -37,7 +37,12 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
             // DEBUG
             std::cout << line << '\n';
 
-
+            if (line.size() <= 0 ||         // If this is a blank line or is a comment, then ignore!
+                line.at(0) == '#')
+            {
+                // This is empty!
+                continue;
+            }
 
             // Check current mode
             if (line.at(0) == '\t')
@@ -163,6 +168,7 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
                             std::string token;
                             std::istringstream tokenStream(line);
 
+                            // Check if just whitespace
                             std::getline(tokenStream, token, '\t');     // '\t'
                             std::getline(tokenStream, token, '\t');     // Starttick!
                             std::istringstream(token) >> startTick;
@@ -365,7 +371,7 @@ void Cutscene::Update()
     ticks++;        // Since it's init'd as -1, this should be 0 now! (if first time)
 
     // Only update and render objects
-    for (int i = 0; i < objects.size(); i++)
+    for (int i = objects.size() - 1; i >= 0; i--)
     {
         objects.at(i)->Update(ticks);
     }
@@ -373,6 +379,8 @@ void Cutscene::Update()
 
 void Cutscene::Render()
 {
+    printf("Ticks in cutscene: %i\n", ticks);
+
     // Reset trans. matrix
     glLoadIdentity();
 
