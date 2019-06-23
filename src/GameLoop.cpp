@@ -14,6 +14,7 @@
 
 #include <iostream>
 
+std::string prevInputCode;
 
 
 // Init game variables
@@ -72,36 +73,46 @@ bool GameLoop::Execute()
 
 
         // FOR DEBUG: check if the room needs to be reloaded
-        if (InputManager::Instance().reloadRoom())		// This is a check, but after 1 check the inside variable turns off, so no worries.
+        if (InputManager::Instance().reloadResource())		// This is a check, but after 1 check the inside variable turns off, so no worries.
         {
-            // EDIT: Make it so that you can change the level to test using <iostream>
-            std::cout << "Please enter the new level\'s name: ";
-            std::string newLvl;
-            std::getline(std::cin, newLvl);
-            if (!newLvl.empty())
-                // Load the level eh
-                SetRoom(new TestRoom(newLvl.c_str(), this));
-            else
-                printf("ERROR: Level name was empty!!\n");
+            // EDIT: Make it so that you can change the resource to test using <iostream>
+            std::cout << "Please enter the new resource\'s name\n(Press enter to reload \"" << prevInputCode.c_str() << "\"): ";
+            std::string newRes;
+            std::getline(std::cin, newRes);
+            if (newRes.empty())
+            {
+                // Try loading the previous one!
+                if (prevInputCode.empty())
+                    printf("ERROR: Resource name was empty!!\n");
+                else
+                {
+                    // Prep for loading the resource
+                    newRes = prevInputCode;
+                }
+            }
+
+
+            // So, did the new resource actually get filled?
+            if (!newRes.empty())
+            {
+                // Load the filled data!!!
+                switch (newRes.at(0))
+                {
+                    case 'n':
+                        // Load the level eh
+                        SetRoom(new TestRoom(newRes.c_str(), this));
+                        break;
+
+                    case 'c':
+                        // Cutscene time!!!
+                        SetRoom(new Cutscene(newRes.c_str(), this));
+                        break;
+                }
+
+                // For the next time!!!
+                prevInputCode = newRes;
+            }
         }
-
-        // FOR DEBUG: check if player wants to trigger a cutscene
-        if (InputManager::Instance().reloadCutscene())		// This is a check, but after 1 check the inside variable turns off, so no worries.
-        {
-            // EDIT: Make it so that you can change the level to test using <iostream>
-            std::cout << "Please enter the cutscene\'s name: ";
-            std::string newCut;
-            std::getline(std::cin, newCut);
-            if (!newCut.empty())
-                // Cutscene time!!!
-                SetRoom(new Cutscene(newCut.c_str(), this));
-            else
-                printf("ERROR: Cutscene name was empty!!\n");
-        }
-
-
-
-
 
 
 

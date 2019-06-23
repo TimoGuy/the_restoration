@@ -9,24 +9,14 @@
 #include <cmath>
 #include <algorithm>
 
-bool InputManager::reloadRoom()
+bool InputManager::reloadResource()
 {
-	if (_reloadRoom)
+	if (_reloadRes)
 	{
-		_reloadRoom = false;
+		_reloadRes = false;
 		return true;
 	}
-	return _reloadRoom;
-}
-
-bool InputManager::reloadCutscene()
-{
-	if (_reloadCutscene)
-	{
-		_reloadCutscene = false;
-		return true;
-	}
-	return _reloadCutscene;
+	return _reloadRes;
 }
 
 
@@ -143,11 +133,7 @@ void InputManager::ProcessInput(GameLoop* g)
                     break;
 
 				case SDLK_r:
-					_reloadRoom = true;		// FOR DEBUG: there's no keyup event, btw.
-					break;
-
-				case SDLK_c:
-					_reloadCutscene = true;		// FOR DEBUG: there's no keyup event, btw.
+					_reloadRes = true;		// FOR DEBUG: there's no keyup event, btw.
 					break;
                 }
             }

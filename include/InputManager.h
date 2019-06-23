@@ -29,8 +29,7 @@ class InputManager
         const bool& b1() const { return _b1; }
 		const bool& b2() const { return _b2; }
 
-		bool reloadRoom();	// It's not const bc that way the variable inside can be turned off after 1 call to this function!
-        bool reloadCutscene();
+		bool reloadResource();	// It's not const bc that way the variable inside can be turned off after 1 call to this function!
 
     protected:
 
@@ -52,8 +51,7 @@ class InputManager
         bool _b2 = false;       // Dash or Jump?? (I dont really know...)
 
 		// TEST: For debugging
-		bool _reloadRoom = false;	// This is the 'r' button which will trigger a 'reload the room' signal
-        bool _reloadCutscene = false;
+		bool _reloadRes = false;	// This is the 'r' button which will trigger a 'reload the room' signal
 
 
         // Well, I only use these functions eh.

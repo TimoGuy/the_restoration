@@ -19,4 +19,4 @@ o	2	0,0
 	720	770	fade-in
 	1000	1000	exit-cutscene	c_w1FellOnMarshmallows
 # There needs to be time-space for that big thud!!
-# The thud should sound at 810 or 820 ticks!!!!
+# The thud should sound at 850 ticks!!!!
