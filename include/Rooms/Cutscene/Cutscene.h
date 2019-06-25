@@ -14,13 +14,19 @@
 // Reaction is so that you do a run() on this thing, and plug it into a TRIGGER.
 
 
+#ifdef __unix__
 #include "Rooms/Room.h"
 #include "CutsceneSprite.h"
-class CutsceneObject;
 #include "GameLoop.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../Room.h"
+#include "CutsceneSprite.h"
+#include "../../GameLoop.h"
+#endif
 
 #include <vector>
 
+class CutsceneObject;
 
 class Cutscene : public Room//, public Reaction
 {

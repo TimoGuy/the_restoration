@@ -7,6 +7,7 @@
 #include "InputManager.h"
 #include "Textbox.h"
 #include "defs.h"
+#include <SDL2/SDL_ttf.h>
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
@@ -14,10 +15,11 @@
 #include "../../include/Players/Trigger.h"
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/InputManager.h"
+#include "../../include/Players/Textbox.h"
 #include "../../include/defs.h"
+#include <SDL_ttf.h>
 #endif
 
-#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <cmath>
 #include <algorithm>

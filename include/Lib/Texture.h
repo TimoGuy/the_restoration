@@ -6,6 +6,7 @@
 #elif defined(_WIN32) || defined(WIN32)
 //#include <GL/wglew.h>
 #include <SDL_opengl.h>
+#include <SDL_ttf.h>
 #endif
 
 #include <string>

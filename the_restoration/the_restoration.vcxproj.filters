@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Shape">
       <UniqueIdentifier>{c1a60771-985e-48f4-a112-e504bafa650b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rooms\Cutscene">
+      <UniqueIdentifier>{6adaa4b6-6525-4680-b984-3728019f87c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rooms\Cutscene">
+      <UniqueIdentifier>{9e728549-b043-4051-9b67-0c825f7b8383}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\defs.h">
@@ -72,9 +78,6 @@
     <ClInclude Include="..\include\Players\Ground.h">
       <Filter>Header Files\Players</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Players\Exit.h">
-      <Filter>Header Files\Players</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Lib\stb_image.h">
       <Filter>Header Files\Lib</Filter>
     </ClInclude>
@@ -96,13 +99,28 @@
     <ClInclude Include="..\include\Players\MovingPlatGround.h">
       <Filter>Header Files\Players</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Players\Textbox.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Players\Trigger.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Rooms\Cutscene\Cutscene.h">
+      <Filter>Header Files\Rooms\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Rooms\Cutscene\CutsceneObject.h">
+      <Filter>Header Files\Rooms\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Rooms\Cutscene\CutsceneSprite.h">
+      <Filter>Header Files\Rooms\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Lib\Texture.cpp">
       <Filter>Source Files\Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Players\Exit.cpp">
-      <Filter>Source Files\Players</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Players\Ground.cpp">
       <Filter>Source Files\Players</Filter>
@@ -153,6 +171,21 @@
       <Filter>Source Files\Players</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Players\MovingPlatGround.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Rooms\Cutscene\Cutscene.cpp">
+      <Filter>Source Files\Rooms\Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Rooms\Cutscene\CutsceneObject.cpp">
+      <Filter>Source Files\Rooms\Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Rooms\Cutscene\CutsceneSprite.cpp">
+      <Filter>Source Files\Rooms\Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\Textbox.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\Trigger.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>

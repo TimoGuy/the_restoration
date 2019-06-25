@@ -5,6 +5,7 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/defs.h"
+#include "../../include/Rooms/TestRoom.h"
 #endif
 
 #include <stdio.h>
