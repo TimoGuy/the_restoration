@@ -11,6 +11,7 @@
 #include "Entity.h"
 #include "TestGameObj.h"
 #include "TestEnemy.h"
+#include "Npc.h"
 
 
 #elif defined(_WIN32) || defined(WIN32)
@@ -26,6 +27,7 @@
 #include "../include/Players/Entity.h"
 #include "../include/Players/TestGameObj.h"
 #include "../include/Players/TestEnemy.h"
+#include "../include/Players/Npc.h"
 #endif
 
 #include <stdio.h>
@@ -51,6 +53,8 @@ enum StringValue
 	evEnemy1,
 
 	evMovingPlatGround,
+
+	evNpc,
 
     evEnd
 };
@@ -78,6 +82,7 @@ ObjectFactory::ObjectFactory()
     (*s_mapStringValues)["100,100,100"] = evTopSideCollGround;
     (*s_mapStringValues)["255,174,201"] = evEnemy1;
     (*s_mapStringValues)["136,0,21"] = evMovingPlatGround;
+	(*s_mapStringValues)["239,228,176"] = evNpc;
     (*s_mapStringValues)["end"] = evEnd;
 
     printf("Init Object map!!\n");
@@ -177,6 +182,10 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* r
 			// Extend the current moving platform!
 			((MovingPlatGround*)previousObj)->Extend1BlockToTheRight(gx, gy);
 		}
+		break;
+
+	case evNpc:
+		retObj = new Npc(gx, gy, rm);
 		break;
 
     default:
