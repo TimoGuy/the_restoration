@@ -227,7 +227,7 @@ void Trigger::SetupSlaveRecur(int gx, int gy)
 
 void Trigger::SetMasterTriggerAndSetSlave(Trigger* masterTrig)
 {
-    printf("\tslave in trigger-group found!\n");
+    //printf("\tslave in trigger-group found!\n");
     _masterTrigger = masterTrig;
     _nextEventID = "";
     _isJustTouchToTrigger = masterTrig->_isJustTouchToTrigger;

@@ -1,7 +1,12 @@
 #pragma once
 
+#ifdef __unix__
 #include "Object.h"
 #include "Textbox.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../Object.h"
+#include "Textbox.h"
+#endif
 
 class Npc : public Object
 {
@@ -12,7 +17,7 @@ class Npc : public Object
         void Update();
         void Render();
 
-        bool IsColliding(BoundBox* box) { }
+		bool IsColliding(BoundBox* box) { return false; }
 
     protected:
     	Quad* image;

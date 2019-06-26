@@ -12,7 +12,7 @@
 Ground::Ground(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, true)
 {
     // Init
-    printf("Ground built!\n");
+    //printf("Ground built!\n");
     image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/ground_test.png"), STBI_rgb_alpha));
 
     // Add to collision map

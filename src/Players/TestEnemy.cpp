@@ -14,7 +14,7 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 	: Entity(gx, gy, rm)
 {
 	// Init
-	printf("Enemy built!\n");
+	//printf("Enemy built!\n");
 	image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/enemy_test.png"), STBI_rgb_alpha));
 	life = 1;   // 0 is ded.
 }

@@ -1,4 +1,8 @@
+#ifdef __unix__
 #include "Npc.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Players/Npc.h"
+#endif
 
 Npc::Npc(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, false)
 {
@@ -19,12 +23,30 @@ Npc::~Npc()
 
 void Npc::Update()
 {
-
+	if (tBox != NULL)
+		tBox->Update();
 }
 
 void Npc::Render()
 {
+	glColor4f(1, 1, 1, 1);
+
     image->Render(x, y);
+
+	if (tBox != NULL)
+	{
+		tBox->SetXY(x, y - 100);
+
+		tBox->Render();
+		if (tBox->DeleteMe())
+		{
+			delete tBox;
+			tBox = NULL;
+		}
+	}
+
+	// Reset color!
+	glColor4f(1, 1, 1, 1);
 }
 
 void Npc::OnTextboxFinish()

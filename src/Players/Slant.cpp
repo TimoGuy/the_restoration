@@ -15,7 +15,7 @@
 Slant::Slant(int gx, int gy, TestRoom* rm, bool isLeft) : Object(gx, gy, rm, true)
 {
     //ctor
-    printf("Slant built!\n");
+    //printf("Slant built!\n");
 	originalGy = gy;		// If when extending this isn't correct, then we know it's wrapped around
 	_isLeft = isLeft;
 	_blocks = 1;
@@ -128,7 +128,7 @@ void Slant::Extend1BlockToTheRight(int newGx, int newGy)
 		// Not gonna happen
 		return;
 
-	printf("\tSlant was extended by 1!!\n");
+	//printf("\tSlant was extended by 1!!\n");
 
 	// Move the right point to the right more
 	_blocks++;

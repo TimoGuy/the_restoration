@@ -1,0 +1,22 @@
+s	1500,648	images/falling_player.png
+s	512,512	images/earth.png
+s	1024,576	images/black.png
+o	0	250,-100
+	0	0	rotate	30
+	320	420	move-lerp	-640,-580	1.5
+	100	1100	wiggle-y	10	10
+	100	877	wiggle-x	20	13
+	550	550	delete-self
+o	1	294,70
+	0	0	fade-out
+	0	0	scale	0.85
+	550	550	fade-in
+	550	1720	move	128,-96
+	550	1720	scale	1.5
+	550	770	wiggle-x	4	111
+o	2	0,0
+	100	200	fade-out
+	720	770	fade-in
+	1000	1000	exit-cutscene	c_w1FellOnMarshmallows
+# There needs to be time-space for that big thud!!
+# The thud should sound at 850 ticks!!!!

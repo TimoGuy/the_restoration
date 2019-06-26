@@ -10,7 +10,7 @@
 Hazard::Hazard(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, false)
 {
     // Init
-    printf("Hazard built!\n");
+    //printf("Hazard built!\n");
     image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/hazard_test.png"), STBI_rgb_alpha));
 
     // Add to collision map

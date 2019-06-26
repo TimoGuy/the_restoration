@@ -1,0 +1,12 @@
+f	.data/fonts/calibri.ttf
+t	Good Morning!!!!
+	````Well, we're almost done for the day. `. `.
+t	. `. `.
+t	You had the nightmare again, didn't you.
+t	It's fine.
+t	How about you go and shear the sheep today?
+	`````Today `. `. `.  they're in the mountains to the east.
+	`````Yeah.
+t	The shears are in the shed next to their flock, eh.
+t	We're gonna go into town today, so go ahead and
+	just get your mind clear and have an easy day.
