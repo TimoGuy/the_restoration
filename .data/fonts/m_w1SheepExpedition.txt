@@ -1,0 +1,7 @@
+f	.data/fonts/calibri.ttf
+t	Go to the left where the back
+	of the pod is . . .  and you want
+	to jump off.
+t	The engine propulsion will send you
+	towards the place where I am
+t	Go `````without your girlfriend too
