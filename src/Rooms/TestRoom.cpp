@@ -253,13 +253,59 @@ void TestRoom::Update()
     {
         camY = std::max(0, std::min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
     }
+
+	
+	// Offset the camera!!!
+#define CAM_MOVE_MULTIPLIER 15
+#define CAM_SCALE_MULTIPLIER 0.05f
+	if (InputManager::Instance().b3())
+	{
+		// Move!!!!
+		camOffX += InputManager::Instance().x() / camScale * CAM_MOVE_MULTIPLIER;
+		camOffY += InputManager::Instance().y() / camScale * CAM_MOVE_MULTIPLIER;
+
+		// Scale!!
+		if (InputManager::Instance().b1())
+		{
+			camScale -= CAM_SCALE_MULTIPLIER;	// Zoom out
+		}
+		else if (InputManager::Instance().b2())
+		{
+			camScale += CAM_SCALE_MULTIPLIER;	// Zoom in
+		}
+
+		camScale = std::max(0.01f, camScale);
+	}
+	else
+	{
+		// Reset the camera since you let go of manipulation button
+		camOffX = camOffY = 0;
+		camScale = 1;
+	}
+
+	// Update the camera
+	camX += camOffX;
+	camY += camOffY;
 }
 
 void TestRoom::Render()
 {
-    // Set the camera
     glLoadIdentity();
-    glTranslatef(-camX, -camY, 0.0f);
+
+    // Set the camera's zoom
+	{
+		float doX = camX + (SCREEN_WIDTH / 2);
+		float doY = camY + (SCREEN_HEIGHT / 2);
+		glScalef(camScale, camScale, camScale);
+		glTranslatef(-doX, -doY, 0.0f);
+	}
+
+	// Set camera position
+	//glTranslatef(-camX, -camY, 0.0f);
+	glTranslatef(SCREEN_WIDTH / 2 / camScale, SCREEN_HEIGHT / 2 / camScale, 0);
+
+
+
 
     // Call a render for everyone!
     for (int it = 0; it < gameObjects.size(); ++it)

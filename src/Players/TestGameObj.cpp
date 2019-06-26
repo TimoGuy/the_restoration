@@ -77,12 +77,22 @@ TestGameObj::~TestGameObj()
 void TestGameObj::Update()
 {
 	// Adjust according to input
-    if (GameLoop::sawTutorial)
+	float inputX = 0;
+	bool inputJump = false;
+
+    if (GameLoop::sawTutorial &&
+		!InputManager::Instance().b3())
     {
-        hsp += InputManager::Instance().x();
+        inputX = InputManager::Instance().x();
+		inputJump = InputManager::Instance().b2();
 	}
 
-	if (InputManager::Instance().x() == 0 &&
+
+
+	// Add the input val if it was given!
+	hsp += inputX;
+
+	if (inputX == 0 &&
         hsp != 0)
 	{
         if (abs(hsp) < FRICTION) { hsp = 0; }
@@ -98,12 +108,12 @@ void TestGameObj::Update()
 
 
     // Jump!
-	if (InputManager::Instance().b2() && numJumps > 0 && !wasJumpBtnAlreadyPressed)
+	if (inputJump && numJumps > 0 && !wasJumpBtnAlreadyPressed)
 	{
         vsp = -JUMP_HEIGHT - nerfer;
 		numJumps--;
     }
-	wasJumpBtnAlreadyPressed = InputManager::Instance().b2();
+	wasJumpBtnAlreadyPressed = inputJump;
 
     // Gravity!
     vsp += GRAV;

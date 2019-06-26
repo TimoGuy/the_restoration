@@ -59,4 +59,7 @@ class TestRoom : public Room
         // For the camera
         float camX = 0, camY = 0;   // Make this the same coords as the player!
         Object* camFocusObj = NULL;        // This is the pointer to the player, eh!
+		float camOffX = 0,						// For moving the cam manually
+			camOffY = 0;
+		float camScale = 1;						// For setting size of cam view
 };

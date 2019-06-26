@@ -28,6 +28,7 @@ class InputManager
         const float& y() const { return _y; }
         const bool& b1() const { return _b1; }
 		const bool& b2() const { return _b2; }
+		const bool& b3() const { return _b3; }
 
 		bool reloadResource();	// It's not const bc that way the variable inside can be turned off after 1 call to this function!
 
@@ -49,6 +50,7 @@ class InputManager
         // Next: action buttons
         bool _b1 = false;       // Attack or Action
         bool _b2 = false;       // Dash or Jump?? (I dont really know...)
+		bool _b3 = false;		// Look around (hold to look around the level eh)
 
 		// TEST: For debugging
 		bool _reloadRes = false;	// This is the 'r' button which will trigger a 'reload the room' signal
