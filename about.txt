@@ -237,3 +237,27 @@ x-You can jump on HAZARDS if you hold a.
 will operate on the 't_' flag in the level's code.
 -Make better neighbor calculations for the big 'triggers' object, so that they can join
 together when adjacent from each other.
+
+
+
+
+
+
+--PLANNING--
+
+-npcs
+	-You'd have to be able to enter them in, but for now, they need to be able to
+		-have their x and y coords be manipulatible
+		-as well as hsp and vsp values
+		-NO COLLISION IS NECESSARY
+		-have support for textboxes
+		-can change their sprite and animate
+	-This should be coded just like the cutscene.h, that way it'll be really easy.
+		-And this can all be in the 'NPC' class, I suppose,
+			-And when it's done acting out, we can just have it have code to change
+			 into an enemy or whatever.
+			-And if desired, keep the NPC object and say 'onAllObjectsDeleted()', if
+			 it spat out an enemy, and then have the NPC encaser reappear and do some cut
+			 scene before actually disappearing eh!
+
+-But for now, it will just be a hard-coded not fancy at all example eh.

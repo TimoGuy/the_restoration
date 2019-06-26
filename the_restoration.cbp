@@ -64,6 +64,7 @@
 		<Unit filename="include/Players/Ground.h" />
 		<Unit filename="include/Players/Hazard.h" />
 		<Unit filename="include/Players/MovingPlatGround.h" />
+		<Unit filename="include/Players/Npc.h" />
 		<Unit filename="include/Players/Slant.h" />
 		<Unit filename="include/Players/TestEnemy.h" />
 		<Unit filename="include/Players/TestGameObj.h" />
@@ -90,6 +91,7 @@
 		<Unit filename="src/Players/Ground.cpp" />
 		<Unit filename="src/Players/Hazard.cpp" />
 		<Unit filename="src/Players/MovingPlatGround.cpp" />
+		<Unit filename="src/Players/Npc.cpp" />
 		<Unit filename="src/Players/Slant.cpp" />
 		<Unit filename="src/Players/TestEnemy.cpp" />
 		<Unit filename="src/Players/TestGameObj.cpp" />
