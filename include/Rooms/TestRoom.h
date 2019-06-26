@@ -31,6 +31,7 @@ class TestRoom : public Room
         int getGHeight() { return gHeight; }
 
 		void ScreenTransition(const std::function<void()>& lambda, SDL_Color fadeOutColor={ 0, 0, 0, 1 });			// This just does the fade out, then runs the lambda eh
+		void ScreenFadeIn(SDL_Color fadeOutColor={ 0, 0, 0, 1 });
 
         void Update();
         void Render();
@@ -51,6 +52,7 @@ class TestRoom : public Room
 		std::vector<std::function<void()>> scrTransLambdas;
 		SDL_Color scrTransColor;
 		int fadeOutTimer = -1;			// -1 means do nothing
+		int fadeInTimer = -1;			// Fade out means screen goes black, fade in is fades into the game screen eh!
 
 
         // Level-loading

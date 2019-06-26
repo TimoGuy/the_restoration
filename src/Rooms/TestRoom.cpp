@@ -33,6 +33,12 @@
 
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
+	// You want a fade-in there boi???
+	if (fadeIn)
+	{
+		ScreenFadeIn(fadeInColor);		// Here you go!
+	}
+
     // Tear down all the objects in the object list
 	for (int it = 0; it != gameObjects.size(); ++it)
 	{
@@ -222,6 +228,16 @@ void TestRoom::ScreenTransition(const std::function<void()>& lambda, SDL_Color f
 	fadeOutTimer = FADE_IN_OUT_TICKS;
 }
 
+void TestRoom::ScreenFadeIn(SDL_Color fadeOutColor)
+{
+	if (screenTransition == NULL)
+		screenTransition = new Quad(SCREEN_WIDTH, SCREEN_HEIGHT);
+	scrTransColor = fadeOutColor;
+
+	// Same drill!
+	fadeInTimer = FADE_IN_OUT_TICKS;
+}
+
 
 
 
@@ -369,6 +385,21 @@ void TestRoom::Render()
 			// again until someone takes the fadeOutTimer and
 			// sets it to some number again.
 		}
+	}
+	else if (fadeInTimer >= 0)
+	{
+		// Reset stuff!
+		glLoadIdentity();
+
+		// Screen will turn from black (or the color eh) to clear
+		float alpha = fadeInTimer / (float)FADE_IN_OUT_TICKS;
+
+		// Render!!!
+		glColor4f(scrTransColor.r / 255.0f, scrTransColor.g / 255.0f, scrTransColor.b / 255.0f, alpha);
+		screenTransition->Render(0, 0);
+
+		// Tick!
+		fadeInTimer--;
 	}
 }
 
