@@ -51,8 +51,8 @@ class TestRoom : public Room
 		Quad* screenTransition;			// This will be a fade in AND out thing, okay?
 		std::vector<std::function<void()>> scrTransLambdas;
 		SDL_Color scrTransColor;
-		int fadeOutTimer = -1;			// -1 means do nothing
-		int fadeInTimer = -1;			// Fade out means screen goes black, fade in is fades into the game screen eh!
+		int fadeOutTimer = -100;			// -100 means do nothing
+		int fadeInTimer = -100;			// Fade out means screen goes black, fade in is fades into the game screen eh!
 
 
         // Level-loading

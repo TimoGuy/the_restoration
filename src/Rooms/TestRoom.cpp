@@ -353,7 +353,7 @@ void TestRoom::Render()
 
 
 	// If there's a screen transition, do it!
-	if (fadeOutTimer >= 0)
+	if (fadeOutTimer >= -1)						// The -1 is so that while it's 0 the GameLoop actually gets to get up to GL_Swap()
 	{
 		// Reset stuff!
 		glLoadIdentity();
@@ -368,7 +368,7 @@ void TestRoom::Render()
 		fadeOutTimer--;
 
 		// Check if complete!
-		if (fadeOutTimer < 0)		// So it was just at 0, then ticked down to -1 (theoretically), it is complete.
+		if (fadeOutTimer < -1)		// So it was just at -1, then ticked down to -2 (theoretically), it is complete.
 		{
 			// Just run all the lambdas, don't quit!! Be made quit!!
 			for (int i = scrTransLambdas.size() - 1; i >= 0; i--)
@@ -386,7 +386,7 @@ void TestRoom::Render()
 			// sets it to some number again.
 		}
 	}
-	else if (fadeInTimer >= 0)
+	else if (fadeInTimer >= 0)			// There's no heavy lambdas being executed here, so 0's just fine!
 	{
 		// Reset stuff!
 		glLoadIdentity();

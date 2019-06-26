@@ -172,15 +172,18 @@ void TestGameObj::Update()
 				if (trig->IsDesiringToTrigger())
 				{
                     // Trigger the next event eh
-                    Base* nextEv = trig->GetNextEvent();
+                    std::string evType = trig->GetNewEventID();
 
-                    if (dynamic_cast<Room*>(nextEv) != NULL)
+                    if (evType.at(0) == 'n' ||
+						evType.at(0) == 'c')
                     {
                         // Go to that next room!!!!!
-						auto rmTransLambda = [&](void)
+						Room* _room = room;
+						auto rmTransLambda = [_room, trig](void)
 						{
 							// Switch rooms!
-							room->GetGameLoop()->SetRoom((Room*)nextEv);
+							Room* nextEv = (Room*)trig->GetNextEvent();		// Load the room!
+							_room->GetGameLoop()->SetRoom(nextEv);
 
 							// See if can do another screen transition (only for game rooms)
 							if (dynamic_cast<TestRoom*>(nextEv) != NULL)
@@ -188,11 +191,11 @@ void TestGameObj::Update()
 						};
 						room->ScreenTransition(rmTransLambda);
                     }
-                    else if (dynamic_cast<Textbox*>(nextEv) != NULL)
+                    else if (evType.at(0) == 'm')
                     {
                         // Set up a textbox!!!
                         if (pf.size() == 0)
-                            pf.push_back((Textbox*)nextEv);
+                            pf.push_back((Textbox*)trig->GetNextEvent());
 					}
 
 					// To make sure that the trigger doesn't do anything funky!
