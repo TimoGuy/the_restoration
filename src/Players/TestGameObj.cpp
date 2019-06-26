@@ -165,19 +165,20 @@ void TestGameObj::Update()
 			// Check for exits
 			else if (dynamic_cast<Trigger*>(tempCollisions.at(i)) != NULL)
 			{
-				Trigger* trig = (Trigger*)tempCollisions.at(i);
+				//Trigger* trig = ((Trigger*)tempCollisions.at(i));
 
 				// Already determined we're colliding, so...
 				// See if it wants to trigger
-				if (trig->IsDesiringToTrigger())
+				if (((Trigger*)tempCollisions.at(i))->IsDesiringToTrigger())
 				{
                     // Trigger the next event eh
-                    Base* nextEv = trig->GetNextEvent();
+                    Base* nextEv = ((Trigger*)tempCollisions.at(i))->GetNextEvent();
 
                     if (dynamic_cast<Room*>(nextEv) != NULL)
                     {
                         // Go to that next room!!!!!
-						auto rmTransLambda = [&](void)
+						Room* rm = room;
+						auto rmTransLambda = [rm, nextEv](void)
 						{
 							// See if can do another screen transition (only for game rooms)
 							if (dynamic_cast<TestRoom*>(nextEv) != NULL)
@@ -187,7 +188,7 @@ void TestGameObj::Update()
 							}
 
 							// Switch rooms!
-							room->GetGameLoop()->SetRoom((Room*)nextEv);
+							rm->GetGameLoop()->SetRoom((Room*)nextEv);
 						};
 						room->ScreenTransition(rmTransLambda);
                     }
@@ -199,7 +200,7 @@ void TestGameObj::Update()
 					}
 
 					// To make sure that the trigger doesn't do anything funky!
-					trig->DisableMe();
+					((Trigger*)tempCollisions.at(i))->DisableMe();
 				}
 			}
 
