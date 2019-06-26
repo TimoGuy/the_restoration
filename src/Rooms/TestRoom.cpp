@@ -72,8 +72,8 @@ TestRoom::~TestRoom()
 
 void TestRoom::Initialize()
 {
-	// Don't run if not set up yet!!!
-	if (!isInitd)
+	// Don't run if already set up!!!
+	if (isInitd)
 	{
 		printf("ERROR: Level is not setup yet!\n\tCall Initialize()\n");
 		return;
