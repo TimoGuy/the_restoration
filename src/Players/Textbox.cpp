@@ -268,6 +268,8 @@ void Textbox::Update()
 		{
 			OnExitRequest();	// This means I quit, but once I'm hidden this will execute
 			// NOTE: this will also run this textbox's lambda too!
+
+			room->ScreenFadeIn();
 		};
 		room->ScreenTransition(skipLambda);
 	}

@@ -113,35 +113,27 @@ bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the varia
 
 Base* Trigger::GetNextEvent()
 {
-    if (isDisabled()) return NULL;
+    //if (isDisabled()) return NULL;
 
 
-    if (_masterTrigger == NULL)
+    // Check what type of event
+    switch (GetNewEventID().at(0))
     {
-        // Check what type of event
-        switch (GetNewEventID().at(0))
-        {
-        case 'c':
-            return new Cutscene(GetNewEventID(), room->GetGameLoop());
-            break;
+    case 'c':
+        return new Cutscene(GetNewEventID(), room->GetGameLoop());
+        break;
 
-        case 'n':
-            return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
-            break;
+    case 'n':
+        return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
+        break;
 
-        case 'm':
-            return new Textbox(0, 0, GetNewEventID(), 28, std::function<void()>(), room);
-            break;
+    case 'm':
+        return new Textbox(0, 0, GetNewEventID(), 28, std::function<void()>(), room);
+        break;
 
-        default:
-            return NULL;
-            break;
-        }
-    }
-    else
-    {
-        // If a slave, all info is pulled from master.
-        return _masterTrigger->GetNextEvent();
+    default:
+        return NULL;
+        break;
     }
 }
 
@@ -171,6 +163,9 @@ bool Trigger::IsColliding(BoundBox* box)
 
 bool Trigger::IsDesiringToTrigger()
 {
+	if (isDisabled())
+		return false;
+
 	return _isJustTouchToTrigger ||
 		(!_prevHadUpPressed && _isUpPressed);
 }
@@ -241,7 +236,14 @@ void Trigger::SetMasterTriggerAndSetSlave(Trigger* masterTrig)
 
 std::string Trigger::GetNewEventID()
 {
-	return _nextEventID;
+	if (_masterTrigger == NULL)
+	{
+		return _nextEventID;
+	}
+	else
+	{
+		return _masterTrigger->GetNewEventID();
+	}
 }
 
 
