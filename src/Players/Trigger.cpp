@@ -124,7 +124,7 @@ Base* Trigger::GetNextEvent()
         break;
 
     case 'n':
-        return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
+        return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY, false);	// Do retroactive loading for this ol' buddy!
         break;
 
     case 'm':

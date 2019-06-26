@@ -179,12 +179,15 @@ void TestGameObj::Update()
                         // Go to that next room!!!!!
 						auto rmTransLambda = [&](void)
 						{
-							// Switch rooms!
-							room->GetGameLoop()->SetRoom((Room*)nextEv);
-
 							// See if can do another screen transition (only for game rooms)
 							if (dynamic_cast<TestRoom*>(nextEv) != NULL)
+							{
+								((TestRoom*)nextEv)->Initialize();		// Set it up if it's a testroom!!!!
 								((TestRoom*)nextEv)->ScreenFadeIn();
+							}
+
+							// Switch rooms!
+							room->GetGameLoop()->SetRoom((Room*)nextEv);
 						};
 						room->ScreenTransition(rmTransLambda);
                     }

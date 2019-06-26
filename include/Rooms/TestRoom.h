@@ -20,8 +20,10 @@
 class TestRoom : public Room
 {
     public:
-        TestRoom(std::string name, GameLoop* gloop, int playerGX=-1, int playerGY=-1, bool fadeIn=false, SDL_Color fadeInColor={ 0, 0, 0, 1 });
+        TestRoom(std::string name, GameLoop* gloop, int playerGX=-1, int playerGY=-1, bool preload=true, bool fadeIn=false, SDL_Color fadeInColor={ 0, 0, 0, 1 });
         ~TestRoom();
+
+		void Initialize();		// This takes the first-initialized values and actually loads the level!! (only really works if preload=false in constructor)
 
 
         Object** getCollisionMap() { return collisionMap; }
@@ -64,6 +66,10 @@ class TestRoom : public Room
 		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
         static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename (w/out the 'n_')), and the directory of the levels!
 
+		// ONLY for afterloading eh!!!	(Preloading, you don't have to worry!!!)
+		bool isInitd = false;
+		std::string _l_name;
+		int _l_playerGX, _l_playerGY;
 
 
 

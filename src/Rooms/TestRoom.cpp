@@ -31,7 +31,7 @@
 #define FADE_IN_OUT_TICKS 20
 
 
-TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
+TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool preload, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
 	// You want a fade-in there boi???
 	if (fadeIn)
@@ -39,7 +39,50 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 		ScreenFadeIn(fadeInColor);		// Here you go!
 	}
 
-    // Tear down all the objects in the object list
+	// Get ready for loading the file!!!
+	_l_name = name;
+	_l_playerGX = playerGX;
+	_l_playerGY = playerGY;
+
+	if (preload)
+	{
+		Initialize();		// Set it up!!!
+	}
+}
+
+
+
+
+
+TestRoom::~TestRoom()
+{
+	// Tear down all the objects in the object list
+	// (no need for the entity list to be touched eh)
+	for (int it = 0; it != gameObjects.size(); ++it)
+	{
+		delete gameObjects.at(it);
+	}
+	gameObjects.clear();
+
+	delete screenTransition;
+}
+
+
+
+
+void TestRoom::Initialize()
+{
+	// Don't run if not set up yet!!!
+	if (!isInitd)
+	{
+		printf("ERROR: Level is not setup yet!\n\tCall Initialize()\n");
+		return;
+	}
+
+	// Okay, now do some good here!!!
+	isInitd = true;
+
+	// Tear down all the objects in the object list
 	for (int it = 0; it != gameObjects.size(); ++it)
 	{
 		delete gameObjects.at(it);
@@ -54,7 +97,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 	// TEST CODE to load a level
 	bool success;
-	success = LoadLevelIO(name);
+	success = LoadLevelIO(_l_name);
 
 	if (!success)
 	{
@@ -76,126 +119,111 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 			gameObjects.push_back(camFocusObj);
 			printf("\n\n\n\t\tPlayer was pushed_back() and level is loaded!!!\n");
 
-			if (playerGX >= 0 && playerGY >= 0)
+			if (_l_playerGX >= 0 && _l_playerGY >= 0)
 			{
-                // Change the coords
-                ((TestGameObj*)camFocusObj)->SetGridCoords(playerGX, playerGY);
-                ((TestGameObj*)camFocusObj)->UpdateStartCoords();
-                printf("\t\t\tPlayer set to custom coords %i,%i\n", playerGX, playerGY);
+				// Change the coords
+				((TestGameObj*)camFocusObj)->SetGridCoords(_l_playerGX, _l_playerGY);
+				((TestGameObj*)camFocusObj)->UpdateStartCoords();
+				printf("\t\t\tPlayer set to custom coords %i,%i\n", _l_playerGX, _l_playerGY);
 			}
 			break;
 		}
 	}
 
 
-    // To set up the triggers!
+	// To set up the triggers!
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
 		// Look for a trigger, tigger!!!
 		if (dynamic_cast<Trigger*>(gameObjects.at(i)) != NULL)
 		{
-            // Found!!!
-            Trigger* tmpTrigger = (Trigger*)gameObjects.at(i);
+			// Found!!!
+			Trigger* tmpTrigger = (Trigger*)gameObjects.at(i);
 
-            if (tmpTrigger->NeedsSetup())   // If already setup, then will skip
-            {
-                // Get the first 't' code from the params
-                int pos = -1;
-                for (int i = 0; i < rmParams.size(); i++)
-                {
-                    if (rmParams.at(i) == std::string("t"))
-                    {
-                        // Start here and just start reading the string thru to get values!
-                        pos = i;
-                        break;
-                    }
-                }
+			if (tmpTrigger->NeedsSetup())   // If already setup, then will skip
+			{
+				// Get the first 't' code from the params
+				int pos = -1;
+				for (int i = 0; i < rmParams.size(); i++)
+				{
+					if (rmParams.at(i) == std::string("t"))
+					{
+						// Start here and just start reading the string thru to get values!
+						pos = i;
+						break;
+					}
+				}
 
-                if (pos < 0)
-                {
-                    // Break out and print error
-                    printf("\n\nERROR:: Not enough \'t\' params in level to create an exit...\n\n\n");
-                    break;
-                }
-
-
-                // Grab values
-                bool touchTrigger;
-                    std::istringstream(rmParams.at(pos + 1)) >> touchTrigger;
-                std::string eventTagType = rmParams.at(pos + 2);
-                std::string eventName = rmParams.at(pos + 3);
-
-                bool custEntr = false;
-                std::string custEntrCoords;
-                if (eventTagType == "n" &&                             // Check if a game level type
-                    pos + 4 < rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
-                    rmParams.at(pos + 4) != std::string("t"))
-                {
-                    custEntr = true;
-                    custEntrCoords = rmParams.at(pos + 4);
-                }
+				if (pos < 0)
+				{
+					// Break out and print error
+					printf("\n\nERROR:: Not enough \'t\' params in level to create an exit...\n\n\n");
+					break;
+				}
 
 
-                // Set up the trigger object to be a master, and it will find all its slaves.
-                tmpTrigger->SetEventIDAndSetMaster(eventTagType + "_" + eventName, touchTrigger);
+				// Grab values
+				bool touchTrigger;
+				std::istringstream(rmParams.at(pos + 1)) >> touchTrigger;
+				std::string eventTagType = rmParams.at(pos + 2);
+				std::string eventName = rmParams.at(pos + 3);
 
-                int end = 4;
-                if (custEntr)
-                {
-                    end = 5;    // A fifth param...             (it's the custom entrance coords!!!)
+				bool custEntr = false;
+				std::string custEntrCoords;
+				if (eventTagType == "n" &&                             // Check if a game level type
+					pos + 4 < rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
+					rmParams.at(pos + 4) != std::string("t"))
+				{
+					custEntr = true;
+					custEntrCoords = rmParams.at(pos + 4);
+				}
 
-                    // Parse from the x value (i.e. has a 123x456 to display coords)
-                    int ceGX, ceGY;
 
-                    std::string token;
-                    std::istringstream tokenStream(custEntrCoords);
-                    int times = 0;
-                    while (std::getline(tokenStream, token, 'x') &&
-                        times <= 1)
-                    {
-                        if (times == 0)     // X axis
-                        {
-                            std::istringstream(token) >> ceGX;
-                        }
-                        else if (times == 1)    // Y axis
-                        {
-                            std::istringstream(token) >> ceGY;
-                        }
+				// Set up the trigger object to be a master, and it will find all its slaves.
+				tmpTrigger->SetEventIDAndSetMaster(eventTagType + "_" + eventName, touchTrigger);
 
-                        times++;
-                    }
+				int end = 4;
+				if (custEntr)
+				{
+					end = 5;    // A fifth param...             (it's the custom entrance coords!!!)
 
-                    printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
-                    tmpTrigger->SetEntranceCoords(ceGX, ceGY);
-                }
-                else
-                {
-                    printf("\tNo custom exit code found\n");
-                }
+								// Parse from the x value (i.e. has a 123x456 to display coords)
+					int ceGX, ceGY;
 
-                // Remove those values for future params-checking!
-                rmParams.erase(rmParams.begin() + pos, rmParams.begin() + pos + end);
-            }
+					std::string token;
+					std::istringstream tokenStream(custEntrCoords);
+					int times = 0;
+					while (std::getline(tokenStream, token, 'x') &&
+						times <= 1)
+					{
+						if (times == 0)     // X axis
+						{
+							std::istringstream(token) >> ceGX;
+						}
+						else if (times == 1)    // Y axis
+						{
+							std::istringstream(token) >> ceGY;
+						}
+
+						times++;
+					}
+
+					printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
+					tmpTrigger->SetEntranceCoords(ceGX, ceGY);
+				}
+				else
+				{
+					printf("\tNo custom exit code found\n");
+				}
+
+				// Remove those values for future params-checking!
+				rmParams.erase(rmParams.begin() + pos, rmParams.begin() + pos + end);
+			}
 		}
 	}
 }
 
 
-
-
-
-TestRoom::~TestRoom()
-{
-	// Tear down all the objects in the object list
-	// (no need for the entity list to be touched eh)
-	for (int it = 0; it != gameObjects.size(); ++it)
-	{
-		delete gameObjects.at(it);
-	}
-	gameObjects.clear();
-
-	delete screenTransition;
-}
 
 
 
