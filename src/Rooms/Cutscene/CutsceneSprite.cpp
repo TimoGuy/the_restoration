@@ -1,4 +1,8 @@
+#ifdef __unix__
 #include "CutsceneSprite.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../../include/Rooms/Cutscene/CutsceneSprite.h"
+#endif
 
 CutsceneSprite::CutsceneSprite(Quad* firstImg)
 {

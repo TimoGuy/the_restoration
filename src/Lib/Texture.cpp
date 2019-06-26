@@ -4,7 +4,10 @@
 #include <SDL2/SDL_ttf.h>
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Lib/Texture.h"
+#include <SDL.h>
+#include <SDL_ttf.h>
 #endif
+
 #include <stdio.h>
 #include <iostream>
 

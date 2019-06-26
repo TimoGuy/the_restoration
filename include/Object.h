@@ -5,8 +5,8 @@
 //#include "TestRoom.h"
 #include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
+#include "Base.h"
 #include "ObjectFactory.h"
-#include "Rooms\Room.h"
 #include "Shape\Quad.h"
 #endif
 

@@ -74,12 +74,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Libraries\SDL2-2.0.4\include;$(SolutionDir)..\Libraries\SDL2_image-2.0.0\include;$(SolutionDir)..\Libraries\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Libraries\SDL2-2.0.4\include;$(SolutionDir)..\Libraries\SDL2_image-2.0.0\include;$(SolutionDir)..\Libraries\SDL2_ttf-2.0.14\include;$(SolutionDir)..\Libraries\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Libraries\SDL2_image-2.0.0\lib\x86;$(SolutionDir)..\Libraries\SDL2-2.0.4\lib\x86;$(SolutionDir)..\Libraries\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;opengl32.lib;glu32.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libraries\SDL2-2.0.4\lib\x86;$(SolutionDir)..\Libraries\SDL2_image-2.0.0\lib\x86;$(SolutionDir)..\Libraries\SDL2_ttf-2.0.14\lib\x86;$(SolutionDir)..\Libraries\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;opengl32.lib;glu32.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -97,14 +97,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Libraries\SDL2-2.0.4\include;$(SolutionDir)..\Libraries\SDL2_image-2.0.0\include;$(SolutionDir)..\Libraries\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Libraries\SDL2-2.0.4\include;$(SolutionDir)..\Libraries\SDL2_image-2.0.0\include;$(SolutionDir)..\Libraries\SDL2_ttf-2.0.14\include;$(SolutionDir)..\Libraries\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Libraries\SDL2_image-2.0.0\lib\x86;$(SolutionDir)..\Libraries\SDL2-2.0.4\lib\x86;$(SolutionDir)..\Libraries\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;opengl32.lib;glu32.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libraries\SDL2-2.0.4\lib\x86;$(SolutionDir)..\Libraries\SDL2_image-2.0.0\lib\x86;$(SolutionDir)..\Libraries\SDL2_ttf-2.0.14\lib\x86;$(SolutionDir)..\Libraries\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;opengl32.lib;glu32.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -122,6 +122,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\Base.h" />
     <ClInclude Include="..\include\defs.h" />
     <ClInclude Include="..\include\GameLoop.h" />
     <ClInclude Include="..\include\InputManager.h" />
@@ -130,7 +131,6 @@
     <ClInclude Include="..\include\Object.h" />
     <ClInclude Include="..\include\ObjectFactory.h" />
     <ClInclude Include="..\include\Players\Entity.h" />
-    <ClInclude Include="..\include\Players\Exit.h" />
     <ClInclude Include="..\include\Players\Ground.h" />
     <ClInclude Include="..\include\Players\Hazard.h" />
     <ClInclude Include="..\include\Players\MovingPlatGround.h" />
@@ -138,7 +138,12 @@
     <ClInclude Include="..\include\Players\Slant.h" />
     <ClInclude Include="..\include\Players\TestEnemy.h" />
     <ClInclude Include="..\include\Players\TestGameObj.h" />
+    <ClInclude Include="..\include\Players\Textbox.h" />
     <ClInclude Include="..\include\Players\TopSideCollGround.h" />
+    <ClInclude Include="..\include\Players\Trigger.h" />
+    <ClInclude Include="..\include\Rooms\Cutscene\Cutscene.h" />
+    <ClInclude Include="..\include\Rooms\Cutscene\CutsceneObject.h" />
+    <ClInclude Include="..\include\Rooms\Cutscene\CutsceneSprite.h" />
     <ClInclude Include="..\include\Rooms\Room.h" />
     <ClInclude Include="..\include\Rooms\TestRoom.h" />
     <ClInclude Include="..\include\Shape\Quad.h" />
@@ -152,7 +157,6 @@
     <ClCompile Include="..\src\Object.cpp" />
     <ClCompile Include="..\src\ObjectFactory.cpp" />
     <ClCompile Include="..\src\Players\Entity.cpp" />
-    <ClCompile Include="..\src\Players\Exit.cpp" />
     <ClCompile Include="..\src\Players\Ground.cpp" />
     <ClCompile Include="..\src\Players\Hazard.cpp" />
     <ClCompile Include="..\src\Players\MovingPlatGround.cpp" />
@@ -160,7 +164,12 @@
     <ClCompile Include="..\src\Players\Slant.cpp" />
     <ClCompile Include="..\src\Players\TestEnemy.cpp" />
     <ClCompile Include="..\src\Players\TestGameObj.cpp" />
+    <ClCompile Include="..\src\Players\Textbox.cpp" />
     <ClCompile Include="..\src\Players\TopSideCollGround.cpp" />
+    <ClCompile Include="..\src\Players\Trigger.cpp" />
+    <ClCompile Include="..\src\Rooms\Cutscene\Cutscene.cpp" />
+    <ClCompile Include="..\src\Rooms\Cutscene\CutsceneObject.cpp" />
+    <ClCompile Include="..\src\Rooms\Cutscene\CutsceneSprite.cpp" />
     <ClCompile Include="..\src\Rooms\Room.cpp" />
     <ClCompile Include="..\src\Rooms\TestRoom.cpp" />
     <ClCompile Include="..\src\Shape\Quad.cpp" />

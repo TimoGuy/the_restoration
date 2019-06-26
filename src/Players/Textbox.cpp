@@ -1,5 +1,11 @@
+#ifdef __unix__
 #include "Textbox.h"
 #include "InputManager.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/Players/Textbox.h"
+#include "../../include/InputManager.h"
+#endif
+
 #include <algorithm>
 #include <iostream>
 #include <sstream>

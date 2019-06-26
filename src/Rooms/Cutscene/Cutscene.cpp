@@ -1,5 +1,11 @@
+#ifdef __unix__
 #include "Cutscene.h"
 #include "CutsceneObject.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../../include/Rooms/Cutscene/Cutscene.h"
+#include "../../../include/Rooms/Cutscene/CutsceneObject.h"
+#endif
+
 #include <iostream>
 #include <sstream>
 #include <fstream>

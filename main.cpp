@@ -10,6 +10,7 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include <SDL_ttf.h>
 #include "include\GameLoop.h"
 #include "include\defs.h"
 #endif

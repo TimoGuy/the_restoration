@@ -1,6 +1,13 @@
+#ifdef __unix__
 #include "Cutscene.h"       // That way don't have to load in the header file!
 #include "CutsceneObject.h"
 #include "TestRoom.h"
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../../include/Rooms/Cutscene/Cutscene.h"
+#include "../../../include/Rooms/Cutscene/CutsceneObject.h"
+#include "../../../include/Rooms/TestRoom.h"
+#endif
+
 #include <sstream>
 #include <cmath>
 #include <cstring>
@@ -468,7 +475,7 @@ void CutsceneObject::ExitCutscene(int currentTick, int startTick, int endTick, s
 
     printf("Cutscene ended\n\n\n");
 
-    Room* newRoom;
+    Room* newRoom = NULL;
 
     std::string prefixLvl("n_");
     std::string prefixCut("c_");

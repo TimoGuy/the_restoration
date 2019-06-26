@@ -3,6 +3,7 @@
 #include "GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/Room.h"
+#include "../../include/GameLoop.h"
 #endif
 
 Room::Room(GameLoop* gloop)

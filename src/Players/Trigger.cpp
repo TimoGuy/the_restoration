@@ -8,6 +8,9 @@
 #include <SDL2/SDL_opengl.h>
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Trigger.h"
+#include "../../include/Rooms/TestRoom.h"
+#include "../../include/Players/Textbox.h"
+#include "../../include/Rooms/Cutscene/Cutscene.h"
 #include "../../include/InputManager.h"
 #include "../../include/defs.h"
 #include <SDL_opengl.h>

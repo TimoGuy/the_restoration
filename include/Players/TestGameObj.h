@@ -4,7 +4,7 @@
 #include "Textbox.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "Entity.h"
-#include "../Shape/Quad.h"
+#include "../Players/Textbox.h"
 #endif
 
 #include <vector>

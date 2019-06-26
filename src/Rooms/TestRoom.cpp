@@ -12,6 +12,7 @@
 #include "../../include/InputManager.h"
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
+#include "../../include/Players/Trigger.h"
 #include "../../include/Lib/Texture.h"
 //#include <io.h>
 #include "../../include/Lib/dirent.h"

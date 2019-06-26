@@ -4,6 +4,7 @@
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TestEnemy.h"
+#include "../../include/Rooms/TestRoom.h"
 #include "../../include/defs.h"
 #endif
 

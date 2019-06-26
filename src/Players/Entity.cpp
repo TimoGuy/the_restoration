@@ -9,6 +9,8 @@
 #include "..\..\include\Players\Entity.h"
 #include "../../include/defs.h"
 
+#include "../../include/Rooms/TestRoom.h"
+
 #include "../../include/Players/Slant.h"		// Hope I can include this!!!
 #endif
 

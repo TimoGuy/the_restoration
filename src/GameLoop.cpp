@@ -7,6 +7,7 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/GameLoop.h"
 #include "../include/Rooms/TestRoom.h"
+#include "../include/Rooms/Cutscene/Cutscene.h"
 #include <SDL_opengl.h>
 #include "../include/InputManager.h"
 #endif
