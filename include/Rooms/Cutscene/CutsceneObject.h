@@ -29,8 +29,8 @@ class CutsceneObject
         Cutscene* cutscene;     // So can load the sprite list toka.
 
     	CutsceneSprite* _image;        // So that animation is supported..
-        int _x, _y;     // Only set these when an action has ended!
-        int dx, dy;     // Any function can play w/ these...
+        float _x, _y;     // Only set these when an action has ended!
+		float dx, dy;     // Any function can play w/ these...
 
         float _angle;    // This is the rotation eh!
         float dAngle;

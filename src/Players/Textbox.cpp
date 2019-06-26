@@ -327,8 +327,8 @@ void Textbox::Render()
         }
         else
         {
-            int rendX = x + PADDING + offset;
-            int rendY = y + PADDING + _fontSize * line;
+            float rendX = x + PADDING + offset;
+			float rendY = y + PADDING + _fontSize * line;
 
 
 
