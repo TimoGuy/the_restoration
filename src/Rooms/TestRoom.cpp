@@ -27,7 +27,11 @@
 #include <algorithm>
 #include <string>
 
-TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY) : Room(gloop)
+
+#define FADE_IN_OUT_TICKS 20
+
+
+TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
     // Tear down all the objects in the object list
 	for (int it = 0; it != gameObjects.size(); ++it)
@@ -183,6 +187,8 @@ TestRoom::~TestRoom()
 		delete gameObjects.at(it);
 	}
 	gameObjects.clear();
+
+	delete screenTransition;
 }
 
 
@@ -201,6 +207,21 @@ void TestRoom::RemoveEntity(Entity* thisObj)
             gameObjects.end(), thisObj),
             gameObjects.end());
 }
+
+
+
+
+void TestRoom::ScreenTransition(const std::function<void()>& lambda, SDL_Color fadeOutColor)
+{
+	scrTransLambdas.push_back(lambda);
+	if (screenTransition == NULL)
+		screenTransition = new Quad(SCREEN_WIDTH, SCREEN_HEIGHT);
+	scrTransColor = fadeOutColor;
+
+	// So,,,, like,,,, I need to show the game there's fade out business, I suppose.
+	fadeOutTimer = FADE_IN_OUT_TICKS;
+}
+
 
 
 
@@ -232,29 +253,29 @@ void TestRoom::Update()
     int w = SCREEN_WIDTH / GRID_SIZE,
         h = SCREEN_HEIGHT / GRID_SIZE;
     if (w >= gWidth)
-    {
-        lockX = true;
-        camX = ((gWidth * GRID_SIZE) - SCREEN_WIDTH) / 2;
-    }
-    if (h >= gHeight)
-    {
-        lockY = true;
-        camY = ((gHeight * GRID_SIZE) - SCREEN_HEIGHT) / 2;
-    }
+	{
+	lockX = true;
+	camX = ((gWidth * GRID_SIZE) - SCREEN_WIDTH) / 2;
+	}
+	if (h >= gHeight)
+	{
+		lockY = true;
+		camY = ((gHeight * GRID_SIZE) - SCREEN_HEIGHT) / 2;
+	}
 
 
 
-    // Clamp it to the edges
-    if (!lockX)
-    {
-        camX = std::max(0, std::min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
-    }
-    if (!lockY)
-    {
-        camY = std::max(0, std::min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
-    }
+	// Clamp it to the edges
+	if (!lockX)
+	{
+		camX = std::max(0, std::min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
+	}
+	if (!lockY)
+	{
+		camY = std::max(0, std::min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
+	}
 
-	
+
 	// Offset the camera!!!
 #define CAM_MOVE_MULTIPLIER 15
 #define CAM_SCALE_MULTIPLIER 0.05f
@@ -290,9 +311,9 @@ void TestRoom::Update()
 
 void TestRoom::Render()
 {
-    glLoadIdentity();
+	glLoadIdentity();
 
-    // Set the camera's zoom
+	// Set the camera's zoom
 	{
 		float doX = camX + (SCREEN_WIDTH / 2);
 		float doY = camY + (SCREEN_HEIGHT / 2);
@@ -307,11 +328,48 @@ void TestRoom::Render()
 
 
 
-    // Call a render for everyone!
-    for (int it = 0; it < gameObjects.size(); ++it)
-    {
-        gameObjects.at(it)->Render();
-    }
+	// Call a render for everyone!
+	for (int it = 0; it < gameObjects.size(); ++it)
+	{
+		gameObjects.at(it)->Render();
+	}
+
+
+
+	// If there's a screen transition, do it!
+	if (fadeOutTimer >= 0)
+	{
+		// Reset stuff!
+		glLoadIdentity();
+
+		// Screen will turn black (or whatever color you chose)
+		float alpha = (FADE_IN_OUT_TICKS - fadeOutTimer) / (float)FADE_IN_OUT_TICKS;
+
+		glColor4f(scrTransColor.r / 255.0f, scrTransColor.g / 255.0f, scrTransColor.b / 255.0f, alpha);
+		screenTransition->Render(0, 0);
+
+		// Tick down
+		fadeOutTimer--;
+
+		// Check if complete!
+		if (fadeOutTimer < 0)		// So it was just at 0, then ticked down to -1 (theoretically), it is complete.
+		{
+			// Just run all the lambdas, don't quit!! Be made quit!!
+			for (int i = scrTransLambdas.size() - 1; i >= 0; i--)
+			{
+				// Go backwards so we can delete too!
+				auto lambda = scrTransLambdas.at(i);
+				lambda();
+
+				// Delete!
+				scrTransLambdas.erase(scrTransLambdas.begin() + i);
+			}
+
+			// And, here's the thing, this function won't run
+			// again until someone takes the fadeOutTimer and
+			// sets it to some number again.
+		}
+	}
 }
 
 

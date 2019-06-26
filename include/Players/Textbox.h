@@ -34,6 +34,8 @@ class Textbox : public Object
     private:
         void SetupTextbox(float x, float y, std::string text);                      bool setupReq = true;
 
+		bool skipping = false;		// This is only for pressing button3 to skip the whole textbox!!!
+
         void OnExitRequest();                                                       bool exiting = false;
         std::function<void()> _lambda;
 

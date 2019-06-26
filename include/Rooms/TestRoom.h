@@ -20,7 +20,7 @@
 class TestRoom : public Room
 {
     public:
-        TestRoom(std::string name, GameLoop* gloop, int playerGX=-1, int playerGY=-1);
+        TestRoom(std::string name, GameLoop* gloop, int playerGX=-1, int playerGY=-1, bool fadeIn=false, SDL_Color fadeInColor={ 0, 0, 0, 1 });
         ~TestRoom();
 
 
@@ -30,11 +30,10 @@ class TestRoom : public Room
         int getGWidth() { return gWidth; }
         int getGHeight() { return gHeight; }
 
+		void ScreenTransition(const std::function<void()>& lambda, SDL_Color fadeOutColor={ 0, 0, 0, 1 });			// This just does the fade out, then runs the lambda eh
 
         void Update();
         void Render();
-
-        bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
 
     protected:
 
@@ -48,13 +47,23 @@ class TestRoom : public Room
 
         std::vector<Object*> gameObjects;
 
+		Quad* screenTransition;			// This will be a fade in AND out thing, okay?
+		std::vector<std::function<void()>> scrTransLambdas;
+		SDL_Color scrTransColor;
+		int fadeOutTimer = -1;			// -1 means do nothing
+
 
         // Level-loading
         std::string currentLvl;
 		std::string currentLvlFilename;
         std::vector<std::string> rmParams;        // These are the level tokens which dictate its objects within (eg: an exit object's params)
 
+
+		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
         static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename (w/out the 'n_')), and the directory of the levels!
+
+
+
 
         // For the camera
         float camX = 0, camY = 0;   // Make this the same coords as the player!

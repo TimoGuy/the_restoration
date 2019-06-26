@@ -256,6 +256,21 @@ void Textbox::Update()
     {
         exitTicks = ticks;
     }
+
+	// Or if the player just wants to skip it outright!
+	else if (InputManager::Instance().b3() &&
+		!skipping)
+	{
+		skipping = true;
+
+		// Do the screen transition
+		auto skipLambda= [&](void)
+		{
+			OnExitRequest();	// This means I quit, but once I'm hidden this will execute
+			// NOTE: this will also run this textbox's lambda too!
+		};
+		room->ScreenTransition(skipLambda);
+	}
 }
 
 
