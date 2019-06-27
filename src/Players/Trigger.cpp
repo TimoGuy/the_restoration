@@ -91,8 +91,15 @@ void Trigger::Render()
 
 void Trigger::SetEntranceCoords(int gx, int gy)
 {
-    ceGX = gx;
-    ceGY = gy;
+	if (_masterTrigger == NULL)
+	{
+		ceGX = gx;
+		ceGY = gy;
+	}
+	else
+	{
+		_masterTrigger->SetEntranceCoords(gx, gy);
+	}
 
     // That's it, I suppose...
     // We'll have to change the entrance code for the player eh...
@@ -102,11 +109,18 @@ void Trigger::SetEntranceCoords(int gx, int gy)
 
 bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the variables, warning you!!! (it's a dipstick function)
 {
-    // Now insert the gx,gy etc.
-    gx = ceGX;
-    gy = ceGY;
+	if (_masterTrigger == NULL)
+	{
+		// Now insert the gx,gy etc.
+		gx = ceGX;
+		gy = ceGY;
 
-    return ceGX >= 0 || ceGY >= 0;
+		return ceGX >= 0 || ceGY >= 0;
+	}
+	else
+	{
+		return _masterTrigger->GetCustomCoords(gx, gy);
+	}
 }
 
 
@@ -124,8 +138,12 @@ Base* Trigger::GetNextEvent()
         break;
 
     case 'n':
-        return new TestRoom(GetNewEventID(), room->GetGameLoop(), ceGX, ceGY);
-        break;
+	{
+		int tmpCeGX, tmpCeGY;
+		Trigger::GetCustomCoords(tmpCeGX, tmpCeGY);
+		return new TestRoom(GetNewEventID(), room->GetGameLoop(), tmpCeGX, tmpCeGY);
+		break;
+	}
 
     case 'm':
         return new Textbox(0, 0, GetNewEventID(), 28, std::function<void()>(), room);
