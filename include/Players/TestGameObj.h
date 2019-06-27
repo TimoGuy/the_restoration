@@ -32,7 +32,7 @@ class TestGameObj : public Entity
 
         // States
 		int numJumps = 0;
-		int maxJumps = 2;	// Default: 1 for only 1 jump eh.
+		int maxJumps = 1;	// Default: 1 for only 1 jump eh.
 		bool wasJumpBtnAlreadyPressed = false;
 
 		int framesOfInvincibility = 0;      // This counts down until 0, wherewith you are not invincible anymore
