@@ -119,4 +119,4 @@ o	10	186,0
 	1650	2000	move	70,-100
 	1650	1750	fade-in
 	1900	2000	fade-out
-	2100	2100	exit-cutscene	n_w1Home
+	2100	2100	exit-cutscene	n_w101Home
