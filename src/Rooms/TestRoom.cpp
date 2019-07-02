@@ -30,6 +30,9 @@
 
 #define FADE_IN_OUT_TICKS 20
 
+Quad* screenTransition;			// This will be a fade in AND out thing, okay?
+
+
 
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {

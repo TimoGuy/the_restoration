@@ -48,7 +48,7 @@ class TestRoom : public Room
 
         std::vector<Object*> gameObjects;
 
-		Quad* screenTransition;			// This will be a fade in AND out thing, okay?
+
 		std::vector<std::function<void()>> scrTransLambdas;
 		SDL_Color scrTransColor;
 		int fadeOutTimer = -100;			// -100 means do nothing
