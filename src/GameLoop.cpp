@@ -29,6 +29,9 @@ bool GameLoop::sawTutorial = false;
 GameLoop::GameLoop(SDL_Window* window)
 {
     _window = window;
+
+    // Set the initial shape for the window
+	SetWindowDimensions(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 bool GameLoop::Execute()
@@ -155,4 +158,37 @@ GameLoop::~GameLoop()
 {
     // Thanks for letting me use it!
     _window = NULL;
+}
+
+
+
+
+
+
+void GameLoop::SetWindowDimensions(int width, int height)
+{
+    // Make sure to have the new dimensions recorded!!!
+    _windowWidth = width;
+    _windowHeight = height;
+
+    //Set the viewport
+    glViewport(0.0f,0.0f, width, height);
+
+//    float aspectRat = float(width) / float(height);
+
+    //Initialize Projection Matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+//    glOrtho(0.0, SCREEN_HEIGHT * aspectRat, SCREEN_HEIGHT, 0.0, 1.0, -1.0);
+    glOrtho(-width / 2, width / 2, height / 2, -height / 2, 1.0, -1.0);
+
+    //Initialize Modelview Matrix
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+void GameLoop::GetWindowDimensions(int& width, int& height)
+{
+    width = _windowWidth;
+    height = _windowHeight;
 }

@@ -15,26 +15,6 @@
 
 
 
-void InputManager::Reshape(int width, int height)
-{
-    //Set the viewport
-    glViewport(0.0f,0.0f, width, height);
-
-    float aspectRat = float(width) / float(height);
-
-    //Initialize Projection Matrix
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-//    glOrtho(0.0, SCREEN_HEIGHT * aspectRat, SCREEN_HEIGHT, 0.0, 1.0, -1.0);
-    glOrtho(-width / 2, width / 2, height / 2, -height / 2, 1.0, -1.0);
-
-    //Initialize Modelview Matrix
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-}
-
-
-
 bool InputManager::reloadResource()
 {
 	if (_reloadRes)
@@ -108,7 +88,7 @@ void InputManager::ProcessInput(GameLoop* g)
             switch (e.window.event)
             {
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
-                    Reshape(e.window.data1, e.window.data2);
+                    g->SetWindowDimensions(e.window.data1, e.window.data2);
                     break;
             }
         }

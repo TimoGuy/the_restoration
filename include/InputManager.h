@@ -22,9 +22,6 @@ class InputManager
 
         void ProcessInput(GameLoop* g);
 
-        // For resizing the game window!!!!
-        void Reshape(int width, int height);
-
 
         // Read-only variables for everyone!
         const float& x() const { return _x; }

@@ -264,8 +264,8 @@ void TestRoom::Update()
         return;
 
     // Update camera
-    camX = camFocusObj->getX() - (SCREEN_WIDTH / 2);
-    camY = camFocusObj->getY() - (SCREEN_HEIGHT / 2);
+    camX = camFocusObj->getX();
+    camY = camFocusObj->getY();
 
     // Cap it to the center if it's too large
     bool lockX = false, lockY = false;
@@ -273,25 +273,26 @@ void TestRoom::Update()
         h = SCREEN_HEIGHT / GRID_SIZE;
     if (w >= gWidth)
 	{
-	lockX = true;
-	camX = ((gWidth * GRID_SIZE) - SCREEN_WIDTH) / 2;
+        lockX = true;
+        camX = gWidth * GRID_SIZE;
 	}
 	if (h >= gHeight)
 	{
 		lockY = true;
-		camY = ((gHeight * GRID_SIZE) - SCREEN_HEIGHT) / 2;
+		camY = gHeight * GRID_SIZE;
 	}
 
 
 
-	// Clamp it to the edges
+	// Clamp it to the edges (reuse the variables)
+	_gloop->GetWindowDimensions(w, h);
 	if (!lockX)
 	{
-		camX = std::max(0, std::min((int)camX, gWidth * GRID_SIZE - SCREEN_WIDTH));
+		camX = std::max(w / 2.0f, std::min(camX, (float)gWidth * GRID_SIZE));
 	}
 	if (!lockY)
 	{
-		camY = std::max(0, std::min((int)camY, gHeight * GRID_SIZE - SCREEN_HEIGHT));
+		camY = std::max(h / 2.0f, std::min(camY, (float)gHeight * GRID_SIZE));
 	}
 
 

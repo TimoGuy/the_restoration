@@ -68,7 +68,6 @@ bool Setup()
 
 
 
-	InputManager::Instance().Reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // GL properties
     glEnable(GL_BLEND);

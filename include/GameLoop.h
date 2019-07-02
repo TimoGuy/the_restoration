@@ -20,6 +20,9 @@ class GameLoop
         void SetRoom(Room* newRoom);
         Room* GetRoom();
 
+        void SetWindowDimensions(int width, int height);
+        void GetWindowDimensions(int& width, int& height);          // Dipstick function!!!!
+
 
 
         // Variables controlling the game
@@ -30,6 +33,8 @@ class GameLoop
     private:
         SDL_Window* _window;
         bool _running = true;
+
+        int _windowWidth, _windowHeight;
 
 
 
