@@ -1,4 +1,0 @@
-o	-1	500,500
-	0	100	wiggle-x	100	2
-	0	100	move	500,50
-	0	101	exit-cutscene	n_tut	56,41
