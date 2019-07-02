@@ -6,17 +6,22 @@
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_ttf.h>
 #include "GameLoop.h"
+#include "InputManager.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_ttf.h>
 #include "include\GameLoop.h"
+#include "include\InputManager.h"
 #include "include\defs.h"
 #endif
 
 SDL_Window* window;
 SDL_GLContext glContext;
+
+
+
 
 bool Setup()
 {
@@ -42,7 +47,7 @@ bool Setup()
         SDL_WINDOWPOS_CENTERED,
         SCREEN_WIDTH,
         SCREEN_HEIGHT,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (window == NULL)
     {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -63,17 +68,7 @@ bool Setup()
 
 
 
-	//Set the viewport
-    glViewport(0.0f,0.0f, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    //Initialize Projection Matrix
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0.0, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0, 1.0, -1.0);
-
-    //Initialize Modelview Matrix
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	InputManager::Instance().Reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // GL properties
     glEnable(GL_BLEND);

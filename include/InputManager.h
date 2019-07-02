@@ -22,6 +22,9 @@ class InputManager
 
         void ProcessInput(GameLoop* g);
 
+        // For resizing the game window!!!!
+        void Reshape(int width, int height);
+
 
         // Read-only variables for everyone!
         const float& x() const { return _x; }
@@ -30,6 +33,8 @@ class InputManager
 		const bool& b2() const { return _b2; }
 		const bool& b3() const { return _b3; }
 
+
+		// Only beta eh!
 		bool reloadResource();	// It's not const bc that way the variable inside can be turned off after 1 call to this function!
 
     protected:

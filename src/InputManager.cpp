@@ -1,13 +1,39 @@
 #ifdef __unix__
 #include "InputManager.h"
 #include "SDL2/SDL.h"
+#include <SDL2/SDL_opengl.h>
+#include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/InputManager.h"
 #include <SDL.h>
+#include <SDL_opengl.h>
+#include "../include/defs.h"
 #endif
 #include <stdio.h>
 #include <cmath>
 #include <algorithm>
+
+
+
+void InputManager::Reshape(int width, int height)
+{
+    //Set the viewport
+    glViewport(0.0f,0.0f, width, height);
+
+    float aspectRat = float(width) / float(height);
+
+    //Initialize Projection Matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+//    glOrtho(0.0, SCREEN_HEIGHT * aspectRat, SCREEN_HEIGHT, 0.0, 1.0, -1.0);
+    glOrtho(-width / 2, width / 2, height / 2, -height / 2, 1.0, -1.0);
+
+    //Initialize Modelview Matrix
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+
 
 bool InputManager::reloadResource()
 {
@@ -76,16 +102,16 @@ void InputManager::ProcessInput(GameLoop* g)
             // Exit the game loop
             g->TerminateLoop();
         }
-        // else if (e.type == SDL_WINDOWEVENT)
-        // {
-        //     // Window events
-        //     switch (e.window.event)
-        //     {
-        //         case SDL_WINDOWEVENT_SIZE_CHANGED:
-        //             Reshape(e.window.data1, e.window.data2);
-        //             break;
-        //     }
-        // }
+        else if (e.type == SDL_WINDOWEVENT)
+        {
+            // Window events
+            switch (e.window.event)
+            {
+                case SDL_WINDOWEVENT_SIZE_CHANGED:
+                    Reshape(e.window.data1, e.window.data2);
+                    break;
+            }
+        }
         else
         {
             // Handle the keyboard
