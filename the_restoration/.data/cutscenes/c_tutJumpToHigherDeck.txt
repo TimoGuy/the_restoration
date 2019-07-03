@@ -1,5 +1,5 @@
 s	32,48	test.png
-o	0	500,500
+o	0	-12,212
 	0	100	wiggle-x	100	2
-	0	100	move	500,50
+	0	100	move	-12,-238
 	101	101	exit-cutscene	n_tut	56,41
