@@ -224,7 +224,11 @@ void TestRoom::ScreenTransition(const std::function<void()>& lambda, SDL_Color f
 {
 	scrTransLambdas.push_back(lambda);
 	if (screenTransition == NULL)
-		screenTransition = new Quad(SCREEN_WIDTH, SCREEN_HEIGHT);
+	{
+        int w, h;
+		_gloop->GetWindowDimensions(w, h);
+		screenTransition = new Quad(w, h);
+    }
 	scrTransColor = fadeOutColor;
 
 	// So,,,, like,,,, I need to show the game there's fade out business, I suppose.
@@ -234,7 +238,11 @@ void TestRoom::ScreenTransition(const std::function<void()>& lambda, SDL_Color f
 void TestRoom::ScreenFadeIn(SDL_Color fadeOutColor)
 {
 	if (screenTransition == NULL)
-		screenTransition = new Quad(SCREEN_WIDTH, SCREEN_HEIGHT);
+	{
+        int w, h;
+		_gloop->GetWindowDimensions(w, h);
+		screenTransition = new Quad(w, h);
+    }
 	scrTransColor = fadeOutColor;
 
 	// Same drill!
@@ -366,7 +374,10 @@ void TestRoom::Render()
 		float alpha = (FADE_IN_OUT_TICKS - fadeOutTimer) / (float)FADE_IN_OUT_TICKS;
 
 		glColor4f(scrTransColor.r / 255.0f, scrTransColor.g / 255.0f, scrTransColor.b / 255.0f, alpha);
-		screenTransition->Render(0, 0);
+
+		int w, h;
+		_gloop->GetWindowDimensions(w, h);
+		screenTransition->Render(-w / 2, -h / 2);
 
 		// Tick down
 		fadeOutTimer--;
@@ -400,7 +411,10 @@ void TestRoom::Render()
 
 		// Render!!!
 		glColor4f(scrTransColor.r / 255.0f, scrTransColor.g / 255.0f, scrTransColor.b / 255.0f, alpha);
-		screenTransition->Render(0, 0);
+
+		int w, h;
+		_gloop->GetWindowDimensions(w, h);
+		screenTransition->Render(-w / 2, -h / 2);
 
 		// Tick!
 		fadeInTimer--;
