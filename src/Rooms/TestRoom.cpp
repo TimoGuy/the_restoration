@@ -276,11 +276,11 @@ void TestRoom::Update()
 	_gloop->GetWindowDimensions(w, h);
 	if (!lockX)
 	{
-		camX = std::max(w / 2.0f, std::min(camX, (float)gWidth * GRID_SIZE));
+		camX = std::max(w / 2.0f, std::min(camX, (float)gWidth * GRID_SIZE - w / 2.0f));
 	}
 	if (!lockY)
 	{
-		camY = std::max(h / 2.0f, std::min(camY, (float)gHeight * GRID_SIZE));
+		camY = std::max(h / 2.0f, std::min(camY, (float)gHeight * GRID_SIZE - h / 2.0f));
 	}
 
 
