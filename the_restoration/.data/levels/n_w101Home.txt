@@ -1,1 +1,3 @@
-.t_1_n_w102VertCavern_41x99
+i	w101Home.png
+
+t	1	n_w102VertCavern	41x99

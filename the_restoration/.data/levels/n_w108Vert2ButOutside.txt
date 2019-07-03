@@ -1,1 +1,4 @@
-.t_1_n_w109MtnPeakThisIsYourCalling_t_1_n_w107FallTerrainHuh_183x57
+i	w108Vert2ButOutside.png
+
+t	1	n_w109MtnPeakThisIsYourCalling
+t	1	n_w107FallTerrainHuh	183x57

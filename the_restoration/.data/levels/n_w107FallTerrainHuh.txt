@@ -1,1 +1,4 @@
-.t_1_n_w106TheClimb_99x26_t_1_n_w108Vert2ButOutside
+i	w107FallTerrainHuh.png
+
+t	1	n_w106TheClimb	99x26
+t	1	n_w108Vert2ButOutside

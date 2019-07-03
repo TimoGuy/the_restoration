@@ -1,1 +1,5 @@
-.t_1_c_tutJumpOff_t_1_m_tut2_t_0_c_tutJumpToHigherDeck
+i	tut.png
+
+t	1	c_tutJumpOff
+t	1	m_tut2
+t	0	c_tutJumpToHigherDeck
