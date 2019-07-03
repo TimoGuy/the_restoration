@@ -62,7 +62,6 @@ class TestRoom : public Room
 
 
 		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
-        static std::string FindLevelIO(std::string name, std::string dir);  // the name of the level (not filename (w/out the 'n_')), and the directory of the levels!
 
 
 

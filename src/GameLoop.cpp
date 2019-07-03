@@ -49,6 +49,10 @@ bool GameLoop::Execute()
 
     while (_running)
     {
+		// Reset messages!
+		_didJustResize = false;
+
+
         // Event system
         InputManager::Instance().ProcessInput(this);    // If the input desires, 'this' game loop can be terminated from this function!
 
@@ -167,6 +171,12 @@ GameLoop::~GameLoop()
 
 void GameLoop::SetWindowDimensions(int width, int height)
 {
+	// Enable the message!!!
+	_didJustResize = true;
+
+
+
+
     // Make sure to have the new dimensions recorded!!!
     _windowWidth = width;
     _windowHeight = height;
@@ -191,4 +201,9 @@ void GameLoop::GetWindowDimensions(int& width, int& height)
 {
     width = _windowWidth;
     height = _windowHeight;
+}
+
+bool GameLoop::DidJustResize()
+{
+	return _didJustResize;
 }

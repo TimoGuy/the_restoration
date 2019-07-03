@@ -2,4 +2,4 @@ i	w102VertCavern.png
 
 t	1	n_w103CavernSecret
 t	1	n_w104CavHugePits
-t	1	n_w101Home	296x50
+t	1	n_w101Home	296,50

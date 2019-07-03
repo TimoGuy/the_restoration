@@ -5,7 +5,6 @@
 #include "Trigger.h"
 #include "Lib/Texture.h"
 #include <unistd.h>
-#include <dirent.h>
 #include "ObjectFactory.h"
 #include <SDL2/SDL_opengl.h>
 #elif defined(_WIN32) || defined(WIN32)
@@ -125,48 +124,39 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
                 // Grab values
                 bool touchTrigger;
                     std::istringstream(rmParams.at(pos + 1)) >> touchTrigger;
-                std::string eventTagType = rmParams.at(pos + 2);
-                std::string eventName = rmParams.at(pos + 3);
+                std::string eventName = rmParams.at(pos + 2);
 
-                bool custEntr = false;
-                std::string custEntrCoords;
-                if (eventTagType == "n" &&                             // Check if a game level type
-                    pos + 4 < rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
-                    rmParams.at(pos + 4) != std::string("t"))
+				
+				
+				// Set up the trigger object to be a master, and it will find all its slaves.
+				tmpTrigger->SetEventIDAndSetMaster(eventName, touchTrigger);
+							// This needs to be set up before we start setting properties to it, like custom coords!
+
+
+
+				int end = 3;		// This is left at 3 if no custom coords
+                if (eventName.at(0) == 'n' &&                             // Check if a game level type
+                    pos + 3 < rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
+                    rmParams.at(pos + 3) != std::string("\n"))
                 {
-                    custEntr = true;
-                    custEntrCoords = rmParams.at(pos + 4);
-                }
+                    end = 4;    // A 4th param...             (it's the custom entrance coords!!!)
 
+					// Grab value
+					std::string custEntrCoords = rmParams.at(pos + 3);
 
-                // Set up the trigger object to be a master, and it will find all its slaves.
-                tmpTrigger->SetEventIDAndSetMaster(eventTagType + "_" + eventName, touchTrigger);
-
-                int end = 4;
-                if (custEntr)
-                {
-                    end = 5;    // A fifth param...             (it's the custom entrance coords!!!)
 
                     // Parse from the x value (i.e. has a 123x456 to display coords)
                     int ceGX, ceGY;
 
                     std::string token;
                     std::istringstream tokenStream(custEntrCoords);
-                    int times = 0;
-                    while (std::getline(tokenStream, token, 'x') &&
-                        times <= 1)
-                    {
-                        if (times == 0)     // X axis
-                        {
-                            std::istringstream(token) >> ceGX;
-                        }
-                        else if (times == 1)    // Y axis
-                        {
-                            std::istringstream(token) >> ceGY;
-                        }
 
-                        times++;
-                    }
+					std::getline(tokenStream, token, ',');
+					std::istringstream(token) >> ceGX;		// X coord
+					std::getline(tokenStream, token, ',');
+					std::istringstream(token) >> ceGY;		// Y coord
+
+
 
                     printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
                     tmpTrigger->SetEntranceCoords(ceGX, ceGY);
@@ -175,6 +165,8 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
                 {
                     printf("\tNo custom exit code found\n");
                 }
+
+				
 
                 // Remove those values for future params-checking!
                 rmParams.erase(rmParams.begin() + pos, rmParams.begin() + pos + end);
@@ -223,12 +215,6 @@ void TestRoom::RemoveEntity(Entity* thisObj)
 void TestRoom::ScreenTransition(const std::function<void()>& lambda, SDL_Color fadeOutColor)
 {
 	scrTransLambdas.push_back(lambda);
-	if (screenTransition == NULL)
-	{
-        int w, h;
-		_gloop->GetWindowDimensions(w, h);
-		screenTransition = new Quad(w, h);
-    }
 	scrTransColor = fadeOutColor;
 
 	// So,,,, like,,,, I need to show the game there's fade out business, I suppose.
@@ -237,12 +223,6 @@ void TestRoom::ScreenTransition(const std::function<void()>& lambda, SDL_Color f
 
 void TestRoom::ScreenFadeIn(SDL_Color fadeOutColor)
 {
-	if (screenTransition == NULL)
-	{
-        int w, h;
-		_gloop->GetWindowDimensions(w, h);
-		screenTransition = new Quad(w, h);
-    }
 	scrTransColor = fadeOutColor;
 
 	// Same drill!
@@ -363,6 +343,15 @@ void TestRoom::Render()
 	}
 
 
+	// Setup screen transitioner, if needed ;)
+	if (screenTransition == NULL ||
+		_gloop->DidJustResize())
+	{
+		int w, h;
+		_gloop->GetWindowDimensions(w, h);
+		screenTransition = new Quad(w, h);
+	}
+
 
 	// If there's a screen transition, do it!
 	if (fadeOutTimer >= -1)						// The -1 is so that while it's 0 the GameLoop actually gets to get up to GL_Swap()
@@ -374,10 +363,7 @@ void TestRoom::Render()
 		float alpha = (FADE_IN_OUT_TICKS - fadeOutTimer) / (float)FADE_IN_OUT_TICKS;
 
 		glColor4f(scrTransColor.r / 255.0f, scrTransColor.g / 255.0f, scrTransColor.b / 255.0f, alpha);
-
-		int w, h;
-		_gloop->GetWindowDimensions(w, h);
-		screenTransition->Render(-w / 2, -h / 2);
+		screenTransition->Render(-screenTransition->GetWidth() / 2, -screenTransition->GetHeight() / 2);
 
 		// Tick down
 		fadeOutTimer--;
@@ -411,10 +397,7 @@ void TestRoom::Render()
 
 		// Render!!!
 		glColor4f(scrTransColor.r / 255.0f, scrTransColor.g / 255.0f, scrTransColor.b / 255.0f, alpha);
-
-		int w, h;
-		_gloop->GetWindowDimensions(w, h);
-		screenTransition->Render(-w / 2, -h / 2);
+		screenTransition->Render(-screenTransition->GetWidth() / 2, -screenTransition->GetHeight() / 2);
 
 		// Tick!
 		fadeInTimer--;
@@ -427,22 +410,73 @@ void TestRoom::Render()
 
 bool TestRoom::LoadLevelIO(std::string name)
 {
+	// Initialize / empty the token/params list
+	rmParams.clear();
+
+
     // Find/Search for the requested level (within the 'n_...' form-factor)
-#ifdef __unix__
-    std::string currentDir = std::string(get_current_dir_name()) + std::string("/.data/levels/");
-#elif defined(_WIN32) || defined(WIN32)
 	std::string currentDir = std::string(".data/levels/");
-#endif
 
     printf("Levels are stored in:\n%s\n\n", currentDir.c_str());
-    std::string levelFilename = TestRoom::FindLevelIO(name, currentDir);
-    if (levelFilename.empty())           // Error checking....
-    {
-        printf("ERROR: Unable to switch levels... no file was found with the level name \"%s\"\n", name.c_str());
-        return false;
-    }
 
-    // Load a level
+	// Level variables
+	std::string levelFilename;
+
+	// Try loading the level!!!
+	std::string line;
+	std::ifstream myfile(currentDir + name + ".txt");
+	if (myfile.is_open())
+	{
+		std::cout << "Reading level file:\n";
+
+
+
+		// Read line by line
+		while (std::getline(myfile, line))
+		{
+			// DEBUG
+			std::cout << line << '\n';
+
+			if (line.size() <= 0 ||         // If this is a blank line or is a comment, then ignore!
+				line.at(0) == '#')
+			{
+				// This is empty!
+				continue;
+			}
+
+			// Check what data type
+			if (line.at(0) == 'i')
+			{
+				// It's a collision picture!!!! (the base one)
+				levelFilename = line.substr(2);			// Cut off the 'i' and '\t'
+			}
+			else
+			{
+				// It's some extra level params to pass on!
+				std::string token;
+				std::istringstream tokenStream(line);
+
+				printf("\nFound a line of level params...\n");
+				while (std::getline(tokenStream, token, '\t'))
+				{
+					printf("\t%s\n", token.c_str());
+					rmParams.push_back(token);        // Add into level's params to be used l8r!!
+				}
+
+				// Seal off this line! (w/ a line break)
+				rmParams.push_back("\n");
+			}
+		}
+	}
+	else
+	{
+		printf("ERROR: Unable to switch levels... no file was found with the level name \"%s\"\n", name.c_str());
+		return false;
+	}
+
+#pragma region Load Collision Picture
+
+    // Load a picture of the level
     int comp;
     const std::string& fileName = currentDir + levelFilename;
     int req = STBI_rgb;
@@ -454,32 +488,9 @@ bool TestRoom::LoadLevelIO(std::string name)
         return false;
     }
 
-    // Initialize / empty the token/params list
-    rmParams.clear();
+#pragma endregion
 
-	// Remember what level you're on!
-	currentLvl = name;
-	currentLvlFilename = levelFilename;
-
-	// Cut off the beginning I suppose!
-	std::string prefixCutoff = currentLvl + std::string(".");
-	int len = currentLvlFilename.size() - prefixCutoff.size() - 4;                  // The '4's referring to the '.png' at the end
-	std::string levelParams = currentLvlFilename.substr(prefixCutoff.size(), len);
-
-	// This way we can parse and get the code from the filename!
-    std::string token;
-    std::istringstream tokenStream(levelParams);
-
-    printf("\nPrinting out level param data...\n");
-    while (std::getline(tokenStream, token, '_'))
-    {
-        printf("%s\n", token.c_str());
-        rmParams.push_back(token);        // Add into level's params to be used l8r!!
-    }
-    printf("\n\n\n\n");
-
-
-
+    
 
     // Initialize the Collision Map as EMPTY!!!!
     collisionMap = new Object*[gWidth * gHeight];
@@ -523,48 +534,5 @@ bool TestRoom::LoadLevelIO(std::string name)
     // Free loaded image
     stbi_image_free(imgData);
 	return true;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-std::string TestRoom::FindLevelIO(std::string name, std::string dir)         // The level has to be a png file in the levels folder
-{
-    // Search using dirent.h??? (what is that, anyways??)
-    DIR* dirPoint = opendir(dir.c_str());
-    dirent* entry = readdir(dirPoint);
-
-    std::string searchCriteria = name + std::string(".");
-
-    while (entry)
-    {
-        // Only searches the top level
-        if (entry->d_type == DT_REG)
-        {
-            // REGULAR FILE!!! Check if it matches
-            std::string fname = entry->d_name;
-            if (strncmp(fname.c_str(), searchCriteria.c_str(), searchCriteria.size()) == 0)         // This sees if it 'startswith' the searchCrit!
-            {
-                // Spit it out!
-                printf("Found level: %s\n\n", fname.c_str());
-                return fname;
-            }
-        }
-
-        entry = readdir(dirPoint);
-    }
-
-
-	printf("ERROR: Could not find level \"%s\"\n", name.c_str());
-    return std::string();
 }
 

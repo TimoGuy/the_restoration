@@ -1,4 +1,4 @@
 i	w104CavHugePits.png
 
-t	1	n_w102VertCavern_101x65
+t	1	n_w102VertCavern	101,65
 t	1	n_w105SheepShearing

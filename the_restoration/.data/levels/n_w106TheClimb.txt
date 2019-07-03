@@ -1,4 +1,4 @@
 i	w106TheClimb.png
 
 t	1	n_w107FallTerrainHuh
-t	1	n_w105SheepShearing	374x68
+t	1	n_w105SheepShearing	374,68

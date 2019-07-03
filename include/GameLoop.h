@@ -22,6 +22,7 @@ class GameLoop
 
         void SetWindowDimensions(int width, int height);
         void GetWindowDimensions(int& width, int& height);          // Dipstick function!!!!
+		bool DidJustResize();			// This will be on for only 1 tick really
 
 
 
@@ -35,6 +36,7 @@ class GameLoop
         bool _running = true;
 
         int _windowWidth, _windowHeight;
+		bool _didJustResize;
 
 
 
