@@ -326,19 +326,16 @@ void TestRoom::Render()
 	glLoadIdentity();
 
 	// Set the camera's zoom
-	{
-		float doX = camX + (SCREEN_WIDTH / 2);
-		float doY = camY + (SCREEN_HEIGHT / 2);
-		glScalef(camScale, camScale, camScale);
-		glTranslatef(-doX, -doY, 0.0f);
-	}
-
-	// Set camera position
-	//glTranslatef(-camX, -camY, 0.0f);
-	glTranslatef(SCREEN_WIDTH / 2 / camScale, SCREEN_HEIGHT / 2 / camScale, 0);
+	glScalef(camScale, camScale, camScale);
+	glTranslatef(-camX, -camY, 0.0f);
 
 
 
+
+
+	// And then the tileset underlay!!!!!
+	glColor4f(1, 1, 1, 1);
+	roomTileSet.RenderVerts();
 
 	// Call a render for everyone!
 	for (int it = 0; it < gameObjects.size(); ++it)
@@ -347,8 +344,7 @@ void TestRoom::Render()
 	}
 
 
-	// And then the tileset overlay!!!!!
-	roomTileSet.RenderVerts();
+
 
 	// Setup screen transitioner, if needed ;)
 	if (screenTransition == NULL ||
