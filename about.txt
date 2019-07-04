@@ -261,3 +261,33 @@ together when adjacent from each other.
 			 scene before actually disappearing eh!
 
 -But for now, it will just be a hard-coded not fancy at all example eh.
+
+
+
+
+--LEVEL TILESETS--
+
+So for this, it's a map showing all the spots (will correspond w/ the actual level, but
+doesn't have to have the same dimensions, but the x and y coords will be the exact same eh)
+where tiles are to be placed.
+
+STYLE: will be anything, but basically the tileset will be a (for the case of 32px tiles)
+512x512 png for 256 different tiles. The splitting will be automatic into 16x16 grids, so
+if you want to use a 1024x1024 tile-set, then all of a sudden you have hd textures!
+
+As to which tile will be used, in the picture, if the red value is 0, it will just ignore
+it (blank tile), but the game will just simply read the red value (g and b aren't looked
+at eh) and then find the coordinates for that inside of an array, and that will be the
+assigned tile value! (excluding the blank 0 tile), you have 1-255 different choices!!!!
+
+
+For the standard cardinal blocks, you will need 8 for sides and corners, and a 9th for a
+center, (probably black) block.
+
+For slants, you will need 4 for the 45 degrees, 8 for the 4-block wides, 6 for the 3's,
+and 4 for the 2's.
+
+CURRENT TOTAL: 31 tiles for just the ground
+
+(NOTE: and of course you can animate the tilesets, precisely like you do it w/ cutscenes)
+
