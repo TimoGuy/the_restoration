@@ -64,6 +64,10 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 		return;
 	}
 
+
+
+
+
 	// To set up the player
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
@@ -343,6 +347,9 @@ void TestRoom::Render()
 	}
 
 
+	// And then the tileset overlay!!!!!
+	roomTileSet.RenderVerts();
+
 	// Setup screen transitioner, if needed ;)
 	if (screenTransition == NULL ||
 		_gloop->DidJustResize())
@@ -422,6 +429,9 @@ bool TestRoom::LoadLevelIO(std::string name)
 	// Level variables
 	std::string levelFilename;
 
+	// Level's tileset loading prep variable
+	std::string levelTileSetFname;			// Should init as an empty string
+
 	// Try loading the level!!!
 	std::string line;
 	std::ifstream myfile(currentDir + name + ".txt");
@@ -449,6 +459,22 @@ bool TestRoom::LoadLevelIO(std::string name)
 			{
 				// It's a collision picture!!!! (the base one)
 				levelFilename = line.substr(2);			// Cut off the 'i' and '\t'
+
+				// NOTE: this file will later be loaded!!!
+				// (@ region "Load Collision Picture")
+			}
+			else if (line.at(0) == 's')
+			{
+				// It's the tile-set!!!! (support animation l8r TODO)
+				roomTileSet.LoadTileTex(currentDir + line.substr(2));		// It's a rel path!!! (also cutoff the 's' and '\t' too eh)
+			}
+			else if (line.at(0) == 'm')
+			{
+				// It's the tile set to collision map!!!!
+				levelTileSetFname = line.substr(2);			// Cut off the 'm' and '\t'
+
+				// NOTE: this file will later be loaded!!!
+				// (@ region "Load Level Tileset Map")
 			}
 			else
 			{
@@ -474,65 +500,120 @@ bool TestRoom::LoadLevelIO(std::string name)
 		return false;
 	}
 
+
+	// Just error-checking!
+	if (!levelFilename.empty())
+	{
 #pragma region Load Collision Picture
 
-    // Load a picture of the level
-    int comp;
-    const std::string& fileName = currentDir + levelFilename;
-    int req = STBI_rgb;
-    unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
+		// Load a picture of the level
+		int comp;
+		const std::string& fileName = currentDir + levelFilename;
+		int req = STBI_rgb;
+		unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
 
-    if (imgData == NULL)
-    {
-        printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
-        return false;
-    }
+		if (imgData == NULL)
+		{
+			printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
+			return false;
+		}
+
+
+
+		// Initialize the Collision Map as EMPTY!!!!
+		collisionMap = new Object*[gWidth * gHeight];
+		for (int uu = 0; uu < gWidth * gHeight; uu++)
+		{
+			collisionMap[uu] = NULL;
+		}
+
+		// Yeah so hopefully you kept 'req' at STBI_rgb,
+		// bc we're gonna use the 3 values to get the objects
+		// for the room from ObjectFactory.h
+		//
+		// convert the pixels to objects yall!
+		int i = 0;
+		while (i < gWidth * gHeight)
+		{
+			// We'll assume it's STBI_rgb
+			std::string out_string;
+			std::stringstream ss[3];
+			ss[0] << (int)imgData[(i * 3)];
+			ss[1] << (int)imgData[(i * 3) + 1];
+			ss[2] << (int)imgData[(i * 3) + 2];
+
+
+			std::string colorId =
+				ss[0].str() + std::string(",") +
+				ss[1].str() + std::string(",") +
+				ss[2].str();
+
+			Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
+			if (_new != NULL)
+				gameObjects.push_back(_new);        // Adds the returned built object!
+
+			i++;
+		}
+
+
+		// Free loaded image
+		stbi_image_free(imgData);
 
 #pragma endregion
-
-    
-
-    // Initialize the Collision Map as EMPTY!!!!
-    collisionMap = new Object*[gWidth * gHeight];
-    for (int uu = 0; uu < gWidth * gHeight; uu++)
-    {
-        collisionMap[uu] = NULL;
-    }
-
-    // Yeah so hopefully you kept 'req' at STBI_rgb,
-    // bc we're gonna use the 3 values to get the objects
-    // for the room from ObjectFactory.h
-    //
-    // convert the pixels to objects yall!
-    int i = 0;
-    while (i < gWidth * gHeight)
-    {
-        // We'll assume it's STBI_rgb
-        std::string out_string;
-        std::stringstream ss[3];
-        ss[0] << (int)imgData[(i * 3)];
-        ss[1] << (int)imgData[(i * 3) + 1];
-        ss[2] << (int)imgData[(i * 3) + 2];
-
-
-        std::string colorId =
-            ss[0].str() + std::string(",") +
-            ss[1].str() + std::string(",") +
-            ss[2].str();
-
-        Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
-        if (_new != NULL)
-            gameObjects.push_back(_new);        // Adds the returned built object!
-
-        i++;
-    }
+	}
+	else
+	{
+		printf("WARNING: No filename for collision data was specified... use 'i' in the level file\n");
+		// Do nuthin, cuz it's a warning!
+	}
 
 
 
+	// First check if there was a tileset
+	// requested in the first place!!!
+	if (!levelTileSetFname.empty())
+	{
+#pragma region Load Level Tileset Map
+
+		// Load it up!!!!
+		int comp;
+		const std::string& fileName = currentDir + levelTileSetFname;		// See? Just a little bit different!!!
+		int req = STBI_rgb;
+		unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
+
+		if (imgData == NULL)
+		{
+			printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
+			return false;
+		}
+
+		// Yeah so hopefully you kept 'req' at STBI_rgb,
+		// bc we're gonna use the 3 values to get the objects
+		// for the room from ObjectFactory.h
+		//
+		// convert the pixels to objects yall!
+		int i = 0;
+		while (i < gWidth * gHeight)
+		{
+			// We'll assume it's STBI_rgb (hence 3 multiplier eh)
+			roomTileSet.InterpretAndAddVector((int)imgData[(i * 3)], (int)(i % gWidth), (int)(i / gWidth));		// Take the r_value, and it will interpret it!
+
+			i++;
+		}
 
 
-    // Free loaded image
-    stbi_image_free(imgData);
+		// Free loaded image
+		stbi_image_free(imgData);
+
+#pragma endregion
+	}
+	else
+	{
+		printf("WARNING: No filename for tile-mapping data was specified... use 'm' in the level file\n");
+		// Do nuthin, cuz it's a warning!
+	}
+
+
 	return true;
 }
 

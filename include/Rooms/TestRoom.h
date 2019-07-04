@@ -4,10 +4,12 @@
 #include "Rooms/Room.h"
 #include "Entity.h"
 #include "defs.h"
+#include "TileSet.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/Room.h"
 #include "../../include/Players/Entity.h"
 #include "../../include/defs.h"
+#include "../../include/Rooms/TileSet.h"
 #endif
 
 #include <stdio.h>
@@ -64,6 +66,9 @@ class TestRoom : public Room
 		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
 
 
+		// Level's tileset overlay!!
+		// (disable object's rendering and check it out!!!!!)
+		TileSet roomTileSet;
 
 
         // For the camera

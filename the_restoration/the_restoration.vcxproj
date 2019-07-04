@@ -146,6 +146,7 @@
     <ClInclude Include="..\include\Rooms\Cutscene\CutsceneSprite.h" />
     <ClInclude Include="..\include\Rooms\Room.h" />
     <ClInclude Include="..\include\Rooms\TestRoom.h" />
+    <ClInclude Include="..\include\Rooms\TileSet.h" />
     <ClInclude Include="..\include\Shape\Quad.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClCompile Include="..\src\Rooms\Cutscene\CutsceneSprite.cpp" />
     <ClCompile Include="..\src\Rooms\Room.cpp" />
     <ClCompile Include="..\src\Rooms\TestRoom.cpp" />
+    <ClCompile Include="..\src\Rooms\TileSet.cpp" />
     <ClCompile Include="..\src\Shape\Quad.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
