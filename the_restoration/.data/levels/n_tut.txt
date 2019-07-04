@@ -1,4 +1,6 @@
 i	tut.png
+s	../textures/tileset_test.png
+m	tut_ts.png
 
 t	1	c_tutJumpOff
 t	1	m_tut2
