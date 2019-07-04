@@ -1,3 +1,9 @@
+# 'i' is the collision image (and obj init map)
+# 's' is the tile-set (may animate if desired)
+# 'm' is the tile-placement map (should correspond w/ the 'i' image)
+
 i	w101Home.png
+s	../textures/tileset_test.png
+m	w101_ts.png
 
 t	1	n_w102VertCavern	41,99
