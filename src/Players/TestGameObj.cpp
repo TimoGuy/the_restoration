@@ -26,12 +26,13 @@
 
 //class TestRoom;
 
-#define PLAYER_WIDTH 32
+#define PLAYER_WIDTH 24
 #define PLAYER_HEIGHT 48
 #define PLAYER_YOFF -16
 
 TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 {
+    startCoords = new Quad(10, 10);
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
@@ -315,6 +316,7 @@ void TestGameObj::Update()
 	{
 		numJumps = maxJumps;	// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
+		UpdateStartCoords();
 	}
 
 	// Reset outside forces
@@ -342,8 +344,8 @@ void TestGameObj::Render()
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
 
-
-
+    glColor4f(0.5f, 0, 0, 1);
+    startCoords->Render(startX, startY);
 
 
 

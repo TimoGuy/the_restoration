@@ -29,6 +29,7 @@ class TestGameObj : public Entity
 
     private:
         std::vector<Textbox*> pf;
+        Quad* startCoords;
 
         // States
 		int numJumps = 0;
