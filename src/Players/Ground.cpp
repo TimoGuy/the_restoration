@@ -29,7 +29,7 @@ Ground::~Ground()
 
 void Ground::Render()
 {
-	if (InputManager::Instance().b3())
+	if (InputManager::Instance().b4())
 		image->Render(x, y);
 }
 

@@ -145,6 +145,12 @@ void InputManager::ProcessInput(GameLoop* g)
 				case SDLK_r:
 					_reloadRes = true;		// FOR DEBUG: there's no keyup event, btw.
 					break;
+
+				case SDLK_LCTRL:
+				case SDLK_RCTRL:
+					_b4 = !_b4;				// FOR DEBUG: a toggling btn to show the original blox
+					printf("InputManager:: Toggled showing collision blocks!\n");
+					break;
                 }
             }
             else if (e.type == SDL_KEYUP)

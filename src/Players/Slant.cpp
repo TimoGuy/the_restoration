@@ -49,7 +49,7 @@ Slant::~Slant()
 
 void Slant::Render()
 {
-	if (!InputManager::Instance().b3())
+	if (!InputManager::Instance().b4())
 		return;
 
 
