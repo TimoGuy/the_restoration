@@ -53,12 +53,6 @@ void Trigger::Update()
 
 void Trigger::Render()
 {
-	if (!InputManager::Instance().b3())
-		return;
-
-
-
-
 	if (IsColliding())
 	{
 		// Ready to enter!!!

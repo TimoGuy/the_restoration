@@ -30,7 +30,7 @@ bool TopSideCollGround::IsColliding(BoundBox* box)
 
 	// Use 'image' as the bounding box and test collision!
 	return x < box->x + box->width &&
-		x + GRID_SIZE > box->x &&
+		x + image->GetWidth() > box->x &&
 		y < box->y + box->height &&
-		y + GRID_SIZE > box->y;
+		y + image->GetHeight() > box->y;
 }
