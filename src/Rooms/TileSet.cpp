@@ -95,8 +95,15 @@ void TileSet::RenderVerts()
 	// clockwise)
 	glBegin(GL_QUADS);
 
+	#ifdef __unix__
+	for (int i = 0; i < rendVectors.size(); i++)
+	{
+        TileSet_Vector tsv = rendVectors.at(i);
+	#elif defined(_WIN32) || defined(WIN32)
 	for each (TileSet_Vector tsv in rendVectors)
 	{
+	#endif // __unix__
+
 		glTexCoord2f(tsv.s, tsv.t);
 		glVertex2f(tsv.x, tsv.y);
 	}

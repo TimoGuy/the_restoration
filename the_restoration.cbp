@@ -76,6 +76,7 @@
 		<Unit filename="include/Rooms/Cutscene/CutsceneSprite.h" />
 		<Unit filename="include/Rooms/Room.h" />
 		<Unit filename="include/Rooms/TestRoom.h" />
+		<Unit filename="include/Rooms/TileSet.h" />
 		<Unit filename="include/Shape/Quad.h" />
 		<Unit filename="include/defs.h" />
 		<Unit filename="main.cpp" />
@@ -103,6 +104,7 @@
 		<Unit filename="src/Rooms/Cutscene/CutsceneSprite.cpp" />
 		<Unit filename="src/Rooms/Room.cpp" />
 		<Unit filename="src/Rooms/TestRoom.cpp" />
+		<Unit filename="src/Rooms/TileSet.cpp" />
 		<Unit filename="src/Shape/Quad.cpp" />
 		<Extensions>
 			<code_completion />
