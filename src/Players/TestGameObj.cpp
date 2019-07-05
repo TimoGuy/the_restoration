@@ -257,6 +257,7 @@ void TestGameObj::Update()
                         // Means was originally above the enemy, so the player wins!
                         hsp = 0;
                         vsp = -vsp;
+                        vsp = std::min(vsp, -JUMP_HEIGHT * 1.075f);       // Make sure you jump a little higher so you can escape the aimed jump!
                         ent->YouLose(this);
                     }
                     else
