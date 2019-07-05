@@ -41,7 +41,7 @@ class InputManager
         InputManager();
 
 		// FOR JOYSTICK USE
-		SDL_GameController* controller;
+		SDL_GameController* controller;         float _joy_x = 0, _joy_y = 0;   // For joystick, then will get mixed into the _x and _y!
 		int numJoysticks = 0;
 
         // This is the virtual controller input per-se!

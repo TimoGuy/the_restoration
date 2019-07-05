@@ -201,25 +201,20 @@ void InputManager::ProcessInput(GameLoop* g)
 				{
 					if (e.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)		// X axis
 					{
-						_x = std::min(1.0f, std::max(-1.0f, e.caxis.value / JOYSTICK_MAX_RADIUS));
-						if (std::abs(_x) < JOYSTICK_RAD_DEADZONE)
+						_joy_x = std::min(1.0f, std::max(-1.0f, e.caxis.value / JOYSTICK_MAX_RADIUS));
+						if (std::abs(_joy_x) < JOYSTICK_RAD_DEADZONE)
 						{
 							// DEADZONE it!
-							_x = 0;
+							_joy_x = 0;
 						}
-						//else
-						//{
-						//	// Testing eh!
-						//	printf("X Axis: %f\n", _x);
-						//}
 					}
 					else if (e.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)		// Y axis
 					{
-						_y = std::min(1.0f, std::max(-1.0f, e.caxis.value / JOYSTICK_MAX_RADIUS));
-						if (std::abs(_y) < JOYSTICK_RAD_DEADZONE)
+						_joy_y = std::min(1.0f, std::max(-1.0f, e.caxis.value / JOYSTICK_MAX_RADIUS));
+						if (std::abs(_joy_y) < JOYSTICK_RAD_DEADZONE)
 						{
 							// DEADZONE it!
-							_y = 0;
+							_joy_y = 0;
 						}
 					}
 				}
@@ -230,20 +225,34 @@ void InputManager::ProcessInput(GameLoop* g)
 				// Press buttons!
 				if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
 					_b2 = true;
-				/*else if (e.cbutton.button == SDL_CONTROLLER_BUTTON_X)
-					SDL_Delay(250);*/
+				else if (e.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+					_b1 = true;
+				else if (e.cbutton.button == SDL_CONTROLLER_BUTTON_B)
+					_b3 = true;
 			}
 			else if (e.type == SDL_CONTROLLERBUTTONUP)
 			{
 				// Release
 				if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
 					_b2 = false;
+				else if (e.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+					_b1 = false;
+				else if (e.cbutton.button == SDL_CONTROLLER_BUTTON_B)
+					_b3 = false;
 			}
         }
     }
 
-	if (SDL_NumJoysticks() <= 0 ||
-        controller == NULL)			        // If there's no gamecontroller, then keyboard is the big boss hoe!
+
+	// The keyboard is the big boss when the controller's not being used!
+    if (_joy_x != 0 || _joy_y != 0)
+    {
+        _x = _joy_x;
+        _y = _joy_y;
+    }
+
+    // Okay then, now poll the keyboard, since the gc's not being used!!!
+    else
 	{
 		// ESPECIALLY FOR KEYBOARD... since the variables need some refining eh.
 		if (kLeft == kRight) _x = 0;   // If both are pressed it cancels
