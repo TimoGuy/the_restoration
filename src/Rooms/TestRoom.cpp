@@ -130,8 +130,8 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
                     std::istringstream(rmParams.at(pos + 1)) >> touchTrigger;
                 std::string eventName = rmParams.at(pos + 2);
 
-				
-				
+
+
 				// Set up the trigger object to be a master, and it will find all its slaves.
 				tmpTrigger->SetEventIDAndSetMaster(eventName, touchTrigger);
 							// This needs to be set up before we start setting properties to it, like custom coords!
@@ -170,7 +170,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
                     printf("\tNo custom exit code found\n");
                 }
 
-				
+
 
                 // Remove those values for future params-checking!
                 rmParams.erase(rmParams.begin() + pos, rmParams.begin() + pos + end);
@@ -583,18 +583,24 @@ bool TestRoom::LoadLevelIO(std::string name)
 			return false;
 		}
 
+		int _size = gWidth * gHeight;
+		int rVals[_size];
+		for (int i = 0; i < _size; i++)
+		{
+            // Insert the values into the list before processing!!
+            rVals[i] = (int)imgData[(i * 3)];
+            printf("r_value: %i\n", rVals[i]);
+		}
+
 		// Yeah so hopefully you kept 'req' at STBI_rgb,
 		// bc we're gonna use the 3 values to get the objects
 		// for the room from ObjectFactory.h
 		//
 		// convert the pixels to objects yall!
-		int i = 0;
-		while (i < gWidth * gHeight)
+		for (int i = 0; i < _size; i++)
 		{
 			// We'll assume it's STBI_rgb (hence 3 multiplier eh)
-			roomTileSet.InterpretAndAddVector((int)imgData[(i * 3)], (int)(i % gWidth), (int)(i / gWidth));		// Take the r_value, and it will interpret it!
-
-			i++;
+			roomTileSet.InterpretAndAddVector(i, (int)(i % gWidth), (int)(i / gWidth), gWidth, gHeight, rVals);		// Take the r_value, and it will interpret it!
 		}
 
 
