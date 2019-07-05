@@ -2,10 +2,12 @@
 #include "Slant.h"
 #include "defs.h"
 #include "TestRoom.h"
+#include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Slant.h"
 #include "../../include/defs.h"
 #include "../../include/Rooms/TestRoom.h"
+#include "../../include/InputManager.h"
 #endif
 
 #include <stdio.h>
@@ -47,6 +49,12 @@ Slant::~Slant()
 
 void Slant::Render()
 {
+	if (!InputManager::Instance().b3())
+		return;
+
+
+
+
 	// Make sure these are off
 	glDisable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, NULL);
