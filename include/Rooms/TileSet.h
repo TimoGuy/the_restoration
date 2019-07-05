@@ -27,7 +27,7 @@ public:
 	~TileSet();
 
 	void LoadTileTex(std::string tileSetFName);			// Please provide 'tileSetFName' as an absolute path!!!!
-	void InterpretAndAddVector(int index, int gx, int gy, const int rmGWidth, const int rmGHeight, const int* r_values);      // Gives a list to access (16 x 16)
+	void InterpretAndAddVector(int index, int gx, int gy, const int rmGWidth, const int rmGHeight, unsigned char* imgData);      // Gives the texture for edge-detection!
 	void RenderVerts();
 
 private:

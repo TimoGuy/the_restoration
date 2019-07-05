@@ -583,24 +583,15 @@ bool TestRoom::LoadLevelIO(std::string name)
 			return false;
 		}
 
-		int _size = gWidth * gHeight;
-		int rVals[_size];
-		for (int i = 0; i < _size; i++)
-		{
-            // Insert the values into the list before processing!!
-            rVals[i] = (int)imgData[(i * 3)];
-            printf("r_value: %i\n", rVals[i]);
-		}
-
 		// Yeah so hopefully you kept 'req' at STBI_rgb,
 		// bc we're gonna use the 3 values to get the objects
 		// for the room from ObjectFactory.h
 		//
 		// convert the pixels to objects yall!
-		for (int i = 0; i < _size; i++)
+		for (int i = 0; i < gWidth * gHeight; i++)
 		{
 			// We'll assume it's STBI_rgb (hence 3 multiplier eh)
-			roomTileSet.InterpretAndAddVector(i, (int)(i % gWidth), (int)(i / gWidth), gWidth, gHeight, rVals);		// Take the r_value, and it will interpret it!
+			roomTileSet.InterpretAndAddVector(i, (int)(i % gWidth), (int)(i / gWidth), gWidth, gHeight, imgData);		// Take the r_value, and it will interpret it!
 		}
 
 

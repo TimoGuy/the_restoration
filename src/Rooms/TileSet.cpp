@@ -35,23 +35,32 @@ void TileSet::LoadTileTex(std::string tileSetFName)
 #define TS_GRID_WIDTH_HEIGHT 16
 bool IsInrangeOfGrounds(int r_value, bool includeSlopes)
 {
-    return ((r_value >= 1 && r_value <= 3) ||
-        (r_value >= 16 && r_value <= 19) ||
-        (r_value >= 33 && r_value <= 35) ||
-        r_value == 51 ||
-        (r_value >= 64 && r_value <= 67) ||
-        (r_value >= 80 && r_value <= 82) ||
-        (r_value >= 96 && r_value <= 98))
-        &&
-        (!includeSlopes ||
-        (r_value >= 4 && r_value <= 11) ||
-        (r_value >= 20 && r_value <= 27) ||
-        (r_value >= 36 && r_value <= 41) ||
-        (r_value >= 52 && r_value <= 57) ||
-        (r_value >= 68 && r_value <= 71) ||
-        (r_value >= 84 && r_value <= 87) ||
-        (r_value >= 100 && r_value <= 101) ||
-        (r_value >= 116 && r_value <= 117));
+	
+	bool checkRegGnd = ((r_value >= 1 && r_value <= 3) ||
+		(r_value >= 16 && r_value <= 19) ||
+		(r_value >= 33 && r_value <= 35) ||
+		r_value == 51 ||
+		(r_value >= 64 && r_value <= 67) ||
+		(r_value >= 80 && r_value <= 82) ||
+		(r_value >= 96 && r_value <= 98));
+
+	if (checkRegGnd)
+	{
+		return true;
+	}
+	else if (includeSlopes)
+	{
+		return ((r_value >= 4 && r_value <= 11) ||
+			(r_value >= 20 && r_value <= 27) ||
+			(r_value >= 36 && r_value <= 41) ||
+			(r_value >= 52 && r_value <= 57) ||
+			(r_value >= 68 && r_value <= 71) ||
+			(r_value >= 84 && r_value <= 87) ||
+			(r_value >= 100 && r_value <= 101) ||
+			(r_value >= 116 && r_value <= 117));
+	}
+
+	return false;
 }
 
 void AddQuadForTile(int r_value, int gx, int gy, std::vector<TileSet_Vector>& rendVectors)
@@ -98,9 +107,9 @@ void AddQuadForTile(int r_value, int gx, int gy, std::vector<TileSet_Vector>& re
 
 
 
-void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidth, const int rmGHeight, const int* r_values)
+void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidth, const int rmGHeight, unsigned char* imgData)
 {
-    int r_value = r_values[index];
+    int r_value = (int)imgData[index * 3];
 
     // If 0 it's blank eh (or out of bounds)
 	if (r_value <= 0 ||
@@ -118,10 +127,10 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
     // the flat ground is hard to coordinate together
     // (Slopes are fine, so only do the flat ground!)
     // IT WILL BECOME AUTOMAGIC!!!! YES!!!
-    bool ul_isInsideCorner;
-	bool ur_isInsideCorner;				// These.... will be used later, when overlays need to be made.
-    bool dl_isInsideCorner;
-    bool dr_isInsideCorner;
+    bool ul_isInsideCorner = false;
+	bool ur_isInsideCorner = false;				// These.... will be used later, when overlays need to be made.
+    bool dl_isInsideCorner = false;
+    bool dr_isInsideCorner = false;
     if (IsInrangeOfGrounds(r_value, false))
     {
         if (r_value == 18)
@@ -162,7 +171,8 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             		{
             			// Try testing it! (this time make sure that slopes are included, since in this case, they
             			// are ground we want to meld with)
-            			isEmpties[i] = !IsInrangeOfGrounds(r_values[yoff * rmGWidth + xoff], true);
+						int foundRVal = (int)imgData[(yoff * rmGWidth + xoff) * 3];
+            			isEmpties[i] = !IsInrangeOfGrounds(foundRVal, true);
 
             			// We want to know for this next part if is empty of ground!
             		}
@@ -183,18 +193,18 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             	//
             	// And then from all of that, it will assign a new
             	// r_value!
-            	bool ul_isCorner, ul_isInsideCorner;
-            	bool ur_isCorner, ur_isInsideCorner;
-            	bool dl_isCorner, dl_isInsideCorner;
-            	bool dr_isCorner, dr_isInsideCorner;
-            	bool n_isWall, e_isWall, s_isWall, w_isWall;
+            	bool ul_isCorner = false;
+            	bool ur_isCorner = false;
+            	bool dl_isCorner = false;
+            	bool dr_isCorner = false;
+            	bool n_isWall = false, e_isWall = false, s_isWall = false, w_isWall = false;
 
 
             	// Start w/ the upper_left corner
             	//	**0
             	//	* 0
             	//	000
-            	if (isEmpties[0] && isEmpties[1] && isEmpties[3])
+            	if (isEmpties[1] && isEmpties[3])
             	{
             		ul_isCorner = true;
             		n_isWall = true;
@@ -218,7 +228,7 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             	//	0**
             	//	0 *
             	//	000
-            	if (isEmpties[1] && isEmpties[2] && isEmpties[4])
+            	if (isEmpties[1] && isEmpties[4])
             	{
             		ur_isCorner = true;
             		n_isWall = true;
@@ -245,7 +255,7 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             	//	000
             	//	* 0
             	//	**0
-            	if (isEmpties[3] && isEmpties[5] && isEmpties[6])
+            	if (isEmpties[3] && isEmpties[6])
             	{
             		dl_isCorner = true;
             		s_isWall = true;
@@ -271,7 +281,7 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             	//	000
             	//	0 *
             	//	0**
-            	if (isEmpties[4] && isEmpties[6] && isEmpties[7])
+            	if (isEmpties[4] && isEmpties[6])
             	{
             		dr_isCorner = true;
             		s_isWall = true;
