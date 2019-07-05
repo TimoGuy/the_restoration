@@ -142,13 +142,6 @@ void TestGameObj::Update()
     // CHECK FOR COLLISION W/ NPCs/HAZARDS/DOORS/etc.
     bool die = false;
 
-	// TEST: if pressed 'j' then you'd automagically respawn
-	/*if (InputManager::Instance().b1())
-	{
-//        printf("You dyed!!\n");
-		die = true;
-	}*/
-
 
     std::vector<Object*> tempCollisions;
     if (CollideAtPos(x + hsp, y + vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, tempCollisions, false))
@@ -221,11 +214,37 @@ void TestGameObj::Update()
     // Cycle thru all entities and react eh
     if (framesOfInvincibility <= 0)
     {
+        bool hasTargeted = false;
         for (int i = 0; i < room->getEntityList()->size(); i++)
         {
             Entity* ent;
             if ((ent = room->getEntityList()->at(i)) != this)
             {
+                // Enemy targeting helper????
+                if (!hasTargeted && vsp > 0)
+                {
+                    int dist = ent->getY() - (y + image->GetHeight());
+                    if (dist > 0 && dist < 64)             // It needs to be that the player is above the enemy, falling on it!
+                    {
+                        // Select 1 to target
+                        float deltHsp = (ent->getX() - x) / 10.0f;
+                        if (std::abs(ent->getX() - x) < 128)       // Only do if close enough!
+                        {
+                            // Speed up to get the mark!
+                            hsp = deltHsp;
+
+                            // Don't do this craziness on 2 enemies at once!
+                            hasTargeted = true;
+                        }
+                    }
+                }
+
+
+
+
+
+
+
                 // It's not me, so let's interact!!!
                 BoundBox b = { x + hsp, y + vsp, x, y, image->GetWidth(), image->GetHeight() };
                 if (ent->IsColliding(&b))
@@ -249,8 +268,6 @@ void TestGameObj::Update()
             }
         }
     }
-//    else
-//        printf("You\'re invincible!!! %i\n", framesOfInvincibility);
 
 
 
