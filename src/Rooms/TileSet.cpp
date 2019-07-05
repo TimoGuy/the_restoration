@@ -35,7 +35,7 @@ void TileSet::LoadTileTex(std::string tileSetFName)
 #define TS_GRID_WIDTH_HEIGHT 16
 bool IsInrangeOfGrounds(int r_value, bool includeSlopes)
 {
-	
+
 	bool checkRegGnd = ((r_value >= 1 && r_value <= 3) ||
 		(r_value >= 16 && r_value <= 19) ||
 		(r_value >= 33 && r_value <= 35) ||
@@ -148,7 +148,6 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
         	//	***
         	//	* *
 			//	***
-            bool safe = true;
             bool isEmpties[8];
             for (int i = 0; i < 8; i++)
             {
@@ -159,13 +158,16 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             		// Change into the correct x and y coords
             		int xoff = filteredInd % 3 - 1 + gx;
             		int yoff = filteredInd / 3 - 1 + gy;
+            		
 
             		// Check if offset vals aren't exiting the room
             		if (xoff < 0 || xoff >= rmGWidth ||
             			yoff < 0 || yoff >= rmGHeight)
             		{
-            			// FLAG AS UNSAFE!!!
-            			safe = false;
+                        // Set it as a wall so
+                        // that maybe it'll load correctly in the
+                        // filter l8r down the algorithm
+                     	isEmpties[i] = false;
             		}
             		else
             		{
@@ -179,241 +181,234 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             	}
             }
 
-            // ACTUALLY set this r_value if safe
-            if (!safe)
-            {
-            	r_value = 51;		// The one-block lonely dawg.
-            }
-            else
-            {
-            	// THIS IS THE TESTING ZONE!!!
-            	// Desc: The test will see if an inside-corner
-            	// is needed, or if a block is a wall or a floor
-            	// based off of the corners and walls it finds
-            	//
-            	// And then from all of that, it will assign a new
-            	// r_value!
-            	bool ul_isCorner = false;
-            	bool ur_isCorner = false;
-            	bool dl_isCorner = false;
-            	bool dr_isCorner = false;
-            	bool n_isWall = false, e_isWall = false, s_isWall = false, w_isWall = false;
+            
+        	// THIS IS THE TESTING ZONE!!!
+        	// Desc: The test will see if an inside-corner
+        	// is needed, or if a block is a wall or a floor
+        	// based off of the corners and walls it finds
+        	//
+        	// And then from all of that, it will assign a new
+        	// r_value!
+        	bool ul_isCorner = false;
+        	bool ur_isCorner = false;
+        	bool dl_isCorner = false;
+        	bool dr_isCorner = false;
+        	bool n_isWall = false, e_isWall = false, s_isWall = false, w_isWall = false;
 
 
-            	// Start w/ the upper_left corner
-            	//	**0
-            	//	* 0
-            	//	000
-            	if (isEmpties[1] && isEmpties[3])
-            	{
-            		ul_isCorner = true;
-            		n_isWall = true;
-            		w_isWall = true;
-            	}
-            	else if (isEmpties[1])		// Just the upper wall
-            	{
-            		n_isWall = true;
-            	}
-            	else if (isEmpties[3])		// Just the left wall
-            	{
-            		w_isWall = true;
-            	}
-            	else if (isEmpties[0])		// Okay, if just the corner's empty, then it's an inside-corner!
-            	{
-            		ul_isInsideCorner = true;
-            	}
+        	// Start w/ the upper_left corner
+        	//	**0
+        	//	* 0
+        	//	000
+        	if (isEmpties[1] && isEmpties[3])
+        	{
+        		ul_isCorner = true;
+        		n_isWall = true;
+        		w_isWall = true;
+        	}
+        	else if (isEmpties[1])		// Just the upper wall
+        	{
+        		n_isWall = true;
+        	}
+        	else if (isEmpties[3])		// Just the left wall
+        	{
+        		w_isWall = true;
+        	}
+        	else if (isEmpties[0])		// Okay, if just the corner's empty, then it's an inside-corner!
+        	{
+        		ul_isInsideCorner = true;
+        	}
 
 
-            	// Yoshi! Tugi wa the upper_right corner
-            	//	0**
-            	//	0 *
-            	//	000
-            	if (isEmpties[1] && isEmpties[4])
-            	{
-            		ur_isCorner = true;
-            		n_isWall = true;
-            		e_isWall = true;
-            	}
-            	else if (isEmpties[1])		// Just the upper wall
-            	{
-            		n_isWall = true;
-            	}
-            	else if (isEmpties[4])		// Just the right wall
-            	{
-            		e_isWall = true;
-            	}
-            	else if (isEmpties[2])		// Okay, if just the corner's empty, then it's an inside-corner!
-            	{
-            		ur_isInsideCorner = true;
-            	}
+        	// Yoshi! Tugi wa the upper_right corner
+        	//	0**
+        	//	0 *
+        	//	000
+        	if (isEmpties[1] && isEmpties[4])
+        	{
+        		ur_isCorner = true;
+        		n_isWall = true;
+        		e_isWall = true;
+        	}
+        	else if (isEmpties[1])		// Just the upper wall
+        	{
+        		n_isWall = true;
+        	}
+        	else if (isEmpties[4])		// Just the right wall
+        	{
+        		e_isWall = true;
+        	}
+        	else if (isEmpties[2])		// Okay, if just the corner's empty, then it's an inside-corner!
+        	{
+        		ur_isInsideCorner = true;
+        	}
 
 
 
 
 
-            	// Tugi wa the lower_left corner
-            	//	000
-            	//	* 0
-            	//	**0
-            	if (isEmpties[3] && isEmpties[6])
-            	{
-            		dl_isCorner = true;
-            		s_isWall = true;
-            		w_isWall = true;
-            	}
-            	else if (isEmpties[6])		// Just the lower wall
-            	{
-            		s_isWall = true;
-            	}
-            	else if (isEmpties[3])		// Just the left wall
-            	{
-            		w_isWall = true;
-            	}
-            	else if (isEmpties[5])		// Okay, if just the corner's empty, then it's an inside-corner!
-            	{
-            		dl_isInsideCorner = true;
-            	}
+        	// Tugi wa the lower_left corner
+        	//	000
+        	//	* 0
+        	//	**0
+        	if (isEmpties[3] && isEmpties[6])
+        	{
+        		dl_isCorner = true;
+        		s_isWall = true;
+        		w_isWall = true;
+        	}
+        	else if (isEmpties[6])		// Just the lower wall
+        	{
+        		s_isWall = true;
+        	}
+        	else if (isEmpties[3])		// Just the left wall
+        	{
+        		w_isWall = true;
+        	}
+        	else if (isEmpties[5])		// Okay, if just the corner's empty, then it's an inside-corner!
+        	{
+        		dl_isInsideCorner = true;
+        	}
 
 
 
 
-            	// Saigo ni the lower_left corner wo kakunin siken no kaisi wo itasimasu
-            	//	000
-            	//	0 *
-            	//	0**
-            	if (isEmpties[4] && isEmpties[6])
-            	{
-            		dr_isCorner = true;
-            		s_isWall = true;
-            		e_isWall = true;
-            	}
-            	else if (isEmpties[6])		// Just the lower wall
-            	{
-            		s_isWall = true;
-            	}
-            	else if (isEmpties[4])		// Just the right wall
-            	{
-            		e_isWall = true;
-            	}
-            	else if (isEmpties[7])		// Okay, if just the corner's empty, then it's an inside-corner!
-            	{
-            		dr_isInsideCorner = true;
-            	}
+        	// Saigo ni the lower_left corner wo kakunin siken no kaisi wo itasimasu
+        	//	000
+        	//	0 *
+        	//	0**
+        	if (isEmpties[4] && isEmpties[6])
+        	{
+        		dr_isCorner = true;
+        		s_isWall = true;
+        		e_isWall = true;
+        	}
+        	else if (isEmpties[6])		// Just the lower wall
+        	{
+        		s_isWall = true;
+        	}
+        	else if (isEmpties[4])		// Just the right wall
+        	{
+        		e_isWall = true;
+        	}
+        	else if (isEmpties[7])		// Okay, if just the corner's empty, then it's an inside-corner!
+        	{
+        		dr_isInsideCorner = true;
+        	}
 
 
 
 
-            	// OKAY, now take all of these collision
-            	// discoveries and make some magic happen!
-            	//
-            	// ASSIGN THE NEW R_VALUE!!!!
+        	// OKAY, now take all of these collision
+        	// discoveries and make some magic happen!
+        	//
+        	// ASSIGN THE NEW R_VALUE!!!!
 
-            	if (ul_isCorner)		// Start w/ the upper left corner eh
-            	{
-            		if (dr_isCorner)	// Is it a 4-cornerer?????
-            		{
-            			// Sweet! Set the r_val!
-            			r_value = 51;
-            		}
-            		else if (ur_isCorner)	// Is it a top of pillar????
-            		{
-            			// Cool!
-            			r_value = 64;
-            		}
-            		else if (dl_isCorner)	// Is it a left-end-of-thin-platform????
-            		{
-            			// Heeeey
-            			r_value = 65;
-            		}
-            		else
-            		{
-            			// Well, it is a regular corner, but still cool, i'd say!
-            			r_value = 1;
-            		}
-            	}
-            	else if (ur_isCorner)	// Start w/ the upper right corner....
-            	{
-            		if (dr_isCorner)	// Is it a right-end-of-thin-platform????
-            		{
-            			// Yes! I do say!
-            			r_value = 67;
-            		}
-            		else
-            		{
-            			// Reg. corner guys
-            			r_value = 3;
-            		}
-            	}
-            	else if (dl_isCorner)	// Start w/ the lower left corner.....
-            	{
-            		if (dr_isCorner)	// Is it a bottom of a pillar????
-            		{
-            			// Saved my b8con!!!
-            			r_value = 96;
-            		}
-            		else
-            		{
-            			// Regular corner
-            			r_value = 33;
-            		}
-            	}
-            	else if (dr_isCorner)	// Only 1 possibility left dude...
-            	{
-            		// A reg-reg!
-            		r_value = 35;
-            	}
+        	if (ul_isCorner)		// Start w/ the upper left corner eh
+        	{
+        		if (dr_isCorner)	// Is it a 4-cornerer?????
+        		{
+        			// Sweet! Set the r_val!
+        			r_value = 51;
+        		}
+        		else if (ur_isCorner)	// Is it a top of pillar????
+        		{
+        			// Cool!
+        			r_value = 64;
+        		}
+        		else if (dl_isCorner)	// Is it a left-end-of-thin-platform????
+        		{
+        			// Heeeey
+        			r_value = 65;
+        		}
+        		else
+        		{
+        			// Well, it is a regular corner, but still cool, i'd say!
+        			r_value = 1;
+        		}
+        	}
+        	else if (ur_isCorner)	// Start w/ the upper right corner....
+        	{
+        		if (dr_isCorner)	// Is it a right-end-of-thin-platform????
+        		{
+        			// Yes! I do say!
+        			r_value = 67;
+        		}
+        		else
+        		{
+        			// Reg. corner guys
+        			r_value = 3;
+        		}
+        	}
+        	else if (dl_isCorner)	// Start w/ the lower left corner.....
+        	{
+        		if (dr_isCorner)	// Is it a bottom of a pillar????
+        		{
+        			// Saved my b8con!!!
+        			r_value = 96;
+        		}
+        		else
+        		{
+        			// Regular corner
+        			r_value = 33;
+        		}
+        	}
+        	else if (dr_isCorner)	// Only 1 possibility left dude...
+        	{
+        		// A reg-reg!
+        		r_value = 35;
+        	}
 
-            	// Okay, so from here on out, there will only be walls
-            	// (or segments of pillars)
-            	else if (n_isWall)		// Start with the north wall...
-            	{
-            		if (s_isWall)		// Could this be part of a hor. pillar???
-            		{
-            			// Hey hey hey!!!
-            			r_value = 66;
-            		}
-            		else
-            		{
-            			// Normal wall
-            			r_value = 2;
-            		}
-            	}
-            	else if (e_isWall)		// Start w/ the east wall!
-            	{
-            		if (w_isWall)		// Am I.... the.... pillar section?????
-            		{
-            			// Woohooo!
-            			r_value = 80;
-            		}
-            		else
-            		{
-            			// Nope, just a regular wall!
-            			// But that's okay, I'm still important in this level!
-            			r_value = 19;
-            		}
-            	}
-            	else if (s_isWall)		// Well, nothing special from here on out, I guess...
-            	{
-            		// Reg.
-            		r_value = 34;
-            	}
-            	else if (w_isWall)
-            	{
-            		// Reg.
-            		r_value = 17;
-            	}
-            	else
-            	{
-            		// Wait wait wait... so you're not a corner,
-            		// neither a wall?!?!?!?!
-            		//
-            		// Oh, I get it... the INSIDE CORNER on all 4
-            		// sides, eh.
-            		// Okay, I'll just give you the blank (not black)
-            		// space so they can overlay it l8r, 'kay? Thanks!
-            		r_value = 16;
-            	}
-            }
+        	// Okay, so from here on out, there will only be walls
+        	// (or segments of pillars)
+        	else if (n_isWall)		// Start with the north wall...
+        	{
+        		if (s_isWall)		// Could this be part of a hor. pillar???
+        		{
+        			// Hey hey hey!!!
+        			r_value = 66;
+        		}
+        		else
+        		{
+        			// Normal wall
+        			r_value = 2;
+        		}
+        	}
+        	else if (e_isWall)		// Start w/ the east wall!
+        	{
+        		if (w_isWall)		// Am I.... the.... pillar section?????
+        		{
+        			// Woohooo!
+        			r_value = 80;
+        		}
+        		else
+        		{
+        			// Nope, just a regular wall!
+        			// But that's okay, I'm still important in this level!
+        			r_value = 19;
+        		}
+        	}
+        	else if (s_isWall)		// Well, nothing special from here on out, I guess...
+        	{
+        		// Reg.
+        		r_value = 34;
+        	}
+        	else if (w_isWall)
+        	{
+        		// Reg.
+        		r_value = 17;
+        	}
+        	else
+        	{
+        		// Wait wait wait... so you're not a corner,
+        		// neither a wall?!?!?!?!
+        		//
+        		// Oh, I get it... the INSIDE CORNER on all 4
+        		// sides, eh.
+        		// Okay, I'll just give you the blank (not black)
+        		// space so they can overlay it l8r, 'kay? Thanks!
+        		r_value = 16;
+        	}
         }
     }
 
