@@ -1,6 +1,7 @@
 # 'i' is the collision image (and obj init map)
-# 's' is the tile-set (may animate if desired)
+# 's' is a sprite (first one is the tileset) (may animate if desired)
 # 'm' is the tile-placement map (should correspond w/ the 'i' image)
+# 'o' is an object (o\t<sprite id (-1 for nothing)>\tx,y,z(if >0 then will be considered a background, and its parallax will be determined by a value from 1 - 1000)
 
 i	w101Home.png
 s	../textures/tileset_test.png

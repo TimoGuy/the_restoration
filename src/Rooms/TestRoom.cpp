@@ -89,6 +89,10 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
                 ((TestGameObj*)camFocusObj)->UpdateStartCoords();
                 printf("\t\t\tPlayer set to custom coords %i,%i\n", playerGX, playerGY);
 			}
+
+			// Update the camera to reflect all the wonderful changes!
+            camX = camFocusObj->getX();
+            camY = camFocusObj->getY();
 			break;
 		}
 	}
@@ -235,7 +239,7 @@ void TestRoom::ScreenFadeIn(SDL_Color fadeOutColor)
 
 
 
-
+float camHsp = 0, camVsp = 0;
 
 void TestRoom::Update()
 {
@@ -256,8 +260,20 @@ void TestRoom::Update()
         return;
 
     // Update camera
-    camX = camFocusObj->getX();
-    camY = camFocusObj->getY();
+
+    // DEBUG:: do a fancy camera trick!
+    if (InputManager::Instance().b4())
+    {
+        camX = camFocusObj->getX();
+        camY = camFocusObj->getY();
+    }
+    else
+    {
+        /*camHsp*/ camX += (camFocusObj->getX() - camX) / 10.0f;
+        /*camVsp */camY += (camFocusObj->getY() - camY) / 10.0f;
+//        camHsp += 20;
+//        camVsp += 20;
+    }
 
     // Cap it to the center if it's too large
     bool lockX = false, lockY = false;
@@ -316,9 +332,9 @@ void TestRoom::Update()
 		camScale = 1;
 	}
 
-	// Update the camera
+	// Update the debug mvtment camera
 	camX += camOffX;
-	camY += camOffY;
+    camY += camOffY;
 }
 
 void TestRoom::Render()
