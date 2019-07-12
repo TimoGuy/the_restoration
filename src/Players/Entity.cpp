@@ -208,3 +208,14 @@ bool Entity::CollideAtPos(float futX, float futY, float width, float height, std
 	return collided;
 }
 
+
+
+
+
+
+
+float Entity::GetHsp()
+{
+    return hsp;
+}
+

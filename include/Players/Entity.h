@@ -19,6 +19,8 @@ public:
 
 	virtual void YouLose(Entity* accordingToMe) = 0;
 
+	float GetHsp();
+
 protected:
 	float hsp, vsp;
 	Quad* image;

@@ -38,6 +38,8 @@ class TestRoom : public Room
         void Update();
         void Render();
 
+        void AddCamOffCoords(float offx, float offy);
+
     protected:
 
     private:
@@ -73,6 +75,7 @@ class TestRoom : public Room
 
         // For the camera
         float camX = 0, camY = 0;   // Make this the same coords as the player!
+        float camReqOffX = 0, camReqOffY = 0;       // Objects can override and request camera mvt. (also, these variables are reset to 0 every frame, so you ADD to them in the add())
         Object* camFocusObj = NULL;        // This is the pointer to the player, eh!
 		float camOffX = 0,						// For moving the cam manually
 			camOffY = 0;

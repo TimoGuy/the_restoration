@@ -30,8 +30,20 @@
 #define PLAYER_HEIGHT 48
 #define PLAYER_YOFF -16
 
+
+
+Quad* mySword = NULL;
+bool isUsingMySword = false;
+bool isSwordLeft = false;
+#define PLAYER_SWORD_WIDTH 128
+#define PLAYER_SWORD_HEIGHT 16
+
+
+
+
 TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 {
+    mySword = new Quad(PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT);
     startCoords = new Quad(10, 10);
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
@@ -75,6 +87,11 @@ TestGameObj::~TestGameObj()
 #define KNOCKBACK_VSP -4.0f
 #define HURT_FRAMES 60
 
+float reqCamOffx = 0;
+#define MAX_CAM_OFFSET_X 32.0f
+#define CAM_X_MVTMENT_SPEED 0.15f
+
+
 void TestGameObj::Update()
 {
 	// Adjust according to input
@@ -86,7 +103,61 @@ void TestGameObj::Update()
     {
         inputX = InputManager::Instance().x();
 		inputJump = InputManager::Instance().b2();
+		isUsingMySword = InputManager::Instance().b1();
+		if (!isUsingMySword)
+		{
+            if (inputX < 0) isSwordLeft = true;
+            else if (inputX > 0) isSwordLeft = false;
+		}
 	}
+
+
+
+
+
+
+
+
+
+	// Shift SLOWLY the cam offset x!
+    float multiplier = 0;
+    if (isSwordLeft)
+    {
+        multiplier = -1;
+    }
+    else
+    {
+        multiplier = 1;
+    }
+
+    if (isUsingMySword)
+    {
+        // If you use the sword, it just 'pops' out!
+        reqCamOffx = MAX_CAM_OFFSET_X * multiplier;
+    }
+    else
+    {
+        reqCamOffx += CAM_X_MVTMENT_SPEED * multiplier + hsp / 10.0f;
+        if (reqCamOffx > MAX_CAM_OFFSET_X)
+            reqCamOffx = MAX_CAM_OFFSET_X;
+        else if (reqCamOffx < -MAX_CAM_OFFSET_X)
+            reqCamOffx = -MAX_CAM_OFFSET_X;
+    }
+
+    room->AddCamOffCoords(reqCamOffx, 0);
+
+    printf("%f\n", reqCamOffx);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -136,6 +207,27 @@ void TestGameObj::Update()
 	SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck);	// Inserts it into the 'tempCollisionsToCheck' variable
 
 
+
+	// CHECK FOR COLLISION W/ THE WEAPON!!!
+    if (isUsingMySword)
+    {
+        for (int i = 0; i < room->getEntityList()->size(); i++)
+        {
+            Entity* ent;
+            if ((ent = room->getEntityList()->at(i)) != this)
+            {
+                // It's not me, so let's interact!!!
+                float swordX = isSwordLeft ? x - PLAYER_SWORD_WIDTH : x + image->GetWidth();
+                float swordY = y + PLAYER_HEIGHT / 2;
+
+                BoundBox b = { swordX + hsp, swordY + vsp, swordX, swordY, PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT };
+                if (ent->IsColliding(&b))
+                {
+                    ent->YouLose(this);         // Hit the enemy!!! (or npc... they won't care tho)
+                }
+            }
+        }
+    }
 
 
 
@@ -221,51 +313,13 @@ void TestGameObj::Update()
             Entity* ent;
             if ((ent = room->getEntityList()->at(i)) != this)
             {
-                // Enemy targeting helper????
-                if (!hasTargeted && vsp > 0)
-                {
-                    int dist = ent->getY() - (y + image->GetHeight());
-                    if (dist > 0 && dist < 64)             // It needs to be that the player is above the enemy, falling on it!
-                    {
-                        // Select 1 to target
-                        float deltHsp = (ent->getX() - x) / 10.0f;
-                        if (std::abs(ent->getX() - x) < 128)       // Only do if close enough!
-                        {
-                            // Speed up to get the mark!
-                            hsp = deltHsp;
-
-                            // Don't do this craziness on 2 enemies at once!
-                            hasTargeted = true;
-                        }
-                    }
-                }
-
-
-
-
-
-
-
                 // It's not me, so let's interact!!!
                 BoundBox b = { x + hsp, y + vsp, x, y, image->GetWidth(), image->GetHeight() };
                 if (ent->IsColliding(&b))
                 {
-                    // Hit the enemy!!!! (or you got hit???)
-
-                    // Now, did the player win or did the enemy?
-                    if (ent->getY() - GRID_SIZE >= b.prevy)
-                    {
-                        // Means was originally above the enemy, so the player wins!
-                        hsp = 0;
-                        vsp = -vsp;
-                        vsp = std::min(vsp, -JUMP_HEIGHT * 1.075f);       // Make sure you jump a little higher so you can escape the aimed jump!
-                        ent->YouLose(this);
-                    }
-                    else
-                    {
-                        // Do youlose() on yourself eh!
-                        this->YouLose(ent);
-                    }
+                    // You got hit???
+                    // Do youlose() on yourself eh!
+                    this->YouLose(ent);
                 }
             }
         }
@@ -343,6 +397,12 @@ void TestGameObj::Render()
 
 //    printf("Rendering Player!!!\n");
 	image->Render(x, y);
+
+	if (isUsingMySword)
+	{
+        float rendX = isSwordLeft ? x - PLAYER_SWORD_WIDTH : x + image->GetWidth();
+        mySword->Render(rendX, y + PLAYER_HEIGHT / 2);
+	}
 
     glColor4f(0.5f, 0, 0, 1);
     startCoords->Render(startX, startY);

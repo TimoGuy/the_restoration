@@ -269,11 +269,14 @@ void TestRoom::Update()
     }
     else
     {
-        /*camHsp*/ camX += (camFocusObj->getX() - camX) / 10.0f;
-        /*camVsp */camY += (camFocusObj->getY() - camY) / 10.0f;
+        /*camHsp*/ camX += (camFocusObj->getX() - camX) / 10.0f + camReqOffX;
+        /*camVsp */camY += (camFocusObj->getY() - camY) / 10.0f + camReqOffY;
 //        camHsp += 20;
 //        camVsp += 20;
     }
+
+    // Reset the requested offset cam now!
+    camReqOffX = camReqOffY = 0;
 
     // Cap it to the center if it's too large
     bool lockX = false, lockY = false;
@@ -624,5 +627,12 @@ bool TestRoom::LoadLevelIO(std::string name)
 
 
 	return true;
+}
+
+
+void TestRoom::AddCamOffCoords(float offx, float offy)
+{
+    camReqOffX += offx;
+    camReqOffY += offy;
 }
 
