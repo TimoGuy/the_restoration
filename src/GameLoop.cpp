@@ -44,8 +44,8 @@ bool GameLoop::Execute()
     // supposted to be 1 main thread you know?
     // TODO: maybe make this a singleton or something????
 
-	float msAllotted = 1000.f / 60.f;
-	float targetTime = SDL_GetTicks();
+	int msAllotted = 1000 / 60;		// Unfortunately there's no such thing as 'half a millisecond', so it needs to be an int
+	unsigned int targetTime = SDL_GetTicks();
 
     while (_running)
     {
@@ -182,7 +182,7 @@ void GameLoop::SetWindowDimensions(int width, int height)
     _windowHeight = height;
 
     //Set the viewport
-    glViewport(0.0f,0.0f, width, height);
+    glViewport(0, 0, width, height);
 
 //    float aspectRat = float(width) / float(height);
 

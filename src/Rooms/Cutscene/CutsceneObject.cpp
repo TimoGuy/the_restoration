@@ -14,8 +14,8 @@
 
 CutsceneObject::CutsceneObject(int x, int y, int spriteId, Cutscene* myCutscene)
 {
-    _x = x;
-    _y = y;
+    _x = (float)x;
+    _y = (float)y;
     dx = dy = 0;
 
     _angle = 0;
@@ -44,7 +44,7 @@ void CutsceneObject::Update(int ticks)
     dScale = 0;
 
     // Run all of the registered functions eh!
-    for (int i = 0; i < functions.size(); i++)
+    for (unsigned int i = 0; i < functions.size(); i++)
     {
         // Check if within the time bounds! (ticks)
         if (ticks >= functions.at(i).startTick &&
@@ -203,8 +203,8 @@ void CutsceneObject::Move(int currentTick, int startTick, int endTick, std::stri
     // See if last action... if so, set the x and y to this too!
     if (currentTick == endTick)
     {
-        _x = toX;
-        _y = toY;
+        _x = (float)toX;
+        _y = (float)toY;
         return;
     }
 
@@ -243,8 +243,8 @@ void CutsceneObject::MoveLerp(int currentTick, int startTick, int endTick, std::
     // See if last action... if so, set the x and y to this too!
     if (currentTick == endTick)
     {
-        _x = toX;
-        _y = toY;
+        _x = (float)toX;
+        _y = (float)toY;
         return;
     }
 
@@ -344,8 +344,8 @@ void CutsceneObject::SetCoords(int currentTick, int startTick, int endTick, std:
         }
     }
 
-    _x = toX;
-    _y = toY;
+    _x = (float)toX;
+    _y = (float)toY;
 }
 
 
@@ -375,7 +375,7 @@ float wiggle_helper(int currentTick, int startTick, int endTick, std::string par
     int distance = endTick - startTick;
     float bubun = (currentTick - startTick) / (float)distance;
 
-    float angle = bubun * 2.0f * M_PI * backAndForth;
+    float angle = float(bubun * 2.0f * M_PI * backAndForth);
     return std::sin(angle) * variance;
 }
 
@@ -479,7 +479,6 @@ void CutsceneObject::ExitCutscene(int currentTick, int startTick, int endTick, s
 
     std::string prefixLvl("n_");
     std::string prefixCut("c_");
-    bool i;
     if (strncmp(filename.c_str(), prefixLvl.c_str(), prefixLvl.size()) == 0)
     {
         // The request is a level!!!!

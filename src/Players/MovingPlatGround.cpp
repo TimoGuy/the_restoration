@@ -88,7 +88,7 @@ void MovingPlatGround::RecalcMyselfToCollisionMap()
 	prevY = (int)y;
 
 	// Remove the previous coordinates.
-	for (int i = 0; i < collCoords.size(); i++)
+	for (unsigned int i = 0; i < collCoords.size(); i++)
 	{
 		room->getCollisionMap()[collCoords[i]] = NULL;	// Release the spot!
 	}

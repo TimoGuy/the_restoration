@@ -45,8 +45,8 @@ Entity::~Entity()
 
 void Entity::SeeNeighborCollisionObjects(float centerX, float centerY, std::vector<Object*>& neighboringCollisions)
 {
-	int gx = centerX / GRID_SIZE,     // gx and gy mean that this is where
-		gy = centerY / GRID_SIZE;     // the center of the obj lies in the collision grid
+	int gx = (int)centerX / GRID_SIZE,     // gx and gy mean that this is where
+		gy = (int)centerY / GRID_SIZE;     // the center of the obj lies in the collision grid
 
 									  // It's probably good to check the current position (within the collision chart) and the 8 around it!
 	int ngx, ngy;
@@ -84,7 +84,7 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 
 
 	// Try updating x (from hsp)				// EDIT: we'll add the ability to see if collided into a slant or not! This only happens if you're RUBBING into it though!
-	int tHsp = ceil(abs(hspeed));
+	int tHsp = (int)ceil(abs(hspeed));
 	std::vector<Object*> tempCollisions;
 	if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y, width, height, collisionsToCheck, tempCollisions, true))
 	{
@@ -96,7 +96,7 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 		bool successClimb = false;
 
 #pragma region Slant_climbing!!!
-		for (int i = 0; i < tempCollisions.size(); i++)
+		for (unsigned int i = 0; i < tempCollisions.size(); i++)
 		{
 			if (dynamic_cast<Slant*>(tempCollisions.at(i)) != NULL)
 			{
@@ -132,7 +132,7 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 			for (tHsp -= 1; tHsp > 0; tHsp--)
 			{
 				// Roll back 1 at a time and see if no collision
-				int newX = round(x) + tHsp * copysignf(1.0f, hspeed);
+				float newX = round(x) + tHsp * copysignf(1.0f, hspeed);
 				if (!CollideAtPos(newX, y, width, height, collisionsToCheck, true))
 				{
 					// Update!
@@ -150,7 +150,7 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 
 
 	// Try updating y (from vsp)										// NOTE: the value 'vsp' could be modified by the ramp climbing back here!
-	int tVsp = ceil(abs(vspeed));
+	int tVsp = (int)ceil(abs(vspeed));
 	if (!CollideAtPos(x, y + tVsp * copysignf(1.0f, vspeed), width, height, collisionsToCheck, true))
 	{
 		// It's safe!
@@ -162,7 +162,7 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 		for (tVsp -= 1; tVsp > 0; tVsp--)
 		{
 			// Roll back 1 at a time and see if no collision
-			int newY = round(y) + tVsp * copysignf(1.0f, vspeed);
+			float newY = round(y) + tVsp * copysignf(1.0f, vspeed);
 			if (!CollideAtPos(x, newY, width, height, collisionsToCheck, true))
 			{
 				// Update!
@@ -194,7 +194,7 @@ bool Entity::CollideAtPos(float futX, float futY, float width, float height, std
 {
 	// And then see if collided!
 	bool collided = false;
-	for (int i = 0; i < collisionsToCheck->size(); i++)
+	for (unsigned int i = 0; i < collisionsToCheck->size(); i++)
 	{
 		BoundBox b = { futX, futY, x, y, width, height };
 		if (collisionsToCheck->at(i)->IsColliding(&b) &&

@@ -135,7 +135,7 @@ void Textbox::SetupTextbox(float x, float y, std::string text)
     exitTicks = -1;
     exiting = false;
 
-    for (int i = 0; i < _renderingText.size(); i++)
+    for (unsigned int i = 0; i < _renderingText.size(); i++)
     {
         delete _renderingText.at(i);
     }
@@ -192,7 +192,7 @@ void Textbox::SetupTextbox(float x, float y, std::string text)
 
             // Create quads for each line
             Texture* tempTex = new Texture(subToken + " ", font);
-            _renderingText.push_back(new Quad(tempTex->GetWidth(), tempTex->GetHeight(), tempTex));
+            _renderingText.push_back(new Quad((float)tempTex->GetWidth(), (float)tempTex->GetHeight(), tempTex));
             _textAlpha.push_back(0);    // Set at transparent so that it can fade in eh.
 
             tempWidth += tempTex->GetWidth();
@@ -215,7 +215,7 @@ void Textbox::SetupTextbox(float x, float y, std::string text)
 
 
     // Create the actual textbox bg.
-    height = _fontSize * lines;      // Calc the height (width is already calc'd)
+    height = (float)_fontSize * lines;      // Calc the height (width is already calc'd)
 
     // Add the padding
 //    x -= PADDING;
@@ -300,7 +300,7 @@ void Textbox::Render()
     {
         // You're invisible, let's re-init or delete!!!!
         currentString++;
-        if (currentString < _strings.size())
+        if (currentString < (signed int)_strings.size())
         {
             setupReq = true;
         }
@@ -329,7 +329,7 @@ void Textbox::Render()
 
     int offset = 0;
     int line = 0;
-    for (int i = 0; i < _textLines.size() && i < ticks / EVERY_X_TICKS_NEW_WORD; i++)
+    for (int i = 0; i < (signed int)_textLines.size() && i < ticks / EVERY_X_TICKS_NEW_WORD; i++)
     {
         if (_textLines.at(i) == "\n")
         {
@@ -352,7 +352,7 @@ void Textbox::Render()
             // Wiggle!
             float bubun = ticks / SPEED_DAMPER;
 
-            float angle = bubun * 2.0f * M_PI;
+            float angle = float(bubun * 2.0f * M_PI);
             float addition = (-std::cos(angle) + 1) * WAVE_AMPLITUDE * (line + 1);
             rendY += addition;
             addToHeight = addition;         // We just want the last one, which will be the largest
@@ -374,7 +374,7 @@ void Textbox::Render()
 
             // Actually render eh.
             _renderingText.at(i)->Render(rendX, rendY + masterYoff);
-            offset += _renderingText.at(i)->GetWidth();         // Offset the width (includes space!)
+            offset += (int)_renderingText.at(i)->GetWidth();         // Offset the width (includes space!)
 
 
         }

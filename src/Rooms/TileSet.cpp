@@ -66,8 +66,8 @@ bool IsInrangeOfGrounds(int r_value, bool includeSlopes)
 void AddQuadForTile(int r_value, int gx, int gy, std::vector<TileSet_Vector>& rendVectors)
 {
     // Calculate all the things needed!!!
-	float x = gx * GRID_SIZE;
-	float y = gy * GRID_SIZE;
+	float x = (float)gx * GRID_SIZE;
+	float y = (float)gy * GRID_SIZE;
 
 
 

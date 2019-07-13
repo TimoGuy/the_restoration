@@ -214,7 +214,7 @@ void TestGameObj::Update()
 	// CHECK FOR COLLISION W/ THE WEAPON!!!
     if (isUsingMySword)
     {
-        for (int i = 0; i < room->getEntityList()->size(); i++)
+        for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
         {
             Entity* ent;
             if ((ent = room->getEntityList()->at(i)) != this)
@@ -242,7 +242,7 @@ void TestGameObj::Update()
     std::vector<Object*> tempCollisions;
     if (CollideAtPos(x + hsp, y + vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, tempCollisions, false))
     {
-		for (int i = 0; i < tempCollisions.size(); i++)
+		for (unsigned int i = 0; i < tempCollisions.size(); i++)
 		{
 			// Check for hazards
 			if (dynamic_cast<Hazard*>(tempCollisions.at(i)) != NULL)
@@ -311,7 +311,7 @@ void TestGameObj::Update()
     if (framesOfInvincibility <= 0)
     {
         bool hasTargeted = false;
-        for (int i = 0; i < room->getEntityList()->size(); i++)
+        for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
         {
             Entity* ent;
             if ((ent = room->getEntityList()->at(i)) != this)
@@ -371,7 +371,8 @@ void TestGameObj::Update()
 	// Bc now it's more of a rocket-jumping game!
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
-		if (numJumps < maxJumps)
+		if (numJumps < maxJumps &&
+			!isUsingMySword)
 			numJumps++;						// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
@@ -381,7 +382,7 @@ void TestGameObj::Update()
 	outHsp = outVsp = 0;
 	framesOfInvincibility--;
 
-    for (int i = 0; i < pf.size(); i++)
+    for (unsigned int i = 0; i < pf.size(); i++)
         pf.at(i)->Update();
 }
 
@@ -413,7 +414,7 @@ void TestGameObj::Render()
 
 
     // Render any message boxes!!!
-	for (int i = 0; i < pf.size(); i++)
+	for (unsigned int i = 0; i < pf.size(); i++)
 	{
         pf.at(i)->SetXY(x, y - 200);
         pf.at(i)->Render();
@@ -459,8 +460,8 @@ int TestGameObj::GetNumJumps()
 
 void TestGameObj::SetGridCoords(int gx, int gy)
 {
-    x = gx * GRID_SIZE;
-    y = gy * GRID_SIZE + PLAYER_YOFF;
+    x = float(gx * GRID_SIZE);
+    y = float(gy * GRID_SIZE + PLAYER_YOFF);
 }
 
 void TestGameObj::UpdateStartCoords()

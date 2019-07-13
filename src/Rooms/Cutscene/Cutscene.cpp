@@ -155,7 +155,7 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
                         }
 
                         // The quad!
-                        Quad* tempQ = new Quad(w, h, new Texture(std::string(".data/") + fname, STBI_rgb_alpha));
+                        Quad* tempQ = new Quad((float)w, (float)h, new Texture(std::string(".data/") + fname, STBI_rgb_alpha));
                         nCS->AddImage(tempQ);
                     }
                     break;
@@ -258,7 +258,7 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
                     }
 
                     // The quad!
-                    Quad* tempQ = new Quad(w, h, new Texture(std::string(".data/") + fname, STBI_rgb_alpha));
+                    Quad* tempQ = new Quad((float)w, (float)h, new Texture(std::string(".data/") + fname, STBI_rgb_alpha));
 
 
                     // Finish init of the sprite!!!
@@ -354,13 +354,13 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
 Cutscene::~Cutscene()
 {
     // Delete everything!!!!
-    for (int i = 0; i < sprites.size(); i++)
+    for (unsigned int i = 0; i < sprites.size(); i++)
     {
         delete sprites.at(i);
     }
     sprites.clear();
 
-    for (int i = 0; i < objects.size(); i++)
+    for (unsigned int i = 0; i < objects.size(); i++)
     {
         delete objects.at(i);
     }
@@ -391,7 +391,7 @@ void Cutscene::Render()
     glLoadIdentity();
 
     // Only update and render objects
-    for (int i = 0; i < objects.size(); i++)
+    for (unsigned int i = 0; i < objects.size(); i++)
     {
         objects.at(i)->Render(ticks);
     }
@@ -411,7 +411,7 @@ void Cutscene::End(Room* nextRoom)
 
 CutsceneSprite* Cutscene::GetSpriteByID(int id)
 {
-    if (id >= 0 && id < sprites.size())
+    if (id >= 0 && id < (signed int)sprites.size())
     {
         return sprites.at(id);
     }

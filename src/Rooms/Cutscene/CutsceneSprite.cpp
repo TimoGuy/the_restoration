@@ -13,7 +13,7 @@ CutsceneSprite::CutsceneSprite(Quad* firstImg)
 
 CutsceneSprite::~CutsceneSprite()
 {
-    for (int i = 0; i < images.size(); i++)
+    for (unsigned int i = 0; i < images.size(); i++)
     {
         delete images.at(i);
     }
@@ -44,7 +44,7 @@ void CutsceneSprite::Render(int x, int y, int ticks, float alpha)
 
     if (images.size() == 1)
     {
-        images.at(0)->Render(x, y);
+        images.at(0)->Render((float)x, (float)y);
         return;
     }
 
@@ -63,10 +63,10 @@ void CutsceneSprite::Render(int x, int y, int ticks, float alpha)
     }
     else
     {
-        currentFrame = ticks < images.size() ? ticks : images.size() - 1;
+        currentFrame = ticks < (signed int)images.size() ? ticks : (signed int)images.size() - 1;
     }
 
-    images.at(currentFrame)->Render(x, y);
+    images.at(currentFrame)->Render((float)x, (float)y);
 
 
     // Reset color

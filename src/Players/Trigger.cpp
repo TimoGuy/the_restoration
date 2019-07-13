@@ -212,8 +212,8 @@ void Trigger::SetEventIDAndSetMaster(std::string nextEventID, bool isJustTouchTo
     // FIND ALL NEIGHBORING TRIGGERS!!!!
     // And set them up to be slaves!!!!!
     // Start w/ nearby
-    int gx = x / GRID_SIZE;
-    int gy = y / GRID_SIZE;
+    int gx = (int)x / GRID_SIZE;
+    int gy = (int)y / GRID_SIZE;
     SetupSlaveRecur(gx - 1, gy);
     SetupSlaveRecur(gx, gy + 1);
     SetupSlaveRecur(gx + 1, gy);

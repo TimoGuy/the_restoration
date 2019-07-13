@@ -50,7 +50,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 
 	// Init
-	camFocusObj == NULL;
+	camFocusObj = NULL;
 
 
 
@@ -69,7 +69,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 
 	// To set up the player
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
 		// Look for the player!!!
 		if (dynamic_cast<TestGameObj*>(gameObjects.at(i)) != NULL)
@@ -99,7 +99,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 
     // To set up the triggers!
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
 		// Look for a trigger, tigger!!!
 		if (dynamic_cast<Trigger*>(gameObjects.at(i)) != NULL)
@@ -111,7 +111,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
             {
                 // Get the first 't' code from the params
                 int pos = -1;
-                for (int i = 0; i < rmParams.size(); i++)
+                for (unsigned int i = 0; i < rmParams.size(); i++)
                 {
                     if (rmParams.at(i) == std::string("t"))
                     {
@@ -144,7 +144,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 				int end = 3;		// This is left at 3 if no custom coords
                 if (eventName.at(0) == 'n' &&                             // Check if a game level type
-                    pos + 3 < rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
+                    pos + 3 < (signed int)rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
                     rmParams.at(pos + 3) != std::string("\n"))
                 {
                     end = 4;    // A 4th param...             (it's the custom entrance coords!!!)
@@ -245,7 +245,7 @@ float camHsp = 0, camVsp = 0;
 void TestRoom::Update()
 {
     // Update all objects
-    for (int it = 0; it < gameObjects.size(); ++it)
+    for (unsigned int it = 0; it < gameObjects.size(); ++it)
     {
         gameObjects.at(it)->Update();
     }
@@ -284,12 +284,12 @@ void TestRoom::Update()
     if (w >= gWidth)
 	{
         lockX = true;
-        camX = gWidth * GRID_SIZE;
+        camX = (float)gWidth * GRID_SIZE;
 	}
 	if (h >= gHeight)
 	{
 		lockY = true;
-		camY = gHeight * GRID_SIZE;
+		camY = (float)gHeight * GRID_SIZE;
 	}
 
 
@@ -356,7 +356,7 @@ void TestRoom::Render()
 	roomTileSet.RenderVerts();
 
 	// Call a render for everyone!
-	for (int it = 0; it < gameObjects.size(); ++it)
+	for (unsigned int it = 0; it < gameObjects.size(); ++it)
 	{
 		gameObjects.at(it)->Render();
 	}
@@ -387,8 +387,8 @@ void TestRoom::Render()
 
 		int originalX = i * oneUnit;
 
-		float xPos = originalX % 1024;
-		float yPos = originalX / 1024 * oneUnit;
+		float xPos = float(originalX % 1024);
+		float yPos = float(originalX / 1024 * oneUnit);
 
 		oneStamina->Render(xPos - 508, yPos - 284);
 	}
@@ -403,7 +403,7 @@ void TestRoom::Render()
 	{
 		int w, h;
 		_gloop->GetWindowDimensions(w, h);
-		screenTransition = new Quad(w, h);
+		screenTransition = new Quad((float)w, (float)h);
 	}
 
 

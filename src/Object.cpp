@@ -27,6 +27,6 @@ Object::~Object()
 
 void Object::SetGridCoords(int gx, int gy)
 {
-    x = gx * GRID_SIZE;
-    y = gy * GRID_SIZE;
+    x = float(gx * GRID_SIZE);
+    y = float(gy * GRID_SIZE);
 }
