@@ -36,7 +36,7 @@ Quad* mySword = NULL;
 bool isUsingMySword = false;
 bool isSwordLeft = false;
 #define PLAYER_SWORD_WIDTH 128
-#define PLAYER_SWORD_HEIGHT 16
+#define PLAYER_SWORD_HEIGHT 32
 
 
 
@@ -103,12 +103,17 @@ void TestGameObj::Update()
     {
         inputX = InputManager::Instance().x();
 		inputJump = InputManager::Instance().b2();
-		isUsingMySword = InputManager::Instance().b1();
-		if (!isUsingMySword)
-		{
-            if (inputX < 0) isSwordLeft = true;
-            else if (inputX > 0) isSwordLeft = false;
-		}
+		isUsingMySword = IsUsingSword();
+
+		if (isUsingMySword)
+        {
+            // Actually, you'll wanna undo the x
+            // input for the duration the player's holding!
+            inputX = 0;
+        }
+        // Thus you can't move while you're holding out your sword!
+        if (inputX < 0) isSwordLeft = true;
+        else if (inputX > 0) isSwordLeft = false;
 	}
 
 
@@ -218,7 +223,7 @@ void TestGameObj::Update()
             {
                 // It's not me, so let's interact!!!
                 float swordX = isSwordLeft ? x - PLAYER_SWORD_WIDTH : x + image->GetWidth();
-                float swordY = y + PLAYER_HEIGHT / 2;
+                float swordY = y + PLAYER_HEIGHT / 2 - PLAYER_SWORD_HEIGHT / 2;
 
                 BoundBox b = { swordX + hsp, swordY + vsp, swordX, swordY, PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT };
                 if (ent->IsColliding(&b))
@@ -401,7 +406,7 @@ void TestGameObj::Render()
 	if (isUsingMySword)
 	{
         float rendX = isSwordLeft ? x - PLAYER_SWORD_WIDTH : x + image->GetWidth();
-        mySword->Render(rendX, y + PLAYER_HEIGHT / 2);
+        mySword->Render(rendX, y + PLAYER_HEIGHT / 2 - PLAYER_SWORD_HEIGHT / 2);
 	}
 
     glColor4f(0.5f, 0, 0, 1);
@@ -461,3 +466,34 @@ void TestGameObj::UpdateStartCoords()
     startY = y;
 }
 
+
+
+
+#define SWORD_TICKS_HOLDING 10
+bool prevB1Down = false;
+int swordTicksLeft = 0;
+bool TestGameObj::IsUsingSword()
+{
+    swordTicksLeft--;
+    bool currentDown = InputManager::Instance().b1();
+
+    // Can we start another cycle of sword?
+    if (numJumps > 0)
+    {
+        // Check if JUST pressed it!
+        if (!prevB1Down && currentDown)
+        {
+            // Go! But it uses a jump's worth of stamina eh
+            swordTicksLeft = SWORD_TICKS_HOLDING;
+            numJumps--;
+        }
+    }
+
+
+    // Update prevs
+    prevB1Down = currentDown;
+
+    // This is what controls
+    // if the sword is on!
+    return swordTicksLeft > 0;
+}

@@ -32,6 +32,8 @@ class TestGameObj : public Entity
         Quad* startCoords;
 
         // States
+        bool IsUsingSword();
+
 		int numJumps = 0;
 		int maxJumps = 10;	// Default: 1 for only 1 jump eh.
 		bool wasJumpBtnAlreadyPressed = false;
