@@ -31,7 +31,7 @@
 
 Quad* screenTransition;			// This will be a fade in AND out thing, okay?
 
-
+Quad* oneStamina;
 
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
@@ -198,6 +198,7 @@ TestRoom::~TestRoom()
 	gameObjects.clear();
 
 	delete screenTransition;
+	delete oneStamina;
 }
 
 
@@ -269,10 +270,8 @@ void TestRoom::Update()
     }
     else
     {
-        /*camHsp*/ camX += (camFocusObj->getX() - camX) / 10.0f + camReqOffX;
-        /*camVsp */camY += (camFocusObj->getY() - camY) / 10.0f + camReqOffY;
-//        camHsp += 20;
-//        camVsp += 20;
+        camX += (camFocusObj->getX() - camX) / 10.0f + camReqOffX;
+        camY += (camFocusObj->getY() - camY) / 10.0f + camReqOffY;
     }
 
     // Reset the requested offset cam now!
@@ -365,6 +364,39 @@ void TestRoom::Render()
 
 
 
+
+
+	// Reset stuff!
+	glLoadIdentity();
+
+	// Now render the HUD!!!
+#define ONE_STAMINA_SIZE 24
+#define ONE_STAMINA_PADDING 8
+	if (oneStamina == NULL)
+	{
+		oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
+	}
+
+	int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
+	for (int i = 0; i < stamGauges; i++)
+	{
+		// Start at the upper left corner and just start drawing them green!
+		glColor3f(0, 1, 0);
+
+		int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
+
+		int originalX = i * oneUnit;
+
+		float xPos = originalX % 1024;
+		float yPos = originalX / 1024 * oneUnit;
+
+		oneStamina->Render(xPos - 508, yPos - 284);
+	}
+
+
+
+
+
 	// Setup screen transitioner, if needed ;)
 	if (screenTransition == NULL ||
 		_gloop->DidJustResize())
@@ -378,8 +410,7 @@ void TestRoom::Render()
 	// If there's a screen transition, do it!
 	if (fadeOutTimer >= -1)						// The -1 is so that while it's 0 the GameLoop actually gets to get up to GL_Swap()
 	{
-		// Reset stuff!
-		glLoadIdentity();
+		
 
 		// Screen will turn black (or whatever color you chose)
 		float alpha = (FADE_IN_OUT_TICKS - fadeOutTimer) / (float)FADE_IN_OUT_TICKS;

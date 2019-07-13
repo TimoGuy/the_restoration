@@ -151,8 +151,6 @@ void TestGameObj::Update()
 
     room->AddCamOffCoords(reqCamOffx, 0);
 
-    printf("%f\n", reqCamOffx);
-
 
 
 
@@ -373,7 +371,8 @@ void TestGameObj::Update()
 	// Bc now it's more of a rocket-jumping game!
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
-		numJumps = maxJumps;	// Reset number of jumps you can do
+		if (numJumps < maxJumps)
+			numJumps++;						// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
 	}
@@ -400,7 +399,6 @@ void TestGameObj::Render()
 
 
 
-//    printf("Rendering Player!!!\n");
 	image->Render(x, y);
 
 	if (isUsingMySword)
@@ -450,6 +448,11 @@ void TestGameObj::YouLose(Entity* accordingToMe)
     framesOfInvincibility = HURT_FRAMES;
 }
 
+int TestGameObj::GetNumJumps()
+{
+	return numJumps;
+}
+
 
 
 
@@ -469,7 +472,7 @@ void TestGameObj::UpdateStartCoords()
 
 
 
-#define SWORD_TICKS_HOLDING 10
+#define SWORD_TICKS_HOLDING 25
 bool prevB1Down = false;
 int swordTicksLeft = 0;
 bool TestGameObj::IsUsingSword()
