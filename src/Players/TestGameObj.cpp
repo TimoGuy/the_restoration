@@ -436,6 +436,7 @@ void TestGameObj::Render()
 void TestGameObj::YouLose(Entity* accordingToMe)
 {
     // Enemy won :====(
+    room->GetGameLoop()->AddPause(10);
     float sign = 1;
     if (x + hsp < accordingToMe->getX() ||
         hsp > 0)
