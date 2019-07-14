@@ -91,8 +91,6 @@ float reqCamOffx = 0;
 #define MAX_CAM_OFFSET_X 32.0f
 #define CAM_X_MVTMENT_SPEED 0.15f
 
-bool tryTest = false;
-
 void TestGameObj::Update()
 {
 	// Adjust according to input
@@ -195,7 +193,6 @@ void TestGameObj::Update()
 	{
         vsp = -JUMP_HEIGHT - nerfer;
 		numJumps--;
-		tryTest = true;
     }
 	wasJumpBtnAlreadyPressed = inputJump;
 
@@ -384,12 +381,7 @@ void TestGameObj::Update()
 			numJumps++;						// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
-		tryTest = false;
 	}
-
-
-	if (tryTest)
-        printf("%f\n", vsp);
 
 	// Reset outside forces
 	outHsp = outVsp = 0;
