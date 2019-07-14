@@ -80,7 +80,20 @@ TestGameObj::~TestGameObj()
 // Grav should be somewhere between 0.5 and 1.0
 #define GRAV 0.5f
 #define FRICTION 0.5f
+
+// 33px (32)
 #define JUMP_HEIGHT 5.5f
+// 68px (64)
+#define JUMP_HEIGHT_2B 8.0f
+// 95px (96)
+#define JUMP_HEIGHT_3B 9.5f
+// 126.5px (128)
+#define JUMP_HEIGHT_4B 11.0f
+// 162.5px (160)
+#define JUMP_HEIGHT_5B 12.5f
+// 189px (192)
+#define JUMP_HEIGHT_6B 13.5f
+
 #define MAX_HSP 35.0f
 
 #define KNOCKBACK_HSP 10.0f
@@ -192,6 +205,11 @@ void TestGameObj::Update()
 	if (inputJump && numJumps > 0 && !wasJumpBtnAlreadyPressed)
 	{
         vsp = -JUMP_HEIGHT - nerfer;
+		//vsp = -JUMP_HEIGHT_2B - nerfer;
+		//vsp = -JUMP_HEIGHT_3B - nerfer;
+		//vsp = -JUMP_HEIGHT_4B - nerfer;		// Prob won't use 4+
+		//vsp = -JUMP_HEIGHT_5B - nerfer;
+		//vsp = -JUMP_HEIGHT_6B - nerfer;
 		numJumps--;
     }
 	wasJumpBtnAlreadyPressed = inputJump;
