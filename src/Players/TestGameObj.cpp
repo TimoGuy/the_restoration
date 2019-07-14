@@ -80,7 +80,7 @@ TestGameObj::~TestGameObj()
 // Grav should be somewhere between 0.5 and 1.0
 #define GRAV 0.5f
 #define FRICTION 0.5f
-#define JUMP_HEIGHT 6.5f
+#define JUMP_HEIGHT 5.5f
 #define MAX_HSP 35.0f
 
 #define KNOCKBACK_HSP 10.0f
@@ -182,6 +182,13 @@ void TestGameObj::Update()
     hsp = std::min(std::max(hsp, -MAX_HSP), MAX_HSP);
 
 
+
+
+
+	// Gravity!
+	vsp += GRAV;
+
+
     // Jump!
 	if (inputJump && numJumps > 0 && !wasJumpBtnAlreadyPressed)
 	{
@@ -190,8 +197,7 @@ void TestGameObj::Update()
     }
 	wasJumpBtnAlreadyPressed = inputJump;
 
-    // Gravity!
-    vsp += GRAV;
+    
 
 
 
