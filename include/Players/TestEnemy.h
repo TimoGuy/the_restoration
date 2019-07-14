@@ -17,5 +17,7 @@ public:
 
 private:
     float life;
+
+    int framesOfInvincibility = 0;
 };
 

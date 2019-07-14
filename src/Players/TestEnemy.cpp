@@ -31,11 +31,12 @@ TestEnemy::~TestEnemy()
 void TestEnemy::Update()
 {
 	// Does nothing eh
+	framesOfInvincibility--;
 }
 
 void TestEnemy::Render()
 {
-    glColor4f(1, 1, 1, life);
+    glColor4f(1, 1, 1, framesOfInvincibility > 0 ? 0.5f : 1.0f);
 	image->Render(x, y);
 }
 
@@ -55,7 +56,10 @@ bool TestEnemy::IsColliding(BoundBox* box)
 
 void TestEnemy::YouLose(Entity* accordingToMe)
 {
+    if (framesOfInvincibility > 0) return;
+
     life -= 0.5f;
+	framesOfInvincibility = 30;
 
     if (life <= 0)
     {
