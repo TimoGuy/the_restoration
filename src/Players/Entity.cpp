@@ -84,7 +84,7 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 
 
 	// Try updating x (from hsp)				// EDIT: we'll add the ability to see if collided into a slant or not! This only happens if you're RUBBING into it though!
-	int tHsp = (int)ceil(abs(hspeed));
+	int tHsp = (int)std::ceil(std::abs(hspeed));
 	std::vector<Object*> tempCollisions;
 	if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y, width, height, collisionsToCheck, tempCollisions, true))
 	{
@@ -150,7 +150,7 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 
 
 	// Try updating y (from vsp)										// NOTE: the value 'vsp' could be modified by the ramp climbing back here!
-	int tVsp = (int)ceil(abs(vspeed));
+	int tVsp = (int)std::ceil(std::abs(vspeed));
 	if (!CollideAtPos(x, y + tVsp * copysignf(1.0f, vspeed), width, height, collisionsToCheck, true))
 	{
 		// It's safe!

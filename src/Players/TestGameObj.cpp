@@ -91,6 +91,7 @@ float reqCamOffx = 0;
 #define MAX_CAM_OFFSET_X 32.0f
 #define CAM_X_MVTMENT_SPEED 0.15f
 
+bool tryTest = false;
 
 void TestGameObj::Update()
 {
@@ -170,7 +171,7 @@ void TestGameObj::Update()
 	if (inputX == 0 &&
         hsp != 0)
 	{
-        if (abs(hsp) < FRICTION) { hsp = 0; }
+        if (std::abs(hsp) < FRICTION) { hsp = 0; }
         else
         {
             float chg = FRICTION * copysignf(1.0f, hsp);
@@ -194,10 +195,11 @@ void TestGameObj::Update()
 	{
         vsp = -JUMP_HEIGHT - nerfer;
 		numJumps--;
+		tryTest = true;
     }
 	wasJumpBtnAlreadyPressed = inputJump;
 
-    
+
 
 
 
@@ -382,7 +384,12 @@ void TestGameObj::Update()
 			numJumps++;						// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
+		tryTest = false;
 	}
+
+
+	if (tryTest)
+        printf("%f\n", vsp);
 
 	// Reset outside forces
 	outHsp = outVsp = 0;
