@@ -2,10 +2,12 @@
 #include "TestEnemy.h"
 #include "TestRoom.h"
 #include "defs.h"
+#include "GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TestEnemy.h"
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/defs.h"
+#include "../../include/GameLoop.h"
 #endif
 
 #include <algorithm>
@@ -60,6 +62,7 @@ void TestEnemy::YouLose(Entity* accordingToMe)
 
     life -= 0.5f;
 	framesOfInvincibility = 30;
+    room->GetGameLoop()->AddPause(7);
 
     if (life <= 0)
     {

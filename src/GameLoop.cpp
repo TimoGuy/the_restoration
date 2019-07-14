@@ -126,6 +126,20 @@ bool GameLoop::Execute()
 
 
 
+
+
+        // See if any wait frames
+        if (waitTicks > 0)
+        {
+            // Do the delay
+            SDL_Delay(msAllotted * waitTicks);
+            targetTime += msAllotted * waitTicks;
+
+            // Reset eh
+            waitTicks = 0;
+        }
+
+
 		// Matouze
         if (SDL_GetTicks() >= (targetTime += msAllotted))
         {
@@ -163,6 +177,20 @@ GameLoop::~GameLoop()
     // Thanks for letting me use it!
     _window = NULL;
 }
+
+
+
+
+
+
+void GameLoop::AddPause(int numTicks)
+{
+    waitTicks += numTicks;
+    // This will be handled in the
+    // main game loop right before
+    // the whole big pause for the next frame!
+}
+
 
 
 

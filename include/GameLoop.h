@@ -20,6 +20,8 @@ class GameLoop
         void SetRoom(Room* newRoom);
         Room* GetRoom();
 
+        void AddPause(int numTicks);
+
         void SetWindowDimensions(int width, int height);
         void GetWindowDimensions(int& width, int& height);          // Dipstick function!!!!
 		bool DidJustResize();			// This will be on for only 1 tick really
@@ -34,6 +36,8 @@ class GameLoop
     private:
         SDL_Window* _window;
         bool _running = true;
+
+        int waitTicks = 0;
 
         int _windowWidth, _windowHeight;
 		bool _didJustResize;
