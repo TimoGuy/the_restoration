@@ -2,5 +2,5 @@ i	w104CavHugePits.png
 s	../textures/tileset_test.png
 m	w104_ts.png
 
-t	1	n_w102VertCavern	101,65
+t	1	n_w102VertCavern	97,65
 t	1	n_w105SheepShearing
