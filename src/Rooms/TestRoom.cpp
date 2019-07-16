@@ -307,7 +307,7 @@ void TestRoom::Update()
 
 
 	// Offset the camera!!!
-#define CAM_MOVE_MULTIPLIER 15
+#define CAM_MOVE_MULTIPLIER 2.5
 #define CAM_SCALE_MULTIPLIER 0.05f
 	if (InputManager::Instance().b3())
 	{
@@ -410,7 +410,7 @@ void TestRoom::Render()
 	// If there's a screen transition, do it!
 	if (fadeOutTimer >= -1)						// The -1 is so that while it's 0 the GameLoop actually gets to get up to GL_Swap()
 	{
-		
+
 
 		// Screen will turn black (or whatever color you chose)
 		float alpha = (FADE_IN_OUT_TICKS - fadeOutTimer) / (float)FADE_IN_OUT_TICKS;
