@@ -70,6 +70,8 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     startX = x;
     startY = y;
     outHsp = outVsp = 0;
+
+    life = 5;       // Start out by default w/ 5 eh!
 }
 
 TestGameObj::~TestGameObj()
@@ -470,7 +472,9 @@ void TestGameObj::YouLose(Entity* accordingToMe)
     hsp = KNOCKBACK_HSP * sign;
     vsp = KNOCKBACK_VSP;
 
+    life--;
     framesOfInvincibility = HURT_FRAMES;
+    printf("Player:: lost 1 life, has %ihp left\n", life);
 }
 
 int TestGameObj::GetNumJumps()
