@@ -4,6 +4,7 @@
 #include "Hazard.h"
 #include "Trigger.h"
 #include "MovingPlatGround.h"
+#include "FuelIncreaserItem.h"
 #include "InputManager.h"
 #include "Textbox.h"
 #include "defs.h"
@@ -14,6 +15,7 @@
 #include "../../include/Players/Hazard.h"
 #include "../../include/Players/Trigger.h"
 #include "../../include/Players/MovingPlatGround.h"
+#include "../../include/Players/FuelIncreaserItem.h"
 #include "../../include/InputManager.h"
 #include "../../include/Players/Textbox.h"
 #include "../../include/defs.h"
@@ -336,7 +338,7 @@ void TestGameObj::Update()
     if (framesOfInvincibility <= 0)
     {
         bool hasTargeted = false;
-        for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
+        for (int i = (signed int)room->getEntityList()->size() - 1; i >= 0; i--)
         {
             Entity* ent;
             if ((ent = room->getEntityList()->at(i)) != this)
@@ -345,9 +347,18 @@ void TestGameObj::Update()
                 BoundBox b = { x + hsp, y + vsp, x, y, image->GetWidth(), image->GetHeight() };
                 if (ent->IsColliding(&b))
                 {
-                    // You got hit???
-                    // Do youlose() on yourself eh!
-                    this->YouLose(ent);
+                    if (dynamic_cast<FuelIncreaserItem*>(ent) != NULL)
+                    {
+                        // Wow!!!! you found a fuel increase!
+                        maxJumps++;
+                        ent->YouLose(this);
+                    }
+                    else
+                    {
+                        // You got hit???
+                        // Do youlose() on yourself eh!
+                        this->YouLose(ent);
+                    }
                 }
             }
         }

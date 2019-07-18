@@ -29,7 +29,8 @@ Entity::Entity(int gx, int gy, TestRoom* rm)
 Entity::~Entity()
 {
 	//dtor
-	delete image;
+//	if (image != NULL)
+//        delete image;
 }
 
 
