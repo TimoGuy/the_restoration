@@ -40,6 +40,8 @@ class TestRoom : public Room
 
         void AddCamOffCoords(float offx, float offy);
 
+        std::string GetLevelName();
+
     protected:
 
     private:

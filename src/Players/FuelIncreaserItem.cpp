@@ -2,18 +2,34 @@
 #include "FuelIncreaserItem.h"
 #include "TestRoom.h"
 #include "defs.h"
+#include "SerialManager.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\FuelIncreaserItem.h"
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/defs.h"
+#include "../../include/SerialManager.h"
 #endif
-
 
 Quad* icon = NULL;
 
 FuelIncreaserItem::FuelIncreaserItem(int gx, int gy, TestRoom* rm)
     : Entity(gx, gy, rm)
 {
+    active = true;
+    serial =
+        room->GetLevelName() +
+        std::string("_") +
+        std::to_string(gx) +
+        std::string("_") +
+        std::to_string(gy);
+
+    // Check if serial is unique
+    if (SerialManager::Instance().CheckIfSerialIsTaken(serial))
+    {
+        // It's taken, which means it's registered as a taken object
+        active = false;
+    }
+
     // Init the icon if needed
     if (icon == NULL)
     {
@@ -38,12 +54,16 @@ FuelIncreaserItem::~FuelIncreaserItem()
 void FuelIncreaserItem::Update() {}
 void FuelIncreaserItem::Render()
 {
+    if (!active) return;
+
     glColor4f(1, 1, 1, 1);
 	icon->Render(x, y);
 }
 
 bool FuelIncreaserItem::IsColliding(BoundBox* box)
 {
+    if (!active) return false;
+
     // Use 'icon' as the bounding box and test collision!
 	return x < box->x + box->width &&
 		x + icon->GetWidth() > box->x &&
@@ -54,5 +74,7 @@ bool FuelIncreaserItem::IsColliding(BoundBox* box)
 void FuelIncreaserItem::YouLose(Entity* accordingToMe)
 {
     // Okay, I go away now
+    // but, register as taken!
+    SerialManager::Instance().GetSerials().push_back(serial);
     delete this;
 }

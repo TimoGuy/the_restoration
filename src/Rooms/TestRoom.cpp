@@ -667,3 +667,10 @@ void TestRoom::AddCamOffCoords(float offx, float offy)
     camReqOffY += offy;
 }
 
+
+
+std::string TestRoom::GetLevelName()
+{
+    return currentLvl;
+}
+

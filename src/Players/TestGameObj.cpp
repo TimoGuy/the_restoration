@@ -350,7 +350,7 @@ void TestGameObj::Update()
                     if (dynamic_cast<FuelIncreaserItem*>(ent) != NULL)
                     {
                         // Wow!!!! you found a fuel increase!
-                        maxJumps++;
+                        GameLoop::playerMaxJumps++;
                         ent->YouLose(this);
                     }
                     else
@@ -407,7 +407,7 @@ void TestGameObj::Update()
 	// Bc now it's more of a rocket-jumping game!
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
-		if (numJumps < maxJumps &&
+		if (numJumps < GameLoop::playerMaxJumps &&
 			!isUsingMySword)
 			numJumps++;						// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!

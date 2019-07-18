@@ -20,6 +20,7 @@ std::string prevInputCode;
 
 // Init game variables
 bool GameLoop::sawTutorial = false;
+int GameLoop::playerMaxJumps = 1;
 
 
 

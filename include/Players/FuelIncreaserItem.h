@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include <string>
 
 class FuelIncreaserItem : public Entity
 {
@@ -18,4 +19,6 @@ class FuelIncreaserItem : public Entity
     protected:
 
     private:
+        std::string serial;
+        bool active;
 };

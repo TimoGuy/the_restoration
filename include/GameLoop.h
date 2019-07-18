@@ -30,6 +30,7 @@ class GameLoop
 
         // Variables controlling the game
         static bool sawTutorial;
+        static int playerMaxJumps;
 
     protected:
 

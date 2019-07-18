@@ -37,7 +37,6 @@ class TestGameObj : public Entity
         bool IsUsingSword();
 
 		int numJumps = 0;
-		int maxJumps = 1;	// Default: 1 for only 1 jump eh.
 		bool wasJumpBtnAlreadyPressed = false;
 
 		int life = 0;
