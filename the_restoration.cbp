@@ -61,6 +61,7 @@
 		<Unit filename="include/Object.h" />
 		<Unit filename="include/ObjectFactory.h" />
 		<Unit filename="include/Players/Entity.h" />
+		<Unit filename="include/Players/FuelIncreaserItem.h" />
 		<Unit filename="include/Players/Ground.h" />
 		<Unit filename="include/Players/Hazard.h" />
 		<Unit filename="include/Players/MovingPlatGround.h" />
@@ -77,6 +78,7 @@
 		<Unit filename="include/Rooms/Room.h" />
 		<Unit filename="include/Rooms/TestRoom.h" />
 		<Unit filename="include/Rooms/TileSet.h" />
+		<Unit filename="include/SerialManager.h" />
 		<Unit filename="include/Shape/Quad.h" />
 		<Unit filename="include/defs.h" />
 		<Unit filename="main.cpp" />
@@ -89,6 +91,7 @@
 		<Unit filename="src/Object.cpp" />
 		<Unit filename="src/ObjectFactory.cpp" />
 		<Unit filename="src/Players/Entity.cpp" />
+		<Unit filename="src/Players/FuelIncreaserItem.cpp" />
 		<Unit filename="src/Players/Ground.cpp" />
 		<Unit filename="src/Players/Hazard.cpp" />
 		<Unit filename="src/Players/MovingPlatGround.cpp" />
