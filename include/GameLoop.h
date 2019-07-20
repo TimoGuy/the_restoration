@@ -26,12 +26,6 @@ class GameLoop
         void GetWindowDimensions(int& width, int& height);          // Dipstick function!!!!
 		bool DidJustResize();			// This will be on for only 1 tick really
 
-
-
-        // Variables controlling the game
-        static bool sawTutorial;
-        static int playerMaxJumps;
-
     protected:
 
     private:
@@ -49,5 +43,4 @@ class GameLoop
         Room* currentRoom;
 
         static void LoadGameVariables();
-        static void CheckAndUpdateGameVariables();
 };

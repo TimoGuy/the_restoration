@@ -6,6 +6,7 @@
 #include "MovingPlatGround.h"
 #include "FuelIncreaserItem.h"
 #include "InputManager.h"
+#include "SerialManager.h"
 #include "Textbox.h"
 #include "defs.h"
 #include <SDL2/SDL_ttf.h>
@@ -17,6 +18,7 @@
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/Players/FuelIncreaserItem.h"
 #include "../../include/InputManager.h"
+#include "../../include/SerialManager.h"
 #include "../../include/Players/Textbox.h"
 #include "../../include/defs.h"
 #include <SDL_ttf.h>
@@ -54,12 +56,14 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 
 
     // Create the tutorial
-    if (!GameLoop::sawTutorial)
+    if (!SerialManager::Instance()
+            .GetGameData_Bool("saw_tutorial", false))
     {
         auto glambda = [&](void)
         {
             printf("Saw tutorial!\n");
-            GameLoop::sawTutorial = true;
+            SerialManager::Instance()
+                .SetGameData_Bool("saw_tutorial", true);
         };
 
         pf.push_back(new Textbox(x, y, std::string("td_player_tutorial"), 28, glambda, room));
@@ -114,7 +118,7 @@ void TestGameObj::Update()
 	float inputX = 0;
 	bool inputJump = false;
 
-    if (GameLoop::sawTutorial &&
+    if (SerialManager::Instance().GetGameData_Bool("saw_tutorial", false) &&
 		!InputManager::Instance().b3())
     {
         inputX = InputManager::Instance().x();
@@ -350,7 +354,10 @@ void TestGameObj::Update()
                     if (dynamic_cast<FuelIncreaserItem*>(ent) != NULL)
                     {
                         // Wow!!!! you found a fuel increase!
-                        GameLoop::playerMaxJumps++;
+                        SerialManager::Instance().SetGameData_Int(
+                            "player_max_jumps",
+                            SerialManager::Instance().GetGameData_Int("player_max_jumps", 1) + 1
+                        );
                         ent->YouLose(this);
                     }
                     else
@@ -407,7 +414,7 @@ void TestGameObj::Update()
 	// Bc now it's more of a rocket-jumping game!
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
-		if (numJumps < GameLoop::playerMaxJumps &&
+		if (numJumps < SerialManager::Instance().GetGameData_Int("player_max_jumps", 1) &&
 			!isUsingMySword)
 			numJumps++;						// Reset number of jumps you can do
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!

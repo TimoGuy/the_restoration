@@ -20,13 +20,6 @@
 std::string prevInputCode;
 
 
-// Init game variables
-bool GameLoop::sawTutorial = false;
-int GameLoop::playerMaxJumps = 1;
-
-
-
-
 
 
 GameLoop::GameLoop(SDL_Window* window)
@@ -62,11 +55,6 @@ bool GameLoop::Execute()
 
 		// Update
         GetRoom()->Update();
-
-
-
-        // Process any changes in the variables
-        CheckAndUpdateGameVariables();
 
 
 
@@ -245,34 +233,6 @@ bool GameLoop::DidJustResize()
 
 void GameLoop::LoadGameVariables()
 {
-    Json::Value& vars = SerialManager::Instance().GetJsonData();
-
-    if (vars["game_vars"].isMember("saw_tutorial"))
-        sawTutorial = vars["game_vars"]["saw_tutorial"].asBool();
-    if (vars["game_vars"].isMember("player_max_jumps"))
-        playerMaxJumps = vars["game_vars"]["player_max_jumps"].asInt();
-}
-
-void GameLoop::CheckAndUpdateGameVariables()
-{
-    Json::Value& vars = SerialManager::Instance().GetJsonData();
-    bool changed = false;
-
-    // Check for updates
-    if (!vars["game_vars"].isMember("saw_tutorial") ||
-        vars["game_vars"]["saw_tutorial"].asBool() != sawTutorial)
-    {
-        vars["game_vars"]["saw_tutorial"] = sawTutorial;
-        changed = true;
-    }
-
-    if (!vars["game_vars"].isMember("player_max_jumps") ||
-        vars["game_vars"]["player_max_jumps"].asInt() != playerMaxJumps)
-    {
-        vars["game_vars"]["player_max_jumps"] = playerMaxJumps;
-        changed = true;
-    }
-
-    // If changed, update!
-    if (changed) SerialManager::Instance().SaveData();
+    SerialManager::Instance().GetGameData_Bool("saw_tutorial", false);
+    SerialManager::Instance().GetGameData_Int("player_max_jumps", 1);
 }

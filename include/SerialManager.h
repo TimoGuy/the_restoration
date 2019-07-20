@@ -33,6 +33,44 @@ public:
         save_file.close();
     }
 
+
+
+
+    void SetGameData_Bool(char* key, bool flag)
+    {
+        Json::Value& vars = GetJsonData();
+        vars["game_vars"][key] = flag;
+        SaveData();
+    }
+    bool GetGameData_Bool(char* key, bool defaultVal)
+    {
+        Json::Value& vars = GetJsonData();
+        if (!vars["game_vars"].isMember(key))
+            SetGameData_Bool(key, defaultVal);       // Set and save the default value
+
+        // Pull the value now!
+        return vars["game_vars"][key].asBool();
+    }
+
+
+
+
+    void SetGameData_Int(char* key, int flag)
+    {
+        Json::Value& vars = GetJsonData();
+        vars["game_vars"][key] = flag;
+        SaveData();
+    }
+    int GetGameData_Int(char* key, int defaultVal)
+    {
+        Json::Value& vars = GetJsonData();
+        if (!vars["game_vars"].isMember(key))
+            SetGameData_Int(key, defaultVal);       // Set and save the default value
+
+        // Pull the value now!
+        return vars["game_vars"][key].asInt();
+    }
+
 private:
     SerialManager()
     {
