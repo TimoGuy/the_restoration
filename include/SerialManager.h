@@ -1,7 +1,12 @@
 #pragma once
 
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/writer.h>
 #include <vector>
 #include <string>
+#include <fstream>
+
+#define SERIAL_FILE_LOCATION ".data/data.json"
 
 
 /// It's a singleton for serializing objects for saving and such.
@@ -16,29 +21,28 @@ public:
         return *_instance;
     }
 
-    std::vector<std::string>& GetSerials() { return serials; }
+    Json::Value& GetJsonData() { return jsonData; }
 
-    bool CheckIfSerialIsTaken(std::string serial)
+    void SaveData()
     {
-        for (unsigned int i = 0; i < serials.size(); i++)
-        {
-            if (serial == serials.at(i))
-            {
-                // It's taken!
-                return true;
-            }
-        }
+        std::ofstream save_file;
+        save_file.open(SERIAL_FILE_LOCATION);
 
-        // Not taken eh
-        return false;
+        Json::StyledWriter styledWriter;
+        save_file << styledWriter.write(jsonData);
+        save_file.close();
     }
 
 private:
     SerialManager()
     {
-
+        // Check if json file exists and read it in
+        std::ifstream ifs(SERIAL_FILE_LOCATION);
+        Json::Reader reader;
+        Json::Value obj;
+        reader.parse(ifs, jsonData);
     }
 
-    std::vector<std::string> serials;
+    Json::Value jsonData;
 };
 

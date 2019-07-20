@@ -18,13 +18,15 @@ FuelIncreaserItem::FuelIncreaserItem(int gx, int gy, TestRoom* rm)
     active = true;
     serial =
         room->GetLevelName() +
-        std::string("_") +
+        std::string("_FuelIncreaserItem_") +
         std::to_string(gx) +
         std::string("_") +
         std::to_string(gy);
 
     // Check if serial is unique
-    if (SerialManager::Instance().CheckIfSerialIsTaken(serial))
+    if (SerialManager::Instance()
+            .GetJsonData()["serialized_data"]
+            .isMember(serial))
     {
         // It's taken, which means it's registered as a taken object
         active = false;
@@ -75,6 +77,7 @@ void FuelIncreaserItem::YouLose(Entity* accordingToMe)
 {
     // Okay, I go away now
     // but, register as taken!
-    SerialManager::Instance().GetSerials().push_back(serial);
+    SerialManager::Instance().GetJsonData()["serialized_data"][serial] = true;
+    SerialManager::Instance().SaveData();
     delete this;
 }
