@@ -3,7 +3,6 @@
 #include "TestRoom.h"
 #include "defs.h"
 #include "GameLoop.h"
-#include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TestEnemy.h"
 #include "../../include/Rooms/TestRoom.h"
