@@ -3,6 +3,7 @@
 #include "TestRoom.h"
 #include "defs.h"
 #include "GameLoop.h"
+#include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TestEnemy.h"
 #include "../../include/Rooms/TestRoom.h"
@@ -14,7 +15,7 @@
 
 
 TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
-	: Entity(gx, gy, rm)
+	: Entity(gx, gy, rm, true)
 {
 	// Init
 	//printf("Enemy built!\n");
@@ -34,6 +35,32 @@ void TestEnemy::Update()
 {
 	// Does nothing eh
 	framesOfInvincibility--;
+
+	// Update mvt
+	vsp += 0.5f;
+
+    // COLLISION SYSTEM
+	// Get middle of object for accuracy
+    float centX = x + hsp + GRID_SIZE / 2,
+        centY = y + vsp + GRID_SIZE / 2;
+
+	// Check collision potential area
+	std::vector<Object*> tempCollisionsToCheck;
+	SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck);
+
+	// Add other enemies too!
+    for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
+    {
+        Entity* ent;
+        if ((ent = room->getEntityList()->at(i)) != this)
+        {
+            // It's not me!!!
+            tempCollisionsToCheck.push_back(ent);
+        }
+    }
+
+	// Update the hsp and vsp
+	UpdateGroundCollisionVelocity(hsp, vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck);
 }
 
 void TestEnemy::Render()

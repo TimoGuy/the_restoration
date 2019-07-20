@@ -14,7 +14,7 @@
 class Entity : public Object
 {
 public:
-	Entity(int gx, int gy, TestRoom* rm);
+	Entity(int gx, int gy, TestRoom* rm, bool isSolid=false);
 	~Entity();
 
 	virtual void YouLose(Entity* accordingToMe) = 0;

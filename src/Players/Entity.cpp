@@ -18,8 +18,8 @@
 #include <algorithm>
 
 
-Entity::Entity(int gx, int gy, TestRoom* rm)
-	: Object(gx, gy, rm, false)
+Entity::Entity(int gx, int gy, TestRoom* rm, bool isSolid)
+	: Object(gx, gy, rm, isSolid)
 {
 	hsp = vsp = 0;
 	rm->getEntityList()->push_back(this);	// Adds itself to the entity list of the room
