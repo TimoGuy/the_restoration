@@ -47,4 +47,7 @@ class GameLoop
 
         // This is the current room
         Room* currentRoom;
+
+        static void LoadGameVariables();
+        static void CheckAndUpdateGameVariables();
 };

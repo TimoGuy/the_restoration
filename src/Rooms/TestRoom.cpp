@@ -55,6 +55,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 
 	// TEST CODE to load a level
+	currentLvl = name;          // Load for serialization
 	bool success;
 	success = LoadLevelIO(name);
 

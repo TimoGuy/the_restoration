@@ -4,12 +4,14 @@
 #include "Cutscene.h"
 #include <SDL2/SDL_opengl.h>
 #include "InputManager.h"
+#include "SerialManager.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/GameLoop.h"
 #include "../include/Rooms/TestRoom.h"
 #include "../include/Rooms/Cutscene/Cutscene.h"
 #include <SDL_opengl.h>
 #include "../include/InputManager.h"
+#include "../include/SerialManager.h"
 #endif
 
 
@@ -29,6 +31,7 @@ int GameLoop::playerMaxJumps = 1;
 
 GameLoop::GameLoop(SDL_Window* window)
 {
+    LoadGameVariables();
     _window = window;
 
     // Set the initial shape for the window
@@ -61,6 +64,9 @@ bool GameLoop::Execute()
         GetRoom()->Update();
 
 
+
+        // Process any changes in the variables
+        CheckAndUpdateGameVariables();
 
 
 
@@ -235,4 +241,38 @@ void GameLoop::GetWindowDimensions(int& width, int& height)
 bool GameLoop::DidJustResize()
 {
 	return _didJustResize;
+}
+
+void GameLoop::LoadGameVariables()
+{
+    Json::Value& vars = SerialManager::Instance().GetJsonData();
+
+    if (vars["game_vars"].isMember("saw_tutorial"))
+        sawTutorial = vars["game_vars"]["saw_tutorial"].asBool();
+    if (vars["game_vars"].isMember("player_max_jumps"))
+        playerMaxJumps = vars["game_vars"]["player_max_jumps"].asInt();
+}
+
+void GameLoop::CheckAndUpdateGameVariables()
+{
+    Json::Value& vars = SerialManager::Instance().GetJsonData();
+    bool changed = false;
+
+    // Check for updates
+    if (!vars["game_vars"].isMember("saw_tutorial") ||
+        vars["game_vars"]["saw_tutorial"].asBool() != sawTutorial)
+    {
+        vars["game_vars"]["saw_tutorial"] = sawTutorial;
+        changed = true;
+    }
+
+    if (!vars["game_vars"].isMember("player_max_jumps") ||
+        vars["game_vars"]["player_max_jumps"].asInt() != playerMaxJumps)
+    {
+        vars["game_vars"]["player_max_jumps"] = playerMaxJumps;
+        changed = true;
+    }
+
+    // If changed, update!
+    if (changed) SerialManager::Instance().SaveData();
 }
