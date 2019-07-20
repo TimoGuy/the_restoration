@@ -233,6 +233,6 @@ bool GameLoop::DidJustResize()
 
 void GameLoop::LoadGameVariables()
 {
-    SerialManager::Instance().GetGameData_Bool("saw_tutorial", false);
-    SerialManager::Instance().GetGameData_Int("player_max_jumps", 1);
+    SerialManager::Instance().GetGameData_Bool("saw_tutorial", GAME_VAR_DEF_saw_tutorial);
+    SerialManager::Instance().GetGameData_Int("player_max_jumps", GAME_VAR_DEF_player_max_jumps);
 }

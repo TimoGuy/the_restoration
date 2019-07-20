@@ -57,7 +57,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 
     // Create the tutorial
     if (!SerialManager::Instance()
-            .GetGameData_Bool("saw_tutorial", false))
+            .GetGameData_Bool("saw_tutorial", GAME_VAR_DEF_saw_tutorial))
     {
         auto glambda = [&](void)
         {
@@ -118,7 +118,7 @@ void TestGameObj::Update()
 	float inputX = 0;
 	bool inputJump = false;
 
-    if (SerialManager::Instance().GetGameData_Bool("saw_tutorial", false) &&
+    if (SerialManager::Instance().GetGameData_Bool("saw_tutorial", GAME_VAR_DEF_saw_tutorial) &&
 		!InputManager::Instance().b3())
     {
         inputX = InputManager::Instance().x();
@@ -356,7 +356,7 @@ void TestGameObj::Update()
                         // Wow!!!! you found a fuel increase!
                         SerialManager::Instance().SetGameData_Int(
                             "player_max_jumps",
-                            SerialManager::Instance().GetGameData_Int("player_max_jumps", 1) + 1
+                            SerialManager::Instance().GetGameData_Int("player_max_jumps", GAME_VAR_DEF_player_max_jumps) + 1
                         );
                         ent->YouLose(this);
                     }
@@ -414,9 +414,11 @@ void TestGameObj::Update()
 	// Bc now it's more of a rocket-jumping game!
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
-		if (numJumps < SerialManager::Instance().GetGameData_Int("player_max_jumps", 1) &&
+		if (numJumps < SerialManager::Instance().GetGameData_Int(
+                "player_max_jumps", GAME_VAR_DEF_player_max_jumps) &&
 			!isUsingMySword)
 			numJumps++;						// Reset number of jumps you can do
+
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
 	}
