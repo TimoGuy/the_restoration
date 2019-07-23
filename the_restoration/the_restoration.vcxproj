@@ -126,11 +126,14 @@
     <ClInclude Include="..\include\defs.h" />
     <ClInclude Include="..\include\GameLoop.h" />
     <ClInclude Include="..\include\InputManager.h" />
+    <ClInclude Include="..\include\json\json-forwards.h" />
+    <ClInclude Include="..\include\json\json.h" />
     <ClInclude Include="..\include\Lib\stb_image.h" />
     <ClInclude Include="..\include\Lib\Texture.h" />
     <ClInclude Include="..\include\Object.h" />
     <ClInclude Include="..\include\ObjectFactory.h" />
     <ClInclude Include="..\include\Players\Entity.h" />
+    <ClInclude Include="..\include\Players\FuelIncreaserItem.h" />
     <ClInclude Include="..\include\Players\Ground.h" />
     <ClInclude Include="..\include\Players\Hazard.h" />
     <ClInclude Include="..\include\Players\MovingPlatGround.h" />
@@ -147,17 +150,20 @@
     <ClInclude Include="..\include\Rooms\Room.h" />
     <ClInclude Include="..\include\Rooms\TestRoom.h" />
     <ClInclude Include="..\include\Rooms\TileSet.h" />
+    <ClInclude Include="..\include\SerialManager.h" />
     <ClInclude Include="..\include\Shape\Quad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\src\GameLoop.cpp" />
     <ClCompile Include="..\src\InputManager.cpp" />
+    <ClCompile Include="..\src\jsoncpp.cpp" />
     <ClCompile Include="..\src\Lib\stb_image.c" />
     <ClCompile Include="..\src\Lib\Texture.cpp" />
     <ClCompile Include="..\src\Object.cpp" />
     <ClCompile Include="..\src\ObjectFactory.cpp" />
     <ClCompile Include="..\src\Players\Entity.cpp" />
+    <ClCompile Include="..\src\Players\FuelIncreaserItem.cpp" />
     <ClCompile Include="..\src\Players\Ground.cpp" />
     <ClCompile Include="..\src\Players\Hazard.cpp" />
     <ClCompile Include="..\src\Players\MovingPlatGround.cpp" />
