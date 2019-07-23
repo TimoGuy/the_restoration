@@ -1,5 +1,10 @@
 #pragma once
+
 #include "Entity.h"
+
+class Entity;
+struct BoundBox;
+
 
 class TestEnemy :
 	public Entity

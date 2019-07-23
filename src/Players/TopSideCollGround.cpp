@@ -1,9 +1,13 @@
 #ifdef __unix__
 #include "TopSideCollGround.h"
 #include "defs.h"
+#include "Lib/Texture.h"
+#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TopSideCollGround.h"
 #include "../../include/defs.h"
+#include "../../include/Lib/Texture.h"
+#include "../../include/Shape/Quad.h"
 #endif
 
 

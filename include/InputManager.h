@@ -2,11 +2,11 @@
 
 #ifdef __unix__
 #include <SDL2/SDL.h>
-#include "GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include <SDL.h>
-#include "GameLoop.h"
 #endif
+
+class GameLoop;
 
 // THIS IS SUPPOSED TO BE A SINGLETON!!!
 class InputManager

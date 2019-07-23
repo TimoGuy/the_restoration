@@ -10,6 +10,9 @@
 #include "Textbox.h"
 #include "defs.h"
 #include <SDL2/SDL_ttf.h>
+#include "Lib/Texture.h"
+#include "Quad.h"
+#include "../../include/GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
@@ -22,6 +25,9 @@
 #include "../../include/Players/Textbox.h"
 #include "../../include/defs.h"
 #include <SDL_ttf.h>
+#include "../../include/Lib/Texture.h"
+#include "../../include/Shape/Quad.h"
+#include "../../include/GameLoop.h"
 #endif
 
 #include <stdio.h>
@@ -327,12 +333,10 @@ void TestGameObj::Update()
 			else if (dynamic_cast<MovingPlatGround*>(tempCollisions.at(i)) != NULL)
 			{
 				// Add hsp to me!!!! (unless if hitting it from below, then you'd just hit your head!)
-				//if (vsp - ((MovingPlatGround*)tempCollisions.at(i))->GetHsp() >= 0)
-				{
-					// This means still, or downwards (in comparison to the moving obj!!)
-					outHsp = ((MovingPlatGround*)tempCollisions.at(i))->GetHsp();
-					outVsp = ((MovingPlatGround*)tempCollisions.at(i))->GetVsp();
-				}
+					
+                // This means still, or downwards (in comparison to the moving obj!!)
+				outHsp = ((MovingPlatGround*)tempCollisions.at(i))->GetHsp();
+				outVsp = ((MovingPlatGround*)tempCollisions.at(i))->GetVsp();
 			}
 		}
     }

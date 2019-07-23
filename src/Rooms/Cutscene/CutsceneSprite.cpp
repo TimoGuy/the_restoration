@@ -1,7 +1,11 @@
 #ifdef __unix__
 #include "CutsceneSprite.h"
+#include <SDL2/SDL_opengl.h>
+#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../../include/Rooms/Cutscene/CutsceneSprite.h"
+#include <SDL_opengl.h>
+#include "../../../include/Shape/Quad.h"
 #endif
 
 CutsceneSprite::CutsceneSprite(Quad* firstImg)

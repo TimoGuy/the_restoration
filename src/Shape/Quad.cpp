@@ -2,10 +2,12 @@
 #include "Quad.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include "Lib/Texture.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Shape/Quad.h"			// WOWEE windows is wEIRD!!!
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include "../../include/Lib/Texture.h"
 #endif
 
 

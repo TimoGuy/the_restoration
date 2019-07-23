@@ -1,7 +1,12 @@
 #pragma once
 
+#ifdef __unix__
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/writer.h>
+#elif defined(_WIN32) || defined(WIN32)
+// TODO: Set up JSON w/ windows!
+#endif
+
 #include <vector>
 #include <string>
 #include <fstream>

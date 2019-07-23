@@ -1,9 +1,10 @@
 #pragma once
+
 #ifdef __unix__
-#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
-#include "../../Shape/Quad.h"
 #endif
+
+class Quad;
 
 #include <vector>
 

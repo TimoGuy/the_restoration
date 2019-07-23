@@ -3,11 +3,15 @@
 #include "TestRoom.h"
 #include "defs.h"
 #include "GameLoop.h"
+#include "Lib/Texture.h"
+#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Players\TestEnemy.h"
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/defs.h"
 #include "../../include/GameLoop.h"
+#include "../../include/Lib/Texture.h"
+#include "../../include/Shape/Quad.h"
 #endif
 
 #include <algorithm>
@@ -17,7 +21,6 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 	: Entity(gx, gy, rm, true)
 {
 	// Init
-	//printf("Enemy built!\n");
 	image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/enemy_test.png"), STBI_rgb_alpha));
 	life = 1;   // 0 is ded.
 }

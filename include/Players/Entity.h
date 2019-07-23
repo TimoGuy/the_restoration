@@ -1,15 +1,18 @@
 #pragma once
+
 #ifdef __unix__
 #include "Object.h"
-#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../Object.h"
-#include "../Shape/Quad.h"
 #endif
+
+class Quad;
+class TestRoom;
+
+
 
 #include <vector>
 
-//class Room;
 
 class Entity : public Object
 {

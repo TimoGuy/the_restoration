@@ -1,11 +1,15 @@
 #ifdef __unix__
 #include "Cutscene.h"       // That way don't have to load in the header file!
+#include "CutsceneSprite.h"
 #include "CutsceneObject.h"
 #include "TestRoom.h"
+#include <SDL2/SDL_opengl.h>
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../../include/Rooms/Cutscene/Cutscene.h"
+#include "../../../include/Rooms/Cutscene/CutsceneSprite.h"
 #include "../../../include/Rooms/Cutscene/CutsceneObject.h"
 #include "../../../include/Rooms/TestRoom.h"
+#include <SDL_opengl.h>
 #endif
 
 #include <sstream>

@@ -1,7 +1,15 @@
 #ifdef __unix__
 #include "Npc.h"
+#include "Lib/Texture.h"
+#include "Quad.h"
+#include "defs.h"
+#include "Textbox.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Npc.h"
+#include "../../include/Lib/Texture.h"
+#include "../../include/Shape/Quad.h"
+#include "../../include/defs.h"
+#include "../../include/Players/Textbox.h"
 #endif
 
 Npc::Npc(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, false)

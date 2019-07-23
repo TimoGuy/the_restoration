@@ -2,11 +2,8 @@
 
 #ifdef __unix__
 #include "Base.h"
-//#include "Object.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../Base.h"
-//#include "../Object.h"
-//#include "../Players/Entity.h"
 #endif
 
 class GameLoop;

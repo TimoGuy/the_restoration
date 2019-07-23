@@ -1,9 +1,17 @@
 #ifdef __unix__
 #include "Textbox.h"
 #include "InputManager.h"
+#include <SDL2/SDL_ttf.h>
+#include "Lib/Texture.h"
+#include "Quad.h"
+#include "TestRoom.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Textbox.h"
 #include "../../include/InputManager.h"
+#include <SDL_ttf.h>
+#include "../../include/Lib/Texture.h"
+#include "../../include/Shape/Quad.h"
+#include "../../include/Rooms/TestRoom.h"
 #endif
 
 #include <algorithm>
@@ -95,8 +103,6 @@ Textbox::Textbox(float x, float y, std::string fileName, int fontSize, const std
     // Final stuff eh.
     texts.push_back(buildingString);
 
-    // Create and spit out!!
-//    return new Textbox(x, y, texts, fontSize, lambda, rm);
     // Setup!
     _strings = texts;
     _fontSize = fontSize;
@@ -218,9 +224,7 @@ void Textbox::SetupTextbox(float x, float y, std::string text)
     height = (float)_fontSize * lines;      // Calc the height (width is already calc'd)
 
     // Add the padding
-//    x -= PADDING;
     width += PADDING * 2;
-//    y -= PADDING;
     height += PADDING * 2;
 
 

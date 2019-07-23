@@ -2,11 +2,14 @@
 
 #ifdef __unix__
 #include "Object.h"
-#include "Textbox.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../Object.h"
-#include "Textbox.h"
 #endif
+
+struct BoundBox;
+class Textbox;
+class Quad;
+
 
 class Npc : public Object
 {

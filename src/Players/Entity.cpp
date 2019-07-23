@@ -29,8 +29,6 @@ Entity::Entity(int gx, int gy, TestRoom* rm, bool isSolid)
 Entity::~Entity()
 {
 	//dtor
-//	if (image != NULL)
-//        delete image;
 }
 
 

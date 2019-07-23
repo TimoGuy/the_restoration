@@ -4,19 +4,23 @@
 #include "Players/TestGameObj.h"
 #include "Trigger.h"
 #include "Lib/Texture.h"
-#include <unistd.h>
 #include "ObjectFactory.h"
 #include <SDL2/SDL_opengl.h>
+#include "GameLoop.h"
+#include "TileSet.h"
+#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/InputManager.h"
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
 #include "../../include/Players/Trigger.h"
 #include "../../include/Lib/Texture.h"
-//#include <io.h>
-#include "../../include/Lib/dirent.h"
 #include "../../include/ObjectFactory.h"
 #include <SDL_opengl.h>
+#include "../../include/GameLoop.h"
+#include "../../include/Rooms/TileSet.h"
+#include "../../include/Shape/Quad.h"
+
 #endif
 
 #include <iostream>
@@ -35,6 +39,8 @@ Quad* oneStamina;
 
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
+    roomTileSet = new TileSet();
+
 	// You want a fade-in there boi???
 	if (fadeIn)
 	{
@@ -354,7 +360,7 @@ void TestRoom::Render()
 
 	// And then the tileset underlay!!!!!
 	glColor4f(1, 1, 1, 1);
-	roomTileSet.RenderVerts();
+	roomTileSet->RenderVerts();
 
 	// Call a render for everyone!
 	for (unsigned int it = 0; it < gameObjects.size(); ++it)
@@ -513,7 +519,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 			else if (line.at(0) == 's')
 			{
 				// It's the tile-set!!!! (support animation l8r TODO)
-				roomTileSet.LoadTileTex(currentDir + line.substr(2));		// It's a rel path!!! (also cutoff the 's' and '\t' too eh)
+				roomTileSet->LoadTileTex(currentDir + line.substr(2));		// It's a rel path!!! (also cutoff the 's' and '\t' too eh)
 			}
 			else if (line.at(0) == 'm')
 			{
@@ -642,7 +648,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 		for (int i = 0; i < gWidth * gHeight; i++)
 		{
 			// We'll assume it's STBI_rgb (hence 3 multiplier eh)
-			roomTileSet.InterpretAndAddVector(i, (int)(i % gWidth), (int)(i / gWidth), gWidth, gHeight, imgData);		// Take the r_value, and it will interpret it!
+			roomTileSet->InterpretAndAddVector(i, (int)(i % gWidth), (int)(i / gWidth), gWidth, gHeight, imgData);		// Take the r_value, and it will interpret it!
 		}
 
 

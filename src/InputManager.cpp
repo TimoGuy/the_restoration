@@ -3,11 +3,13 @@
 #include "SDL2/SDL.h"
 #include <SDL2/SDL_opengl.h>
 #include "defs.h"
+#include "GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../include/InputManager.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "../include/defs.h"
+#include "../include/GameLoop.h"
 #endif
 #include <stdio.h>
 #include <cmath>

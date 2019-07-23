@@ -16,14 +16,15 @@
 
 #ifdef __unix__
 #include "Rooms/Room.h"
-#include "CutsceneSprite.h"
-#include "GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../Room.h"
-#include "CutsceneSprite.h"
-#include "../../GameLoop.h"
 #endif
 
+class CutsceneSprite;
+class GameLoop;
+
+
+#include <string>
 #include <vector>
 
 class CutsceneObject;

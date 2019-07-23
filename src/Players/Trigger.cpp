@@ -133,9 +133,6 @@ bool Trigger::GetCustomCoords(int& gx, int& gy)        // This'll edit the varia
 
 Base* Trigger::GetNextEvent()
 {
-    //if (isDisabled()) return NULL;
-
-
     // Check what type of event
     switch (GetNewEventID().at(0))
     {

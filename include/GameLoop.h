@@ -2,11 +2,14 @@
 
 #ifdef __unix__
 #include <SDL2/SDL.h>
-#include "Room.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include <SDL.h>
-#include "Rooms\Room.h"
 #endif
+
+class Room;
+
+
+
 
 class GameLoop
 {

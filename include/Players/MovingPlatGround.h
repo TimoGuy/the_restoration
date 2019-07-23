@@ -1,11 +1,14 @@
 #pragma once
+
 #ifdef __unix__
-#include <Object.h>
-#include "Quad.h"
+#include "Object.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../Object.h"
-#include "../Shape/Quad.h"
 #endif
+
+struct BoundBox;
+class Quad;
+
 
 #include <vector>
 

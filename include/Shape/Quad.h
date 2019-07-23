@@ -1,16 +1,17 @@
 #pragma once
+
 #ifdef __unix__
-#include "Lib/Texture.h"
 #elif defined(_WIN32) || defined(WIN32)
-#include "../Lib/Texture.h"
 #endif
+
+class Texture;
+
 
 class Quad
 {
     public:
         Quad(float width, float height);
         Quad(float width, float height, Texture* tex);
-//        Quad(float width, float height, Image);           TODO: make a textured quad constructor
         virtual ~Quad();
 
         void Render(float x, float y);
@@ -31,5 +32,5 @@ class Quad
     private:
         float _width;
         float _height;
-        Texture* _image = NULL;
+        Texture* _image = nullptr;
 };

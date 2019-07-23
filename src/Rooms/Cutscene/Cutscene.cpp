@@ -1,9 +1,19 @@
 #ifdef __unix__
 #include "Cutscene.h"
+#include "CutsceneSprite.h"
 #include "CutsceneObject.h"
+#include "Quad.h"
+#include "Lib/stb_image.h"
+#include "Lib/Texture.h"
+#include "GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../../include/Rooms/Cutscene/Cutscene.h"
+#include "../../../include/Rooms/Cutscene/CutsceneSprite.h"
 #include "../../../include/Rooms/Cutscene/CutsceneObject.h"
+#include "../../../include/Shape/Quad.h"
+#include "../../../include/Lib/stb_image.h"
+#include "../../../include/Lib/Texture.h"
+#include "../../../include/GameLoop.h"
 #endif
 
 #include <iostream>

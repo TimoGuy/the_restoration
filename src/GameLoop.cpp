@@ -61,9 +61,6 @@ bool GameLoop::Execute()
 		// Render
 		glClear(GL_COLOR_BUFFER_BIT);
 
-        // Setup proj mat
-//        glUniformMatrix4fv(resources::shaderStandard->GetLocProjectMat(), 1, false, (GLfloat*)&resources::projectionMat[0]);
-//        resources::modelViewMat = glm::mat4();
         GetRoom()->Render();
 
 
@@ -204,18 +201,15 @@ void GameLoop::SetWindowDimensions(int width, int height)
     _windowWidth = width;
     _windowHeight = height;
 
-    //Set the viewport
+    // Set the viewport
     glViewport(0, 0, width, height);
 
-//    float aspectRat = float(width) / float(height);
-
-    //Initialize Projection Matrix
+    // Initialize Projection Matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-//    glOrtho(0.0, SCREEN_HEIGHT * aspectRat, SCREEN_HEIGHT, 0.0, 1.0, -1.0);
     glOrtho(-width / 2, width / 2, height / 2, -height / 2, 1.0, -1.0);
 
-    //Initialize Modelview Matrix
+    // Initialize Modelview Matrix
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

@@ -10,7 +10,7 @@
 // Basic usage (see HDR discussion below):
 //    int x,y,n;
 //    unsigned char *data = stbi_load(filename, &x, &y, &n, 0);
-//    // ... process data if not NULL ... 
+//    // ... process data if not NULL ...
 //    // ... x = width, y = height, n = # 8-bit components per pixel ...
 //    // ... replace '0' with '1'..'4' to force that many components per pixel
 //    // ... but 'n' will always be the number that it would have been if you said 0
@@ -86,7 +86,7 @@
 // (linear) floats to preserve the full dynamic range:
 //
 //    float *data = stbi_loadf(filename, &x, &y, &n, 0);
-// 
+//
 // If you load LDR images through this interface, those images will
 // be promoted to floating point values, run through the inverse of
 // constants corresponding to the above:
@@ -108,10 +108,12 @@
 // I/O callbacks allow you to read from arbitrary sources, like packaged
 // files or some other source. Data read from callbacks are processed
 // through a small internal buffer (currently 128 bytes) to try to reduce
-// overhead. 
+// overhead.
 //
 // The three functions you must define are "read" (reads some bytes of data),
 // "skip" (skips some bytes of data), "eof" (reports if the stream is at the end).
+
+#pragma once
 
 
 #ifndef STBI_NO_STDIO
@@ -160,7 +162,7 @@ extern stbi_uc *stbi_load_from_file  (FILE *f,                  int *x, int *y, 
 
 typedef struct
 {
-   int      (*read)  (void *user,char *data,int size);   // fill 'data' with 'size' bytes.  return number of bytes actually read 
+   int      (*read)  (void *user,char *data,int size);   // fill 'data' with 'size' bytes.  return number of bytes actually read
    void     (*skip)  (void *user,unsigned n);            // skip the next 'n' bytes
    int      (*eof)   (void *user);                       // returns nonzero if we are at end of file/data
 } stbi_io_callbacks;
@@ -174,7 +176,7 @@ extern stbi_uc *stbi_load_from_callbacks  (stbi_io_callbacks const *clbk, void *
    extern float *stbi_loadf            (char const *filename,   int *x, int *y, int *comp, int req_comp);
    extern float *stbi_loadf_from_file  (FILE *f,                int *x, int *y, int *comp, int req_comp);
    #endif
-   
+
    extern float *stbi_loadf_from_callbacks  (stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp);
 
    extern void   stbi_hdr_to_ldr_gamma(float gamma);
@@ -195,7 +197,7 @@ extern int      stbi_is_hdr_from_file(FILE *f);
 
 // get a VERY brief reason for failure
 // NOT THREADSAFE
-extern const char *stbi_failure_reason  (void); 
+extern const char *stbi_failure_reason  (void);
 
 // free the loaded image -- this is just free()
 extern void     stbi_image_free      (void *retval_from_stbi_load);

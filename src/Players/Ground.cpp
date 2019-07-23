@@ -3,11 +3,15 @@
 #include "TestRoom.h"
 #include "defs.h"
 #include "InputManager.h"
+#include "Lib/Texture.h"
+#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/Ground.h"
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/defs.h"
 #include "../../include/InputManager.h"
+#include "../../include/Lib/Texture.h"
+#include "../../include/Shape/Quad.h"
 #endif
 
 #include <stdio.h>

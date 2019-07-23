@@ -1,20 +1,23 @@
 #pragma once
 
 #ifdef __unix__
+#include <SDL2/SDL.h>
 #include "Rooms/Room.h"
-#include "Entity.h"
 #include "defs.h"
-#include "TileSet.h"
 #elif defined(_WIN32) || defined(WIN32)
+#include <SDL.h>
 #include "../../include/Rooms/Room.h"
-#include "../../include/Players/Entity.h"
 #include "../../include/defs.h"
-#include "../../include/Rooms/TileSet.h"
 #endif
+
+class Object;
+class Entity;
+class TileSet;
 
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <functional>
 
 // Hopefully this is where 90% of the game
 // will happen! Load a file via IO and then go!
@@ -72,7 +75,7 @@ class TestRoom : public Room
 
 		// Level's tileset overlay!!
 		// (disable object's rendering and check it out!!!!!)
-		TileSet roomTileSet;
+		TileSet* roomTileSet;
 
 
         // For the camera

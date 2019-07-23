@@ -1,11 +1,14 @@
 #pragma once
+
 #ifdef __unix__
 #include "Entity.h"
-#include "Textbox.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "Entity.h"
-#include "../Players/Textbox.h"
 #endif
+
+class Textbox;
+class Quad;
+
 
 #include <vector>
 

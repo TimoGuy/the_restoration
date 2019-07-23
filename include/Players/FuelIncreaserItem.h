@@ -1,5 +1,11 @@
 #pragma once
+
 #include "Entity.h"
+
+struct BoundBox;
+class TestRoom;
+
+
 #include <string>
 
 class FuelIncreaserItem : public Entity

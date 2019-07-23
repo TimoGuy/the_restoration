@@ -2,11 +2,12 @@
 
 #ifdef __unix__
 #include "Object.h"
-#include "TestRoom.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../Object.h"
-#include "../Rooms/TestRoom.h"
 #endif
+
+class TestRoom;
+
 
 #include <string>
 #include <vector>

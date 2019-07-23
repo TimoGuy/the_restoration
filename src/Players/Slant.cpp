@@ -1,9 +1,11 @@
 #ifdef __unix__
+#include <SDL2/SDL_opengl.h>
 #include "Slant.h"
 #include "defs.h"
 #include "TestRoom.h"
 #include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
+#include <SDL_opengl.h>
 #include "../../include/Players/Slant.h"
 #include "../../include/defs.h"
 #include "../../include/Rooms/TestRoom.h"
@@ -18,7 +20,6 @@
 Slant::Slant(int gx, int gy, TestRoom* rm, bool isLeft) : Object(gx, gy, rm, true)
 {
     //ctor
-    //printf("Slant built!\n");
 	originalGy = gy;		// If when extending this isn't correct, then we know it's wrapped around
 	_isLeft = isLeft;
 	_blocks = 1;
@@ -136,8 +137,6 @@ void Slant::Extend1BlockToTheRight(int newGx, int newGy)
 		originalGy != newGy)
 		// Not gonna happen
 		return;
-
-	//printf("\tSlant was extended by 1!!\n");
 
 	// Move the right point to the right more
 	_blocks++;

@@ -2,10 +2,14 @@
 #include "TileSet.h"
 #include <SDL2/SDL_opengl.h>
 #include "defs.h"
+#include "Lib/stb_image.h"
+#include "Lib/Texture.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "..\..\include\Rooms\TileSet.h"
 #include <SDL_opengl.h>
 #include "../../include/defs.h"
+#include "../../include/Lib/stb_image.h"
+#include "../../include/Lib/Texture.h"
 #endif
 
 
@@ -158,7 +162,7 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             		// Change into the correct x and y coords
             		int xoff = filteredInd % 3 - 1 + gx;
             		int yoff = filteredInd / 3 - 1 + gy;
-            		
+
 
             		// Check if offset vals aren't exiting the room
             		if (xoff < 0 || xoff >= rmGWidth ||
@@ -181,7 +185,7 @@ void TileSet::InterpretAndAddVector(int index, int gx, int gy, const int rmGWidt
             	}
             }
 
-            
+
         	// THIS IS THE TESTING ZONE!!!
         	// Desc: The test will see if an inside-corner
         	// is needed, or if a block is a wall or a floor

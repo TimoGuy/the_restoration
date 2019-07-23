@@ -1,11 +1,12 @@
 #pragma once
 
 #ifdef __unix__
-#include "Lib/Texture.h"
 #elif defined(_WIN32) || defined(WIN32)
-#include "../Lib/Texture.h"
 #endif
 
+class Texture;
+
+#include <string>
 #include <vector>
 
 // This will run thru and render all of

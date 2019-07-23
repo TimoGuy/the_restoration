@@ -2,10 +2,14 @@
 #include "MovingPlatGround.h"
 #include "defs.h"
 #include "TestRoom.h"
+#include "Lib/Texture.h"
+#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/defs.h"
 #include "../../include/Rooms/TestRoom.h"
+#include "../../include/Lib/Texture.h"
+#include "../../include/Shape/Quad.h"
 #endif
 
 #include <stdio.h>
@@ -15,7 +19,6 @@
 MovingPlatGround::MovingPlatGround(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, true)
 {
     // Init
-    //printf("MPG (Moving Plat Grnd) built!\n");
     image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/ground_test.png"), STBI_rgb_alpha));
 
     // Add to collision map
@@ -60,16 +63,9 @@ bool MovingPlatGround::IsColliding(BoundBox* box)
 
 void MovingPlatGround::Extend1BlockToTheRight(int newGx, int newGy)
 {
-	// NOTE:::::: There'll be no block limit like there is with the slants
-	/*if (_blocks >= SLANT_PROPERTIES_MAX_BLOCKS ||
-		originalGy != newGy)
-		// Not gonna happen
-		return;*/
-
 	printf("\tMPG was extended by 1!!\n");
 
 	// Move the right point to the right more
-	//_blocks++;
 	image->SetWidth(image->GetWidth() + GRID_SIZE);
 
 	// Add myself to the new spots I take up too!!!

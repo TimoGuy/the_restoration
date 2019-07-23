@@ -1,14 +1,14 @@
 #pragma once
+
 #ifdef __unix__
 #include "Base.h"
-#include "ObjectFactory.h"
-//#include "TestRoom.h"
-#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "Base.h"
-#include "ObjectFactory.h"
-#include "Shape\Quad.h"
 #endif
+
+class ObjectFactory;
+class Quad;
+
 
 #include <vector>
 
