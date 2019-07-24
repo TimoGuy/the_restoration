@@ -70,6 +70,8 @@ void CutsceneObject::Update(int ticks)
 
 void CutsceneObject::Render(int ticks)
 {
+	if (_image == NULL) return;
+
     glTranslatef(_x + dx, _y + dy, 0);
     glRotatef(_angle + dAngle, 0, 0, 1);
     glScalef(_scale + dScale, _scale + dScale, 1);

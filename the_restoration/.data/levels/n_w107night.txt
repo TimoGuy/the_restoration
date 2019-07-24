@@ -1,0 +1,6 @@
+i	w107FallTerrainHuh.png
+s	../textures/tileset_night.png
+m	w107_ts.png
+
+t	1	n_w106night	99,26
+t	1	n_w108night

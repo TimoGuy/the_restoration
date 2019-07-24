@@ -4,7 +4,7 @@
 # 'o' is an object (o\t<sprite id (-1 for nothing)>\tx,y,z(if >0 then will be considered a background, and its parallax will be determined by a value from 1 - 1000)
 
 i	w101Home.png
-s	../textures/tileset_tiff.png
+s	../textures/tileset_test.png
 m	w101_ts.png
 
 t	1	n_w102VertCavern	41,99

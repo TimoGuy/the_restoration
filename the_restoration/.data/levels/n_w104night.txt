@@ -1,0 +1,6 @@
+i	w104CavHugePits.png
+s	../textures/tileset_night.png
+m	w104_ts.png
+
+t	1	n_w102night	97,65
+t	1	n_w105night

@@ -1,0 +1,7 @@
+i	w102VertCavern.png
+s	../textures/tileset_night.png
+m	w102_ts_night.png
+
+t	1	n_w103night
+t	1	n_w104night
+t	1	n_w101night	296,50

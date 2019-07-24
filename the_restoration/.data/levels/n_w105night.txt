@@ -1,0 +1,6 @@
+i	w105SheepShearing.png
+s	../textures/tileset_night.png
+m	w105_ts.png
+
+t	1	n_w106night
+t	1	n_w104night	234,33
