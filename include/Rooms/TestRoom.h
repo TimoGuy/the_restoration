@@ -13,6 +13,7 @@
 class Object;
 class Entity;
 class TileSet;
+class Cutscene;
 
 #include <stdio.h>
 #include <iostream>
@@ -76,6 +77,7 @@ class TestRoom : public Room
 		// Level's tileset overlay!!
 		// (disable object's rendering and check it out!!!!!)
 		TileSet* roomTileSet;
+		Cutscene* roomPropSet;
 
 
         // For the camera

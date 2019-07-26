@@ -2,9 +2,11 @@
 # 's' is a sprite (first one is the tileset) (may animate if desired)
 # 'm' is the tile-placement map (should correspond w/ the 'i' image)
 # 'o' is an object (o\t<sprite id (-1 for nothing)>\tx,y,z(if >0 then will be considered a background, and its parallax will be determined by a value from 1 - 1000)
+# 'c' is a prop set (really, it's a cutscene though)
 
 i	w101Home.png
 s	../textures/tileset_test.png
 m	w101_ts.png
+#c	c_test
 
 t	1	n_w102VertCavern	41,99

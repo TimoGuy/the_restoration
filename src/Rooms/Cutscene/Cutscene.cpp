@@ -395,10 +395,18 @@ void Cutscene::Update()
 
 void Cutscene::Render()
 {
+	Render(true);
+}
+
+void Cutscene::Render(bool resetViewMat)
+{
     printf("Ticks in cutscene: %i\n", ticks);
 
-    // Reset trans. matrix
-    glLoadIdentity();
+	if (resetViewMat)
+	{
+		// Reset trans. matrix
+		glLoadIdentity();
+	}
 
     // Only update and render objects
     for (unsigned int i = 0; i < objects.size(); i++)

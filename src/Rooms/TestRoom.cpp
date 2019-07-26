@@ -9,6 +9,7 @@
 #include "GameLoop.h"
 #include "TileSet.h"
 #include "Quad.h"
+#include "Cutscene.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/InputManager.h"
 #include "../../include/Rooms/TestRoom.h"
@@ -20,7 +21,7 @@
 #include "../../include/GameLoop.h"
 #include "../../include/Rooms/TileSet.h"
 #include "../../include/Shape/Quad.h"
-
+#include "../../include/Rooms/Cutscene/Cutscene.h"
 #endif
 
 #include <iostream>
@@ -40,6 +41,7 @@ Quad* oneStamina;
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
     roomTileSet = new TileSet();
+	roomPropSet = NULL;
 
 	// You want a fade-in there boi???
 	if (fadeIn)
@@ -359,6 +361,15 @@ void TestRoom::Update()
 	// Update the debug mvtment camera
 	camX += camOffX;
     camY += camOffY;
+
+
+
+
+	// Update the cutscene-prop-set if needed
+	if (roomPropSet != NULL)
+	{
+		roomPropSet->Update();
+	}
 }
 
 void TestRoom::Render()
@@ -375,7 +386,16 @@ void TestRoom::Render()
 
 	// And then the tileset underlay!!!!!
 	glColor4f(1, 1, 1, 1);
+	
+	if (roomPropSet != NULL)
+	{
+		roomPropSet->Render(false);
+	}
+
 	roomTileSet->RenderVerts();
+
+
+
 
 	// Call a render for everyone!
 	for (unsigned int it = 0; it < gameObjects.size(); ++it)
@@ -392,29 +412,31 @@ void TestRoom::Render()
 	glLoadIdentity();
 
 	// Now render the HUD!!!
+	if (camFocusObj != NULL)
+	{
 #define ONE_STAMINA_SIZE 24
 #define ONE_STAMINA_PADDING 8
-	if (oneStamina == NULL)
-	{
-		oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
+		if (oneStamina == NULL)
+		{
+			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
+		}
+
+		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
+		for (int i = 0; i < stamGauges; i++)
+		{
+			// Start at the upper left corner and just start drawing them green!
+			glColor3f(0, 1, 0);
+
+			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
+
+			int originalX = i * oneUnit;
+
+			float xPos = float(originalX % 1024);
+			float yPos = float(originalX / 1024 * oneUnit);
+
+			oneStamina->Render(xPos - 508, yPos - 284);
+		}
 	}
-
-	int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
-	for (int i = 0; i < stamGauges; i++)
-	{
-		// Start at the upper left corner and just start drawing them green!
-		glColor3f(0, 1, 0);
-
-		int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
-
-		int originalX = i * oneUnit;
-
-		float xPos = float(originalX % 1024);
-		float yPos = float(originalX / 1024 * oneUnit);
-
-		oneStamina->Render(xPos - 508, yPos - 284);
-	}
-
 
 
 
@@ -543,6 +565,11 @@ bool TestRoom::LoadLevelIO(std::string name)
 
 				// NOTE: this file will later be loaded!!!
 				// (@ region "Load Level Tileset Map")
+			}
+			else if (line.at(0) == 'c')
+			{
+				// It's the prop set (created by a cutscene file)!!!!
+				roomPropSet = new Cutscene(line.substr(2), _gloop);			// Cut off the 'c' and '\t'
 			}
 			else
 			{
