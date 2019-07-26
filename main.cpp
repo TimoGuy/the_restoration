@@ -24,10 +24,6 @@
 #define GetCurrentDir _getcwd
 #endif
 
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL.h>
-#include <stdio.h>
-
 SDL_Window* window;
 SDL_GLContext glContext;
 

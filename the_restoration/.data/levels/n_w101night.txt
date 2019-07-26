@@ -1,0 +1,5 @@
+i	w101Home.png
+s	../textures/tileset_night.png
+m	w101_ts.png
+
+t	1	n_w102night	41,99

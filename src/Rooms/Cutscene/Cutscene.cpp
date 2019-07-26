@@ -6,6 +6,7 @@
 #include "Lib/stb_image.h"
 #include "Lib/Texture.h"
 #include "GameLoop.h"
+#include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../../include/Rooms/Cutscene/Cutscene.h"
 #include "../../../include/Rooms/Cutscene/CutsceneSprite.h"
@@ -14,6 +15,7 @@
 #include "../../../include/Lib/stb_image.h"
 #include "../../../include/Lib/Texture.h"
 #include "../../../include/GameLoop.h"
+#include "../../../include/InputManager.h"
 #endif
 
 #include <iostream>
@@ -399,10 +401,19 @@ void Cutscene::Update()
 
 void Cutscene::Render()
 {
-    printf("Ticks in cutscene: %i\n", ticks);
+	Render(true);
+}
 
-    // Reset trans. matrix
-    glLoadIdentity();
+void Cutscene::Render(bool resetViewMat)
+{
+	if (InputManager::Instance().b4())
+		printf("Ticks in cutscene: %i\n", ticks);
+
+	if (resetViewMat)
+	{
+		// Reset trans. matrix
+		glLoadIdentity();
+	}
 
     // Only update and render objects
     for (unsigned int i = 0; i < objects.size(); i++)

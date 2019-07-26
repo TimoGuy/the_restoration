@@ -1,0 +1,5 @@
+i	w103CavernSecret.png
+s	../textures/tileset_night.png
+m	w103_ts.png
+
+t	1	n_w102night	44,33

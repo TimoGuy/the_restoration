@@ -43,6 +43,9 @@
     <Filter Include="Header Files\Rooms\Cutscene">
       <UniqueIdentifier>{9e728549-b043-4051-9b67-0c825f7b8383}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\json">
+      <UniqueIdentifier>{6960ffb3-e324-44a7-a0d4-3d46703d3f52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\defs.h">
@@ -123,6 +126,18 @@
     <ClInclude Include="..\include\Rooms\TileSet.h">
       <Filter>Header Files\Rooms</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\json\json.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\json-forwards.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Players\FuelIncreaserItem.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SerialManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Lib\Texture.cpp">
@@ -199,6 +214,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Rooms\TileSet.cpp">
       <Filter>Source Files\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jsoncpp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\FuelIncreaserItem.cpp">
+      <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

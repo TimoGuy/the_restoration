@@ -9,6 +9,7 @@
 #include "GameLoop.h"
 #include "TileSet.h"
 #include "Quad.h"
+#include "Cutscene.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/InputManager.h"
 #include "../../include/Rooms/TestRoom.h"
@@ -20,7 +21,7 @@
 #include "../../include/GameLoop.h"
 #include "../../include/Rooms/TileSet.h"
 #include "../../include/Shape/Quad.h"
-
+#include "../../include/Rooms/Cutscene/Cutscene.h"
 #endif
 
 #include <iostream>
@@ -40,6 +41,7 @@ Quad* oneStamina;
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
     roomTileSet = new TileSet();
+	roomPropSet = NULL;
 
 	// You want a fade-in there boi???
 	if (fadeIn)
@@ -137,50 +139,65 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 
                 // Grab values
-                bool touchTrigger;
-                    std::istringstream(rmParams.at(pos + 1)) >> touchTrigger;
-                std::string eventName = rmParams.at(pos + 2);
+                int touchTrigger_int;
+                    std::istringstream(rmParams.at(pos + 1)) >> touchTrigger_int;
+
+				int end = 2;
+
+				if (touchTrigger_int >= 0)
+				{
+					bool touchTrigger = (bool)touchTrigger_int;
+
+					std::string eventName = rmParams.at(pos + 2);
 
 
 
-				// Set up the trigger object to be a master, and it will find all its slaves.
-				tmpTrigger->SetEventIDAndSetMaster(eventName, touchTrigger);
-							// This needs to be set up before we start setting properties to it, like custom coords!
+					// Set up the trigger object to be a master, and it will find all its slaves.
+					tmpTrigger->SetEventIDAndSetMaster(eventName, touchTrigger);
+					// This needs to be set up before we start setting properties to it, like custom coords!
 
 
 
-				int end = 3;		// This is left at 3 if no custom coords
-                if (eventName.at(0) == 'n' &&                             // Check if a game level type
-                    pos + 3 < (signed int)rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
-                    rmParams.at(pos + 3) != std::string("\n"))
-                {
-                    end = 4;    // A 4th param...             (it's the custom entrance coords!!!)
+					end = 3;		// This is left at 3 if no custom coords
+					if (eventName.at(0) == 'n' &&                             // Check if a game level type
+						pos + 3 < (signed int)rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
+						rmParams.at(pos + 3) != std::string("\n"))
+					{
+						end = 4;    // A 4th param...             (it's the custom entrance coords!!!)
 
-					// Grab value
-					std::string custEntrCoords = rmParams.at(pos + 3);
-
-
-                    // Parse from the x value (i.e. has a 123x456 to display coords)
-                    int ceGX, ceGY;
-
-                    std::string token;
-                    std::istringstream tokenStream(custEntrCoords);
-
-					std::getline(tokenStream, token, ',');
-					std::istringstream(token) >> ceGX;		// X coord
-					std::getline(tokenStream, token, ',');
-					std::istringstream(token) >> ceGY;		// Y coord
+						// Grab value
+						std::string custEntrCoords = rmParams.at(pos + 3);
 
 
+						// Parse from the x value (i.e. has a 123x456 to display coords)
+						int ceGX, ceGY;
 
-                    printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
-                    tmpTrigger->SetEntranceCoords(ceGX, ceGY);
-                }
-                else
-                {
-                    printf("\tNo custom exit code found\n");
-                }
+						std::string token;
+						std::istringstream tokenStream(custEntrCoords);
 
+						std::getline(tokenStream, token, ',');
+						std::istringstream(token) >> ceGX;		// X coord
+						std::getline(tokenStream, token, ',');
+						std::istringstream(token) >> ceGY;		// Y coord
+
+
+
+						printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
+						tmpTrigger->SetEntranceCoords(ceGX, ceGY);
+					}
+					else
+					{
+						printf("\tNo custom exit code found\n");
+					}
+				}
+				else
+				{
+					// It's requested to be a dead trigger eh
+					tmpTrigger->DisableMe();
+
+					// Set up the trigger object to be a master, and it will find all its slaves.
+					tmpTrigger->SetEventIDAndSetMaster("null", false);
+				}
 
 
                 // Remove those values for future params-checking!
@@ -344,6 +361,15 @@ void TestRoom::Update()
 	// Update the debug mvtment camera
 	camX += camOffX;
     camY += camOffY;
+
+
+
+
+	// Update the cutscene-prop-set if needed
+	if (roomPropSet != NULL)
+	{
+		roomPropSet->Update();
+	}
 }
 
 void TestRoom::Render()
@@ -360,7 +386,16 @@ void TestRoom::Render()
 
 	// And then the tileset underlay!!!!!
 	glColor4f(1, 1, 1, 1);
+	
+	if (roomPropSet != NULL)
+	{
+		roomPropSet->Render(false);
+	}
+
 	roomTileSet->RenderVerts();
+
+
+
 
 	// Call a render for everyone!
 	for (unsigned int it = 0; it < gameObjects.size(); ++it)
@@ -377,29 +412,31 @@ void TestRoom::Render()
 	glLoadIdentity();
 
 	// Now render the HUD!!!
+	if (camFocusObj != NULL)
+	{
 #define ONE_STAMINA_SIZE 24
 #define ONE_STAMINA_PADDING 8
-	if (oneStamina == NULL)
-	{
-		oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
+		if (oneStamina == NULL)
+		{
+			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
+		}
+
+		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
+		for (int i = 0; i < stamGauges; i++)
+		{
+			// Start at the upper left corner and just start drawing them green!
+			glColor3f(0, 1, 0);
+
+			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
+
+			int originalX = i * oneUnit;
+
+			float xPos = float(originalX % 1024);
+			float yPos = float(originalX / 1024 * oneUnit);
+
+			oneStamina->Render(xPos - 508, yPos - 284);
+		}
 	}
-
-	int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
-	for (int i = 0; i < stamGauges; i++)
-	{
-		// Start at the upper left corner and just start drawing them green!
-		glColor3f(0, 1, 0);
-
-		int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
-
-		int originalX = i * oneUnit;
-
-		float xPos = float(originalX % 1024);
-		float yPos = float(originalX / 1024 * oneUnit);
-
-		oneStamina->Render(xPos - 508, yPos - 284);
-	}
-
 
 
 
@@ -528,6 +565,11 @@ bool TestRoom::LoadLevelIO(std::string name)
 
 				// NOTE: this file will later be loaded!!!
 				// (@ region "Load Level Tileset Map")
+			}
+			else if (line.at(0) == 'c')
+			{
+				// It's the prop set (created by a cutscene file)!!!!
+				roomPropSet = new Cutscene(line.substr(2), _gloop);			// Cut off the 'c' and '\t'
 			}
 			else
 			{

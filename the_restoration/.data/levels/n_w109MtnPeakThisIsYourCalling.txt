@@ -2,5 +2,5 @@ i	w109MtnPeakThisIsYourCalling.png
 s	../textures/tileset_test.png
 m	w109_ts.png
 
-t	1	m_w1TalkWDad
+t	1	c_w1ThisIsYourCalling
 t	1	n_w108Vert2ButOutside	124,32
