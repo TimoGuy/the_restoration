@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "GameLoop.h"
 #include "Rooms/TestRoom.h"
 #include "Cutscene.h"
@@ -13,7 +13,6 @@
 #include "../include/InputManager.h"
 #include "../include/SerialManager.h"
 #endif
-
 
 #include <iostream>
 

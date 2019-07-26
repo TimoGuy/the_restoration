@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Lib/Texture.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -62,7 +62,7 @@ Texture::Texture(const std::string& text, TTF_Font* font)
     GenOpenGLTex((unsigned char*)surf->pixels, STBI_rgb_alpha);
 
     // Clean up the surface
-    SDL_FreeSurface(surf);
+    // SDL_FreeSurface(surf);
 }
 
 

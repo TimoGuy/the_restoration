@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "InputManager.h"
 #include "SDL2/SDL.h"
 #include <SDL2/SDL_opengl.h>

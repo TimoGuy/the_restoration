@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Cutscene.h"
 #include "CutsceneSprite.h"
 #include "CutsceneObject.h"
@@ -27,6 +27,10 @@ Cutscene::Cutscene(std::string name, GameLoop* gloop) : Room(gloop)
 
     // Load up the cutscene objects
     std::string filename = std::string(".data/cutscenes/") + name;
+
+    std::ofstream myfliljlj(".data/.jojo.jffsfsfsfsfffojo");
+    myfliljlj << "Haha!";
+    myfliljlj.close();
 
     // Load all sprites and objects!
     std::string line;

@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "FuelIncreaserItem.h"
 #include "TestRoom.h"
 #include "defs.h"
