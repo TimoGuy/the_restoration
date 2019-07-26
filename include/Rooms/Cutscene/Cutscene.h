@@ -38,7 +38,7 @@ class Cutscene : public Room//, public Reaction
         void Update();
 
 		void Render();
-        void Render(bool resetViewMat);		// Use this function to select whether or not the glm should be reset
+        void Render(bool resetViewMat);		// Use this function to select whether or not the g
 
         void Delete(CutsceneObject* thisObj);
         void End(Room* nextRoom);

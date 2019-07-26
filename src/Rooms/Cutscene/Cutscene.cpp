@@ -6,6 +6,7 @@
 #include "Lib/stb_image.h"
 #include "Lib/Texture.h"
 #include "GameLoop.h"
+#include "InputManager.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../../include/Rooms/Cutscene/Cutscene.h"
 #include "../../../include/Rooms/Cutscene/CutsceneSprite.h"
@@ -14,6 +15,7 @@
 #include "../../../include/Lib/stb_image.h"
 #include "../../../include/Lib/Texture.h"
 #include "../../../include/GameLoop.h"
+#include "../../../include/InputManager.h"
 #endif
 
 #include <iostream>
@@ -400,7 +402,8 @@ void Cutscene::Render()
 
 void Cutscene::Render(bool resetViewMat)
 {
-    printf("Ticks in cutscene: %i\n", ticks);
+	if (InputManager::Instance().b4())
+		printf("Ticks in cutscene: %i\n", ticks);
 
 	if (resetViewMat)
 	{
