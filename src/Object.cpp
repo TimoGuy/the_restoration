@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Object.h"
 #include "defs.h"
 #elif defined(_WIN32) || defined(WIN32)

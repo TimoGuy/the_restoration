@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Cutscene.h"       // That way don't have to load in the header file!
 #include "CutsceneSprite.h"
 #include "CutsceneObject.h"
