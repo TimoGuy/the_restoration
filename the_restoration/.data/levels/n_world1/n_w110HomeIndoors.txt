@@ -1,0 +1,5 @@
+i	n_world1/w110.png
+s	../textures/tileset_tiff.png
+m	n_world1/w110_ts.png
+
+t	1	n_world1/n_w102VertCavern	41,99

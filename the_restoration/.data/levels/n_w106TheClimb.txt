@@ -1,6 +1,0 @@
-i	w106TheClimb.png
-s	../textures/tileset_test.png
-m	w106_ts.png
-
-t	1	n_w107FallTerrainHuh
-t	1	n_w105SheepShearing	374,68

@@ -1,6 +1,0 @@
-i	w105SheepShearing.png
-s	../textures/tileset_test.png
-m	w105_ts.png
-
-t	1	n_w106TheClimb
-t	1	n_w104CavHugePits	234,33

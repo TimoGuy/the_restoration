@@ -320,3 +320,4 @@ paket-files/
 *.sln.iml
 
 DatesPrinter/
+the_restoration/.data/data.json

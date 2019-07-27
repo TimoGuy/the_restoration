@@ -1,0 +1,7 @@
+i	n_world1/w102VertCavern.png
+s	../textures/tileset_test.png
+m	n_world1/w102_ts.png
+
+t	1	n_world1/n_w103CavernSecret
+t	1	n_world1/n_w104CavHugePits
+t	1	n_world1/n_w101Home	296,50

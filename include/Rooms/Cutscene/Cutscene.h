@@ -36,7 +36,9 @@ class Cutscene : public Room//, public Reaction
         virtual ~Cutscene();
 
         void Update();
-        void Render();
+
+		void Render();
+        void Render(bool resetViewMat);		// Use this function to select whether or not the g
 
         void Delete(CutsceneObject* thisObj);
         void End(Room* nextRoom);
