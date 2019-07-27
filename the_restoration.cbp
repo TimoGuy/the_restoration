@@ -7,8 +7,9 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug_Mac">
-				<Option output="bin/Debug/the_restoration" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
+				<Option platforms="Mac;" />
+				<Option output="bin/Debug_Mac/the_restoration" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug_Mac/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option projectIncludeDirsRelation="1" />
@@ -26,6 +27,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
+					<Add option="-lSDLmain" />
 					<Add option="-framework OpenGL" />
 					<Add option="-lSDL_ttf" />
 					<Add directory="/usr/local/Cellar/sdl_ttf/2.0.11_1/lib" />
@@ -55,14 +57,7 @@
 		<Compiler>
 			<Add option="-std=c++0x" />
 			<Add option="-Wall" />
-			<Add directory="/usr/local/Cellar/sdl2/2.0.9_1/include" />
-			<Add directory="/usr/local/Cellar/sdl_ttf/2.0.11_1/include" />
 		</Compiler>
-		<Linker>
-			<Add directory="/usr/local/Cellar/sdl2/2.0.9_1/lib" />
-			<Add directory="/usr/local/Cellar/sdl_ttf/2.0.11_1/lib" />
-		</Linker>
-		<Unit filename="about.txt" />
 		<Unit filename="include/Base.h" />
 		<Unit filename="include/GameLoop.h" />
 		<Unit filename="include/InputManager.h" />
