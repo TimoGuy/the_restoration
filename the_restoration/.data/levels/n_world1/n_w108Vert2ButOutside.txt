@@ -1,6 +1,6 @@
-i	w108Vert2ButOutside.png
+i	n_world1/w108Vert2ButOutside.png
 s	../textures/tileset_test.png
-m	w108_ts.png
+m	n_world1/w108_ts.png
 
-t	1	n_w109MtnPeakThisIsYourCalling
-t	1	n_w107FallTerrainHuh	183,57
+t	1	n_world1/n_w109MtnPeakThisIsYourCalling
+t	1	n_world1/n_w107FallTerrainHuh	183,57

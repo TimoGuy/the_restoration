@@ -1,6 +1,6 @@
-i	w108Vert2ButOutside.png
+i	n_world1/w108Vert2ButOutside.png
 s	../textures/tileset_night.png
-m	w108_ts_night.png
+m	n_world1/w108_ts_night.png
 
-t	1	n_w109night
-t	1	n_w107night	183,57
+t	1	n_world1/n_w109night
+t	1	n_world1/n_w107night	183,57
