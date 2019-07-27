@@ -2,6 +2,6 @@
 # so you can make it so that it goes to the first level,
 # the title screen, etc.!!!
 o	-1	0,0
-#	0	0	exit-cutscene	n_tut
-#	0	0	exit-cutscene	n_w101Home
-	0	0	exit-cutscene	n_w109MtnPeakThisIsYourCalling
+#	0	0	exit-cutscene	n_world1/n_tut
+#	0	0	exit-cutscene	n_world1/n_w101Home
+	0	0	exit-cutscene	n_world1/n_w109MtnPeakThisIsYourCalling
