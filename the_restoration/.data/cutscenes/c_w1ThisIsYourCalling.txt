@@ -1,2 +1,2 @@
 o	-1	0,0
-	100	100	exit-cutscene	n_w109night	88,26
+	100	100	exit-cutscene	n_world1/n_w109night	88,26
