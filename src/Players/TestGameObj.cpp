@@ -13,6 +13,7 @@
 #include "Lib/Texture.h"
 #include "Quad.h"
 #include "../../include/GameLoop.h"
+#include "Lib/SpriteSheetIO.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
@@ -28,6 +29,7 @@
 #include "../../include/Lib/Texture.h"
 #include "../../include/Shape/Quad.h"
 #include "../../include/GameLoop.h"
+#include "../../include/Lib/SpriteSheetIO.h"
 #endif
 
 #include <stdio.h>
@@ -53,6 +55,13 @@ bool isSwordLeft = false;
 
 TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 {
+    // Look for player.json to load in sprites
+    std::ifstream ifs(".data/properties/player.json");
+    Json::Reader reader;
+    Json::Value props;
+    reader.parse(ifs, props);
+    sprSheet = new SpriteSheetIO(props);
+
     mySword = new Quad(PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT);
     startCoords = new Quad(10, 10);
     // Make image
@@ -449,7 +458,8 @@ void TestGameObj::Render()
 
 
 
-	image->Render(x, y);
+	// image->Render(x, y);
+    sprSheet->Render("run", x, y, 32, 48);
 
 	if (isUsingMySword)
 	{

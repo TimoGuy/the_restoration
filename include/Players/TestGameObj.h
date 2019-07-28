@@ -8,6 +8,7 @@
 
 class Textbox;
 class Quad;
+class SpriteSheetIO;
 
 
 #include <vector>
@@ -35,6 +36,8 @@ class TestGameObj : public Entity
     private:
         std::vector<Textbox*> pf;
         Quad* startCoords;
+
+        SpriteSheetIO* sprSheet;
 
         // States
         bool IsUsingSword();

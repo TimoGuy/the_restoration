@@ -7,6 +7,7 @@
 i	n_world1/w101Home.png
 s	../textures/tileset_test.png
 m	n_world1/w101_ts.png
-#c	c_test
+c	_level_propsets/lps_home
 
+t	-1
 t	1	n_world1/n_w102VertCavern	41,99

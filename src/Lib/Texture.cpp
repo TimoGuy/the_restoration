@@ -62,7 +62,7 @@ Texture::Texture(const std::string& text, TTF_Font* font)
     GenOpenGLTex((unsigned char*)surf->pixels, STBI_rgb_alpha);
 
     // Clean up the surface
-    SDL_FreeSurface(surf);
+    //SDL_FreeSurface(surf);
 }
 
 

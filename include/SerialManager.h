@@ -87,7 +87,6 @@ private:
         // Check if json file exists and read it in
         std::ifstream ifs(SERIAL_FILE_LOCATION);
         Json::Reader reader;
-        Json::Value obj;
         reader.parse(ifs, jsonData);
     }
 
