@@ -15,6 +15,7 @@ SpriteSheetIO::SpriteSheetIO(Json::Value props)
 	_properties = props;
 
 	// Load up the sprite sheet
+	printf(_properties["sprites"]["sprite_sheet"]["image"].asString().c_str());
 	mySpriteSheet = new Texture(
 		_properties["sprites"]["sprite_sheet"]["image"].asString(),
 		STBI_rgb_alpha);
@@ -43,14 +44,20 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 	}
 
 
+	// Calc which frame
+	int adjustedTick =
+        ticksOnAction / _properties["sprites"][action]["ticks_per_frame"].asInt();
+    int frame = adjustedTick % _properties["sprites"][action]["images"].size();
 
 	// Anyways, render this sucker!
-	Json::Value texCoords = _properties["sprites"][action]["images"]["0"];		// TODO: For now, 0, and then put in the animation once you know this works!
-	std::cout << texCoords << "\n";
-	float tx = texCoords["x"].asFloat() / _properties["sprites"]["sprite_sheet"]["width"].asFloat();
-	float ty = texCoords["y"].asFloat() / _properties["sprites"]["sprite_sheet"]["height"].asFloat();
-	float tx2 = texCoords["x2"].asFloat() / _properties["sprites"]["sprite_sheet"]["width"].asFloat();
-	float ty2 = texCoords["y2"].asFloat() / _properties["sprites"]["sprite_sheet"]["height"].asFloat();
+	Json::Value texCoords = _properties["sprites"][action]["images"][std::to_string(frame)];		// TODO: For now, 0, and then put in the animation once you know this works!
+	float texW = _properties["sprites"]["sprite_sheet"]["width"].asFloat();
+	float texH = _properties["sprites"]["sprite_sheet"]["height"].asFloat();
+
+	float tx = texCoords["x"].asFloat() / texW;
+	float ty = texCoords["y"].asFloat() / texH;
+	float tx2 = texCoords["x2"].asFloat() / texW;
+	float ty2 = texCoords["y2"].asFloat() / texH;
 
 	// Enable textures
     glEnable(GL_TEXTURE_2D);
