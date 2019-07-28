@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Npc.h"
 #include "Lib/Texture.h"
 #include "Quad.h"

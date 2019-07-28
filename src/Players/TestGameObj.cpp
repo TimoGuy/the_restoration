@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "TestRoom.h"
 #include "TestGameObj.h"
 #include "Hazard.h"

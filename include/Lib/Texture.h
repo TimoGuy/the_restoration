@@ -1,5 +1,5 @@
 #pragma once
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 //#include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_ttf.h>

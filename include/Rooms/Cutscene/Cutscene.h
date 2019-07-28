@@ -14,7 +14,7 @@
 // Reaction is so that you do a run() on this thing, and plug it into a TRIGGER.
 
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Rooms/Room.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../Room.h"

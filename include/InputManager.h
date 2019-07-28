@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include <SDL2/SDL.h>
 #elif defined(_WIN32) || defined(WIN32)
 #include <SDL.h>

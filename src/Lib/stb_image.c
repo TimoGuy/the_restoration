@@ -68,7 +68,7 @@
 // or create stb_image.h, #define STBI_HEADER_FILE_ONLY, and
 // then include stb_image.c from it.
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Lib/stb_image.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Lib/stb_image.h"

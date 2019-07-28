@@ -222,7 +222,7 @@ render the images anyways. So extremely simple.
 
 Copy and paste this:
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #elif defined(_WIN32) || defined(WIN32)
 #endif
 

@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "TileSet.h"
 #include <SDL2/SDL_opengl.h>
 #include "defs.h"
@@ -457,7 +457,7 @@ void TileSet::RenderVerts()
 	// clockwise)
 	glBegin(GL_QUADS);
 
-	#ifdef __unix__
+	#if defined(__unix__) || defined(__APPLE__)
 	for (int i = 0; i < rendVectors.size(); i++)
 	{
         TileSet_Vector tsv = rendVectors.at(i);
