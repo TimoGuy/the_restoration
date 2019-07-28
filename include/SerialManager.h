@@ -1,8 +1,7 @@
 #pragma once
 
-#ifdef __unix__
-#include <jsoncpp/json/json.h>
-#include <jsoncpp/json/writer.h>
+#if defined(__unix__) || defined(__APPLE__)
+#include "json/json.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "json/json.h"
 #endif

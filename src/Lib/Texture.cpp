@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Lib/Texture.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>

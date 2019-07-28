@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Entity.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "Entity.h"

@@ -1,4 +1,4 @@
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include "Trigger.h"
 #include "TestRoom.h"
 #include "Textbox.h"

@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_ttf.h>
 #include "GameLoop.h"
 #include "InputManager.h"
 #include "defs.h"
+
+#include <unistd.h>
+#define GetCurrentDir getcwd
+
 #elif defined(_WIN32) || defined(WIN32)
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -15,6 +19,9 @@
 #include "include\GameLoop.h"
 #include "include\InputManager.h"
 #include "include\defs.h"
+
+#include <direct.h>
+#define GetCurrentDir _getcwd
 #endif
 
 SDL_Window* window;
@@ -110,6 +117,10 @@ void Destruct()
 int main(int argc, char** argv)
 {
     printf("Hello World! I\'m back!\n");
+
+    char buff[FILENAME_MAX];
+    GetCurrentDir(buff, FILENAME_MAX);
+    printf("Program running in:\n\t%s\n", buff);
 
     if (!Setup())
     {
