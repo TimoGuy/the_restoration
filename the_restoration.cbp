@@ -83,6 +83,7 @@
 		<Unit filename="include/Base.h" />
 		<Unit filename="include/GameLoop.h" />
 		<Unit filename="include/InputManager.h" />
+		<Unit filename="include/Lib/SpriteSheetIO.h" />
 		<Unit filename="include/Lib/Texture.h" />
 		<Unit filename="include/Lib/stb_image.h" />
 		<Unit filename="include/Object.h" />
@@ -113,6 +114,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/GameLoop.cpp" />
 		<Unit filename="src/InputManager.cpp" />
+		<Unit filename="src/Lib/SpriteSheetIO.cpp" />
 		<Unit filename="src/Lib/Texture.cpp" />
 		<Unit filename="src/Lib/stb_image.c">
 			<Option compilerVar="CC" />
