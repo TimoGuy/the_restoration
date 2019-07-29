@@ -31,6 +31,10 @@ SpriteSheetIO::~SpriteSheetIO()
 
 void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h)
 {
+	// Input the offsets!
+	x += _properties["sprites"]["sprite_sheet"]["render_off_x"].asFloat();
+	y += _properties["sprites"]["sprite_sheet"]["render_off_y"].asFloat();
+
 	// Check if same action as previous time
 	if (action == previousAction)
 	{
@@ -47,7 +51,13 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 	// Calc which frame
 	int adjustedTick =
         ticksOnAction / _properties["sprites"][action]["ticks_per_frame"].asInt();
-    int frame = adjustedTick % _properties["sprites"][action]["images"].size();
+
+    int frame;
+    if (_properties["sprites"][action]["repeat"].asBool())
+    	frame = adjustedTick % _properties["sprites"][action]["images"].size();
+    else
+    	frame = adjustedTick >= _properties["sprites"][action]["images"].size()
+    					? _properties["sprites"][action]["images"].size() - 1 : adjustedTick;
 
 	// Anyways, render this sucker!
 	Json::Value texCoords = _properties["sprites"][action]["images"][std::to_string(frame)];		// TODO: For now, 0, and then put in the animation once you know this works!

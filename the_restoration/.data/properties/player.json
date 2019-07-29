@@ -3,7 +3,9 @@
         "sprite_sheet" : {
             "image" : ".data/images/player.png",
             "width" : 120,
-            "height" : 120
+            "height" : 120,
+            "render_off_x" : 0,
+            "render_off_y" : 0
         },
         "idle" : {
             "ticks_per_frame" : 1,
@@ -48,7 +50,7 @@
             }
         },
         "jump" : {
-            "ticks_per_frame" : 1,
+            "ticks_per_frame" : 3,
             "repeat" : false,
             "images" : {
                 "0" : {
@@ -68,14 +70,32 @@
                     "y" : 24,
                     "x2" : 71,
                     "y2" : 47
-                },
-                "3" : {
+                }
+            }
+        },
+        "fall" : {
+            "ticks_per_frame" : 1,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "x" : 48,
+                    "y" : 24,
+                    "x2" : 71,
+                    "y2" : 47
+                }
+            }
+        },
+        "land" : {
+            "ticks_per_frame" : 3,
+            "repeat" : false,
+            "images" : {
+                "0" : {
                     "x" : 72,
                     "y" : 24,
                     "x2" : 95,
                     "y2" : 47
                 },
-                "4" : {
+                "1" : {
                     "x" : 96,
                     "y" : 24,
                     "x2" : 119,

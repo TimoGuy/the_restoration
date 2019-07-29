@@ -342,7 +342,7 @@ void TestGameObj::Update()
 			else if (dynamic_cast<MovingPlatGround*>(tempCollisions.at(i)) != NULL)
 			{
 				// Add hsp to me!!!! (unless if hitting it from below, then you'd just hit your head!)
-					
+
                 // This means still, or downwards (in comparison to the moving obj!!)
 				outHsp = ((MovingPlatGround*)tempCollisions.at(i))->GetHsp();
 				outVsp = ((MovingPlatGround*)tempCollisions.at(i))->GetVsp();
@@ -434,7 +434,10 @@ void TestGameObj::Update()
 
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
+        isMidair = false;
 	}
+    else
+        isMidair = true;
 
 	// Reset outside forces
 	outHsp = outVsp = 0;
@@ -459,7 +462,19 @@ void TestGameObj::Render()
 
 
 	// image->Render(x, y);
-    sprSheet->Render("run", x, y, 32, 48);
+    std::string action = "idle";
+    if (hsp != 0) action = "run";
+    if (isMidair)
+    {
+        action = "jump";
+        if (vsp >= 0) action = "fall";
+    }
+    int flipped = isSwordLeft ? -1 : 1;
+    glTranslatef(x + 24 - 12, y, 0);
+    glScalef(flipped, 1, 1);
+    sprSheet->Render(action, -24, 0, 48, 48);
+    glScalef(flipped, 1, 1);
+    glTranslatef(-x - 24 + 12, -y, 0);
 
 	if (isUsingMySword)
 	{
@@ -467,9 +482,12 @@ void TestGameObj::Render()
         mySword->Render(rendX, y + PLAYER_HEIGHT / 2 - PLAYER_SWORD_HEIGHT / 2);
 	}
 
-    glColor4f(0.5f, 0, 0, 1);
-    startCoords->Render(startX, startY);
-
+    if (InputManager::Instance().b4())
+    {
+        // Draw startcoords marker
+        glColor4f(0.5f, 0, 0, 1);
+        startCoords->Render(startX, startY);
+    }
 
 
     // Render any message boxes!!!
