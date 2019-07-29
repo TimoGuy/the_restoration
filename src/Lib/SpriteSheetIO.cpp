@@ -18,7 +18,8 @@ SpriteSheetIO::SpriteSheetIO(Json::Value props)
 	printf(_properties["sprites"]["sprite_sheet"]["image"].asString().c_str());
 	mySpriteSheet = new Texture(
 		_properties["sprites"]["sprite_sheet"]["image"].asString(),
-		STBI_rgb_alpha);
+		STBI_rgb_alpha
+	);
 
 	previousAction = "";
 	ticksOnAction = 0;
