@@ -47,7 +47,7 @@
 Quad* mySword = NULL;
 bool isUsingMySword = false;
 bool isSwordLeft = false;
-#define PLAYER_SWORD_WIDTH 128
+#define PLAYER_SWORD_WIDTH 64
 #define PLAYER_SWORD_HEIGHT 32
 
 
@@ -552,8 +552,8 @@ void TestGameObj::UpdateStartCoords()
 
 
 
-
-#define SWORD_TICKS_HOLDING 25
+// This being a low number will make the charging mini-boss harder!
+#define SWORD_TICKS_HOLDING 15
 bool prevB1Down = false;
 int swordTicksLeft = 0;
 bool TestGameObj::IsUsingSword()

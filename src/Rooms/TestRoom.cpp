@@ -10,6 +10,9 @@
 #include "TileSet.h"
 #include "Quad.h"
 #include "Cutscene.h"
+
+
+#include "TestMiniboss_Enemy.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/InputManager.h"
 #include "../../include/Rooms/TestRoom.h"
@@ -73,6 +76,9 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 		return;
 	}
 
+
+	// EXTRA DEBUG STUFFF
+	gameObjects.push_back(new TestMiniboss_Enemy(168, 81, this));
 
 
 
