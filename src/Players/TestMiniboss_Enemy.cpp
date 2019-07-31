@@ -29,7 +29,6 @@ TestMiniboss_Enemy::TestMiniboss_Enemy(int gx, int gy, TestRoom* rm)
 	: Entity(gx, gy, rm, true)
 {
     onGround = false;
-    framesOfInvincibility = 0;
 
 	// Init
 	image = new Quad(MY_WIDTH, MY_HEIGHT, new Texture(std::string(".data/textures/enemy_test.png"), STBI_rgb_alpha));
@@ -49,8 +48,6 @@ TestMiniboss_Enemy::~TestMiniboss_Enemy()
 
 void TestMiniboss_Enemy::Update()
 {
-    framesOfInvincibility--;
-
 #pragma region Find player
 
     // See if player is in line of sight eh.
@@ -68,7 +65,7 @@ void TestMiniboss_Enemy::Update()
         hsp += x > targetEnt->getX() ? -1 : 1;
 
         // Check if dead
-        if (framesOfInvincibility < 0 && life <= 0)
+        if (life <= 0)
         {
             // You ded there, son!
             delete this;
@@ -116,7 +113,7 @@ void TestMiniboss_Enemy::Update()
 
 void TestMiniboss_Enemy::Render()
 {
-    glColor4f(1, 1, 1, framesOfInvincibility > 0 ? 0.5f : 1.0f);
+    glColor4f(1, 1, 1, 1);
 	image->Render(x, y);
 }
 
@@ -136,10 +133,7 @@ bool TestMiniboss_Enemy::IsColliding(BoundBox* box)
 #define MIN_KNOCKBACK_HSP 5.0f
 void TestMiniboss_Enemy::YouLose(Entity* accordingToMe)
 {
-    if (framesOfInvincibility > 0) return;
-
     life -= 0.1f;
-	framesOfInvincibility = 30;
     room->GetGameLoop()->AddPause(7);
 
     // Add some knockback!

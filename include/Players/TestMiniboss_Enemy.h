@@ -22,7 +22,6 @@ private:
 	Entity* targetEnt;	// Usually this is the player eh
 
 	bool onGround;
-	int framesOfInvincibility;
 
 	void FindTargetEntity();
 	bool IsTargetInBounds();		// Find if in line of sight eh.
