@@ -42,12 +42,16 @@
 #define PLAYER_HEIGHT 48
 #define PLAYER_YOFF -16
 
+// SWORD (which is really just the player's arm shooting out instantaneously) stats
+// This being a low number will make the charging mini-boss harder!
+#define SWORD_TICKS_HOLDING 15
+#define SWORD_DAMAGE_TICK 8
 
 
 Quad* mySword = NULL;
 bool isUsingMySword = false;
 bool isSwordLeft = false;
-#define PLAYER_SWORD_WIDTH 64
+#define PLAYER_SWORD_WIDTH 128
 #define PLAYER_SWORD_HEIGHT 32
 
 
@@ -63,6 +67,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     sprSheet = new SpriteSheetIO(props);
 
     mySword = new Quad(PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT);
+    swordTicksLeft = 0;
     startCoords = new Quad(10, 10);
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
@@ -258,7 +263,7 @@ void TestGameObj::Update()
 
 
 	// CHECK FOR COLLISION W/ THE WEAPON!!!
-    if (isUsingMySword)
+    if (isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK)      // You'll hold out the sword (it'll use stamina), but the damage will actually be dealt only 1 frame!!! (So invincibility frames are not necessary)
     {
         for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
         {
@@ -479,7 +484,15 @@ void TestGameObj::Render()
 	if (isUsingMySword)
 	{
         float rendX = isSwordLeft ? x - PLAYER_SWORD_WIDTH : x + image->GetWidth();
+        if (swordTicksLeft == SWORD_DAMAGE_TICK)
+            glColor3f(1, 0, 0);
+        else
+            glColor3f(1, 1, 1);
+
         mySword->Render(rendX, y + PLAYER_HEIGHT / 2 - PLAYER_SWORD_HEIGHT / 2);
+
+        // Reset
+        glColor3f(1, 1, 1);
 	}
 
     if (InputManager::Instance().b4())
@@ -552,10 +565,8 @@ void TestGameObj::UpdateStartCoords()
 
 
 
-// This being a low number will make the charging mini-boss harder!
-#define SWORD_TICKS_HOLDING 15
+
 bool prevB1Down = false;
-int swordTicksLeft = 0;
 bool TestGameObj::IsUsingSword()
 {
     swordTicksLeft--;

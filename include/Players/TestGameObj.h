@@ -43,6 +43,7 @@ class TestGameObj : public Entity
 
         // States
         bool IsUsingSword();
+        int swordTicksLeft;
 
 		int numJumps = 0;
 		bool wasJumpBtnAlreadyPressed = false;
