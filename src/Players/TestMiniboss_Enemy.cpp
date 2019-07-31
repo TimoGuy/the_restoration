@@ -22,6 +22,9 @@
 #define MY_WIDTH 96
 #define MY_HEIGHT 64
 
+#define MAX_HSP 10.0f
+
+
 TestMiniboss_Enemy::TestMiniboss_Enemy(int gx, int gy, TestRoom* rm)
 	: Entity(gx, gy, rm, true)
 {
@@ -42,7 +45,6 @@ TestMiniboss_Enemy::~TestMiniboss_Enemy()
 {
     room->RemoveEntity(this);
 }
-
 
 
 void TestMiniboss_Enemy::Update()
@@ -74,6 +76,10 @@ void TestMiniboss_Enemy::Update()
         }
     }
 
+    // Limit hsp
+    hsp = std::min(std::max(hsp, -MAX_HSP), MAX_HSP);
+
+    // Gravity
 	vsp += 0.5f;
 
     // COLLISION SYSTEM
