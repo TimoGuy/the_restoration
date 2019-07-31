@@ -137,10 +137,11 @@ void TestMiniboss_Enemy::YouLose(Entity* accordingToMe)
     room->GetGameLoop()->AddPause(7);
 
     // Add some knockback!
-    if (std::abs(accordingToMe->GetHsp()) > MIN_KNOCKBACK_HSP)
-        hsp = accordingToMe->GetHsp();
+    float knockBackHsp = accordingToMe->GetHsp() * 2.0f;
+    if (std::abs(knockBackHsp) > MIN_KNOCKBACK_HSP)
+        hsp = knockBackHsp;
     else
-        hsp = MIN_KNOCKBACK_HSP * copysignf(1.0f, accordingToMe->GetHsp());
+        hsp = MIN_KNOCKBACK_HSP * copysignf(1.0f, knockBackHsp);
 
     vsp = -10;
 }
