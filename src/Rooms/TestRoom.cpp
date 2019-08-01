@@ -10,6 +10,7 @@
 #include "TileSet.h"
 #include "Quad.h"
 #include "Cutscene.h"
+#include "SerialManager.h"
 
 
 #include "TestMiniboss_Enemy.h"
@@ -25,6 +26,7 @@
 #include "../../include/Rooms/TileSet.h"
 #include "../../include/Shape/Quad.h"
 #include "../../include/Rooms/Cutscene/Cutscene.h"
+#include "../../include/SerialManager.h"
 #endif
 
 #include <iostream>
@@ -427,6 +429,33 @@ void TestRoom::Render()
 			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
 		}
 
+		// Render health!!!
+		int maxHealth = SerialManager::Instance().GetGameData_Int(
+			"player_max_health",
+			GAME_VAR_DEF_player_max_health
+		);
+		int currentHealth = SerialManager::Instance().GetGameData_Int(
+			"player_current_health",
+			GAME_VAR_DEF_player_current_health
+		);
+
+		for (int i = 0; i < maxHealth; i++)
+		{
+			if (i < currentHealth)
+				glColor3f(1, 0, 0);
+			else
+			{
+				glColor3f(0.3f, 0.3f, 0.3f);
+			}
+
+			// Draw!
+			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
+			int xPos = i * oneUnit;
+			oneStamina->Render(xPos - 508, -284);
+		}
+
+
+		// Render stamina!!!
 		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
 		for (int i = 0; i < stamGauges; i++)
 		{
@@ -440,7 +469,7 @@ void TestRoom::Render()
 			float xPos = float(originalX % 1024);
 			float yPos = float(originalX / 1024 * oneUnit);
 
-			oneStamina->Render(xPos - 508, yPos - 284);
+			oneStamina->Render(xPos - 508, yPos - 284 + oneUnit);
 		}
 	}
 

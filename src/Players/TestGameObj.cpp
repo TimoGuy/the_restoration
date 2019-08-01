@@ -96,8 +96,6 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     startX = x;
     startY = y;
     outHsp = outVsp = 0;
-
-    life = 5;       // Start out by default w/ 5 eh!
 }
 
 TestGameObj::~TestGameObj()
@@ -466,7 +464,6 @@ void TestGameObj::Render()
 
 
 
-	// image->Render(x, y);
     std::string action = "idle";
     if (hsp != 0) action = "run";
     if (isMidair)
@@ -537,9 +534,15 @@ void TestGameObj::YouLose(Entity* accordingToMe)
     hsp = KNOCKBACK_HSP * sign;
     vsp = KNOCKBACK_VSP;
 
-    life--;
+    SerialManager::Instance().SetGameData_Int(
+        "player_current_health",
+        SerialManager::Instance().GetGameData_Int(
+            "player_current_health",
+            GAME_VAR_DEF_player_current_health
+        ) - 1
+    );
     framesOfInvincibility = HURT_FRAMES;
-    printf("Player:: lost 1 life, has %ihp left\n", life);
+    // printf("Player:: lost 1 life, has %ihp left\n", life);
 }
 
 int TestGameObj::GetNumJumps()
