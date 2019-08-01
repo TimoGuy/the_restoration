@@ -46,6 +46,8 @@ TestMiniboss_Enemy::~TestMiniboss_Enemy()
 }
 
 
+#define FRICTION 0.5f
+
 void TestMiniboss_Enemy::Update()
 {
 #pragma region Find player
@@ -57,7 +59,29 @@ void TestMiniboss_Enemy::Update()
 #pragma endregion
 
 	// It should charge at the player when in line of sight!!!
-    if (!IsTargetInBounds()) return;
+    if (!IsTargetInBounds())
+    {
+        // Friction the big guy
+        if (std::abs(hsp) < FRICTION) { hsp = 0; }
+        else
+        {
+            float chg = FRICTION * copysignf(1.0f, hsp);
+            hsp -= chg;
+        }
+
+        // Gravity
+        vsp += 0.5f;
+
+        // Set up collision for out of bounds eh!
+        float centX = x + hsp + MY_WIDTH / 2,
+            centY = y + vsp + MY_HEIGHT / 2;
+        std::vector<Object*> tempCollisionsToCheck;
+        SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck);
+
+        // Update the hsp and vsp (until stopping eh)
+	    UpdateGroundCollisionVelocity(hsp, vsp, MY_WIDTH, MY_HEIGHT, &tempCollisionsToCheck);
+        return;
+    }
 
 	// Update mvt
     if (onGround)
