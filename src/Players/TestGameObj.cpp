@@ -124,7 +124,7 @@ TestGameObj::~TestGameObj()
 // 189px (192)
 #define JUMP_HEIGHT_6B 13.5f
 
-#define MAX_HSP 35.0f
+#define MAX_HSP 10.0f
 
 #define KNOCKBACK_HSP 10.0f
 #define KNOCKBACK_VSP -4.0f
@@ -505,7 +505,7 @@ void TestGameObj::Render()
 
 
 
-
+    // Set up the animation actions
     std::string action = "idle";
     if (hsp != 0) action = "run";
     if (isMidair)
@@ -513,6 +513,7 @@ void TestGameObj::Render()
         action = "jump";
         if (vsp >= 0) action = "fall";
     }
+    if (isUsingMySword) action = "attack";
     int flipped = isSwordLeft ? -1 : 1;
     glTranslatef(x + 24 - 12, y, 0);
     glScalef(flipped, 1, 1);
@@ -526,7 +527,7 @@ void TestGameObj::Render()
         if (swordTicksLeft == SWORD_DAMAGE_TICK)
             glColor3f(1, 0, 0);
         else
-            glColor3f(1, 1, 1);
+            glColor4f(1, 1, 1, 0);
 
         mySword->Render(rendX, y + PLAYER_HEIGHT / 2 - PLAYER_SWORD_HEIGHT / 2);
 
