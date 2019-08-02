@@ -160,13 +160,21 @@ void TestMiniboss_Enemy::YouLose(Entity* accordingToMe)
     life -= 0.1f;
     room->GetGameLoop()->AddPause(7);
 
-    // Add some knockback!
-    float knockBackHsp = accordingToMe->GetHsp() * 2.0f;
-    if (std::abs(knockBackHsp) > MIN_KNOCKBACK_HSP)
-        hsp = knockBackHsp;
+    // Add some knockback! (Only do contributing forces tho)
+    float knockBackHsp = 0;
+    if (hsp > 0)
+    {
+        // Knock left!
+        knockBackHsp = std::min(-MIN_KNOCKBACK_HSP, accordingToMe->GetHsp() * 2.0f);
+    }
     else
-        hsp = MIN_KNOCKBACK_HSP * copysignf(1.0f, knockBackHsp);
-
+    {
+        // Knock right!
+        knockBackHsp = std::max(MIN_KNOCKBACK_HSP, accordingToMe->GetHsp() * 2.0f);
+    }
+    
+    // Apply knockback!
+    hsp = knockBackHsp;
     vsp = -10;
 }
 

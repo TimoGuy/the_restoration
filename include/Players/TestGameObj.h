@@ -40,6 +40,7 @@ class TestGameObj : public Entity
         SpriteSheetIO* sprSheet;
 
         bool isMidair;
+        int lifeRechargeTicks;
 
         // States
         bool IsUsingSword();

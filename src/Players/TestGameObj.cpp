@@ -46,8 +46,9 @@
 
 // SWORD (which is really just the player's arm shooting out instantaneously) stats
 // This being a low number will make the charging mini-boss harder!
-#define SWORD_TICKS_HOLDING 15
-#define SWORD_DAMAGE_TICK 8
+// Keep in mind that the damage tick is a countdown, not an 'x steps' thing
+#define SWORD_TICKS_HOLDING 60
+#define SWORD_DAMAGE_TICK 40
 
 
 Quad* mySword = NULL;
@@ -98,6 +99,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     startX = x;
     startY = y;
     outHsp = outVsp = 0;
+    lifeRechargeTicks = 0;
 }
 
 TestGameObj::~TestGameObj()
@@ -145,15 +147,13 @@ void TestGameObj::Update()
 		inputJump = InputManager::Instance().b2();
 		isUsingMySword = IsUsingSword();
 
-		if (isUsingMySword)
+		if (!isUsingMySword)
         {
-            // Actually, you'll wanna undo the x
-            // input for the duration the player's holding!
-            inputX = 0;
+            // Thus you can't change facing direction
+            // while you're holding out your sword!
+            if (inputX < 0) isSwordLeft = true;
+            else if (inputX > 0) isSwordLeft = false;
         }
-        // Thus you can't move while you're holding out your sword!
-        if (inputX < 0) isSwordLeft = true;
-        else if (inputX > 0) isSwordLeft = false;
 	}
 
 
@@ -175,9 +175,9 @@ void TestGameObj::Update()
         multiplier = 1;
     }
 
-    if (isUsingMySword)
+    if (isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK)
     {
-        // If you use the sword, it just 'pops' out!
+        // If you use the sword (and it's the attacking frame), it just 'pops' out!
         reqCamOffx = MAX_CAM_OFFSET_X * multiplier;
     }
     else
@@ -440,11 +440,28 @@ void TestGameObj::Update()
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
         isMidair = false;
+	}
+    else
+        isMidair = true;
+
+    
+    
+    
+    // See if you're going fast enough to gain health back!!!
+    #define RECHARGE_HEALTH_REQ_TICKS 50
+    printf("%i\n", lifeRechargeTicks);
+    if (std::abs(hsp) > MAX_HSP - 2.0f)
+    {
+        // Add a tick
+        lifeRechargeTicks++;
 
 
-        // See if you're going fast enough to gain health back!!!
-        if (std::abs(hsp) > MAX_HSP - 2.0f)
+        // Enough to receive a life???
+        if (lifeRechargeTicks > RECHARGE_HEALTH_REQ_TICKS)
         {
+            // Reset counter
+            lifeRechargeTicks = 0;
+
             // Award w/ 1hp (but cap off at max)
             SerialManager::Instance().SetGameData_Int(
                 "player_current_health",
@@ -460,9 +477,12 @@ void TestGameObj::Update()
                 )
             );
         }
-	}
+    }
     else
-        isMidair = true;
+    {
+        lifeRechargeTicks = 0;
+    }
+
 
 	// Reset outside forces
 	outHsp = outVsp = 0;
