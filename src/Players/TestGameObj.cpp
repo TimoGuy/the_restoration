@@ -47,8 +47,8 @@
 // SWORD (which is really just the player's arm shooting out instantaneously) stats
 // This being a low number will make the charging mini-boss harder!
 // Keep in mind that the damage tick is a countdown, not an 'x steps' thing
-#define SWORD_TICKS_HOLDING 60
-#define SWORD_DAMAGE_TICK 40
+#define SWORD_TICKS_HOLDING 40
+#define SWORD_DAMAGE_TICK 20
 
 
 Quad* mySword = NULL;
@@ -124,7 +124,7 @@ TestGameObj::~TestGameObj()
 // 189px (192)
 #define JUMP_HEIGHT_6B 13.5f
 
-#define MAX_HSP 10.0f
+#define MAX_HSP 35.0f
 
 #define KNOCKBACK_HSP 10.0f
 #define KNOCKBACK_VSP -4.0f
