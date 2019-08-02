@@ -12,8 +12,9 @@
 #include <SDL2/SDL_ttf.h>
 #include "Lib/Texture.h"
 #include "Quad.h"
-#include "../../include/GameLoop.h"
+#include "GameLoop.h"
 #include "Lib/SpriteSheetIO.h"
+#include "Cutscene.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
@@ -30,6 +31,7 @@
 #include "../../include/Shape/Quad.h"
 #include "../../include/GameLoop.h"
 #include "../../include/Lib/SpriteSheetIO.h"
+#include "../../include/Rooms/Cutscene/Cutscene.h"
 #endif
 
 #include <stdio.h>
@@ -438,6 +440,26 @@ void TestGameObj::Update()
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
         isMidair = false;
+
+
+        // See if you're going fast enough to gain health back!!!
+        if (std::abs(hsp) > MAX_HSP - 2.0f)
+        {
+            // Award w/ 1hp (but cap off at max)
+            SerialManager::Instance().SetGameData_Int(
+                "player_current_health",
+                std::min(
+                    SerialManager::Instance().GetGameData_Int(                  // New addition of health, or...
+                        "player_current_health",
+                        GAME_VAR_DEF_player_current_health
+                    ) + 1,
+                    SerialManager::Instance().GetGameData_Int(                  // Cap it off at max hp
+                        "player_max_health",
+                        GAME_VAR_DEF_player_max_health
+                    )
+                )
+            );
+        }
 	}
     else
         isMidair = true;
@@ -534,6 +556,7 @@ void TestGameObj::YouLose(Entity* accordingToMe)
     hsp = KNOCKBACK_HSP * sign;
     vsp = KNOCKBACK_VSP;
 
+    // Take off 1hp
     SerialManager::Instance().SetGameData_Int(
         "player_current_health",
         SerialManager::Instance().GetGameData_Int(
@@ -542,7 +565,17 @@ void TestGameObj::YouLose(Entity* accordingToMe)
         ) - 1
     );
     framesOfInvincibility = HURT_FRAMES;
-    // printf("Player:: lost 1 life, has %ihp left\n", life);
+    
+
+    // Check if lives are out!
+    if (SerialManager::Instance().GetGameData_Int(
+            "player_current_health",
+            GAME_VAR_DEF_player_current_health
+        ) <= 0)
+    {
+        // Sowee, but you ded, son
+        room->GetGameLoop()->SetRoom(new Cutscene("c_dead", room->GetGameLoop()));
+    }
 }
 
 int TestGameObj::GetNumJumps()
