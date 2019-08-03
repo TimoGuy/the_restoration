@@ -39,6 +39,15 @@
 
 #define FADE_IN_OUT_TICKS 20
 
+
+struct _BackgroundParallaxObj
+{
+	float divisor;
+	Quad* backgroundTex;
+};
+
+
+
 Quad* screenTransition;			// This will be a fade in AND out thing, okay?
 
 Quad* oneStamina;
@@ -389,6 +398,35 @@ void TestRoom::Render()
 	glTranslatef(-camX, -camY, 0.0f);
 
 
+	
+	// Render the backgrounds
+	glColor4f(1, 1, 1, 1);
+	int w, h;
+	_gloop->GetWindowDimensions(w, h);
+	for (unsigned int i = 0; i < backgrounds.size(); i++)
+	{
+		// Render at the x and y values eh
+		float desX = camX / backgrounds.at(i).divisor;
+		float desY = camY;
+
+		// Iterate until left the screen (x-wrap)
+		float offsetX = 0;
+		while (desX + offsetX < camX + (w / 2))
+		{
+			if (desX + offsetX + backgrounds.at(i).backgroundTex->GetWidth() >= camX - (w / 2))
+				backgrounds.at(i).backgroundTex->Render(desX + offsetX, desY);
+			offsetX += backgrounds.at(i).backgroundTex->GetWidth();
+		}
+		offsetX = -backgrounds.at(i).backgroundTex->GetWidth();		// now to the left!
+		while (desX + offsetX + backgrounds.at(i).backgroundTex->GetWidth() >= camX - (w / 2))
+		{
+			if (desX + offsetX < camX + (w / 2))
+				backgrounds.at(i).backgroundTex->Render(desX + offsetX, desY);
+			offsetX -= backgrounds.at(i).backgroundTex->GetWidth();
+		}
+	}
+	
+
 
 
 
@@ -605,6 +643,20 @@ bool TestRoom::LoadLevelIO(std::string name)
 			{
 				// It's the prop set (created by a cutscene file)!!!!
 				roomPropSet = new Cutscene(line.substr(2), _gloop);			// Cut off the 'c' and '\t'
+			}
+			else if (line.at(0) == 'b')
+			{
+				// It's a background!!!!
+				Texture* temp =
+					new Texture(currentDir + line.substr(2), STBI_rgb_alpha);
+
+				_BackgroundParallaxObj newObj =
+				{
+					.divisor = 2.0f,
+					.backgroundTex =
+						new Quad(temp->GetWidth(), temp->GetHeight(), temp)
+				};
+				backgrounds.push_back(newObj);
 			}
 			else
 			{

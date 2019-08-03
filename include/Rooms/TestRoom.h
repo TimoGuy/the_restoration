@@ -22,6 +22,7 @@ class Cutscene;
 
 // Hopefully this is where 90% of the game
 // will happen! Load a file via IO and then go!
+struct _BackgroundParallaxObj;
 
 class TestRoom : public Room
 {
@@ -57,6 +58,8 @@ class TestRoom : public Room
 
 
         std::vector<Object*> gameObjects;
+
+        std::vector<_BackgroundParallaxObj> backgrounds;
 
 
 		std::vector<std::function<void()>> scrTransLambdas;
