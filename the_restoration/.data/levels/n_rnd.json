@@ -30,7 +30,5 @@
         "y_divisor" : 1.0
       }
     },
-    "propsets" : {
-        "0": "_level_propsets/lps_sheepShearing"
-    }
+    "propset" : "_level_propsets/lps_sheepShearing"
 }

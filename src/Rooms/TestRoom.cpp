@@ -688,6 +688,14 @@ bool TestRoom::LoadLevelIO(std::string name)
 		}
 	}
 
+
+	// Propsets (cutscene)
+	if (lvlData.isMember("propset"))
+	{
+		// It's the prop set (created by a cutscene file)!!!!
+		roomPropSet = new Cutscene(lvlData["propset"].asString(), _gloop);
+	}
+
 	return true;
 }
 
