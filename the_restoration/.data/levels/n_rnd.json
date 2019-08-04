@@ -1,13 +1,13 @@
 {
     "textures" : {
         "entities" : "rnd.png",
-        "tileset_spritesheet" : "../textures/tileset_tiff.png",
-        "tileset_map" : null
+        "tileset_map" : null,
+        "tileset_spritesheet" : "../textures/tileset_tiff.png"
     },
     "triggers" : {
         "0" : {
-            "auto_trigger" : true,
             "fire_event" : "n_world1/n_w102VertCavern",
+            "auto_trigger" : true,
             "player_start_coords" : {
                 "x" : 41,
                 "y" : 99

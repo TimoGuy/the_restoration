@@ -71,8 +71,7 @@ class TestRoom : public Room
         // Level-loading
         std::string currentLvl;
 		std::string currentLvlFilename;
-        std::vector<std::string> rmParams;        // These are the level tokens which dictate its objects within (eg: an exit object's params)
-
+        
 
 		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
 
