@@ -44,8 +44,11 @@
 
 struct _BackgroundParallaxObj
 {
-	float divisor;
 	Quad* backgroundTex;
+	float divisorX;
+	float divisorY;
+	float xoff;
+	float yoff;
 };
 
 
@@ -308,8 +311,8 @@ void TestRoom::Render()
 	for (unsigned int i = 0; i < backgrounds.size(); i++)
 	{
 		// Render at the x and y values eh
-		float desX = camX / backgrounds.at(i).divisor;
-		float desY = camY;
+		float desX = camX / backgrounds.at(i).divisorX + backgrounds.at(i).xoff;
+		float desY = camY / backgrounds.at(i).divisorY + backgrounds.at(i).yoff;
 
 		// Iterate until left the screen (x-wrap)
 		float offsetX = 0;
@@ -675,9 +678,12 @@ bool TestRoom::LoadLevelIO(std::string name)
 				);
 
 			_BackgroundParallaxObj newObj;
-			newObj.divisor = lvlData["backgrounds"][std::to_string(i)]["x_divisor"].asFloat(),
 			newObj.backgroundTex =
 				new Quad(temp->GetWidth(), temp->GetHeight(), temp);
+			newObj.divisorX = lvlData["backgrounds"][std::to_string(i)]["x_divisor"].asFloat();
+			newObj.divisorY = lvlData["backgrounds"][std::to_string(i)]["y_divisor"].asFloat();
+			newObj.xoff = lvlData["backgrounds"][std::to_string(i)]["xoff"].asFloat();
+			newObj.yoff = lvlData["backgrounds"][std::to_string(i)]["yoff"].asFloat();
 			backgrounds.push_back(newObj);
 		}
 	}
