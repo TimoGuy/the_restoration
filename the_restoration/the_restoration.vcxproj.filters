@@ -138,6 +138,12 @@
     <ClInclude Include="..\include\SerialManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Players\TestMiniboss_Enemy.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Lib\SpriteSheetIO.h">
+      <Filter>Header Files\Lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Lib\Texture.cpp">
@@ -220,6 +226,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Players\FuelIncreaserItem.cpp">
       <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\TestMiniboss_Enemy.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Lib\SpriteSheetIO.cpp">
+      <Filter>Source Files\Lib</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

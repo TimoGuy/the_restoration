@@ -128,6 +128,7 @@
     <ClInclude Include="..\include\InputManager.h" />
     <ClInclude Include="..\include\json\json-forwards.h" />
     <ClInclude Include="..\include\json\json.h" />
+    <ClInclude Include="..\include\Lib\SpriteSheetIO.h" />
     <ClInclude Include="..\include\Lib\stb_image.h" />
     <ClInclude Include="..\include\Lib\Texture.h" />
     <ClInclude Include="..\include\Object.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="..\include\Players\Slant.h" />
     <ClInclude Include="..\include\Players\TestEnemy.h" />
     <ClInclude Include="..\include\Players\TestGameObj.h" />
+    <ClInclude Include="..\include\Players\TestMiniboss_Enemy.h" />
     <ClInclude Include="..\include\Players\Textbox.h" />
     <ClInclude Include="..\include\Players\TopSideCollGround.h" />
     <ClInclude Include="..\include\Players\Trigger.h" />
@@ -158,6 +160,7 @@
     <ClCompile Include="..\src\GameLoop.cpp" />
     <ClCompile Include="..\src\InputManager.cpp" />
     <ClCompile Include="..\src\jsoncpp.cpp" />
+    <ClCompile Include="..\src\Lib\SpriteSheetIO.cpp" />
     <ClCompile Include="..\src\Lib\stb_image.c" />
     <ClCompile Include="..\src\Lib\Texture.cpp" />
     <ClCompile Include="..\src\Object.cpp" />
@@ -171,6 +174,7 @@
     <ClCompile Include="..\src\Players\Slant.cpp" />
     <ClCompile Include="..\src\Players\TestEnemy.cpp" />
     <ClCompile Include="..\src\Players\TestGameObj.cpp" />
+    <ClCompile Include="..\src\Players\TestMiniboss_Enemy.cpp" />
     <ClCompile Include="..\src\Players\Textbox.cpp" />
     <ClCompile Include="..\src\Players\TopSideCollGround.cpp" />
     <ClCompile Include="..\src\Players\Trigger.cpp" />

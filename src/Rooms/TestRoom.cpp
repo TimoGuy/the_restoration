@@ -27,6 +27,8 @@
 #include "../../include/Shape/Quad.h"
 #include "../../include/Rooms/Cutscene/Cutscene.h"
 #include "../../include/SerialManager.h"
+
+#include "../../include/Players/TestMiniboss_Enemy.h"
 #endif
 
 #include <iostream>
@@ -661,23 +663,21 @@ bool TestRoom::LoadLevelIO(std::string name)
 	// Backgrounds loading
 	if (lvlData.isMember("backgrounds"))
 	{
-		for (int i = 0; lvlData["backgrounds"].size(); i++)
+		for (int i = 0; i < lvlData["backgrounds"].size(); i++)
 		{
 			// It's a background!!!!
-			printf(lvlData["backgrounds"][std::to_string(i)]["image"].asString().c_str());
+			std::string path = currentDir +
+				lvlData["backgrounds"][std::to_string(i)]["image"].asString();
 			Texture* temp =
 				new Texture(
-					currentDir +
-					lvlData["backgrounds"][std::to_string(i)]["image"].asString(),
+					path.c_str(),
 					STBI_rgb_alpha
 				);
 
-			_BackgroundParallaxObj newObj =
-			{
-				.divisor = lvlData["backgrounds"][std::to_string(i)]["x_divisor"].asFloat(),
-				.backgroundTex =
-					new Quad(temp->GetWidth(), temp->GetHeight(), temp)
-			};
+			_BackgroundParallaxObj newObj;
+			newObj.divisor = lvlData["backgrounds"][std::to_string(i)]["x_divisor"].asFloat(),
+			newObj.backgroundTex =
+				new Quad(temp->GetWidth(), temp->GetHeight(), temp);
 			backgrounds.push_back(newObj);
 		}
 	}
