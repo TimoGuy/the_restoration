@@ -59,7 +59,6 @@ class TestRoom : public Room
 
         std::vector<Object*> gameObjects;
 
-        std::vector<_BackgroundParallaxObj> backgrounds;
 
 
 		std::vector<std::function<void()>> scrTransLambdas;
@@ -76,10 +75,10 @@ class TestRoom : public Room
 		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
 
 
-		// Level's tileset overlay!!
-		// (disable object's rendering and check it out!!!!!)
+		// Level's tileset, props, backgrounds, etc.!!!
 		TileSet* roomTileSet;
 		Cutscene* roomPropSet;
+        std::vector<_BackgroundParallaxObj> backgrounds;
 
 
         // For the camera

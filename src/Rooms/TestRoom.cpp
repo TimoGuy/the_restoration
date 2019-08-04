@@ -616,11 +616,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 		return false;
 	}
 	
-
-
-
-
-
+	// Setup all the triggers
 	if (lvlData.isMember("triggers") &&
 		lvlData["triggers"].size() > 0)
 	{
@@ -641,15 +637,15 @@ bool TestRoom::LoadLevelIO(std::string name)
 				{
 					// Set up the trigger object to be a master, and it will find all its slaves.
 					tmpTrigger->SetEventIDAndSetMaster(
-						lvlData["triggers"]["fire_event"].asString(),
-						lvlData["triggers"]["auto_trigger"].asBool()
+						lvlData["triggers"][std::to_string(triggerCount)]["fire_event"].asString(),
+						lvlData["triggers"][std::to_string(triggerCount)]["auto_trigger"].asBool()
 					);
 
 					if (lvlData["triggers"].isMember("player_start_coords"))
 					{
 						// Setup the custom coords too!
-						int ceGX = lvlData["triggers"]["player_start_coords"].asInt(),
-							ceGY = lvlData["triggers"]["player_start_coords"].asInt();
+						int ceGX = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"].asInt(),
+							ceGY = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"].asInt();
 						printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
 						tmpTrigger->SetEntranceCoords(ceGX, ceGY);
 					}
@@ -660,6 +656,30 @@ bool TestRoom::LoadLevelIO(std::string name)
 			}
 		}
 #pragma endregion
+	}
+
+	// Backgrounds loading
+	if (lvlData.isMember("backgrounds"))
+	{
+		for (int i = 0; lvlData["backgrounds"].size(); i++)
+		{
+			// It's a background!!!!
+			printf(lvlData["backgrounds"][std::to_string(i)]["image"].asString().c_str());
+			Texture* temp =
+				new Texture(
+					currentDir +
+					lvlData["backgrounds"][std::to_string(i)]["image"].asString(),
+					STBI_rgb_alpha
+				);
+
+			_BackgroundParallaxObj newObj =
+			{
+				.divisor = lvlData["backgrounds"][std::to_string(i)]["x_divisor"].asFloat(),
+				.backgroundTex =
+					new Quad(temp->GetWidth(), temp->GetHeight(), temp)
+			};
+			backgrounds.push_back(newObj);
+		}
 	}
 
 	return true;

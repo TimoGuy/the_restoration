@@ -13,5 +13,17 @@
                 "y" : 99
             }
         }
+    },
+    "backgrounds" : {
+        "0" : {
+            "image" : "../images/znd_guard.png",
+            "xoff" : 0,
+            "yoff" : 0,
+            "x_divisor" : 2.0,
+            "y_divisor" : 1.0
+        }
+    },
+    "propsets" : {
+        "0": "_level_propsets/lps_sheepShearing"
     }
 }
