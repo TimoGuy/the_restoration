@@ -83,6 +83,7 @@
 		<Unit filename="include/Base.h" />
 		<Unit filename="include/GameLoop.h" />
 		<Unit filename="include/InputManager.h" />
+		<Unit filename="include/Lib/SpriteSheetIO.h" />
 		<Unit filename="include/Lib/Texture.h" />
 		<Unit filename="include/Lib/stb_image.h" />
 		<Unit filename="include/Object.h" />
@@ -96,6 +97,7 @@
 		<Unit filename="include/Players/Slant.h" />
 		<Unit filename="include/Players/TestEnemy.h" />
 		<Unit filename="include/Players/TestGameObj.h" />
+		<Unit filename="include/Players/TestMiniboss_Enemy.h" />
 		<Unit filename="include/Players/Textbox.h" />
 		<Unit filename="include/Players/TopSideCollGround.h" />
 		<Unit filename="include/Players/Trigger.h" />
@@ -113,6 +115,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/GameLoop.cpp" />
 		<Unit filename="src/InputManager.cpp" />
+		<Unit filename="src/Lib/SpriteSheetIO.cpp" />
 		<Unit filename="src/Lib/Texture.cpp" />
 		<Unit filename="src/Lib/stb_image.c">
 			<Option compilerVar="CC" />
@@ -128,6 +131,7 @@
 		<Unit filename="src/Players/Slant.cpp" />
 		<Unit filename="src/Players/TestEnemy.cpp" />
 		<Unit filename="src/Players/TestGameObj.cpp" />
+		<Unit filename="src/Players/TestMiniboss_Enemy.cpp" />
 		<Unit filename="src/Players/Textbox.cpp" />
 		<Unit filename="src/Players/TopSideCollGround.cpp" />
 		<Unit filename="src/Players/Trigger.cpp" />

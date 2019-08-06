@@ -1,6 +1,0 @@
-i	n_world1/w107FallTerrainHuh.png
-s	../textures/tileset_night.png
-m	n_world1/w107_ts.png
-
-t	1	n_world1/n_w106night	99,26
-t	1	n_world1/n_w108night

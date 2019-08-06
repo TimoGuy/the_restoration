@@ -1,7 +1,0 @@
-i	n_world1/w105SheepShearing.png
-s	../textures/tileset_test.png
-m	n_world1/w105_ts.png
-c	_level_propsets/lps_sheepShearing
-
-t	1	n_world1/n_w106TheClimb
-t	1	n_world1/n_w104CavHugePits	234,33

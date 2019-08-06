@@ -8,6 +8,7 @@
 
 class Textbox;
 class Quad;
+class SpriteSheetIO;
 
 
 #include <vector>
@@ -36,13 +37,18 @@ class TestGameObj : public Entity
         std::vector<Textbox*> pf;
         Quad* startCoords;
 
+        SpriteSheetIO* sprSheet;
+
+        bool isMidair;
+        int lifeRechargeTicks;
+
         // States
         bool IsUsingSword();
+        int swordTicksLeft;
 
 		int numJumps = 0;
 		bool wasJumpBtnAlreadyPressed = false;
 
-		int life = 0;
 		int framesOfInvincibility = 0;      // This counts down until 0, wherewith you are not invincible anymore
 
         float nerfer = 0;	// DEBUGGING VARIABLE

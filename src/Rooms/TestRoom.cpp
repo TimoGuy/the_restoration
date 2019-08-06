@@ -10,6 +10,10 @@
 #include "TileSet.h"
 #include "Quad.h"
 #include "Cutscene.h"
+#include "SerialManager.h"
+
+
+#include "TestMiniboss_Enemy.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/InputManager.h"
 #include "../../include/Rooms/TestRoom.h"
@@ -22,6 +26,9 @@
 #include "../../include/Rooms/TileSet.h"
 #include "../../include/Shape/Quad.h"
 #include "../../include/Rooms/Cutscene/Cutscene.h"
+#include "../../include/SerialManager.h"
+
+#include "../../include/Players/TestMiniboss_Enemy.h"
 #endif
 
 #include <iostream>
@@ -33,6 +40,18 @@
 
 
 #define FADE_IN_OUT_TICKS 20
+
+
+struct _BackgroundParallaxObj
+{
+	Quad* backgroundTex;
+	float divisorX;
+	float divisorY;
+	float xoff;
+	float yoff;
+};
+
+
 
 Quad* screenTransition;			// This will be a fade in AND out thing, okay?
 
@@ -74,6 +93,9 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 	}
 
 
+	// EXTRA DEBUG STUFFF
+	gameObjects.push_back(new TestMiniboss_Enemy(168, 81, this));
+
 
 
 
@@ -103,106 +125,6 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
             camX = camFocusObj->getX();
             camY = camFocusObj->getY();
 			break;
-		}
-	}
-
-
-    // To set up the triggers!
-	for (unsigned int i = 0; i < gameObjects.size(); i++)
-	{
-		// Look for a trigger, tigger!!!
-		if (dynamic_cast<Trigger*>(gameObjects.at(i)) != NULL)
-		{
-            // Found!!!
-            Trigger* tmpTrigger = (Trigger*)gameObjects.at(i);
-
-            if (tmpTrigger->NeedsSetup())   // If already setup, then will skip
-            {
-                // Get the first 't' code from the params
-                int pos = -1;
-                for (unsigned int i = 0; i < rmParams.size(); i++)
-                {
-                    if (rmParams.at(i) == std::string("t"))
-                    {
-                        // Start here and just start reading the string thru to get values!
-                        pos = i;
-                        break;
-                    }
-                }
-
-                if (pos < 0)
-                {
-                    // Break out and print error
-                    printf("\n\nERROR:: Not enough \'t\' params in level to create an exit...\n\n\n");
-                    break;
-                }
-
-
-                // Grab values
-                int touchTrigger_int;
-                    std::istringstream(rmParams.at(pos + 1)) >> touchTrigger_int;
-
-				int end = 2;
-
-				if (touchTrigger_int >= 0)
-				{
-					bool touchTrigger = (bool)touchTrigger_int;
-
-					std::string eventName = rmParams.at(pos + 2);
-
-
-
-					// Set up the trigger object to be a master, and it will find all its slaves.
-					tmpTrigger->SetEventIDAndSetMaster(eventName, touchTrigger);
-					// This needs to be set up before we start setting properties to it, like custom coords!
-
-
-
-					end = 3;		// This is left at 3 if no custom coords
-					if (eventName.at(0) == 'n' &&                             // Check if a game level type
-						pos + 3 < (signed int)rmParams.size() &&                   // If there's a fourth param (this'd be the coords for a cust. entrance of player)
-						rmParams.at(pos + 3) != std::string("\n"))
-					{
-						end = 4;    // A 4th param...             (it's the custom entrance coords!!!)
-
-						// Grab value
-						std::string custEntrCoords = rmParams.at(pos + 3);
-
-
-						// Parse from the x value (i.e. has a 123x456 to display coords)
-						int ceGX, ceGY;
-
-						std::string token;
-						std::istringstream tokenStream(custEntrCoords);
-
-						std::getline(tokenStream, token, ',');
-						std::istringstream(token) >> ceGX;		// X coord
-						std::getline(tokenStream, token, ',');
-						std::istringstream(token) >> ceGY;		// Y coord
-
-
-
-						printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
-						tmpTrigger->SetEntranceCoords(ceGX, ceGY);
-					}
-					else
-					{
-						printf("\tNo custom exit code found\n");
-					}
-				}
-				else
-				{
-					// It's requested to be a dead trigger eh
-					tmpTrigger->DisableMe();
-
-					// Set up the trigger object to be a master, and it will find all its slaves.
-					tmpTrigger->SetEventIDAndSetMaster("null", false);
-				}
-
-
-                // Remove those values for future params-checking!
-                rmParams.erase(rmParams.begin() + pos, rmParams.begin() + pos + end);
-            }
 		}
 	}
 }
@@ -381,6 +303,35 @@ void TestRoom::Render()
 	glTranslatef(-camX, -camY, 0.0f);
 
 
+	
+	// Render the backgrounds
+	glColor4f(1, 1, 1, 1);
+	int w, h;
+	_gloop->GetWindowDimensions(w, h);
+	for (unsigned int i = 0; i < backgrounds.size(); i++)
+	{
+		// Render at the x and y values eh
+		float desX = camX / backgrounds.at(i).divisorX + backgrounds.at(i).xoff;
+		float desY = camY / backgrounds.at(i).divisorY + backgrounds.at(i).yoff;
+
+		// Iterate until left the screen (x-wrap)
+		float offsetX = 0;
+		while (desX + offsetX < camX + (w / 2))
+		{
+			if (desX + offsetX + backgrounds.at(i).backgroundTex->GetWidth() >= camX - (w / 2))
+				backgrounds.at(i).backgroundTex->Render(desX + offsetX, desY);
+			offsetX += backgrounds.at(i).backgroundTex->GetWidth();
+		}
+		offsetX = -backgrounds.at(i).backgroundTex->GetWidth();		// now to the left!
+		while (desX + offsetX + backgrounds.at(i).backgroundTex->GetWidth() >= camX - (w / 2))
+		{
+			if (desX + offsetX < camX + (w / 2))
+				backgrounds.at(i).backgroundTex->Render(desX + offsetX, desY);
+			offsetX -= backgrounds.at(i).backgroundTex->GetWidth();
+		}
+	}
+	
+
 
 
 
@@ -421,6 +372,33 @@ void TestRoom::Render()
 			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
 		}
 
+		// Render health!!!
+		int maxHealth = SerialManager::Instance().GetGameData_Int(
+			"player_max_health",
+			GAME_VAR_DEF_player_max_health
+		);
+		int currentHealth = SerialManager::Instance().GetGameData_Int(
+			"player_current_health",
+			GAME_VAR_DEF_player_current_health
+		);
+
+		for (int i = 0; i < maxHealth; i++)
+		{
+			if (i < currentHealth)
+				glColor3f(1, 0, 0);
+			else
+			{
+				glColor3f(0.3f, 0.3f, 0.3f);
+			}
+
+			// Draw!
+			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
+			int xPos = i * oneUnit;
+			oneStamina->Render(xPos - 508, -284);
+		}
+
+
+		// Render stamina!!!
 		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
 		for (int i = 0; i < stamGauges; i++)
 		{
@@ -434,7 +412,7 @@ void TestRoom::Render()
 			float xPos = float(originalX % 1024);
 			float yPos = float(originalX / 1024 * oneUnit);
 
-			oneStamina->Render(xPos - 508, yPos - 284);
+			oneStamina->Render(xPos - 508, yPos - 284 + oneUnit);
 		}
 	}
 
@@ -507,86 +485,134 @@ void TestRoom::Render()
 
 bool TestRoom::LoadLevelIO(std::string name)
 {
-	// Initialize / empty the token/params list
-	rmParams.clear();
-
-
     // Find/Search for the requested level (within the 'n_...' form-factor)
 	std::string currentDir = std::string(".data/levels/");
 
     printf("Levels are stored in:\n%s\n\n", currentDir.c_str());
 
-	// Level variables
-	std::string levelFilename;
-
-	// Level's tileset loading prep variable
-	std::string levelTileSetFname;			// Should init as an empty string
-
 	// Try loading the level!!!
-	std::string line;
-	std::ifstream myfile(currentDir + name + ".txt");
-	if (myfile.is_open())
+	std::ifstream myfile(currentDir + name + ".json");
+	Json::Reader reader;
+	Json::Value lvlData;
+	if (reader.parse(myfile, lvlData))
 	{
-		std::cout << "Reading level file:\n";
-
-
-
-		// Read line by line
-		while (std::getline(myfile, line))
+		// Load collision picture ("entities")
+		// (I'm expecting it's there!!!)
+		if (lvlData["textures"].isMember("entities") &&
+			!lvlData["textures"]["entities"].isNull())
 		{
-			// DEBUG
-			std::cout << line << '\n';
+#pragma region Load Collision Picture
+			// Load a picture of the level
+			int comp;
+			const std::string& fileName =
+				currentDir +
+					lvlData["textures"]["entities"].asString();
+			int req = STBI_rgb;
+			unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
 
-			if (line.size() <= 0 ||         // If this is a blank line or is a comment, then ignore!
-				line.at(0) == '#')
+			if (imgData == NULL)
 			{
-				// This is empty!
-				continue;
+				printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
+				return false;
 			}
 
-			// Check what data type
-			if (line.at(0) == 'i')
-			{
-				// It's a collision picture!!!! (the base one)
-				levelFilename = line.substr(2);			// Cut off the 'i' and '\t'
 
-				// NOTE: this file will later be loaded!!!
-				// (@ region "Load Collision Picture")
-			}
-			else if (line.at(0) == 's')
-			{
-				// It's the tile-set!!!! (support animation l8r TODO)
-				roomTileSet->LoadTileTex(currentDir + line.substr(2));		// It's a rel path!!! (also cutoff the 's' and '\t' too eh)
-			}
-			else if (line.at(0) == 'm')
-			{
-				// It's the tile set to collision map!!!!
-				levelTileSetFname = line.substr(2);			// Cut off the 'm' and '\t'
 
-				// NOTE: this file will later be loaded!!!
-				// (@ region "Load Level Tileset Map")
-			}
-			else if (line.at(0) == 'c')
+			// Initialize the Collision Map as EMPTY!!!!
+			collisionMap = new Object*[gWidth * gHeight];
+			for (int uu = 0; uu < gWidth * gHeight; uu++)
 			{
-				// It's the prop set (created by a cutscene file)!!!!
-				roomPropSet = new Cutscene(line.substr(2), _gloop);			// Cut off the 'c' and '\t'
+				collisionMap[uu] = NULL;
+			}
+
+			// Yeah so hopefully you kept 'req' at STBI_rgb,
+			// bc we're gonna use the 3 values to get the objects
+			// for the room from ObjectFactory.h
+			//
+			// convert the pixels to objects yall!
+			int i = 0;
+			while (i < gWidth * gHeight)
+			{
+				// We'll assume it's STBI_rgb
+				std::string out_string;
+				std::stringstream ss[3];
+				ss[0] << (int)imgData[(i * 3)];
+				ss[1] << (int)imgData[(i * 3) + 1];
+				ss[2] << (int)imgData[(i * 3) + 2];
+
+
+				std::string colorId =
+					ss[0].str() + std::string(",") +
+					ss[1].str() + std::string(",") +
+					ss[2].str();
+
+				Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
+				if (_new != NULL)
+					gameObjects.push_back(_new);        // Adds the returned built object!
+
+				i++;
+			}
+
+
+			// Free loaded image
+			stbi_image_free(imgData);
+#pragma endregion
+		}
+
+
+		// Load "tileset_map" if not null eh
+		if (lvlData["textures"].isMember("tileset_map") &&
+			!lvlData["textures"]["tileset_map"].isNull())
+		{
+#pragma region Load Tileset Sprite Sheet
+			if (lvlData["textures"].isMember("tileset_spritesheet") &&
+				!lvlData["textures"]["tileset_spritesheet"].isNull())
+			{
+				// Load in that texture!!!!
+				roomTileSet->LoadTileTex(
+					currentDir +
+						lvlData["textures"]["tileset_spritesheet"].asString()
+				);
 			}
 			else
 			{
-				// It's some extra level params to pass on!
-				std::string token;
-				std::istringstream tokenStream(line);
+				// Show warning
+				printf("WARNING: although \"tileset_map\" was found, \"tileset_spritesheet\" was not found\n");
+			}
+#pragma endregion
 
-				printf("\nFound a line of level params...\n");
-				while (std::getline(tokenStream, token, '\t'))
+#pragma region Load Level Tileset Map
+			{
+				// Load it up!!!!
+				int comp;
+				const std::string& fileName =
+					currentDir +
+						lvlData["textures"]["tileset_map"].asString();		// See? Just a little bit different!!!
+				int req = STBI_rgb;
+				unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
+
+				if (imgData == NULL)
 				{
-					printf("\t%s\n", token.c_str());
-					rmParams.push_back(token);        // Add into level's params to be used l8r!!
+					printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
+					return false;
 				}
 
-				// Seal off this line! (w/ a line break)
-				rmParams.push_back("\n");
+				// Yeah so hopefully you kept 'req' at STBI_rgb,
+				// bc we're gonna use the 3 values to get the objects
+				// for the room from ObjectFactory.h
+				//
+				// convert the pixels to objects yall!
+				for (int i = 0; i < gWidth * gHeight; i++)
+				{
+					// We'll assume it's STBI_rgb (hence 3 multiplier eh)
+					roomTileSet->InterpretAndAddVector(i, (int)(i % gWidth), (int)(i / gWidth), gWidth, gHeight, imgData);		// Take the r_value, and it will interpret it!
+				}
+
+
+				// Free loaded image
+				stbi_image_free(imgData);
 			}
+#pragma endregion
 		}
 	}
 	else
@@ -594,117 +620,95 @@ bool TestRoom::LoadLevelIO(std::string name)
 		printf("ERROR: Unable to switch levels... no file was found with the level name \"%s\"\n", name.c_str());
 		return false;
 	}
-
-
-	// Just error-checking!
-	if (!levelFilename.empty())
+	
+	// Setup all the triggers
+	if (lvlData.isMember("triggers") &&
+		lvlData["triggers"].size() > 0)
 	{
-#pragma region Load Collision Picture
-
-		// Load a picture of the level
-		int comp;
-		const std::string& fileName = currentDir + levelFilename;
-		int req = STBI_rgb;
-		unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
-
-		if (imgData == NULL)
+#pragma region Setup Triggers
+		// To set up the triggers!
+		int triggerCount = 0;
+		for (unsigned int i = 0;
+			i < gameObjects.size() && triggerCount < lvlData["triggers"].size();
+			i++)
 		{
-			printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
-			return false;
+			// Look for a trigger, tigger!!!
+			if (dynamic_cast<Trigger*>(gameObjects.at(i)) != NULL)
+			{
+				// Found!!!
+				Trigger* tmpTrigger = (Trigger*)gameObjects.at(i);
+
+				if (tmpTrigger->NeedsSetup())   // If already setup, then will skip
+				{
+					// Check if a dead trigger
+					if (lvlData["triggers"][std::to_string(triggerCount)].isNull())
+					{
+						// It's requested to be a dead trigger eh
+						tmpTrigger->DisableMe();
+
+						// Set up the trigger object to be a master, and it will find all its slaves.
+						tmpTrigger->SetEventIDAndSetMaster("null", false);	
+					}
+					else
+					{
+						// Set up the trigger object to be a master, and it will find all its slaves.
+						tmpTrigger->SetEventIDAndSetMaster(
+							lvlData["triggers"][std::to_string(triggerCount)]["fire_event"].asString(),
+							lvlData["triggers"][std::to_string(triggerCount)]["auto_trigger"].asBool()
+						);
+
+						if (lvlData["triggers"][std::to_string(triggerCount)]
+								.isMember("player_start_coords"))
+						{
+							printf("\n\n\n\n\n\n\n\t\tSETUP CUSTOM COORDS AT: ");
+							// Setup the custom coords too!
+							int ceGX = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"]["x"].asInt(),
+								ceGY = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"]["y"].asInt();
+							printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
+							tmpTrigger->SetEntranceCoords(ceGX, ceGY);
+						}
+					}
+
+					// Update trigger count!
+					triggerCount++;
+				}
+			}
 		}
-
-
-
-		// Initialize the Collision Map as EMPTY!!!!
-		collisionMap = new Object*[gWidth * gHeight];
-		for (int uu = 0; uu < gWidth * gHeight; uu++)
-		{
-			collisionMap[uu] = NULL;
-		}
-
-		// Yeah so hopefully you kept 'req' at STBI_rgb,
-		// bc we're gonna use the 3 values to get the objects
-		// for the room from ObjectFactory.h
-		//
-		// convert the pixels to objects yall!
-		int i = 0;
-		while (i < gWidth * gHeight)
-		{
-			// We'll assume it's STBI_rgb
-			std::string out_string;
-			std::stringstream ss[3];
-			ss[0] << (int)imgData[(i * 3)];
-			ss[1] << (int)imgData[(i * 3) + 1];
-			ss[2] << (int)imgData[(i * 3) + 2];
-
-
-			std::string colorId =
-				ss[0].str() + std::string(",") +
-				ss[1].str() + std::string(",") +
-				ss[2].str();
-
-			Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
-			if (_new != NULL)
-				gameObjects.push_back(_new);        // Adds the returned built object!
-
-			i++;
-		}
-
-
-		// Free loaded image
-		stbi_image_free(imgData);
-
 #pragma endregion
 	}
-	else
+
+	// Backgrounds loading
+	if (lvlData.isMember("backgrounds"))
 	{
-		printf("WARNING: No filename for collision data was specified... use 'i' in the level file\n");
-		// Do nuthin, cuz it's a warning!
-	}
-
-
-
-	// First check if there was a tileset
-	// requested in the first place!!!
-	if (!levelTileSetFname.empty())
-	{
-#pragma region Load Level Tileset Map
-
-		// Load it up!!!!
-		int comp;
-		const std::string& fileName = currentDir + levelTileSetFname;		// See? Just a little bit different!!!
-		int req = STBI_rgb;
-		unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
-
-		if (imgData == NULL)
+		for (int i = 0; i < lvlData["backgrounds"].size(); i++)
 		{
-			printf("Error! Texture loading failed for \"%s\"\n", fileName.c_str());
-			return false;
+			// It's a background!!!!
+			std::string path = currentDir +
+				lvlData["backgrounds"][std::to_string(i)]["image"].asString();
+			Texture* temp =
+				new Texture(
+					path.c_str(),
+					STBI_rgb_alpha
+				);
+
+			_BackgroundParallaxObj newObj;
+			newObj.backgroundTex =
+				new Quad(temp->GetWidth(), temp->GetHeight(), temp);
+			newObj.divisorX = lvlData["backgrounds"][std::to_string(i)]["x_divisor"].asFloat();
+			newObj.divisorY = lvlData["backgrounds"][std::to_string(i)]["y_divisor"].asFloat();
+			newObj.xoff = lvlData["backgrounds"][std::to_string(i)]["xoff"].asFloat();
+			newObj.yoff = lvlData["backgrounds"][std::to_string(i)]["yoff"].asFloat();
+			backgrounds.push_back(newObj);
 		}
-
-		// Yeah so hopefully you kept 'req' at STBI_rgb,
-		// bc we're gonna use the 3 values to get the objects
-		// for the room from ObjectFactory.h
-		//
-		// convert the pixels to objects yall!
-		for (int i = 0; i < gWidth * gHeight; i++)
-		{
-			// We'll assume it's STBI_rgb (hence 3 multiplier eh)
-			roomTileSet->InterpretAndAddVector(i, (int)(i % gWidth), (int)(i / gWidth), gWidth, gHeight, imgData);		// Take the r_value, and it will interpret it!
-		}
-
-
-		// Free loaded image
-		stbi_image_free(imgData);
-
-#pragma endregion
 	}
-	else
+
+
+	// Propsets (cutscene)
+	if (lvlData.isMember("propset"))
 	{
-		printf("WARNING: No filename for tile-mapping data was specified... use 'm' in the level file\n");
-		// Do nuthin, cuz it's a warning!
+		// It's the prop set (created by a cutscene file)!!!!
+		roomPropSet = new Cutscene(lvlData["propset"].asString(), _gloop);
 	}
-
 
 	return true;
 }

@@ -1,6 +1,0 @@
-i	n_world1/w105SheepShearing.png
-s	../textures/tileset_night.png
-m	n_world1/w105_ts.png
-
-t	1	n_world1/n_w106night
-t	1	n_world1/n_w104night	234,33

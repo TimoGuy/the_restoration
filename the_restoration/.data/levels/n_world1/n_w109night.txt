@@ -1,6 +1,0 @@
-i	n_world1/w109MtnPeakThisIsYourCalling.png
-s	../textures/tileset_night.png
-m	n_world1/w109_ts.png
-
-t	-1
-t	1	n_world1/n_w108night	124,32

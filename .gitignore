@@ -319,5 +319,8 @@ paket-files/
 .idea/
 *.sln.iml
 
+# Extra
 DatesPrinter/
 the_restoration/.data/data.json
+.DS_Store
+.vscode/

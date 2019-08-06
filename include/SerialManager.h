@@ -16,6 +16,8 @@
 // Just gonna put the default values for the game_vars right here...
 #define GAME_VAR_DEF_saw_tutorial false
 #define GAME_VAR_DEF_player_max_jumps 1
+#define GAME_VAR_DEF_player_max_health 6
+#define GAME_VAR_DEF_player_current_health 6
 
 
 /// It's a singleton for serializing objects for saving and such.
@@ -86,7 +88,6 @@ private:
         // Check if json file exists and read it in
         std::ifstream ifs(SERIAL_FILE_LOCATION);
         Json::Reader reader;
-        Json::Value obj;
         reader.parse(ifs, jsonData);
     }
 

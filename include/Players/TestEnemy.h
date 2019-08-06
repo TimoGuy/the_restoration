@@ -2,9 +2,6 @@
 
 #include "Entity.h"
 
-class Entity;
-struct BoundBox;
-
 
 class TestEnemy :
 	public Entity
@@ -22,7 +19,5 @@ public:
 
 private:
     float life;
-
-    int framesOfInvincibility = 0;
 };
 

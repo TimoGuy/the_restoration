@@ -1,0 +1,2 @@
+s	336,384	images/shed.png
+o	0	1050,1220

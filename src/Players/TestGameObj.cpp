@@ -12,7 +12,9 @@
 #include <SDL2/SDL_ttf.h>
 #include "Lib/Texture.h"
 #include "Quad.h"
-#include "../../include/GameLoop.h"
+#include "GameLoop.h"
+#include "Lib/SpriteSheetIO.h"
+#include "Cutscene.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
@@ -28,6 +30,8 @@
 #include "../../include/Lib/Texture.h"
 #include "../../include/Shape/Quad.h"
 #include "../../include/GameLoop.h"
+#include "../../include/Lib/SpriteSheetIO.h"
+#include "../../include/Rooms/Cutscene/Cutscene.h"
 #endif
 
 #include <stdio.h>
@@ -40,6 +44,11 @@
 #define PLAYER_HEIGHT 48
 #define PLAYER_YOFF -16
 
+// SWORD (which is really just the player's arm shooting out instantaneously) stats
+// This being a low number will make the charging mini-boss harder!
+// Keep in mind that the damage tick is a countdown, not an 'x steps' thing
+#define SWORD_TICKS_HOLDING 40
+#define SWORD_DAMAGE_TICK 20
 
 
 Quad* mySword = NULL;
@@ -53,7 +62,15 @@ bool isSwordLeft = false;
 
 TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 {
+    // Look for player.json to load in sprites
+    std::ifstream ifs(".data/properties/player.json");
+    Json::Reader reader;
+    Json::Value props;
+    reader.parse(ifs, props);
+    sprSheet = new SpriteSheetIO(props);
+
     mySword = new Quad(PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT);
+    swordTicksLeft = 0;
     startCoords = new Quad(10, 10);
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
@@ -82,8 +99,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     startX = x;
     startY = y;
     outHsp = outVsp = 0;
-
-    life = 5;       // Start out by default w/ 5 eh!
+    lifeRechargeTicks = 0;
 }
 
 TestGameObj::~TestGameObj()
@@ -131,15 +147,13 @@ void TestGameObj::Update()
 		inputJump = InputManager::Instance().b2();
 		isUsingMySword = IsUsingSword();
 
-		if (isUsingMySword)
+		if (!isUsingMySword)
         {
-            // Actually, you'll wanna undo the x
-            // input for the duration the player's holding!
-            inputX = 0;
+            // Thus you can't change facing direction
+            // while you're holding out your sword!
+            if (inputX < 0) isSwordLeft = true;
+            else if (inputX > 0) isSwordLeft = false;
         }
-        // Thus you can't move while you're holding out your sword!
-        if (inputX < 0) isSwordLeft = true;
-        else if (inputX > 0) isSwordLeft = false;
 	}
 
 
@@ -161,9 +175,9 @@ void TestGameObj::Update()
         multiplier = 1;
     }
 
-    if (isUsingMySword)
+    if (isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK)
     {
-        // If you use the sword, it just 'pops' out!
+        // If you use the sword (and it's the attacking frame), it just 'pops' out!
         reqCamOffx = MAX_CAM_OFFSET_X * multiplier;
     }
     else
@@ -249,7 +263,7 @@ void TestGameObj::Update()
 
 
 	// CHECK FOR COLLISION W/ THE WEAPON!!!
-    if (isUsingMySword)
+    if (isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK)      // You'll hold out the sword (it'll use stamina), but the damage will actually be dealt only 1 frame!!! (So invincibility frames are not necessary)
     {
         for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
         {
@@ -333,7 +347,7 @@ void TestGameObj::Update()
 			else if (dynamic_cast<MovingPlatGround*>(tempCollisions.at(i)) != NULL)
 			{
 				// Add hsp to me!!!! (unless if hitting it from below, then you'd just hit your head!)
-					
+
                 // This means still, or downwards (in comparison to the moving obj!!)
 				outHsp = ((MovingPlatGround*)tempCollisions.at(i))->GetHsp();
 				outVsp = ((MovingPlatGround*)tempCollisions.at(i))->GetVsp();
@@ -425,7 +439,50 @@ void TestGameObj::Update()
 
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
+        isMidair = false;
 	}
+    else
+        isMidair = true;
+
+    
+    
+    
+    // See if you're going fast enough to gain health back!!!
+    #define RECHARGE_HEALTH_REQ_TICKS 50
+    printf("%i\n", lifeRechargeTicks);
+    if (std::abs(hsp) > MAX_HSP - 2.0f)
+    {
+        // Add a tick
+        lifeRechargeTicks++;
+
+
+        // Enough to receive a life???
+        if (lifeRechargeTicks > RECHARGE_HEALTH_REQ_TICKS)
+        {
+            // Reset counter
+            lifeRechargeTicks = 0;
+
+            // Award w/ 1hp (but cap off at max)
+            SerialManager::Instance().SetGameData_Int(
+                "player_current_health",
+                std::min(
+                    SerialManager::Instance().GetGameData_Int(                  // New addition of health, or...
+                        "player_current_health",
+                        GAME_VAR_DEF_player_current_health
+                    ) + 1,
+                    SerialManager::Instance().GetGameData_Int(                  // Cap it off at max hp
+                        "player_max_health",
+                        GAME_VAR_DEF_player_max_health
+                    )
+                )
+            );
+        }
+    }
+    else
+    {
+        lifeRechargeTicks = 0;
+    }
+
 
 	// Reset outside forces
 	outHsp = outVsp = 0;
@@ -448,18 +505,42 @@ void TestGameObj::Render()
 
 
 
-
-	image->Render(x, y);
+    // Set up the animation actions
+    std::string action = "idle";
+    if (hsp != 0) action = "run";
+    if (isMidair)
+    {
+        action = "jump";
+        if (vsp >= 0) action = "fall";
+    }
+    if (isUsingMySword) action = "attack";
+    int flipped = isSwordLeft ? -1 : 1;
+    glTranslatef(x + 24 - 12, y, 0);
+    glScalef(flipped, 1, 1);
+    sprSheet->Render(action, -24, 0, 48, 48);
+    glScalef(flipped, 1, 1);
+    glTranslatef(-x - 24 + 12, -y, 0);
 
 	if (isUsingMySword)
 	{
         float rendX = isSwordLeft ? x - PLAYER_SWORD_WIDTH : x + image->GetWidth();
+        if (swordTicksLeft == SWORD_DAMAGE_TICK)
+            glColor3f(1, 0, 0);
+        else
+            glColor4f(1, 1, 1, 0);
+
         mySword->Render(rendX, y + PLAYER_HEIGHT / 2 - PLAYER_SWORD_HEIGHT / 2);
+
+        // Reset
+        glColor3f(1, 1, 1);
 	}
 
-    glColor4f(0.5f, 0, 0, 1);
-    startCoords->Render(startX, startY);
-
+    if (InputManager::Instance().b4())
+    {
+        // Draw startcoords marker
+        glColor4f(0.5f, 0, 0, 1);
+        startCoords->Render(startX, startY);
+    }
 
 
     // Render any message boxes!!!
@@ -496,9 +577,26 @@ void TestGameObj::YouLose(Entity* accordingToMe)
     hsp = KNOCKBACK_HSP * sign;
     vsp = KNOCKBACK_VSP;
 
-    life--;
+    // Take off 1hp
+    SerialManager::Instance().SetGameData_Int(
+        "player_current_health",
+        SerialManager::Instance().GetGameData_Int(
+            "player_current_health",
+            GAME_VAR_DEF_player_current_health
+        ) - 1
+    );
     framesOfInvincibility = HURT_FRAMES;
-    printf("Player:: lost 1 life, has %ihp left\n", life);
+    
+
+    // Check if lives are out!
+    if (SerialManager::Instance().GetGameData_Int(
+            "player_current_health",
+            GAME_VAR_DEF_player_current_health
+        ) <= 0)
+    {
+        // Sowee, but you ded, son
+        room->GetGameLoop()->SetRoom(new Cutscene("c_dead", room->GetGameLoop()));
+    }
 }
 
 int TestGameObj::GetNumJumps()
@@ -525,9 +623,7 @@ void TestGameObj::UpdateStartCoords()
 
 
 
-#define SWORD_TICKS_HOLDING 25
 bool prevB1Down = false;
-int swordTicksLeft = 0;
 bool TestGameObj::IsUsingSword()
 {
     swordTicksLeft--;

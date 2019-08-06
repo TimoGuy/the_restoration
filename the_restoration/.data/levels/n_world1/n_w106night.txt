@@ -1,6 +1,0 @@
-i	n_world1/w106TheClimb.png
-s	../textures/tileset_night.png
-m	n_world1/w106_ts_night.png
-
-t	1	n_world1/n_w107night
-t	1	n_world1/n_w105night	374,68

@@ -22,6 +22,7 @@ class Cutscene;
 
 // Hopefully this is where 90% of the game
 // will happen! Load a file via IO and then go!
+struct _BackgroundParallaxObj;
 
 class TestRoom : public Room
 {
@@ -59,6 +60,7 @@ class TestRoom : public Room
         std::vector<Object*> gameObjects;
 
 
+
 		std::vector<std::function<void()>> scrTransLambdas;
 		SDL_Color scrTransColor;
 		int fadeOutTimer = -100;			// -100 means do nothing
@@ -68,16 +70,15 @@ class TestRoom : public Room
         // Level-loading
         std::string currentLvl;
 		std::string currentLvlFilename;
-        std::vector<std::string> rmParams;        // These are the level tokens which dictate its objects within (eg: an exit object's params)
-
+        
 
 		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
 
 
-		// Level's tileset overlay!!
-		// (disable object's rendering and check it out!!!!!)
+		// Level's tileset, props, backgrounds, etc.!!!
 		TileSet* roomTileSet;
 		Cutscene* roomPropSet;
+        std::vector<_BackgroundParallaxObj> backgrounds;
 
 
         // For the camera

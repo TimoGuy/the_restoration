@@ -4,4 +4,6 @@
 o	-1	0,0
 #	0	0	exit-cutscene	n_world1/n_tut
 #	0	0	exit-cutscene	n_world1/n_w101Home
-	0	0	exit-cutscene	n_world1/n_w109MtnPeakThisIsYourCalling
+#	0	0	exit-cutscene	n_world1/n_w109MtnPeakThisIsYourCalling
+#	0	0	exit-cutscene	n_world1/n_w101night
+	0	0	exit-cutscene	n_rnd
