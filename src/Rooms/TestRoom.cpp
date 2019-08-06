@@ -640,19 +640,33 @@ bool TestRoom::LoadLevelIO(std::string name)
 
 				if (tmpTrigger->NeedsSetup())   // If already setup, then will skip
 				{
-					// Set up the trigger object to be a master, and it will find all its slaves.
-					tmpTrigger->SetEventIDAndSetMaster(
-						lvlData["triggers"][std::to_string(triggerCount)]["fire_event"].asString(),
-						lvlData["triggers"][std::to_string(triggerCount)]["auto_trigger"].asBool()
-					);
-
-					if (lvlData["triggers"].isMember("player_start_coords"))
+					// Check if a dead trigger
+					if (lvlData["triggers"][std::to_string(triggerCount)].isNull())
 					{
-						// Setup the custom coords too!
-						int ceGX = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"].asInt(),
-							ceGY = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"].asInt();
-						printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
-						tmpTrigger->SetEntranceCoords(ceGX, ceGY);
+						// It's requested to be a dead trigger eh
+						tmpTrigger->DisableMe();
+
+						// Set up the trigger object to be a master, and it will find all its slaves.
+						tmpTrigger->SetEventIDAndSetMaster("null", false);	
+					}
+					else
+					{
+						// Set up the trigger object to be a master, and it will find all its slaves.
+						tmpTrigger->SetEventIDAndSetMaster(
+							lvlData["triggers"][std::to_string(triggerCount)]["fire_event"].asString(),
+							lvlData["triggers"][std::to_string(triggerCount)]["auto_trigger"].asBool()
+						);
+
+						if (lvlData["triggers"][std::to_string(triggerCount)]
+								.isMember("player_start_coords"))
+						{
+							printf("\n\n\n\n\n\n\n\t\tSETUP CUSTOM COORDS AT: ");
+							// Setup the custom coords too!
+							int ceGX = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"]["x"].asInt(),
+								ceGY = lvlData["triggers"][std::to_string(triggerCount)]["player_start_coords"]["y"].asInt();
+							printf("\n\n\tCustom entrance for player at %i,%i\n\n\n", ceGX, ceGY);
+							tmpTrigger->SetEntranceCoords(ceGX, ceGY);
+						}
 					}
 
 					// Update trigger count!
