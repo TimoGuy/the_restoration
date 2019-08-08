@@ -20,6 +20,7 @@
 					<Add directory="include/Players" />
 					<Add directory="include/Rooms/Cutscene/" />
 					<Add directory="include/Rooms/Cutscene" />
+					<Add directory="include/ui/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -46,6 +47,7 @@
 					<Add directory="include/Players" />
 					<Add directory="include/Rooms/Cutscene/" />
 					<Add directory="include/Rooms/Cutscene" />
+					<Add directory="include/ui/" />
 				</Compiler>
 				<Linker>
 					<Add option="-lSDL2" />
@@ -70,6 +72,7 @@
 					<Add directory="include/Players" />
 					<Add directory="include/Rooms/Cutscene/" />
 					<Add directory="include/Rooms/Cutscene" />
+					<Add directory="include/ui/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -112,6 +115,7 @@
 		<Unit filename="include/defs.h" />
 		<Unit filename="include/json/json-forwards.h" />
 		<Unit filename="include/json/json.h" />
+		<Unit filename="include/ui/StaminaBar.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/GameLoop.cpp" />
 		<Unit filename="src/InputManager.cpp" />
@@ -143,6 +147,7 @@
 		<Unit filename="src/Rooms/TileSet.cpp" />
 		<Unit filename="src/Shape/Quad.cpp" />
 		<Unit filename="src/jsoncpp.cpp" />
+		<Unit filename="src/ui/StaminaBar.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

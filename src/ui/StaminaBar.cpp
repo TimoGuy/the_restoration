@@ -1,0 +1,104 @@
+#if defined(__unix__) || defined(__APPLE__)
+#include "StaminaBar.h"
+#include "SerialManager.h"
+#include "Lib/Texture.h"
+#include <SDL2/SDL_opengl.h>
+#elif defined(_WIN32) || defined(WIN32)
+#include "../../include/ui/StaminaBar.h"
+#include "../../include/SerialManager.h"
+#include "../../include/Lib/Texture.h"
+#include <SDL_opengl.h>
+#endif
+
+#define ONE_THIRD 0.3333333333333333333333333333f
+#define STAMINA_CELL_WIDTH 16
+#define STAMINA_CELL_HEIGHT 16
+
+StaminaBar::StaminaBar()
+{
+    // Init
+    currentStaminas_asFloat = -1;               // This is a codeword that it's first initialization (i.e. don't lerp it)
+
+    // Spritesheet
+    spriteSheetBorder = new Texture(".data/images/ui/stamina_bar_border.png", STBI_rgb_alpha);
+    spriteSheetFilling = new Texture(".data/images/ui/stamina_bar_fill.png", STBI_rgb_alpha);
+}
+
+StaminaBar::~StaminaBar()
+{
+    // delete
+    delete spriteSheetBorder;
+    delete spriteSheetFilling;
+}
+
+void StaminaBar::Render(int currentStaminas, float x, float y)
+{
+    if (currentStaminas_asFloat == -1)
+    {
+        // First one
+        currentStaminas_asFloat = currentStaminas;
+    }
+    else
+    {
+        // LERP TO IT!!!!!
+        currentStaminas_asFloat = currentStaminas;      // haha, TODO eh
+    }
+
+    // Render setup...
+    int numStaminas = SerialManager::Instance().GetGameData_Int(
+            "player_max_jumps",
+            GAME_VAR_DEF_player_max_jumps
+        );
+    if (numStaminas <= 0) return;
+
+    // Render the border
+    glEnable(GL_TEXTURE_2D);
+    spriteSheetBorder->Bind(0);
+
+    // Render quad!
+    glBegin(GL_QUADS);
+
+    // Render Left part
+    glTexCoord2f(0, 0);
+    glVertex2f(x, y);
+
+    glTexCoord2f(ONE_THIRD, 0);
+    glVertex2f(x + STAMINA_CELL_WIDTH, y);
+
+    glTexCoord2f(ONE_THIRD, 1);
+    glVertex2f(x + STAMINA_CELL_WIDTH, y + STAMINA_CELL_HEIGHT);
+
+    glTexCoord2f(0, 1);
+    glVertex2f(x, y + STAMINA_CELL_HEIGHT);
+
+    // Scooch along
+    x += STAMINA_CELL_WIDTH;
+
+
+    for (int i = 0; i < numStaminas; i++)
+    {
+        
+        
+        
+        // Increase the x scooch
+        x += STAMINA_CELL_WIDTH;
+    }
+
+
+    // Render Right part
+    glTexCoord2f(ONE_THIRD * 2, 0);
+    glVertex2f(x, y);
+
+    glTexCoord2f(1, 0);
+    glVertex2f(x + STAMINA_CELL_WIDTH, y);
+
+    glTexCoord2f(1, 1);
+    glVertex2f(x + STAMINA_CELL_WIDTH, y + STAMINA_CELL_HEIGHT);
+
+    glTexCoord2f(ONE_THIRD * 2, 1);
+    glVertex2f(x, y + STAMINA_CELL_HEIGHT);
+
+    glEnd();
+
+    
+}

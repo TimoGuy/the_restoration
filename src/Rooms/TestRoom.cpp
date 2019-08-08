@@ -11,6 +11,7 @@
 #include "Quad.h"
 #include "Cutscene.h"
 #include "SerialManager.h"
+#include "StaminaBar.h"
 
 
 #include "TestMiniboss_Enemy.h"
@@ -27,6 +28,7 @@
 #include "../../include/Shape/Quad.h"
 #include "../../include/Rooms/Cutscene/Cutscene.h"
 #include "../../include/SerialManager.h"
+#include "../../include/ui/StaminaBar.h"
 
 #include "../../include/Players/TestMiniboss_Enemy.h"
 #endif
@@ -294,6 +296,8 @@ void TestRoom::Update()
 	}
 }
 
+StaminaBar* stamBar = new StaminaBar();
+
 void TestRoom::Render()
 {
 	glLoadIdentity();
@@ -400,20 +404,21 @@ void TestRoom::Render()
 
 		// Render stamina!!!
 		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
-		for (int i = 0; i < stamGauges; i++)
-		{
-			// Start at the upper left corner and just start drawing them green!
-			glColor3f(0, 1, 0);
+		stamBar->Render(stamGauges, -508, -284 + ONE_STAMINA_SIZE + ONE_STAMINA_PADDING);
+		// for (int i = 0; i < stamGauges; i++)
+		// {
+		// 	// Start at the upper left corner and just start drawing them green!
+		// 	glColor3f(0, 1, 0);
 
-			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
+		// 	int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
 
-			int originalX = i * oneUnit;
+		// 	int originalX = i * oneUnit;
 
-			float xPos = float(originalX % 1024);
-			float yPos = float(originalX / 1024 * oneUnit);
+		// 	float xPos = float(originalX % 1024);
+		// 	float yPos = float(originalX / 1024 * oneUnit);
 
-			oneStamina->Render(xPos - 508, yPos - 284 + oneUnit);
-		}
+		// 	oneStamina->Render(xPos - 508, yPos - 284 + oneUnit);
+		// }
 	}
 
 
