@@ -296,7 +296,7 @@ void TestRoom::Update()
 	}
 }
 
-StaminaBar* stamBar = new StaminaBar();
+StaminaBar stamBar;
 
 void TestRoom::Render()
 {
@@ -404,7 +404,7 @@ void TestRoom::Render()
 
 		// Render stamina!!!
 		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
-		stamBar->Render(stamGauges, -508, -284 + ONE_STAMINA_SIZE + ONE_STAMINA_PADDING);
+		stamBar.Render(stamGauges, -508, -284 + ONE_STAMINA_SIZE + ONE_STAMINA_PADDING);
 		// for (int i = 0; i < stamGauges; i++)
 		// {
 		// 	// Start at the upper left corner and just start drawing them green!
