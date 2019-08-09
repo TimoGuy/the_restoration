@@ -58,9 +58,11 @@ struct _BackgroundParallaxObj
 Quad* screenTransition;			// This will be a fade in AND out thing, okay?
 
 Quad* oneStamina;
+StaminaBar* stamBar;
 
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
+    stamBar = new StaminaBar();
     roomTileSet = new TileSet();
 	roomPropSet = NULL;
 
@@ -147,6 +149,7 @@ TestRoom::~TestRoom()
 
 	delete screenTransition;
 	delete oneStamina;
+	delete stamBar;
 }
 
 
@@ -296,8 +299,6 @@ void TestRoom::Update()
 	}
 }
 
-StaminaBar stamBar;
-
 void TestRoom::Render()
 {
 	glLoadIdentity();
@@ -307,7 +308,7 @@ void TestRoom::Render()
 	glTranslatef(-camX, -camY, 0.0f);
 
 
-	
+
 	// Render the backgrounds
 	glColor4f(1, 1, 1, 1);
 	int w, h;
@@ -334,14 +335,14 @@ void TestRoom::Render()
 			offsetX -= backgrounds.at(i).backgroundTex->GetWidth();
 		}
 	}
-	
+
 
 
 
 
 	// And then the tileset underlay!!!!!
 	glColor4f(1, 1, 1, 1);
-	
+
 	if (roomPropSet != NULL)
 	{
 		roomPropSet->Render(false);
@@ -404,7 +405,7 @@ void TestRoom::Render()
 
 		// Render stamina!!!
 		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
-		stamBar.Render(stamGauges, -508, -284 + ONE_STAMINA_SIZE + ONE_STAMINA_PADDING);
+		stamBar->Render(stamGauges, -508, -284 + ONE_STAMINA_SIZE + ONE_STAMINA_PADDING);
 		// for (int i = 0; i < stamGauges; i++)
 		// {
 		// 	// Start at the upper left corner and just start drawing them green!
@@ -625,7 +626,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 		printf("ERROR: Unable to switch levels... no file was found with the level name \"%s\"\n", name.c_str());
 		return false;
 	}
-	
+
 	// Setup all the triggers
 	if (lvlData.isMember("triggers") &&
 		lvlData["triggers"].size() > 0)
@@ -652,7 +653,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 						tmpTrigger->DisableMe();
 
 						// Set up the trigger object to be a master, and it will find all its slaves.
-						tmpTrigger->SetEventIDAndSetMaster("null", false);	
+						tmpTrigger->SetEventIDAndSetMaster("null", false);
 					}
 					else
 					{

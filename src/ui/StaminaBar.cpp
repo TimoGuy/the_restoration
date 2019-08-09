@@ -3,6 +3,7 @@
 #include "SerialManager.h"
 #include "Lib/Texture.h"
 #include <SDL2/SDL_opengl.h>
+#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/ui/StaminaBar.h"
 #include "../../include/SerialManager.h"
@@ -11,8 +12,10 @@
 #include "../../include/Shape/Quad.h"
 #endif
 
+#include <string>
+
 #define ONE_THIRD 0.3333333333333333333333333333f
-#define STAMINA_CELL_WIDTH 120
+#define STAMINA_CELL_WIDTH 16
 #define STAMINA_CELL_HEIGHT 16
 
 StaminaBar::StaminaBar()
@@ -34,6 +37,8 @@ StaminaBar::~StaminaBar()
 
 void StaminaBar::Render(int currentStaminas, float x, float y)
 {
+    float resetX = x;   // For later
+
     if (currentStaminas_asFloat == -1)
     {
         // First one
@@ -52,10 +57,79 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
         );
     if (numStaminas <= 0) return;
 
-	Quad(192, 64, spriteSheetBorder).Render(x, y);
 
     // Render the border
     glEnable(GL_TEXTURE_2D);
+    spriteSheetFilling->Bind(0);
+    glColor4f(0.6f, 0.5f, 1, 1);
+
+
+    if (currentStaminas > 0)
+    {
+        // Render quad!
+        glBegin(GL_QUADS);
+
+        // Render the beginning
+        glTexCoord2f(0, 0);
+        glVertex2f(x, y);
+
+        glTexCoord2f(ONE_THIRD, 0);
+        glVertex2f(x + STAMINA_CELL_WIDTH, y);
+
+        glTexCoord2f(ONE_THIRD, 1);
+        glVertex2f(x + STAMINA_CELL_WIDTH, y + STAMINA_CELL_HEIGHT);
+
+        glTexCoord2f(0, 1);
+        glVertex2f(x, y + STAMINA_CELL_HEIGHT);
+
+        // Scooch along
+        x += STAMINA_CELL_WIDTH;
+
+        // Render the filling
+        for (int i = 0; i < currentStaminas; i++)
+        {
+            // Render Left part
+            glTexCoord2f(ONE_THIRD, 0);
+            glVertex2f(x, y);
+
+            glTexCoord2f(ONE_THIRD * 2, 0);
+            glVertex2f(x + STAMINA_CELL_WIDTH, y);
+
+            glTexCoord2f(ONE_THIRD * 2, 1);
+            glVertex2f(x + STAMINA_CELL_WIDTH, y + STAMINA_CELL_HEIGHT);
+
+            glTexCoord2f(ONE_THIRD, 1);
+            glVertex2f(x, y + STAMINA_CELL_HEIGHT);
+
+
+            // Increase the x scooch
+            x += STAMINA_CELL_WIDTH;
+        }
+
+        if (currentStaminas >= numStaminas)
+        {
+            // Render the end
+            glTexCoord2f(ONE_THIRD * 2, 0);
+            glVertex2f(x, y);
+
+            glTexCoord2f(1, 0);
+            glVertex2f(x + STAMINA_CELL_WIDTH, y);
+
+            glTexCoord2f(1, 1);
+            glVertex2f(x + STAMINA_CELL_WIDTH, y + STAMINA_CELL_HEIGHT);
+
+            glTexCoord2f(ONE_THIRD * 2, 1);
+            glVertex2f(x, y + STAMINA_CELL_HEIGHT);
+
+        }
+
+        glEnd();
+    }
+
+
+
+    // Setup for border
+    x = resetX;
     spriteSheetBorder->Bind(0);
 	glColor4f(1, 1, 1, 1);
 
@@ -66,10 +140,10 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
     glTexCoord2f(0, 0);
     glVertex2f(x, y);
 
-    glTexCoord2f(1, 0);
+    glTexCoord2f(ONE_THIRD, 0);
     glVertex2f(x + STAMINA_CELL_WIDTH, y);
 
-    glTexCoord2f(1, 1);
+    glTexCoord2f(ONE_THIRD, 1);
     glVertex2f(x + STAMINA_CELL_WIDTH, y + STAMINA_CELL_HEIGHT);
 
     glTexCoord2f(0, 1);
@@ -81,9 +155,20 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
 
     for (int i = 0; i < numStaminas; i++)
     {
-        
-        
-        
+        // Render Left part
+        glTexCoord2f(ONE_THIRD, 0);
+        glVertex2f(x, y);
+
+        glTexCoord2f(ONE_THIRD * 2, 0);
+        glVertex2f(x + STAMINA_CELL_WIDTH, y);
+
+        glTexCoord2f(ONE_THIRD * 2, 1);
+        glVertex2f(x + STAMINA_CELL_WIDTH, y + STAMINA_CELL_HEIGHT);
+
+        glTexCoord2f(ONE_THIRD, 1);
+        glVertex2f(x, y + STAMINA_CELL_HEIGHT);
+
+
         // Increase the x scooch
         x += STAMINA_CELL_WIDTH;
     }
@@ -104,5 +189,5 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
 
     glEnd();
 
-    
+
 }
