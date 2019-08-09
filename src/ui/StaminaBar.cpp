@@ -3,13 +3,11 @@
 #include "SerialManager.h"
 #include "Lib/Texture.h"
 #include <SDL2/SDL_opengl.h>
-#include "Quad.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/ui/StaminaBar.h"
 #include "../../include/SerialManager.h"
 #include "../../include/Lib/Texture.h"
 #include <SDL_opengl.h>
-#include "../../include/Shape/Quad.h"
 #endif
 
 #include <string>

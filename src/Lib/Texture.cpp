@@ -27,7 +27,6 @@ Texture::Texture(const std::string& fileName, int desiredChannelsSTBI)
 
     // Free loaded image
     stbi_image_free(imgData);
-    printf("Texture loaded!!!! \"%s\"\n", fileName.c_str());
 }
 
 
