@@ -42,10 +42,16 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
         // First one
         currentStaminas_asFloat = currentStaminas;
     }
+    else if (currentStaminas_asFloat <= currentStaminas)
+    {
+        // When it's refilling, I want it to go full speed eh
+        currentStaminas_asFloat = currentStaminas;
+    }
     else
     {
         // LERP TO IT!!!!!
-        currentStaminas_asFloat = currentStaminas;      // haha, TODO eh
+        float lerp = (currentStaminas - currentStaminas_asFloat) / 2.25f;
+        currentStaminas_asFloat += lerp;
     }
 
     // Render setup...
@@ -86,7 +92,7 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
         // Render the filling
         for (int i = 0; i < currentStaminas; i++)
         {
-            // Render Left part
+            // Render middle part
             glTexCoord2f(ONE_THIRD, 0);
             glVertex2f(x, y);
 
@@ -118,7 +124,22 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
 
             glTexCoord2f(ONE_THIRD * 2, 1);
             glVertex2f(x, y + STAMINA_CELL_HEIGHT);
+        }
+        else if (currentStaminas_asFloat > currentStaminas)
+        {
+            // Add a little extra from the lerping float
+            float part = currentStaminas_asFloat - currentStaminas;     // Should be a value between 0 and 1
+            glTexCoord2f(ONE_THIRD, 0);
+            glVertex2f(x, y);
 
+            glTexCoord2f(ONE_THIRD + ONE_THIRD * part, 0);
+            glVertex2f(x + STAMINA_CELL_WIDTH * part, y);
+
+            glTexCoord2f(ONE_THIRD + ONE_THIRD * part, 1);
+            glVertex2f(x + STAMINA_CELL_WIDTH * part, y + STAMINA_CELL_HEIGHT);
+
+            glTexCoord2f(ONE_THIRD, 1);
+            glVertex2f(x, y + STAMINA_CELL_HEIGHT);
         }
 
         glEnd();
@@ -153,7 +174,7 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
 
     for (int i = 0; i < numStaminas; i++)
     {
-        // Render Left part
+        // Render middle part
         glTexCoord2f(ONE_THIRD, 0);
         glVertex2f(x, y);
 

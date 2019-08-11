@@ -11,6 +11,7 @@
 #include "Quad.h"
 #include "Cutscene.h"
 #include "SerialManager.h"
+#include "LifeBar.h"
 #include "StaminaBar.h"
 
 
@@ -28,6 +29,7 @@
 #include "../../include/Shape/Quad.h"
 #include "../../include/Rooms/Cutscene/Cutscene.h"
 #include "../../include/SerialManager.h"
+#include "../../include/ui/LifeBar.h"
 #include "../../include/ui/StaminaBar.h"
 
 #include "../../include/Players/TestMiniboss_Enemy.h"
@@ -58,10 +60,12 @@ struct _BackgroundParallaxObj
 Quad* screenTransition;			// This will be a fade in AND out thing, okay?
 
 Quad* oneStamina;
+LifeBar* lifeBar;
 StaminaBar* stamBar;
 
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
+	lifeBar = new LifeBar();
     stamBar = new StaminaBar();
     roomTileSet = new TileSet();
 	roomPropSet = NULL;
@@ -372,35 +376,37 @@ void TestRoom::Render()
 	{
 #define ONE_STAMINA_SIZE 24
 #define ONE_STAMINA_PADDING 8
-		if (oneStamina == NULL)
-		{
-			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
-		}
+// 		if (oneStamina == NULL)
+// 		{
+// 			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
+// 		}
 
 		// Render health!!!
-		int maxHealth = SerialManager::Instance().GetGameData_Int(
-			"player_max_health",
-			GAME_VAR_DEF_player_max_health
-		);
+		// int maxHealth = SerialManager::Instance().GetGameData_Int(
+		// 	"player_max_health",
+		// 	GAME_VAR_DEF_player_max_health
+		// );
 		int currentHealth = SerialManager::Instance().GetGameData_Int(
 			"player_current_health",
 			GAME_VAR_DEF_player_current_health
 		);
 
-		for (int i = 0; i < maxHealth; i++)
-		{
-			if (i < currentHealth)
-				glColor3f(1, 0, 0);
-			else
-			{
-				glColor3f(0.3f, 0.3f, 0.3f);
-			}
+		lifeBar->Render(currentHealth, -508, -284);
 
-			// Draw!
-			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
-			int xPos = i * oneUnit;
-			oneStamina->Render(xPos - 508, -284);
-		}
+		// for (int i = 0; i < maxHealth; i++)
+		// {
+		// 	if (i < currentHealth)
+		// 		glColor3f(1, 0, 0);
+		// 	else
+		// 	{
+		// 		glColor3f(0.3f, 0.3f, 0.3f);
+		// 	}
+
+		// 	// Draw!
+		// 	int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
+		// 	int xPos = i * oneUnit;
+		// 	oneStamina->Render(xPos - 508, -284);
+		// }
 
 
 		// Render stamina!!!
