@@ -23,6 +23,11 @@ LifeBar::LifeBar()
 {
     prevLife = -1;
 
+    SerialManager::Instance().SetGameData_Int(
+        "player_current_health",
+        20
+    );          // DEBUG
+
     // Init
     spriteSheetHearts = new Texture(std::string(".data/images/ui/heart_sprite_sheet.png"), STBI_rgb_alpha);
     texBeam = new Texture(std::string(".data/images/ui/heart_loss_beam_sheet.png"), STBI_rgb_alpha);
@@ -57,6 +62,9 @@ struct _RenderingBounds
 
 void LifeBar::Render(int currentLife, float x, float y)
 {
+    #define ONE_HEART_SIZE 24
+    #define ONE_HEART_PADDING 8
+    
     // Check if life has changed
     if (prevLife != currentLife ||
         prevLife == -1)
@@ -64,14 +72,55 @@ void LifeBar::Render(int currentLife, float x, float y)
         // Find out if lost life
         if (prevLife > currentLife)
         {
+            // Actually, only do 1 at a time!!!!
+            currentLife = prevLife - 1;
+
             // You lost
             _LifeAnimationBeam b;
-            b.angle = 45;
-            b.x = x;
+            int whichHeart = currentLife / LIFE_NUM_PER_HEART;
+            int whichAngle = currentLife % LIFE_NUM_PER_HEART + 1;
+            
+            b.angle = 360 / LIFE_NUM_PER_HEART * (360 - whichAngle) - 54;
+            b.x = x + (ONE_HEART_SIZE + ONE_HEART_PADDING) * (float)whichHeart;
             b.y = y;
+
+            // Do some advanced shifting
+            switch (whichAngle)
+            {
+                case 5:
+                    b.x += (45 / SS_CELL_WIDTH) * ONE_HEART_SIZE;
+                    b.y += (20 / SS_CELL_HEIGHT) * ONE_HEART_SIZE;
+                    break;
+                    
+                case 4:
+                    b.x += (41 / SS_CELL_WIDTH) * ONE_HEART_SIZE;
+                    b.y += (34 / SS_CELL_HEIGHT) * ONE_HEART_SIZE;
+                    break;
+                    
+                case 3:
+                    b.x += (32 / SS_CELL_WIDTH) * ONE_HEART_SIZE;
+                    b.y += (42 / SS_CELL_HEIGHT) * ONE_HEART_SIZE;
+                    break;
+                    
+                case 2:
+                    b.x += (23 / SS_CELL_WIDTH) * ONE_HEART_SIZE;
+                    b.y += (34 / SS_CELL_HEIGHT) * ONE_HEART_SIZE;
+                    break;
+                    
+                case 1:
+                    b.x += (16 / SS_CELL_WIDTH) * ONE_HEART_SIZE;
+                    b.y += (20 / SS_CELL_HEIGHT) * ONE_HEART_SIZE;
+                    break;
+            }
+
             beams.push_back(b);
+
+            printf("Following!!!    %i\n", whichAngle);
         }
     }
+
+    // For the prev variable l8r eh
+    int origCurrentLife = currentLife;
 
     // Render life
     int maxLife = SerialManager::Instance().GetGameData_Int(
@@ -133,9 +182,6 @@ void LifeBar::Render(int currentLife, float x, float y)
             }
         }
 
-        #define ONE_HEART_SIZE 24
-        #define ONE_HEART_PADDING 8
-
         // Actually render the heart!!!
         glTexCoord2f(bounds.s, bounds.t);
         glVertex2f(x, y);
@@ -158,10 +204,45 @@ void LifeBar::Render(int currentLife, float x, float y)
         x += ONE_HEART_SIZE + ONE_HEART_PADDING;
     }
 
-    // End the process... bc you gotta end eventually!
+    // End the process.
     glEnd();
 
 
+
+    // Render the beams
+    texBeam->Bind(0);
+
+    #define BEAM_XOFF -16
+    #define BEAM_YOFF -32
+    for (unsigned int i = 0; i < beams.size(); i++)
+    {
+        glTranslatef(beams.at(i).x, beams.at(i).y, 0);
+        glRotatef(beams.at(i).angle, 0, 0, 1);
+        
+        glBegin(GL_QUADS);
+
+        glTexCoord2f(0, 0);
+        glVertex2f(BEAM_XOFF, BEAM_YOFF);
+
+        glTexCoord2f(1, 0);
+        glVertex2f(BEAM_XOFF + texBeam->GetWidth(), BEAM_YOFF);
+
+        glTexCoord2f(1, 1);
+        glVertex2f(BEAM_XOFF + texBeam->GetWidth(), BEAM_YOFF + texBeam->GetHeight());
+
+        glTexCoord2f(0, 1);
+        glVertex2f(BEAM_XOFF, BEAM_YOFF + texBeam->GetHeight());
+
+        // End the process... bc you gotta end eventually!
+        glEnd();
+
+        glRotatef(-beams.at(i).angle, 0, 0, 1);
+        glTranslatef(-beams.at(i).x, -beams.at(i).y, 0);
+    }
+
+    beams.clear();
+
+
     // Update previous
-    prevLife = currentLife;
+    prevLife = origCurrentLife;
 }
