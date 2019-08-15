@@ -17,6 +17,7 @@ public:
 	~SpriteSheetIO();
 
 	void Render(std::string action, float x, float y, float w, float h);
+	void Render(std::string action, float x, float y, float w, float h, int tickTime);
 
 private:
 	Json::Value _properties;

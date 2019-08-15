@@ -10,6 +10,11 @@
 
 #include <iostream>
 
+struct _Vector4
+{
+	float r, g, b, a;
+};
+
 SpriteSheetIO::SpriteSheetIO(Json::Value props)
 {
 	_properties = props;
@@ -32,10 +37,6 @@ SpriteSheetIO::~SpriteSheetIO()
 
 void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h)
 {
-	// Input the offsets!
-	x += _properties["sprites"]["sprite_sheet"]["render_off_x"].asFloat();
-	y += _properties["sprites"]["sprite_sheet"]["render_off_y"].asFloat();
-
 	// Check if same action as previous time
 	if (action == previousAction)
 	{
@@ -48,10 +49,19 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 		previousAction = action;
 	}
 
+	// Call the real render function eh
+	Render(action, x, y, w, h, ticksOnAction);
+}
+
+void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h, int tickTime)
+{
+	// Input the offsets!
+	x += _properties["sprites"]["sprite_sheet"]["render_off_x"].asFloat();
+	y += _properties["sprites"]["sprite_sheet"]["render_off_y"].asFloat();
 
 	// Calc which frame
 	int adjustedTick =
-        ticksOnAction / _properties["sprites"][action]["ticks_per_frame"].asInt();
+        tickTime / _properties["sprites"][action]["ticks_per_frame"].asInt();
 
     int frame;
     if (_properties["sprites"][action]["repeat"].asBool())
@@ -69,6 +79,27 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 	float ty = texCoords["y"].asFloat() / texH;
 	float tx2 = texCoords["x2"].asFloat() / texW;
 	float ty2 = texCoords["y2"].asFloat() / texH;
+
+	// Calculate the color eh
+	if (_properties["sprites"][action].isMember("colors"))
+	{
+		_Vector4 baseColor, nextColor;
+
+		// Find the basecolor and nextcolor TODODODODODOD
+
+
+		// Interpolate, or no?
+		if (_properties["sprites"][action]["colors"]["interpolate"].asBool())
+		{
+			// Calc the interpolation eh
+
+		}
+		else
+		{
+			// Then it's just the base color
+			glColor4f(baseColor.r, baseColor.g, baseColor.b, baseColor.a);
+		}
+	}
 
 	// Enable textures
     glEnable(GL_TEXTURE_2D);

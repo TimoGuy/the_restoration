@@ -3,11 +3,13 @@
 #include "SerialManager.h"
 #include "Lib/Texture.h"
 #include <SDL2/SDL_opengl.h>
+#include "Lib/SpriteSheetIO.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/ui/LifeBar.h"
 #include "../../include/SerialManager.h"
 #include "../../include/Lib/Texture.h"
 #include <SDL_opengl.h>
+#include "../../include/Lib/SpriteSheetIO.h"
 #endif
 
 #define LIFE_NUM_PER_HEART 5
@@ -16,6 +18,7 @@ struct _LifeAnimationBeam
 {
     float angle;
     float x, y;
+    int ticks;
 };
 
 
@@ -30,8 +33,13 @@ LifeBar::LifeBar()
 
     // Init
     spriteSheetHearts = new Texture(std::string(".data/images/ui/heart_sprite_sheet.png"), STBI_rgb_alpha);
-    texBeam = new Texture(std::string(".data/images/ui/heart_loss_beam_sheet.png"), STBI_rgb_alpha);
-    // NOTE: if you animate the texbeam, make sure to give it a json animation file too!
+
+    // Look for beam's anim file eh
+    std::ifstream ifs(".data/properties/heart_loss_beam.json");
+    Json::Reader reader;
+    Json::Value props;
+    reader.parse(ifs, props);
+    beamSheet = new SpriteSheetIO(props);
 }
 
 LifeBar::~LifeBar()
@@ -80,6 +88,7 @@ void LifeBar::Render(int currentLife, float x, float y)
             int whichHeart = currentLife / LIFE_NUM_PER_HEART;
             int whichAngle = currentLife % LIFE_NUM_PER_HEART + 1;
             
+            b.ticks = 0;
             b.angle = 360 / LIFE_NUM_PER_HEART * (360 - whichAngle) - 54;
             b.x = x + (ONE_HEART_SIZE + ONE_HEART_PADDING) * (float)whichHeart;
             b.y = y;
@@ -210,37 +219,16 @@ void LifeBar::Render(int currentLife, float x, float y)
 
 
     // Render the beams
-    texBeam->Bind(0);
-
-    #define BEAM_XOFF -16
-    #define BEAM_YOFF -32
     for (unsigned int i = 0; i < beams.size(); i++)
     {
         glTranslatef(beams.at(i).x, beams.at(i).y, 0);
         glRotatef(beams.at(i).angle, 0, 0, 1);
         
-        glBegin(GL_QUADS);
-
-        glTexCoord2f(0, 0);
-        glVertex2f(BEAM_XOFF, BEAM_YOFF);
-
-        glTexCoord2f(1, 0);
-        glVertex2f(BEAM_XOFF + texBeam->GetWidth(), BEAM_YOFF);
-
-        glTexCoord2f(1, 1);
-        glVertex2f(BEAM_XOFF + texBeam->GetWidth(), BEAM_YOFF + texBeam->GetHeight());
-
-        glTexCoord2f(0, 1);
-        glVertex2f(BEAM_XOFF, BEAM_YOFF + texBeam->GetHeight());
-
-        // End the process... bc you gotta end eventually!
-        glEnd();
+        beamSheet->Render("fade_out", beams.at(i).x, beams.at(i).y, 128, 64, beams.at(i).ticks);
 
         glRotatef(-beams.at(i).angle, 0, 0, 1);
         glTranslatef(-beams.at(i).x, -beams.at(i).y, 0);
     }
-
-    beams.clear();
 
 
     // Update previous

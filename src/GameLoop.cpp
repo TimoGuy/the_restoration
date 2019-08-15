@@ -135,7 +135,7 @@ bool GameLoop::Execute()
         if (SDL_GetTicks() >= (targetTime += msAllotted))
         {
             // Either right on or deficit (lagging)
-            printf("This frame lagged!\n");
+            // printf("This frame lagged!\n");
             targetTime = SDL_GetTicks();    // Get back on track!
         }
         else

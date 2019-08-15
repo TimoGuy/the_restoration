@@ -1,0 +1,40 @@
+{
+    "sprites" : {
+        "sprite_sheet" : {
+            "image" : ".data/images/ui/heart_loss_beam_sheet.png",
+            "width" : 128,
+            "height" : 64,
+            "render_off_x" : -16,
+            "render_off_y" : -32
+        },
+        "fade_out" : {
+            "ticks_per_frame" : 1,
+            "repeat" : true,
+            "images" : {
+                "0" : {
+                    "x" : 0,
+                    "y" : 0,
+                    "x2" : 127,
+                    "y2" : 63
+                }
+            },
+            "colors" : {
+                "interpolate" : true,
+                "0" : {
+                    "tick" : 0,
+                    "r" : 1,
+                    "g" : 1,
+                    "b" : 1,
+                    "a" : 1
+                },
+                "1" : {
+                    "tick" : 10,
+                    "r" : 1,
+                    "g" : 1,
+                    "b" : 1,
+                    "a" : 0
+                }
+            }
+        }
+    }
+}

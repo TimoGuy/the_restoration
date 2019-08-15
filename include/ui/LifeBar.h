@@ -4,6 +4,7 @@
 
 class Texture;
 struct _LifeAnimationBeam;
+class SpriteSheetIO;
 
 class LifeBar
 {
@@ -17,7 +18,7 @@ class LifeBar
         int prevLife;       // To track if lost life!!!
 
         Texture* spriteSheetHearts;
-        Texture* texBeam;
+        SpriteSheetIO* beamSheet;
 
         std::vector<_LifeAnimationBeam> beams;
 };

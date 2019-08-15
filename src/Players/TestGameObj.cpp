@@ -449,7 +449,7 @@ void TestGameObj::Update()
     
     // See if you're going fast enough to gain health back!!!
     #define RECHARGE_HEALTH_REQ_TICKS 50
-    printf("%i\n", lifeRechargeTicks);
+    // printf("%i\n", lifeRechargeTicks);
     if (std::abs(hsp) > MAX_HSP - 2.0f)
     {
         // Add a tick
@@ -583,7 +583,7 @@ void TestGameObj::YouLose(Entity* accordingToMe)
         SerialManager::Instance().GetGameData_Int(
             "player_current_health",
             GAME_VAR_DEF_player_current_health
-        ) - 1
+        ) - 5
     );
     framesOfInvincibility = HURT_FRAMES;
     
