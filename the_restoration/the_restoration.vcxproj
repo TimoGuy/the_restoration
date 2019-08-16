@@ -154,6 +154,7 @@
     <ClInclude Include="..\include\Rooms\TileSet.h" />
     <ClInclude Include="..\include\SerialManager.h" />
     <ClInclude Include="..\include\Shape\Quad.h" />
+    <ClInclude Include="..\include\ui\LifeBar.h" />
     <ClInclude Include="..\include\ui\StaminaBar.h" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +187,7 @@
     <ClCompile Include="..\src\Rooms\TestRoom.cpp" />
     <ClCompile Include="..\src\Rooms\TileSet.cpp" />
     <ClCompile Include="..\src\Shape\Quad.cpp" />
+    <ClCompile Include="..\src\ui\LifeBar.cpp" />
     <ClCompile Include="..\src\ui\StaminaBar.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

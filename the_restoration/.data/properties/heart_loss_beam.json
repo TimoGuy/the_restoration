@@ -19,8 +19,8 @@
                 }
             },
             "colors" : {
-                "interpolate" : false,
                 "0" : {
+                    "interpolate" : true,
                     "tick" : 0,
                     "r" : 1,
                     "g" : 1,
@@ -28,7 +28,7 @@
                     "a" : 1
                 },
                 "1" : {
-                    "tick" : 100,
+                    "tick" : 1,
                     "r" : 1,
                     "g" : 1,
                     "b" : 1,

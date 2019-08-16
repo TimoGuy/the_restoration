@@ -583,7 +583,7 @@ void TestGameObj::YouLose(Entity* accordingToMe)
         SerialManager::Instance().GetGameData_Int(
             "player_current_health",
             GAME_VAR_DEF_player_current_health
-        ) - 5
+        ) - 23
     );
     framesOfInvincibility = HURT_FRAMES;
     

@@ -28,7 +28,7 @@ LifeBar::LifeBar()
 
     SerialManager::Instance().SetGameData_Int(
         "player_current_health",
-        20
+        100
     );          // DEBUG
 
     // Init
@@ -224,12 +224,22 @@ void LifeBar::Render(int currentLife, float x, float y)
         glTranslatef(beams.at(i).x, beams.at(i).y, 0);
         glRotatef(beams.at(i).angle, 0, 0, 1);
         
-        beamSheet->Render("fade_out", beams.at(i).x, beams.at(i).y, 128, 64, beams.at(i).ticks);
+        beamSheet->Render("fade_out", 0, 0, 128, 64, beams.at(i).ticks);
         beams.at(i).ticks++;
 
         glRotatef(-beams.at(i).angle, 0, 0, 1);
         glTranslatef(-beams.at(i).x, -beams.at(i).y, 0);
     }
+
+	// Clean up the beams eh
+	for (int i = (signed)beams.size() - 1; i >= 0; i--)
+	{
+		if (beams.at(i).ticks > 5)
+		{
+			// Delete it
+			beams.erase(beams.begin() + i);
+		}
+	}
 
 
     // Update previous
