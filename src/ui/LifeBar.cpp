@@ -225,6 +225,7 @@ void LifeBar::Render(int currentLife, float x, float y)
         glRotatef(beams.at(i).angle, 0, 0, 1);
         
         beamSheet->Render("fade_out", beams.at(i).x, beams.at(i).y, 128, 64, beams.at(i).ticks);
+        beams.at(i).ticks++;
 
         glRotatef(-beams.at(i).angle, 0, 0, 1);
         glTranslatef(-beams.at(i).x, -beams.at(i).y, 0);
