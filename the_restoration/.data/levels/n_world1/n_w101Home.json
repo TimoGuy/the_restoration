@@ -1,4 +1,7 @@
 {
+    "music" : {
+        "0" : "tnt_bonus.ogg"
+    },
     "textures" : {
         "entities" : "n_world1/w101Home.png",
         "tileset_map" : "n_world1/w101_ts.png",

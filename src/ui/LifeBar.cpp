@@ -241,6 +241,7 @@ void LifeBar::Render(int currentLife, float x, float y)
 		}
 	}
 
+    glDisable(GL_TEXTURE_2D);
 
     // Update previous
     prevLife = origCurrentLife;

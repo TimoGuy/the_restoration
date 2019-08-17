@@ -1,4 +1,7 @@
 {
+    "music" : {
+        "0" : "test.ogg"
+    },
     "textures" : {
         "entities" : "n_world1/w102VertCavern.png",
         "tileset_map" : "n_world1/w102_ts.png",

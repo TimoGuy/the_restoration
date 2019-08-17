@@ -208,5 +208,6 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
 
     glEnd();
 
-
+    // Undo this mess eh!
+    glDisable(GL_TEXTURE_2D);
 }
