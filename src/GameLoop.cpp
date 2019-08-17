@@ -3,6 +3,7 @@
 #include "Rooms/TestRoom.h"
 #include "Cutscene.h"
 #include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_mixer.h>
 #include "InputManager.h"
 #include "SerialManager.h"
 #elif defined(_WIN32) || defined(WIN32)
@@ -10,6 +11,7 @@
 #include "../include/Rooms/TestRoom.h"
 #include "../include/Rooms/Cutscene/Cutscene.h"
 #include <SDL_opengl.h>
+#include <SDL_mixer.h>
 #include "../include/InputManager.h"
 #include "../include/SerialManager.h"
 #endif
@@ -18,6 +20,9 @@
 
 std::string prevInputCode;
 
+bool changeMainMusic = false;
+Mix_Music* mainMusic = NULL;
+std::string mainMusic_fileName;
 
 
 
@@ -47,6 +52,10 @@ bool GameLoop::Execute()
     {
 		// Reset messages!
 		_didJustResize = false;
+        if (changeMainMusic)
+        {
+
+        }
 
 
         // Event system
@@ -161,6 +170,40 @@ void GameLoop::SetRoom(Room* newRoom)
     currentRoom = newRoom;        // This will shift to the currentRoom when the time is right ;)
 }
 Room* GameLoop::GetRoom() { return currentRoom; }
+
+void GameLoop::RequestNewMusic(std::string fileName, bool hardSet)
+{
+    if (fileName != mainMusic_fileName || hardSet)
+    {
+        // Load up new stuff eh
+        std::string fname = std::string(".data/audio/") + fileName;
+        printf("Attempt loading %s\n", fname.c_str());
+        Mix_Music* newMus =
+            Mix_LoadMUS(fname.c_str());
+        if (newMus == NULL)
+        {
+            // Handle the errors eh
+            printf("Unable to load music file: %s\n", Mix_GetError());
+            return;
+        }
+        else
+        {
+            if (Mix_PlayingMusic())
+            {
+                Mix_HaltMusic();
+                Mix_FreeMusic(mainMusic);
+            }
+
+            // Apply!!
+            mainMusic_fileName = fileName;
+            mainMusic = newMus;
+            
+            // Start playing music
+            Mix_PlayMusic(mainMusic, -1);
+        }
+    }
+}
+std::string GameLoop::GetMusicFname() { return mainMusic_fileName; }
 
 
 GameLoop::~GameLoop()

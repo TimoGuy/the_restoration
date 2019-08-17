@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include "GameLoop.h"
 #include "InputManager.h"
 #include "defs.h"
@@ -16,6 +17,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "include\GameLoop.h"
 #include "include\InputManager.h"
 #include "include\defs.h"
@@ -33,7 +35,7 @@ SDL_GLContext glContext;
 bool Setup()
 {
     // Init SDL2
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_AUDIO) < 0)
     {
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return false;
@@ -45,6 +47,11 @@ bool Setup()
         return false;
     }
 
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        return false;
+    }
 
 
     // Create window!
@@ -92,6 +99,7 @@ void Destruct()
     SDL_Quit();
 
     TTF_Quit();
+    Mix_Quit();
 
     window = NULL;
 }

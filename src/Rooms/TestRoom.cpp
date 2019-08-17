@@ -508,6 +508,16 @@ bool TestRoom::LoadLevelIO(std::string name)
 	Json::Value lvlData;
 	if (reader.parse(myfile, lvlData))
 	{
+		// Get the music rolling!!!
+		if (lvlData.isMember("music") &&
+			lvlData["music"].size() > 0)
+		{
+			_gloop->RequestNewMusic(
+				lvlData["music"][std::to_string(0)].asString()
+			);
+		}
+
+
 		// Load collision picture ("entities")
 		// (I'm expecting it's there!!!)
 		if (lvlData["textures"].isMember("entities") &&

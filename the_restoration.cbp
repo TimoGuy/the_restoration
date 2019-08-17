@@ -54,6 +54,7 @@
 					<Add option="-lSDLmain" />
 					<Add option="-framework OpenGL" />
 					<Add option="-lSDL_ttf" />
+					<Add option="-lSDL2_mixer" />
 					<Add directory="/usr/local/Cellar/sdl_ttf/2.0.11_1/lib" />
 					<Add directory="/usr/local/Cellar/sdl2/2.0.9_1/lib" />
 				</Linker>

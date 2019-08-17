@@ -1,4 +1,7 @@
 {
+    "music" : {
+        "0" : "test.ogg"
+    },
     "textures" : {
         "entities" : "rnd.png",
         "tileset_map" : null,
