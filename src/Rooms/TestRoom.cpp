@@ -371,65 +371,9 @@ void TestRoom::Render()
 	// Reset stuff!
 	glLoadIdentity();
 
+	
+	
 	// Now render the HUD!!!
-	if (camFocusObj != NULL)
-	{
-#define ONE_STAMINA_SIZE 24
-#define ONE_STAMINA_PADDING 8
-// 		if (oneStamina == NULL)
-// 		{
-// 			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
-// 		}
-
-		// Render health!!!
-		// int maxHealth = SerialManager::Instance().GetGameData_Int(
-		// 	"player_max_health",
-		// 	GAME_VAR_DEF_player_max_health
-		// );
-		int currentHealth = SerialManager::Instance().GetGameData_Int(
-			"player_current_health",
-			GAME_VAR_DEF_player_current_health
-		);
-
-		lifeBar->Render(currentHealth, -508, -284);
-
-		// for (int i = 0; i < maxHealth; i++)
-		// {
-		// 	if (i < currentHealth)
-		// 		glColor3f(1, 0, 0);
-		// 	else
-		// 	{
-		// 		glColor3f(0.3f, 0.3f, 0.3f);
-		// 	}
-
-		// 	// Draw!
-		// 	int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
-		// 	int xPos = i * oneUnit;
-		// 	oneStamina->Render(xPos - 508, -284);
-		// }
-
-
-		// Render stamina!!!
-		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
-		stamBar->Render(stamGauges, -508, -284 + ONE_STAMINA_SIZE + ONE_STAMINA_PADDING);
-		// for (int i = 0; i < stamGauges; i++)
-		// {
-		// 	// Start at the upper left corner and just start drawing them green!
-		// 	glColor3f(0, 1, 0);
-
-		// 	int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
-
-		// 	int originalX = i * oneUnit;
-
-		// 	float xPos = float(originalX % 1024);
-		// 	float yPos = float(originalX / 1024 * oneUnit);
-
-		// 	oneStamina->Render(xPos - 508, yPos - 284 + oneUnit);
-		// }
-	}
-
-
-
 
 	// Setup screen transitioner, if needed ;)
 	if (screenTransition == NULL ||
@@ -439,6 +383,41 @@ void TestRoom::Render()
 		_gloop->GetWindowDimensions(w, h);
 		screenTransition = new Quad((float)w, (float)h);
 	}
+
+
+
+	// Render health and stamina
+	if (camFocusObj != NULL)
+	{
+#define ONE_STAMINA_SIZE 24
+#define ONE_STAMINA_PADDING 8
+#define HUD_PADDING_SIZE 4
+
+		// Render health!!!
+		int currentHealth = SerialManager::Instance().GetGameData_Int(
+			"player_current_health",
+			GAME_VAR_DEF_player_current_health
+		);
+		lifeBar->Render(
+			currentHealth,
+			-screenTransition->GetWidth() / 2 + HUD_PADDING_SIZE,
+			-screenTransition->GetHeight() / 2 + HUD_PADDING_SIZE
+		);
+
+
+		// Render stamina!!!
+		int totalStaminas = SerialManager::Instance().GetGameData_Int(
+            "player_max_jumps",
+            GAME_VAR_DEF_player_max_jumps
+        );
+		float xoff = -16.0f * (totalStaminas + 1.3f) - HUD_PADDING_SIZE;		// 2 extra bc of the padding
+		float yoff = -16 - HUD_PADDING_SIZE;
+
+
+		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
+		stamBar->Render(stamGauges, screenTransition->GetWidth() / 2 + xoff, screenTransition->GetHeight() / 2 + yoff);
+	}
+
 
 
 	// If there's a screen transition, do it!
