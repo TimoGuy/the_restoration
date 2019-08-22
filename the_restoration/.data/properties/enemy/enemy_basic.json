@@ -1,0 +1,64 @@
+{
+  "sprites" : {
+    "sprite_sheet" : {
+      "image" : ".data/images/player.png",
+      "width" : 120,
+      "height" : 120,
+      "render_off_x" : 0,
+      "render_off_y" : 0
+    },
+    "idle" : {
+  
+    },
+    "target" : {
+  
+    },
+    "attack_phase_0" : {
+      
+    },
+    "attack_phase_1" : {
+      
+    },
+    "attack_phase_2" : {
+      
+    },
+    "die" : {
+      
+    }
+  },
+  "actions" : {
+    "idle" : {
+      "action" : "none",
+      "hazardous" : false
+    },
+    "target" : {
+      "action" : "face_player",
+      "hazardous" : false
+    },
+    "attack_phases" : {
+      "0" : {
+        "action" : "face_player",
+        "hazardous" : true,
+        "phase_time_ticks" : 10
+      },
+      "1" : {
+        "action" : "none",
+        "hazardous" : true,
+        "phase_time_ticks" : 10
+      },
+      "2" : {
+        "action" : "move_towards_player",
+        "hazardous" : true,
+        "phase_time_ticks" : 10
+      }
+    },
+    "die" : {
+      "action" : "explode",
+      "hazardous" : true
+    }
+  },
+  "collision_data" : {
+    "grid_w" : 3,
+    "grid_h" : 2
+  }
+}

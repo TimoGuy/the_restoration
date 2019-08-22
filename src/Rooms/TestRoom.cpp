@@ -547,7 +547,14 @@ bool TestRoom::LoadLevelIO(std::string name)
 					ss[1].str() + std::string(",") +
 					ss[2].str();
 
-				Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
+				Object* _new =
+					ObjectFactory::GetObjectFactory().Build(
+						colorId.c_str(),
+						(int)(i % gWidth),
+						(int)(i / gWidth),
+						this,
+						lvlData
+					);
 				if (_new != NULL)
 					gameObjects.push_back(_new);        // Adds the returned built object!
 

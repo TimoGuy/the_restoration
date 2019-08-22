@@ -13,6 +13,7 @@
 #include "TestEnemy.h"
 #include "Npc.h"
 #include "FuelIncreaserItem.h"
+#include "json/json.h"
 
 
 #elif defined(_WIN32) || defined(WIN32)
@@ -30,6 +31,7 @@
 #include "../include/Players/TestEnemy.h"
 #include "../include/Players/Npc.h"
 #include "../include/Players/FuelIncreaserItem.h"
+#include "../include/json/json.h"
 #endif
 
 #include <stdio.h>
@@ -52,13 +54,13 @@ enum StringValue
 
 	evTopSideCollGround,
 
-	evEnemy1,
+	evEnemy,
 
 	evMovingPlatGround,
 
 	evNpc,
 
-	evFuelIncreaserItem,
+	evCollectable,
 
     evEnd
 };
@@ -84,10 +86,10 @@ ObjectFactory::ObjectFactory()
     (*s_mapStringValues)["153,217,234"] = evSlantLeft;
     (*s_mapStringValues)["255,0,0"] = evHazard;
     (*s_mapStringValues)["100,100,100"] = evTopSideCollGround;
-    (*s_mapStringValues)["255,174,201"] = evEnemy1;
+    (*s_mapStringValues)["255,174,201"] = evEnemy;
     (*s_mapStringValues)["136,0,21"] = evMovingPlatGround;
 	(*s_mapStringValues)["239,228,176"] = evNpc;
-	(*s_mapStringValues)["127,0,55"] = evFuelIncreaserItem;
+	(*s_mapStringValues)["127,0,55"] = evCollectable;
     (*s_mapStringValues)["end"] = evEnd;
 
     printf("Init Object map!!\n");
@@ -106,7 +108,7 @@ ObjectFactory& ObjectFactory::GetObjectFactory()
 }
 
 
-Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* rm)
+Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* rm, Json::Value& rmOptions)
 {
     // I apologize... this is all hard-coded in!
 	Object* retObj = NULL;
@@ -172,10 +174,6 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* r
 		retObj = new TopSideCollGround(gx, gy, rm);
 		break;
 
-	case evEnemy1:
-		retObj = new TestEnemy(gx, gy, rm);
-		break;
-
 	case evMovingPlatGround:
 		if (previousStringValue != evMovingPlatGround)
 		{
@@ -193,7 +191,33 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* r
 		retObj = new Npc(gx, gy, rm);
 		break;
 
-	case evFuelIncreaserItem:
+
+
+	case evEnemy:
+		{
+			// Find the property coordinating to this enemy
+			std::string enemyData =
+				"enemy_" + std::to_string(gx) + "_" + std::to_string(gy);
+			if (rmOptions["modifications"].isMember(enemyData))
+			{
+				retObj = new TestEnemy(
+					gx,
+					gy,
+					rm,
+					rmOptions["modifications"][enemyData.c_str()]
+				);
+			}
+			else
+			{
+				// Or something's wrong!
+				printf("There was no property attached to %s\n\tbasic_enemy.json will be used", enemyData.c_str());
+				retObj = new TestEnemy(gx, gy, rm);
+			}
+		
+		}	
+		break;
+
+	case evCollectable:
 		retObj = new FuelIncreaserItem(gx, gy, rm);
 		break;
 

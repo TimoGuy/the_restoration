@@ -34,5 +34,32 @@
         "y_divisor" : 1.0
       }
     },
-    "propset" : "_level_propsets/lps_home"
+    "propset" : "_level_propsets/lps_home",
+    "modifications" : {
+      "enemy_33_45" : {
+        "sprite_sheet" : {
+          "image" : ".data/images/player.png",
+          "width" : 120,
+          "height" : 120,
+          "render_off_x" : 0,
+          "render_off_y" : 0
+        },
+        "collision_data" : {
+          "grid_w" : 3,
+          "grid_h" : 2
+        },
+        "idle" : {
+
+        },
+        "target" : {
+
+        },
+        "charge" : {
+
+        },
+        "attack" : {
+
+        }
+      }
+    }
 }
