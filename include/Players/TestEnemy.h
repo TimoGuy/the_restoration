@@ -32,7 +32,6 @@ private:
 	bool IsTargetInBounds(float gridRadius);
 
 	Entity* targetEnt;
-	int state;
     float life;
 
 	int currentAction;

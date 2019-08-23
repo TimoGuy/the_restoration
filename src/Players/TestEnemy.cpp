@@ -21,8 +21,8 @@
 #include <fstream>
 #include <algorithm>
 
-#define MY_WIDTH 96
-#define MY_HEIGHT 64
+#define MY_WIDTH 32
+#define MY_HEIGHT 32
 
 TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
     : Entity(gx, gy, rm, true)
@@ -36,7 +36,7 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 	life = 1;   // 0 is ded.
 
     // Load the basic Json
-    std::ifstream ifs(".data/properties/enemy_basic.json");
+    std::ifstream ifs(".data/properties/enemy/enemy_basic.json");
     Json::Reader reader;
     reader.parse(ifs, props);
     sprSheet = new SpriteSheetIO(props);
@@ -82,7 +82,7 @@ void TestEnemy::Update()
         if (IsTargetInBounds(20))
         {
             // That means at least targeted!
-            state = STATE_TARGET;
+			currentAction = STATE_TARGET;
         }
     }
     else if (currentAction == STATE_TARGET)
@@ -91,14 +91,14 @@ void TestEnemy::Update()
         if (IsTargetInBounds(6))
         {
             // Let's start the attack sequence!!!
-            state = STATE_ATTACK;
+			currentAction = STATE_ATTACK;
             attackPhase = 0;        // First attack phase!
             attackPhase_tick = 0;
         }
         else if (!IsTargetInBounds(20))
         {
             // Target bounds,,, left them :(
-            state = STATE_IDLE;
+			currentAction = STATE_IDLE;
         }
     }
     else if (currentAction == STATE_ATTACK)
@@ -113,7 +113,7 @@ void TestEnemy::Update()
 
 
     // Run the AI from the json props!
-    switch (state)
+    switch (currentAction)
     {
         case STATE_IDLE:
             {
@@ -186,8 +186,8 @@ void TestEnemy::Update()
 
     // COLLISION SYSTEM
 	// Get middle of object for accuracy
-    float centX = x + hsp + GRID_SIZE / 2,
-        centY = y + vsp + GRID_SIZE / 2;
+    float centX = x + hsp + MY_WIDTH / 2,
+        centY = y + vsp + MY_HEIGHT / 2;
 
 	// Check collision potential area
 	std::vector<Object*> tempCollisionsToCheck;
@@ -205,13 +205,20 @@ void TestEnemy::Update()
     }
 
 	// Update the hsp and vsp
-	UpdateGroundCollisionVelocity(hsp, vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck);
+	UpdateGroundCollisionVelocity(hsp, vsp, MY_WIDTH, MY_HEIGHT, &tempCollisionsToCheck);
 }
 
 void TestEnemy::Render()
 {
+	if (currentAction <= 0) return;
+
     glColor4f(1, 1, 1, 1);
-    sprSheet->Render(animAction, x, y, MY_WIDTH, MY_HEIGHT);
+
+	glTranslatef(x + (MY_WIDTH / 2), y, 0);
+	if (isFacingLeft)	glScalef(-1, 1, 1);
+    sprSheet->Render(animAction, -(MY_WIDTH / 2), 0, MY_WIDTH, MY_HEIGHT);
+	if (isFacingLeft)	glScalef(-1, 1, 1);
+	glTranslatef(-x - (MY_WIDTH / 2), -y, 0);
 
 	// image->Render(x, y);
 }
@@ -223,9 +230,9 @@ bool TestEnemy::IsColliding(BoundBox* box)
 {
 	// Use 'image' as the bounding box and test collision!
 	return x < box->x + box->width &&
-		x + image->GetWidth() > box->x &&
+		x + MY_WIDTH > box->x &&
 		y < box->y + box->height &&
-		y + image->GetHeight() > box->y;
+		y + MY_HEIGHT > box->y;
 }
 
 

@@ -8,19 +8,64 @@
       "render_off_y" : 0
     },
     "idle" : {
-  
+      "ticks_per_frame" : 1,
+      "repeat" : true,
+      "images" : {
+        "0" : {
+          "x" : 0,
+          "y" : 96,
+          "x2" : 23,
+          "y2" : 119
+        }
+      }
     },
-    "target" : {
-  
+    "target": {
+      "ticks_per_frame" : 1,
+      "repeat" : true,
+      "images" : {
+        "0": {
+          "x": 0,
+          "y": 24,
+          "x2": 23,
+          "y2": 47
+        }
+      }
     },
     "attack_phase_0" : {
-      
+      "ticks_per_frame" : 1,
+      "repeat" : true,
+      "images" : {
+        "0": {
+          "x" : 72,
+          "y" : 24,
+          "x2" : 95,
+          "y2" : 47
+        }
+      }
     },
     "attack_phase_1" : {
-      
+      "ticks_per_frame" : 1,
+      "repeat" : true,
+      "images" : {
+        "0": {
+          "x" : 72,
+          "y" : 48,
+          "x2" : 95,
+          "y2" : 71
+        }
+      }
     },
     "attack_phase_2" : {
-      
+      "ticks_per_frame" : 1,
+      "repeat" : true,
+      "images" : {
+        "0": {
+          "x" : 24,
+          "y" : 48,
+          "x2" : 47,
+          "y2" : 71
+        }
+      }
     },
     "die" : {
       
