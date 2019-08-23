@@ -28,6 +28,8 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
     : Entity(gx, gy, rm, true)
 {
     currentAction = 0;
+	isHazardous = false;
+	isFacingLeft = true;
 
     // Init
 	// image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/enemy_test.png"), STBI_rgb_alpha));
@@ -102,10 +104,10 @@ void TestEnemy::Update()
     else if (currentAction == STATE_ATTACK)
     {
         // Don't go back to idle until finished attacking!
-        if (attackPhase < 0)        // -1 is usually what is "I'm done!"
-        {
-            currentAction = STATE_IDLE;     // Revert
-        }
+        //if (attackPhase < 0)        // -1 is usually what is "I'm done!"
+        //{
+        //    currentAction = STATE_IDLE;     // Revert
+        //}
     }
 
 
@@ -154,6 +156,7 @@ void TestEnemy::Update()
                     {
                         // It's over, the attack eh
                         attackPhase = -1;
+						currentAction = STATE_IDLE;		// Revert automatically
                     }
                 }
                 else
@@ -237,6 +240,34 @@ void TestEnemy::YouLose(Entity* accordingToMe)
         // You ded there, son!
         delete this;
     }
+}
+
+void TestEnemy::ProcessAction(std::string actionName, bool isHazardous)
+{
+	this->isHazardous = isHazardous;
+
+	if (targetEnt == NULL)
+	{
+		// Just return outta here!
+		printf("No targetEnt was found. Aborting `ProcessAction()`\n");
+		return;
+	}
+
+	// Assign movement behavior eh
+	if (actionName == "none")
+	{
+		// Do nothing eh
+	}
+	else if (actionName == "face_player")
+	{
+		isFacingLeft = targetEnt->getX() < x;
+	}
+	else if (actionName == "move_towards_player")
+	{
+		// Assume speed is very very fast
+		float speed = 20 * (isFacingLeft ? -1.0f : 1.0f);
+		hsp = speed;
+	}
 }
 
 void TestEnemy::FindTargetEntity()
