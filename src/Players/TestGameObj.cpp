@@ -72,6 +72,15 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     mySword = new Quad(PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT);
     swordTicksLeft = 0;
     startCoords = new Quad(10, 10);
+
+	isDoingRocketJump = false;
+	rjInputActivationPhase = 0;		// The first one always
+	rjInputDirection = -1;
+	rjTicksInDeadzone = 0;
+	rjTicksDoingRocketJump = 0;
+	rjStoredHsp = 0;
+	rjStoredVsp = 0;
+
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
@@ -158,9 +167,171 @@ void TestGameObj::Update()
 
 
 
+#pragma region Find Rocket Jump Input
 
+#define RJ_ACT_I_FIRST_NEED_YOU_IN_DEADZONE 0
+#define RJ_ACT_PHASE_STANDBY 1
+#define RJ_ACT_PHASE_FIRST_HOLD 2
+#define RJ_ACT_PHASE_BACK_TO_DEADZONE 3
+#define RJ_ACT_PHASE_SECOND_HOLD 4
 
+#define RJ_DIR_UP 0
+#define RJ_DIR_DOWN 1
+#define RJ_DIR_LEFT 2
+#define RJ_DIR_RIGHT 3
 
+	// Do rocket jump!!!!
+	if (!isUsingMySword)
+	{
+#define RJ_NUM_TICKS 5
+		switch (rjInputActivationPhase)
+		{
+		case RJ_ACT_I_FIRST_NEED_YOU_IN_DEADZONE:
+		{
+			// First into the deadzone threshold to begin this process!
+			// (well, not technically, that's .18 for joysticks's deadzone)
+			if (std::abs(InputManager::Instance().x()) < 0.5f &&
+				std::abs(InputManager::Instance().y()) < 0.5f)
+			{
+				// Move onto next phase!
+				rjTicksInDeadzone = 0;
+				rjInputActivationPhase = RJ_ACT_PHASE_STANDBY;
+			}
+		}
+			break;
+		case RJ_ACT_PHASE_STANDBY:
+		{
+			if (std::abs(InputManager::Instance().x()) > 0.5f || 
+				std::abs(InputManager::Instance().y()) > 0.5f)
+			{
+				// Find which direction is moving! (start w/ this eh!)
+				if (std::abs(InputManager::Instance().x()) >
+					std::abs(InputManager::Instance().y()))
+				{
+					// Okay, x-axis!!
+					rjInputDirection =
+						InputManager::Instance().x() < 0 ?
+						RJ_DIR_LEFT : RJ_DIR_RIGHT;
+				}
+				else
+				{
+					// Fine fine, y-axis!!
+					rjInputDirection =
+						InputManager::Instance().y() < 0 ?
+						RJ_DIR_UP : RJ_DIR_DOWN;
+				}
+
+				// It's moving now, so onto next phase!
+				rjTicksInDeadzone = 0;
+				rjInputActivationPhase = RJ_ACT_PHASE_FIRST_HOLD;
+			}
+		}
+			break;
+		case RJ_ACT_PHASE_FIRST_HOLD:
+		{
+			// Okay, this is trickiest, if you get into the same
+			// direction as when you first started, you're allowed
+			// into the last phase and you can do a rocket-jump!
+			//
+			// Within the specified amount of time too!!!
+			if (rjTicksInDeadzone > RJ_NUM_TICKS)		// Half a second?? Suuure
+			{
+				// Reset!
+				rjInputActivationPhase = RJ_ACT_I_FIRST_NEED_YOU_IN_DEADZONE;
+				break;
+			}
+			else
+			{
+				// Increment ticks
+				rjTicksInDeadzone++;
+			}
+
+			// Back into the no-mvt threshold eh!
+			if (std::abs(InputManager::Instance().x()) < 0.5f &&
+				std::abs(InputManager::Instance().y()) < 0.5f)
+			{
+				// Move onto next phase!
+				rjTicksInDeadzone = 0;
+				rjInputActivationPhase = RJ_ACT_PHASE_BACK_TO_DEADZONE;
+			}
+		}
+			break;
+		case RJ_ACT_PHASE_BACK_TO_DEADZONE:
+		{
+			if (rjTicksInDeadzone > RJ_NUM_TICKS)
+			{
+				// Reset!
+				rjInputActivationPhase = RJ_ACT_I_FIRST_NEED_YOU_IN_DEADZONE;
+				break;
+			}
+			else
+			{
+				// Increment ticks
+				rjTicksInDeadzone++;
+			}
+
+			// Check if inputted!!
+			if (std::abs(InputManager::Instance().x()) > 0.5f ||
+				std::abs(InputManager::Instance().y()) > 0.5f)
+			{
+				// Copy of above code! (pleeeease refactor this TODO)
+				int dir = -1;
+				if (std::abs(InputManager::Instance().x()) >
+					std::abs(InputManager::Instance().y()))
+				{
+					// Okay, x-axis!!
+					dir =
+						InputManager::Instance().x() < 0 ?
+						RJ_DIR_LEFT : RJ_DIR_RIGHT;
+				}
+				else
+				{
+					// Fine fine, y-axis!!
+					dir =
+						InputManager::Instance().y() < 0 ?
+						RJ_DIR_UP : RJ_DIR_DOWN;
+				}
+
+				// Check if direction lines up!
+				if (dir == rjInputDirection)
+				{
+					// You pass!!!
+					rjInputActivationPhase = RJ_ACT_PHASE_SECOND_HOLD;
+				}
+				else
+				{
+					// Okay, not to be mean, but I don't think you
+					// meant to do a rocket jump, so we don't want
+					// any false-positives....
+
+					// Reset!
+					rjInputActivationPhase = RJ_ACT_I_FIRST_NEED_YOU_IN_DEADZONE;
+					break;
+				}
+			}
+		}
+			break;
+		case RJ_ACT_PHASE_SECOND_HOLD:
+		{
+			if (numJumps > 0)		// You can deplete it to the very end, how nice of me!!
+			{
+				// Okay, so you passed, this is considered
+				// a double-tap, and you are going to be
+				// doing a rocket-jump!
+				isDoingRocketJump = true;
+				_freshRocketJump = true;
+				rjTicksDoingRocketJump = 0;
+				numJumps -= 4;
+			}
+
+			// Reset!
+			rjInputActivationPhase = RJ_ACT_I_FIRST_NEED_YOU_IN_DEADZONE;
+			break;
+		}
+		}
+	}
+
+#pragma endregion
 
 
 
@@ -175,7 +346,10 @@ void TestGameObj::Update()
         multiplier = 1;
     }
 
-    if (isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK)
+	bool forceMovement =
+		(isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK) ||
+		(isDoingRocketJump);
+    if (forceMovement)
     {
         // If you use the sword (and it's the attacking frame), it just 'pops' out!
         reqCamOffx = MAX_CAM_OFFSET_X * multiplier;
@@ -202,48 +376,111 @@ void TestGameObj::Update()
 
 
 
-
-
-	// Add the input val if it was given!
-	hsp += inputX;
-
-	if (inputX == 0 &&
-        hsp != 0)
+	if (!isDoingRocketJump)
 	{
-        if (std::abs(hsp) < FRICTION) { hsp = 0; }
-        else
-        {
-            float chg = FRICTION * copysignf(1.0f, hsp);
-            hsp -= chg;
-        }
+		// Add the input val if it was given!
+		hsp += inputX;
+
+		if (inputX == 0 &&
+			hsp != 0)
+		{
+			if (std::abs(hsp) < FRICTION) { hsp = 0; }
+			else
+			{
+				float chg = FRICTION * copysignf(1.0f, hsp);
+				hsp -= chg;
+			}
+		}
+
+		// Limit hsp
+		hsp = std::min(std::max(hsp, -MAX_HSP), MAX_HSP);
+
+
+
+
+
+		// Gravity!
+		vsp += GRAV;
+
+
+		// Jump!
+		if (inputJump && numJumps > 0 && !wasJumpBtnAlreadyPressed)
+		{
+			vsp = -JUMP_HEIGHT - nerfer;
+			//vsp = -JUMP_HEIGHT_2B - nerfer;
+			//vsp = -JUMP_HEIGHT_3B - nerfer;
+			//vsp = -JUMP_HEIGHT_4B - nerfer;		// Prob won't use 4+
+			//vsp = -JUMP_HEIGHT_5B - nerfer;
+			//vsp = -JUMP_HEIGHT_6B - nerfer;
+			numJumps--;
+		}
+		wasJumpBtnAlreadyPressed = inputJump;
 	}
 
-    // Limit hsp
-    hsp = std::min(std::max(hsp, -MAX_HSP), MAX_HSP);
 
 
 
 
 
-	// Gravity!
-	vsp += GRAV;
+#pragma region Process Rocket Jump Until finished
 
-
-    // Jump!
-	if (inputJump && numJumps > 0 && !wasJumpBtnAlreadyPressed)
+	else if (_freshRocketJump)
 	{
-        vsp = -JUMP_HEIGHT - nerfer;
-		//vsp = -JUMP_HEIGHT_2B - nerfer;
-		//vsp = -JUMP_HEIGHT_3B - nerfer;
-		//vsp = -JUMP_HEIGHT_4B - nerfer;		// Prob won't use 4+
-		//vsp = -JUMP_HEIGHT_5B - nerfer;
-		//vsp = -JUMP_HEIGHT_6B - nerfer;
-		numJumps--;
-    }
-	wasJumpBtnAlreadyPressed = inputJump;
+		// Even if in the middle of another rocket
+		// jump, just feel free to interrupt
+		// and do another one!!
+		_freshRocketJump = false;
 
+		// Set the initial velocity (Override the input)!!
+#define RJ_JUMP_VELO 80.0f
+		hsp = vsp = 0;
+		switch (rjInputDirection)
+		{
+		case RJ_DIR_UP:
+			vsp = -RJ_JUMP_VELO / 2.0f;
+			break;
+		case RJ_DIR_DOWN:
+			vsp = RJ_JUMP_VELO;
+			break;
+		case RJ_DIR_LEFT:
+			hsp = -RJ_JUMP_VELO;
+			break;
+		case RJ_DIR_RIGHT:
+			hsp = RJ_JUMP_VELO;
+			break;
+		}
 
+		// Store it for phase II
+		rjStoredHsp = hsp;
+		rjStoredVsp = vsp;
+	}
+	else //if (isDoingRocketJump)
+	{
+#define RJ_RJ_JUMP_TOTAL_TICKS 5
+#define RJ_RJ_MIDAIR_WAIT_B4_BLAST_TOTAL_TICKS 40
+		// Phase II: wait in midair until windforce catches up w/ you
+		if (rjTicksDoingRocketJump > RJ_RJ_MIDAIR_WAIT_B4_BLAST_TOTAL_TICKS)
+		{
+			// Blast into real life again!
+			hsp = rjStoredHsp / 2.0f;
+			vsp = rjStoredVsp / 2.0f;
+			isDoingRocketJump = false;		// This undoes everything!!
+			rjTicksDoingRocketJump = 0;
+		}
+		// Phase I: wait until actual rocket jump is done!
+		else if (rjTicksDoingRocketJump > RJ_RJ_JUMP_TOTAL_TICKS)
+		{
+			// Stop!
+			hsp = vsp = 0;
+			rjTicksDoingRocketJump++;
+		}
+		else
+		{
+			rjTicksDoingRocketJump++;
+		}
+	}
 
+#pragma endregion
 
 
 
@@ -626,11 +863,20 @@ void TestGameObj::UpdateStartCoords()
 bool prevB1Down = false;
 bool TestGameObj::IsUsingSword()
 {
-    swordTicksLeft--;
     bool currentDown = InputManager::Instance().b1();
 
+	if (swordTicksLeft == SWORD_DAMAGE_TICK + 1 &&
+		currentDown)
+	{
+		// Hold it for a sec...
+	}
+	else
+	{
+		swordTicksLeft--;
+	}
+
     // Can we start another cycle of sword?
-    if (numJumps > 0)
+    if (numJumps > 0 && swordTicksLeft <= 0)		// Sword has to be finished for that eh!
     {
         // Check if JUST pressed it!
         if (!prevB1Down && currentDown)
