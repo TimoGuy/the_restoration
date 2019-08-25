@@ -41,6 +41,14 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
     reader.parse(ifs, props);
     sprSheet = new SpriteSheetIO(props);
 
+	// Load collision
+	Json::Value bb = props["collision_data"];
+	myBoundBox = new BoundBox();
+	myBoundBox->x = bb["x_off"].asFloat();
+	myBoundBox->y = bb["y_off"].asFloat();
+	myBoundBox->width = bb["width"].asFloat();
+	myBoundBox->height = bb["height"].asFloat();
+
     // See if can find player
     targetEnt = NULL;
     FindTargetEntity();
@@ -229,10 +237,10 @@ void TestEnemy::Render()
 bool TestEnemy::IsColliding(BoundBox* box)
 {
 	// Use 'image' as the bounding box and test collision!
-	return x < box->x + box->width &&
-		x + MY_WIDTH > box->x &&
-		y < box->y + box->height &&
-		y + MY_HEIGHT > box->y;
+	return x + myBoundBox->x < box->x + box->width &&
+		x + myBoundBox->x + myBoundBox->width > box->x &&
+		y + myBoundBox->y < box->y + box->height &&
+		y + myBoundBox->y + myBoundBox->height > box->y;
 }
 
 

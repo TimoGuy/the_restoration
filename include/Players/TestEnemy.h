@@ -31,6 +31,8 @@ private:
 	void FindTargetEntity();
 	bool IsTargetInBounds(float gridRadius);
 
+	BoundBox* myBoundBox;
+
 	Entity* targetEnt;
     float life;
 

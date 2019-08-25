@@ -92,8 +92,8 @@
       }
     },
     "attack_phase_2" : {
-      "ticks_per_frame" : 50,
-      "repeat" : false,
+      "ticks_per_frame" : 5,
+      "repeat" : true,
       "images" : {
         "0" : {
           "x" : 0,
@@ -172,7 +172,9 @@
     }
   },
   "collision_data" : {
-    "grid_w" : 3,
-    "grid_h" : 2
+    "x_off" : 3,
+    "y_off" : 15,
+    "width" : 25,
+    "height" : 16
   }
 }
