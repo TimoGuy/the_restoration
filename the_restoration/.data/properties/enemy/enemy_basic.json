@@ -8,7 +8,7 @@
       "render_off_y" : 0
     },
     "idle" : {
-      "ticks_per_frame" : 50,
+      "ticks_per_frame" : 40,
       "repeat" : true,
       "images" : {
         "0" : {
@@ -56,7 +56,7 @@
       }
     },
     "attack_phase_0" : {
-      "ticks_per_frame" : 50,
+      "ticks_per_frame" : 30,
       "repeat" : false,
       "images" : {
         "0" : {
@@ -74,7 +74,7 @@
       }
     },
     "attack_phase_1" : {
-      "ticks_per_frame" : 50,
+      "ticks_per_frame" : 30,
       "repeat" : false,
       "images" : {
         "0" : {
@@ -109,6 +109,7 @@
         }
       }
     },
+    "die_ticks" : 250,
     "die" : {
       "ticks_per_frame" : 50,
       "repeat" : false,
@@ -145,25 +146,28 @@
       "action" : "none",
       "hazardous" : false
     },
+    "target_dist" : 10,
     "target" : {
-      "action" : "face_player",
-      "hazardous" : false
+      "action": "face_player",
+      "hazardous": false
     },
+    "attack_dist": 7,
     "attack_phases" : {
       "0" : {
-        "action" : "none",
-        "hazardous" : true,
-        "phase_time_ticks" : 60
+        "action": "face_player",
+        "hazardous": true,
+        "phase_time_ticks": 120
       },
       "1" : {
         "action" : "none",
-        "hazardous" : true,
-        "phase_time_ticks" : 30
+        "hazardous" : false,
+        "phase_time_ticks" : 60
       },
       "2" : {
-        "action" : "move_towards_player",
+        "action": "move_towards_player",
+        "action_args" : 5,
         "hazardous" : true,
-        "phase_time_ticks" : 60
+        "phase_time_ticks" : 20
       }
     },
     "die" : {

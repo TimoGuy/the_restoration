@@ -30,6 +30,8 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
     currentAction = 0;
 	isHazardous = false;
 	isFacingLeft = true;
+	isDying = false;
+	ticksDying = 0;
 
     // Init
 	// image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/enemy_test.png"), STBI_rgb_alpha));
@@ -72,6 +74,23 @@ TestEnemy::~TestEnemy()
 
 void TestEnemy::Update()
 {
+	// Do dying animation that's it
+	if (isDying)
+	{
+		if (ticksDying > props["sprites"]["die_ticks"].asInt())
+		{
+			// Go away!!!
+			delete this;
+			return;
+		}
+
+		ticksDying++;
+		animAction = "die";
+		hsp = vsp = 0;
+		return;
+	}
+
+
     // Find player if not yet eh
     if (targetEnt == NULL)
         FindTargetEntity();
@@ -87,7 +106,7 @@ void TestEnemy::Update()
     else if (currentAction == STATE_IDLE)
     {
         // Check if targetting!
-        if (IsTargetInBounds(20))
+        if (IsTargetInBounds(props["actions"]["target_dist"].asFloat()))
         {
             // That means at least targeted!
 			currentAction = STATE_TARGET;
@@ -96,14 +115,14 @@ void TestEnemy::Update()
     else if (currentAction == STATE_TARGET)
     {
         // See if want to attack
-        if (IsTargetInBounds(6))
+        if (IsTargetInBounds(props["actions"]["attack_dist"].asFloat()))
         {
             // Let's start the attack sequence!!!
 			currentAction = STATE_ATTACK;
             attackPhase = 0;        // First attack phase!
             attackPhase_tick = 0;
         }
-        else if (!IsTargetInBounds(20))
+        else if (!IsTargetInBounds(props["actions"]["target_dist"].asFloat()))
         {
             // Target bounds,,, left them :(
 			currentAction = STATE_IDLE;
@@ -129,6 +148,7 @@ void TestEnemy::Update()
                 animAction = "idle";
                 ProcessAction(
                     idle["action"].asString(),
+					idle["action_args"],
                     idle["hazardous"].asBool()
                 );
             }
@@ -140,6 +160,7 @@ void TestEnemy::Update()
                 animAction = "target";
                 ProcessAction(
                     target["action"].asString(),
+					target["action_args"],
                     target["hazardous"].asBool()
                 );
             }
@@ -174,6 +195,7 @@ void TestEnemy::Update()
                     attackPhase_tick++;
                     ProcessAction(
                         attack["action"].asString(),
+						attack["action_args"],
                         attack["hazardous"].asBool()
                     );
                 }
@@ -223,12 +245,10 @@ void TestEnemy::Render()
     glColor4f(1, 1, 1, 1);
 
 	glTranslatef(x + (MY_WIDTH / 2), y, 0);
-	if (isFacingLeft)	glScalef(-1, 1, 1);
+	if (!isFacingLeft)	glScalef(-1, 1, 1);			// Rendering'll be mirrored hehehe... whoops!
     sprSheet->Render(animAction, -(MY_WIDTH / 2), 0, MY_WIDTH, MY_HEIGHT);
-	if (isFacingLeft)	glScalef(-1, 1, 1);
+	if (!isFacingLeft)	glScalef(-1, 1, 1);
 	glTranslatef(-x - (MY_WIDTH / 2), -y, 0);
-
-	// image->Render(x, y);
 }
 
 
@@ -253,11 +273,12 @@ void TestEnemy::YouLose(Entity* accordingToMe)
     if (life <= 0)
     {
         // You ded there, son!
-        delete this;
+        //delete this;
+		isDying = true;
     }
 }
 
-void TestEnemy::ProcessAction(std::string actionName, bool isHazardous)
+void TestEnemy::ProcessAction(std::string actionName, Json::Value actionArgs, bool isHazardous)
 {
 	this->isHazardous = isHazardous;
 
@@ -272,15 +293,17 @@ void TestEnemy::ProcessAction(std::string actionName, bool isHazardous)
 	if (actionName == "none")
 	{
 		// Do nothing eh
+		hsp = vsp = 0;
 	}
 	else if (actionName == "face_player")
 	{
 		isFacingLeft = targetEnt->getX() < x;
+		hsp = vsp = 0;
 	}
 	else if (actionName == "move_towards_player")
 	{
 		// Assume speed is very very fast
-		float speed = 20 * (isFacingLeft ? -1.0f : 1.0f);
+		float speed = actionArgs.asFloat() * (isFacingLeft ? -1.0f : 1.0f);
 		hsp = speed;
 	}
 }

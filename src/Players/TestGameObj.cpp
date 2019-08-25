@@ -440,7 +440,7 @@ void TestGameObj::Update()
 			vsp = -RJ_JUMP_VELO / 2.0f;
 			break;
 		case RJ_DIR_DOWN:
-			vsp = RJ_JUMP_VELO;
+			vsp = RJ_JUMP_VELO / 2.0f;
 			break;
 		case RJ_DIR_LEFT:
 			hsp = -RJ_JUMP_VELO;

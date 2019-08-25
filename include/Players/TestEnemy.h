@@ -26,7 +26,7 @@ public:
 	void YouLose(Entity* accordingToMe);
 
 private:
-	void ProcessAction(std::string actionName, bool isHazardous);
+	void ProcessAction(std::string actionName, Json::Value actionArgs, bool isHazardous);
 
 	void FindTargetEntity();
 	bool IsTargetInBounds(float gridRadius);
@@ -46,5 +46,8 @@ private:
 	Json::Value props;
 	std::string animAction;
 	SpriteSheetIO* sprSheet;
+
+	bool isDying;
+	int ticksDying;
 };
 
