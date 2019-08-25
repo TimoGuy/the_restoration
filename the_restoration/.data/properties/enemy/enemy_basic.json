@@ -151,19 +151,19 @@
     },
     "attack_phases" : {
       "0" : {
-        "action" : "face_player",
+        "action" : "none",
         "hazardous" : true,
-        "phase_time_ticks" : 10
+        "phase_time_ticks" : 60
       },
       "1" : {
         "action" : "none",
         "hazardous" : true,
-        "phase_time_ticks" : 10
+        "phase_time_ticks" : 30
       },
       "2" : {
         "action" : "move_towards_player",
         "hazardous" : true,
-        "phase_time_ticks" : 10
+        "phase_time_ticks" : 60
       }
     },
     "die" : {
