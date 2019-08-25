@@ -1,74 +1,143 @@
 {
   "sprites" : {
     "sprite_sheet" : {
-      "image" : ".data/images/player.png",
-      "width" : 120,
-      "height" : 120,
+      "image" : ".data/images/enemy/slime_enemy_basic.png",
+      "width" : 160,
+      "height" : 160,
       "render_off_x" : 0,
       "render_off_y" : 0
     },
     "idle" : {
-      "ticks_per_frame" : 1,
+      "ticks_per_frame" : 50,
       "repeat" : true,
       "images" : {
         "0" : {
           "x" : 0,
-          "y" : 96,
-          "x2" : 23,
-          "y2" : 119
+          "y" : 0,
+          "x2" : 31,
+          "y2" : 31
+        },
+        "1" : {
+          "x" : 32,
+          "y" : 0,
+          "x2" : 63,
+          "y2" : 31
+        },
+        "2" : {
+          "x" : 64,
+          "y" : 0,
+          "x2" : 95,
+          "y2" : 31
+        },
+        "3" : {
+          "x" : 96,
+          "y" : 0,
+          "x2" : 127,
+          "y2" : 31
         }
       }
     },
     "target": {
-      "ticks_per_frame" : 1,
-      "repeat" : true,
+      "ticks_per_frame" : 50,
+      "repeat" : false,
       "images" : {
-        "0": {
-          "x": 0,
-          "y": 24,
-          "x2": 23,
-          "y2": 47
+        "0" : {
+          "x" : 0,
+          "y" : 32,
+          "x2" : 31,
+          "y2" : 63
+        },
+        "1" : {
+          "x" : 32,
+          "y" : 32,
+          "x2" : 63,
+          "y2" : 63
         }
       }
     },
     "attack_phase_0" : {
-      "ticks_per_frame" : 1,
-      "repeat" : true,
+      "ticks_per_frame" : 50,
+      "repeat" : false,
       "images" : {
-        "0": {
-          "x" : 72,
-          "y" : 24,
-          "x2" : 95,
-          "y2" : 47
+        "0" : {
+          "x" : 0,
+          "y" : 64,
+          "x2" : 31,
+          "y2" : 95
+        },
+        "1" : {
+          "x" : 32,
+          "y" : 64,
+          "x2" : 63,
+          "y2" : 95
         }
       }
     },
     "attack_phase_1" : {
-      "ticks_per_frame" : 1,
-      "repeat" : true,
+      "ticks_per_frame" : 50,
+      "repeat" : false,
       "images" : {
-        "0": {
-          "x" : 72,
-          "y" : 48,
-          "x2" : 95,
-          "y2" : 71
+        "0" : {
+          "x" : 0,
+          "y" : 96,
+          "x2" : 31,
+          "y2" : 127
+        },
+        "1" : {
+          "x" : 32,
+          "y" : 96,
+          "x2" : 63,
+          "y2" : 127
         }
       }
     },
     "attack_phase_2" : {
-      "ticks_per_frame" : 1,
-      "repeat" : true,
+      "ticks_per_frame" : 50,
+      "repeat" : false,
       "images" : {
-        "0": {
-          "x" : 24,
-          "y" : 48,
-          "x2" : 47,
-          "y2" : 71
+        "0" : {
+          "x" : 0,
+          "y" : 128,
+          "x2" : 31,
+          "y2" : 159
+        },
+        "1" : {
+          "x" : 32,
+          "y" : 128,
+          "x2" : 63,
+          "y2" : 159
         }
       }
     },
     "die" : {
-      
+      "ticks_per_frame" : 50,
+      "repeat" : false,
+      "images" : {
+        "0": {
+          "x" : 128,
+          "y" : 32,
+          "x2" : 159,
+          "y2" : 63
+        },
+        "1": {
+          "x" : 128,
+          "y" : 64,
+          "x2" : 159,
+          "y2" : 95
+        },
+        "2": {
+          "x" : 128,
+          "y" : 96,
+          "x2" : 159,
+          "y2" : 127
+        },
+        "3": {
+          "x" : 128,
+          "y" : 128,
+          "x2" : 159,
+          "y2" : 159
+        }
+      }
     }
   },
   "actions" : {
