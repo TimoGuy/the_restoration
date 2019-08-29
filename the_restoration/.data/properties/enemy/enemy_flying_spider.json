@@ -1,111 +1,93 @@
 {
   "sprites" : {
     "sprite_sheet" : {
-      "image" : ".data/images/enemy/slime_enemy_basic.png",
-      "width" : 160,
-      "height" : 160,
+      "image" : ".data/textures/enemy_test.png",
+      "width" : 32,
+      "height" : 32,
       "render_off_x" : 0,
       "render_off_y" : 0
     },
     "idle" : {
-      "ticks_per_frame" : 40,
-      "repeat" : true,
+      "ticks_per_frame" : 1,
+      "repeat" : false,
       "images" : {
         "0" : {
           "x" : 0,
           "y" : 0,
           "x2" : 31,
-          "y2" : 31
-        },
-        "1" : {
-          "x" : 32,
-          "y" : 0,
-          "x2" : 63,
-          "y2" : 31
-        },
-        "2" : {
-          "x" : 64,
-          "y" : 0,
-          "x2" : 95,
-          "y2" : 31
-        },
-        "3" : {
-          "x" : 96,
-          "y" : 0,
-          "x2" : 127,
           "y2" : 31
         }
       }
     },
     "target": {
-      "ticks_per_frame" : 50,
+      "ticks_per_frame" : 1,
       "repeat" : false,
       "images" : {
         "0" : {
           "x" : 0,
-          "y" : 32,
+          "y" : 0,
           "x2" : 31,
-          "y2" : 63
-        },
-        "1" : {
-          "x" : 32,
-          "y" : 32,
-          "x2" : 63,
-          "y2" : 63
+          "y2" : 31
         }
       }
     },
     "attack_phase_0" : {
-      "ticks_per_frame" : 30,
+      "ticks_per_frame" : 1,
       "repeat" : false,
       "images" : {
         "0" : {
           "x" : 0,
-          "y" : 64,
+          "y" : 0,
           "x2" : 31,
-          "y2" : 95
-        },
-        "1" : {
-          "x" : 32,
-          "y" : 64,
-          "x2" : 63,
-          "y2" : 95
+          "y2" : 31
         }
       }
     },
     "attack_phase_1" : {
-      "ticks_per_frame" : 30,
+      "ticks_per_frame" : 1,
       "repeat" : false,
       "images" : {
         "0" : {
           "x" : 0,
-          "y" : 96,
+          "y" : 0,
           "x2" : 31,
-          "y2" : 127
-        },
-        "1" : {
-          "x" : 32,
-          "y" : 96,
-          "x2" : 63,
-          "y2" : 127
+          "y2" : 31
         }
       }
     },
     "attack_phase_2" : {
-      "ticks_per_frame" : 5,
-      "repeat" : true,
+      "ticks_per_frame" : 1,
+      "repeat" : false,
       "images" : {
         "0" : {
           "x" : 0,
-          "y" : 128,
+          "y" : 0,
           "x2" : 31,
-          "y2" : 159
-        },
-        "1" : {
-          "x" : 32,
-          "y" : 128,
-          "x2" : 63,
-          "y2" : 159
+          "y2" : 31
+        }
+      }
+    },
+    "attack_phase_3" : {
+      "ticks_per_frame" : 1,
+      "repeat" : false,
+      "images" : {
+        "0" : {
+          "x" : 0,
+          "y" : 0,
+          "x2" : 31,
+          "y2" : 31
+        }
+      }
+    },
+    "attack_phase_4" : {
+      "ticks_per_frame" : 1,
+      "repeat" : false,
+      "images" : {
+        "0" : {
+          "x" : 0,
+          "y" : 0,
+          "x2" : 31,
+          "y2" : 31
         }
       }
     },
@@ -146,31 +128,48 @@
       "action" : "none",
       "hazardous" : false
     },
-    "target_dist" : 10,
-    "target" : {
-      "action": "face_player",
-      "hazardous": false
-    },
-    "attack_dist": 7,
+    "target" : null,
+    "attack_dist": 16,
     "attack_phases" : {
       "0" : {
-        "action": "face_player",
+        "action": "none",
         "hazardous": true,
-        "phase_time_ticks": 120
+        "phase_time_ticks": 10
       },
       "1" : {
-        "action" : "none",
-        "hazardous" : false,
-        "phase_time_ticks" : 60
-      },
-      "2" : {
-        "action": "move_towards_player",
+        "action" : "jump_up",
         "action_args" : {
-          "hsp" : 5,
-          "vsp" : 0
+          "vsp" : -10
         },
         "hazardous" : true,
-        "phase_time_ticks" : 20
+        "phase_time_ticks" : 30
+      },
+      "2" : {
+        "action" : "move_towards_player",
+        "action_args" : {
+          "hsp" : 16,
+          "vsp" : 1,
+          "change_direction" : true,
+          "until_near" : {
+            "within_dist" : 2
+          }
+        },
+        "hazardous" : true,
+        "phase_time_ticks" : 600
+      },
+      "3" : {
+        "action" : "none",
+        "hazardous" : true,
+        "phase_time_ticks" : 10
+      },
+      "4" : {
+        "action" : "move",
+        "action_args" : {
+          "hsp" : 0,
+          "vsp" : 10
+        },
+        "hazardous" : true,
+        "phase_time_ticks" : 10
       }
     },
     "die" : {

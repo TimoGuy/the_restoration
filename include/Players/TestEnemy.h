@@ -39,6 +39,7 @@ private:
 	int currentAction;
 	int attackPhase;
 	int attackPhase_tick;
+	bool requestToNextAttackPhase;
 	bool isHazardous;
 
 	bool isFacingLeft;		// If not then you're facing right eh

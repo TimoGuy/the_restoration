@@ -32,6 +32,7 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 	isFacingLeft = true;
 	isDying = false;
 	ticksDying = 0;
+    requestToNextAttackPhase = false;
 
     // Init
 	// image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/enemy_test.png"), STBI_rgb_alpha));
@@ -39,6 +40,7 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 
     // Load the basic Json
     std::ifstream ifs(".data/properties/enemy/enemy_basic.json");
+    // std::ifstream ifs(".data/properties/enemy/enemy_flying_spider.json");
     Json::Reader reader;
     reader.parse(ifs, props);
     sprSheet = new SpriteSheetIO(props);
@@ -103,7 +105,8 @@ void TestEnemy::Update()
         // Init
         currentAction = STATE_IDLE;
     }
-    else if (currentAction == STATE_IDLE)
+    else if (currentAction == STATE_IDLE &&
+            !props["actions"]["target"].isNull())
     {
         // Check if targetting!
         if (IsTargetInBounds(props["actions"]["target_dist"].asFloat()))
@@ -112,8 +115,10 @@ void TestEnemy::Update()
 			currentAction = STATE_TARGET;
         }
     }
-    else if (currentAction == STATE_TARGET)
+    else if (currentAction == STATE_TARGET ||
+            (currentAction == STATE_IDLE && props["actions"]["target"].isNull()))
     {
+        printf("Spikking target!!\n");
         // See if want to attack
         if (IsTargetInBounds(props["actions"]["attack_dist"].asFloat()))
         {
@@ -130,6 +135,7 @@ void TestEnemy::Update()
     }
     else if (currentAction == STATE_ATTACK)
     {
+        printf("Attack Phase: %i\n", attackPhase);
         // Don't go back to idle until finished attacking!
         //if (attackPhase < 0)        // -1 is usually what is "I'm done!"
         //{
@@ -172,8 +178,11 @@ void TestEnemy::Update()
                     props["actions"]["attack_phases"][std::to_string(attackPhase)];
 
                 // Which attack phase?
-                if (attackPhase_tick > attack["phase_time_ticks"].asInt())
+                if (attackPhase_tick > attack["phase_time_ticks"].asInt() ||
+                    requestToNextAttackPhase)
                 {
+                    requestToNextAttackPhase = false;   // Undo flag
+                    
                     // Goto next one!
                     attackPhase_tick = 0;
                     if (props["actions"]["attack_phases"]
@@ -302,10 +311,39 @@ void TestEnemy::ProcessAction(std::string actionName, Json::Value actionArgs, bo
 	}
 	else if (actionName == "move_towards_player")
 	{
+        if (actionArgs["change_direction"].asBool())
+        {
+            isFacingLeft = targetEnt->getX() < x;
+        }
+
 		// Assume speed is very very fast
-		float speed = actionArgs.asFloat() * (isFacingLeft ? -1.0f : 1.0f);
-		hsp = speed;
+		float argHsp = actionArgs["hsp"].asFloat() * (isFacingLeft ? -1.0f : 1.0f);
+        float argVsp = actionArgs["vsp"].asFloat();
+		hsp = argHsp;
+        vsp = argVsp;
+
+        if (actionArgs.isMember("until_near"))
+        {
+            // Check if should move to next phase
+            if (IsTargetInBounds(
+                actionArgs["until_near"]["within_dist"].asFloat()
+            ))
+            {
+                // Request!!!!!
+                requestToNextAttackPhase = true;
+            }
+        }
 	}
+    else if (actionName == "move")
+    {
+        hsp = actionArgs["hsp"].asFloat();
+        vsp = actionArgs["vsp"].asFloat();
+    }
+    else if (actionName == "jump_up")
+    {
+        hsp = 0;
+        vsp = actionArgs["vsp"].asFloat();
+    }
 }
 
 void TestEnemy::FindTargetEntity()
