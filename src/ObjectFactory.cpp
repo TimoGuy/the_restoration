@@ -204,7 +204,7 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* r
 					gx,
 					gy,
 					rm,
-					rmOptions["modifications"][enemyData.c_str()]
+					rmOptions["modifications"][enemyData].asString()
 				);
 			}
 			else

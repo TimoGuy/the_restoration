@@ -15,7 +15,7 @@ class TestEnemy :
 {
 public:
 	TestEnemy(int gx, int gy, TestRoom* rm);
-	TestEnemy(int gx, int gy, TestRoom* rm, Json::Value& mods);
+	TestEnemy(int gx, int gy, TestRoom* rm, std::string fname);
 	virtual ~TestEnemy();
 
 	void Update();

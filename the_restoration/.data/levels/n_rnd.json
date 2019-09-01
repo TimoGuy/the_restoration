@@ -33,5 +33,8 @@
         "y_divisor" : 1.0
       }
     },
-    "propset" : "_level_propsets/lps_sheepShearing"
+    "propset" : "_level_propsets/lps_sheepShearing",
+    "modifications" : {
+      "enemy_158_27" : "properties/enemy/enemy_flying_spider.json"
+    }
 }

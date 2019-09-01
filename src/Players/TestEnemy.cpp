@@ -25,6 +25,9 @@
 #define MY_HEIGHT 32
 
 TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
+    : TestEnemy(gx, gy, rm, "properties/enemy/enemy_basic.json") { }
+
+TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm, std::string fname)
     : Entity(gx, gy, rm, true)
 {
     currentAction = 0;
@@ -39,8 +42,7 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 	life = 1;   // 0 is ded.
 
     // Load the basic Json
-    std::ifstream ifs(".data/properties/enemy/enemy_basic.json");
-    // std::ifstream ifs(".data/properties/enemy/enemy_flying_spider.json");
+    std::ifstream ifs(std::string(".data/") + fname);
     Json::Reader reader;
     reader.parse(ifs, props);
     sprSheet = new SpriteSheetIO(props);
@@ -56,12 +58,6 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
     // See if can find player
     targetEnt = NULL;
     FindTargetEntity();
-}
-
-TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm, Json::Value& mods)
-    : TestEnemy(gx, gy, rm)
-{
-
 }
 
 
