@@ -28,7 +28,12 @@ SpriteSheetIO::SpriteSheetIO(Json::Value props)
 	_properties = props;
 
 	// Load up the sprite sheet
-	printf(_properties["sprites"]["sprite_sheet"]["image"].asString().c_str());
+	printf(
+		("Loaded image: " +
+		_properties["sprites"]["sprite_sheet"]["image"].asString() +
+		"\n").c_str()
+	);
+	
 	mySpriteSheet = new Texture(
 		_properties["sprites"]["sprite_sheet"]["image"].asString(),
 		STBI_rgb_alpha

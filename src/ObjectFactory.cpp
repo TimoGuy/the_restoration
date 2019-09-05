@@ -210,7 +210,7 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* r
 			else
 			{
 				// Or something's wrong!
-				printf("There was no property attached to %s\n\tbasic_enemy.json will be used", enemyData.c_str());
+				printf("There was no property attached to %s\n\tenemy_basic.json will be used\n", enemyData.c_str());
 				retObj = new TestEnemy(gx, gy, rm);
 			}
 		
