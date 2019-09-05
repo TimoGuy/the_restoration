@@ -151,14 +151,17 @@
           "vsp" : 0.125,
           "change_direction" : true,
           "until_near" : {
-            "within_dist" : 2
+            "within_dist" : 3.5
           }
         },
         "hazardous" : true,
-        "phase_time_ticks" : 300
+        "phase_time_ticks" : 250
       },
       "3" : {
-        "action" : "none",
+        "action" : "jump_up",
+        "action_args" : {
+          "vsp" : -1
+        },
         "hazardous" : true,
         "phase_time_ticks" : 20
       },
@@ -166,7 +169,7 @@
         "action" : "move",
         "action_args" : {
           "hsp" : 0,
-          "vsp" : 10
+          "vsp" : 20
         },
         "hazardous" : true,
         "phase_time_ticks" : 10
