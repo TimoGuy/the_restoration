@@ -133,8 +133,8 @@
     "attack_phases" : {
       "0" : {
         "action": "none",
-        "hazardous": true,
-        "phase_time_ticks": 10
+        "hazardous": false,
+        "phase_time_ticks": 60
       },
       "1" : {
         "action" : "jump_up",
@@ -148,19 +148,19 @@
         "action" : "move_towards_player",
         "action_args" : {
           "hsp" : 16,
-          "vsp" : 1,
+          "vsp" : 0.125,
           "change_direction" : true,
           "until_near" : {
             "within_dist" : 2
           }
         },
         "hazardous" : true,
-        "phase_time_ticks" : 600
+        "phase_time_ticks" : 300
       },
       "3" : {
         "action" : "none",
         "hazardous" : true,
-        "phase_time_ticks" : 10
+        "phase_time_ticks" : 20
       },
       "4" : {
         "action" : "move",
@@ -174,7 +174,7 @@
     },
     "die" : {
       "action" : "explode",
-      "hazardous" : true
+      "hazardous" : false
     }
   },
   "collision_data" : {

@@ -25,6 +25,8 @@ public:
 
 	void YouLose(Entity* accordingToMe);
 
+	bool IsHazardous();
+
 private:
 	void ProcessAction(std::string actionName, Json::Value actionArgs, bool isHazardous);
 

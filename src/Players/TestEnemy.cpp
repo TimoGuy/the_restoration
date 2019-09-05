@@ -84,6 +84,7 @@ void TestEnemy::Update()
 
 		ticksDying++;
 		animAction = "die";
+		this->isHazardous = props["actions"]["die"]["hazardous"].asBool();
 		hsp = vsp = 0;
 		return;
 	}
@@ -139,7 +140,8 @@ void TestEnemy::Update()
         //}
     }
 
-
+	// Update mvt
+	vsp += 0.5f;
 
     // Run the AI from the json props!
     switch (currentAction)
@@ -215,10 +217,6 @@ void TestEnemy::Update()
             break;
     }
 
-
-	// Update mvt
-	vsp += 0.5f;
-
     // COLLISION SYSTEM
 	// Get middle of object for accuracy
     float centX = x + hsp + MY_WIDTH / 2,
@@ -283,6 +281,8 @@ void TestEnemy::YouLose(Entity* accordingToMe)
     }
 }
 
+bool TestEnemy::IsHazardous() { return isHazardous; }
+
 void TestEnemy::ProcessAction(std::string actionName, Json::Value actionArgs, bool isHazardous)
 {
 	this->isHazardous = isHazardous;
@@ -317,6 +317,12 @@ void TestEnemy::ProcessAction(std::string actionName, Json::Value actionArgs, bo
         float argVsp = actionArgs["vsp"].asFloat();
 		hsp = argHsp;
         vsp = argVsp;
+
+		// Cap off the movement if too much
+		float multX = hsp > 0 ? 1.0f : -1.0f;
+		float multY = vsp > 0 ? 1.0f : -1.0f;
+		hsp = std::min(std::abs(hsp), std::abs(targetEnt->getX() - x)) * multX;
+		vsp = std::min(std::abs(vsp), std::abs(targetEnt->getY() - y)) * multY;
 
         if (actionArgs.isMember("until_near"))
         {

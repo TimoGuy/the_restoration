@@ -1,6 +1,7 @@
 #if defined(__unix__) || defined(__APPLE__)
 #include "TestRoom.h"
 #include "TestGameObj.h"
+#include "TestEnemy.h"
 #include "Hazard.h"
 #include "Trigger.h"
 #include "MovingPlatGround.h"
@@ -18,6 +19,7 @@
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
+#include "../../include/Players/TestEnemy.h"
 #include "../../include/Players/Hazard.h"
 #include "../../include/Players/Trigger.h"
 #include "../../include/Players/MovingPlatGround.h"
@@ -802,6 +804,13 @@ void TestGameObj::Render()
 
 void TestGameObj::YouLose(Entity* accordingToMe)
 {
+	if (dynamic_cast<TestEnemy*>(accordingToMe) != NULL)
+	{
+		// Cancel out if you aren't hazardous eh!!!
+		if (!((TestEnemy*)accordingToMe)->IsHazardous())
+			return;
+	}
+
     // Enemy won :====(
     room->GetGameLoop()->AddPause(10);
     float sign = 1;
