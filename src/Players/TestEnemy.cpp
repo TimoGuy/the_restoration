@@ -21,9 +21,6 @@
 #include <fstream>
 #include <algorithm>
 
-#define MY_WIDTH 32
-#define MY_HEIGHT 32
-
 TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
     : TestEnemy(gx, gy, rm, "properties/enemy/enemy_basic.json") { }
 
@@ -38,7 +35,6 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm, std::string fname)
     requestToNextAttackPhase = false;
 
     // Init
-	// image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/enemy_test.png"), STBI_rgb_alpha));
 	life = 1;   // 0 is ded.
 
     // Load the basic Json
@@ -46,6 +42,16 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm, std::string fname)
     Json::Reader reader;
     reader.parse(ifs, props);
     sprSheet = new SpriteSheetIO(props);
+
+	// Load size
+	myWidth = myHeight = 32;		// Default size
+	if (props["sprites"]["sprite_sheet"].isMember("render_width"))
+		myWidth = props["sprites"]["sprite_sheet"]["render_width"].asFloat();
+	if (props["sprites"]["sprite_sheet"].isMember("render_height"))
+		myHeight = props["sprites"]["sprite_sheet"]["render_height"].asFloat();
+
+	// Adjust starting y based on height
+	y -= myHeight - GRID_SIZE;
 
 	// Load collision
 	Json::Value bb = props["collision_data"];
@@ -219,8 +225,8 @@ void TestEnemy::Update()
 
     // COLLISION SYSTEM
 	// Get middle of object for accuracy
-    float centX = x + hsp + MY_WIDTH / 2,
-        centY = y + vsp + MY_HEIGHT / 2;
+    float centX = x + hsp + myWidth / 2,
+        centY = y + vsp + myHeight / 2;
 
 	// Check collision potential area
 	std::vector<Object*> tempCollisionsToCheck;
@@ -238,7 +244,7 @@ void TestEnemy::Update()
     }
 
 	// Update the hsp and vsp
-	UpdateGroundCollisionVelocity(hsp, vsp, MY_WIDTH, MY_HEIGHT, &tempCollisionsToCheck);
+	UpdateGroundCollisionVelocity(hsp, vsp, myWidth, myHeight, &tempCollisionsToCheck);
 }
 
 void TestEnemy::Render()
@@ -247,11 +253,11 @@ void TestEnemy::Render()
 
     glColor4f(1, 1, 1, 1);
 
-	glTranslatef(x + (MY_WIDTH / 2), y, 0);
+	glTranslatef(x + (myWidth / 2), y, 0);
 	if (!isFacingLeft)	glScalef(-1, 1, 1);			// Rendering'll be mirrored hehehe... whoops!
-    sprSheet->Render(animAction, -(MY_WIDTH / 2), 0, MY_WIDTH, MY_HEIGHT);
+    sprSheet->Render(animAction, -(myWidth / 2), 0, myWidth, myHeight);
 	if (!isFacingLeft)	glScalef(-1, 1, 1);
-	glTranslatef(-x - (MY_WIDTH / 2), -y, 0);
+	glTranslatef(-x - (myWidth / 2), -y, 0);
 }
 
 
@@ -371,8 +377,8 @@ bool TestEnemy::IsTargetInBounds(float gridRadius)
     }
 
     // See if x and y are within distance
-    float centX = x + hsp + MY_WIDTH / 2,
-        centY = y + vsp + MY_HEIGHT / 2;
+    float centX = x + hsp + myWidth / 2,
+        centY = y + vsp + myHeight / 2;
 
     float distanceBound = GRID_SIZE * gridRadius;        // Radius of 20 blocks, he can see you!
 

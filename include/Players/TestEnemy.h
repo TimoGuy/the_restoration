@@ -50,6 +50,8 @@ private:
 	std::string animAction;
 	SpriteSheetIO* sprSheet;
 
+	float myWidth, myHeight;
+
 	bool isDying;
 	int ticksDying;
 };

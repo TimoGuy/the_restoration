@@ -68,6 +68,8 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 
 void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h, int tickTime)
 {
+	CalculateCoordsFromGridValsIfNeeded(action);		// In case if 'x' or 'y' and such doesn't exist eh (and instead it was entered in as gx and gy)
+
 	// Input the offsets!
 	x += _properties["sprites"]["sprite_sheet"]["render_off_x"].asFloat();
 	y += _properties["sprites"]["sprite_sheet"]["render_off_y"].asFloat();
@@ -77,8 +79,23 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
         tickTime / _properties["sprites"][action]["ticks_per_frame"].asInt();
 
     int frame;
-    if (_properties["sprites"][action]["repeat"].asBool())
-    	frame = adjustedTick % _properties["sprites"][action]["images"].size();
+	if (_properties["sprites"][action]["repeat"].asBool())
+	{
+		if (_properties["sprites"][action].isMember("repeat_to_index") &&
+			adjustedTick >= _properties["sprites"][action]["images"].size())
+		{
+			// Cut off the end eh!
+			int reducedFrames =
+				_properties["sprites"][action]["images"].size() -
+				_properties["sprites"][action]["repeat_to_index"].asInt();
+			frame = adjustedTick % reducedFrames + _properties["sprites"][action]["repeat_to_index"].asInt();
+		}
+		else
+		{
+			// Regular looping!
+			frame = adjustedTick % _properties["sprites"][action]["images"].size();
+		}
+	}
     else
     	frame = adjustedTick >= _properties["sprites"][action]["images"].size()
     					? _properties["sprites"][action]["images"].size() - 1 : adjustedTick;
@@ -202,4 +219,39 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
     // Undo textures
     glDisable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, NULL);
+}
+
+void SpriteSheetIO::CalculateCoordsFromGridValsIfNeeded(std::string action)
+{
+	// Check if already checked eh
+	if (_properties["sprites"][action].isMember("been_checked_dynamically"))
+		return;
+
+	// Now morph since hasn't!!!
+	float width = _properties["sprites"]["sprite_sheet"]["render_width"].asFloat();
+	float height = _properties["sprites"]["sprite_sheet"]["render_height"].asFloat();
+
+	Json::Value& texCoords = _properties["sprites"][action]["images"];
+	for (int i = 0; i < texCoords.size(); i++)
+	{
+		Json::Value& frameCoords = texCoords[std::to_string(i)];
+		if (!frameCoords.isMember("x") ||
+			!frameCoords.isMember("y") ||
+			!frameCoords.isMember("x2") ||
+			!frameCoords.isMember("y2"))
+		{
+			// See if there's sufficient data to create these values!!
+			if (frameCoords.isMember("gx") && frameCoords.isMember("gy"))
+			{
+				// Yessss!!! Recreate it!!
+				_properties["sprites"][action]["images"][std::to_string(i)]["x"] = frameCoords["gx"].asFloat() * width;
+				_properties["sprites"][action]["images"][std::to_string(i)]["y"] = frameCoords["gy"].asFloat() * height;
+				_properties["sprites"][action]["images"][std::to_string(i)]["x2"] = (frameCoords["gx"].asFloat() + 1) * width;
+				_properties["sprites"][action]["images"][std::to_string(i)]["y2"] = (frameCoords["gy"].asFloat() + 1) * height;
+			}
+		}
+	}
+
+	// Add flag at the end!
+	_properties["sprites"][action]["been_checked_dynamically"] = true;
 }

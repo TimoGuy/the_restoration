@@ -1,93 +1,129 @@
 {
   "sprites" : {
     "sprite_sheet" : {
-      "image" : ".data/textures/enemy_test.png",
-      "width" : 32,
-      "height" : 32,
+      "image" : ".data/images/enemy/flying_spider.png",
+      "width" : 512,
+      "height" : 512,
+      "render_width" : 64,
+      "render_height" : 64,
       "render_off_x" : 0,
       "render_off_y" : 0
     },
     "idle" : {
-      "ticks_per_frame" : 1,
-      "repeat" : false,
+      "ticks_per_frame" : 30,
+      "repeat" : true,
       "images" : {
-        "0" : {
-          "x" : 0,
-          "y" : 0,
-          "x2" : 31,
-          "y2" : 31
+        "0": {
+          "gx": 0,
+          "gy": 0
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 0
         }
       }
     },
-    "target": {
-      "ticks_per_frame" : 1,
-      "repeat" : false,
-      "images" : {
-        "0" : {
-          "x" : 0,
-          "y" : 0,
-          "x2" : 31,
-          "y2" : 31
-        }
-      }
-    },
+    "target": null,
     "attack_phase_0" : {
-      "ticks_per_frame" : 1,
+      "ticks_per_frame" : 20,
       "repeat" : false,
       "images" : {
         "0" : {
-          "x" : 0,
-          "y" : 0,
-          "x2" : 31,
-          "y2" : 31
+          "gx": 0,
+          "gy": 1
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 1
+        },
+        "2" : {
+          "gx": 2,
+          "gy": 1
         }
       }
     },
     "attack_phase_1" : {
-      "ticks_per_frame" : 1,
-      "repeat" : false,
+      "ticks_per_frame" : 3,
+      "repeat" : true,
       "images" : {
         "0" : {
-          "x" : 0,
-          "y" : 0,
-          "x2" : 31,
-          "y2" : 31
+          "gx": 0,
+          "gy": 2
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 2
         }
       }
     },
     "attack_phase_2" : {
-      "ticks_per_frame" : 1,
-      "repeat" : false,
+      "ticks_per_frame" : 3,
+      "repeat" : true,
+      "repeat_to_index" : 2,
       "images" : {
         "0" : {
-          "x" : 0,
-          "y" : 0,
-          "x2" : 31,
-          "y2" : 31
+          "gx": 0,
+          "gy": 3
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 3
+        },
+        "2" : {
+          "gx": 0,
+          "gy": 4
+        },
+        "3" : {
+          "gx": 1,
+          "gy": 4
+        },
+        "4" : {
+          "gx": 2,
+          "gy": 4
+        },
+        "5" : {
+          "gx": 3,
+          "gy": 4
         }
       }
     },
     "attack_phase_3" : {
-      "ticks_per_frame" : 1,
+      "ticks_per_frame" : 4,
       "repeat" : false,
       "images" : {
         "0" : {
-          "x" : 0,
-          "y" : 0,
-          "x2" : 31,
-          "y2" : 31
+          "gx": 0,
+          "gy": 5
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 5
+        },
+        "2" : {
+          "gx": 2,
+          "gy": 5
+        },
+        "3" : {
+          "gx": 3,
+          "gy": 5
+        },
+        "4" : {
+          "gx": 4,
+          "gy": 5
         }
       }
     },
     "attack_phase_4" : {
-      "ticks_per_frame" : 1,
-      "repeat" : false,
+      "ticks_per_frame" : 5,
+      "repeat" : true,
       "images" : {
         "0" : {
-          "x" : 0,
-          "y" : 0,
-          "x2" : 31,
-          "y2" : 31
+          "gx": 0,
+          "gy": 6
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 6
         }
       }
     },
@@ -181,9 +217,9 @@
     }
   },
   "collision_data" : {
-    "x_off" : 3,
-    "y_off" : 15,
-    "width" : 25,
+    "x_off" : 16,
+    "y_off" : 48,
+    "width" : 32,
     "height" : 16
   }
 }
