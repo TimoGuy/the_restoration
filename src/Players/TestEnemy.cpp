@@ -20,6 +20,7 @@
 
 #include <fstream>
 #include <algorithm>
+#include <cmath>
 
 TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
     : TestEnemy(gx, gy, rm, "properties/enemy/enemy_basic.json") { }
@@ -44,7 +45,7 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm, std::string fname)
     sprSheet = new SpriteSheetIO(props);
 
 	// Load size
-	myWidth = myHeight = 32;		// Default size
+	myWidth = myHeight = GRID_SIZE;		// Default size
 	if (props["sprites"]["sprite_sheet"].isMember("render_width"))
 		myWidth = props["sprites"]["sprite_sheet"]["render_width"].asFloat();
 	if (props["sprites"]["sprite_sheet"].isMember("render_height"))
@@ -186,7 +187,7 @@ void TestEnemy::Update()
                     requestToNextAttackPhase)
                 {
                     requestToNextAttackPhase = false;   // Undo flag
-                    
+
                     // Goto next one!
                     attackPhase_tick = 0;
                     if (props["actions"]["attack_phases"]
