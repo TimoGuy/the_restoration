@@ -29,7 +29,7 @@ protected:
 	Quad* image;
 
 
-	void SeeNeighborCollisionObjects(float centerX, float centerY, std::vector<Object*>& neighboringCollisions);
+	void SeeNeighborCollisionObjects(float centerX, float centerY, std::vector<Object*>& neighboringCollisions, bool includeEntities=false);
 	void UpdateGroundCollisionVelocity(float & hspeed, float & vspeed, float width, float height, std::vector<Object*>* collisionsToCheck);
 
 	bool CollideAtPos(float futX, float futY, float width, float height, std::vector<Object*>* collisionsToCheck, bool onlySolids);

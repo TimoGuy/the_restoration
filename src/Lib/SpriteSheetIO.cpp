@@ -228,8 +228,11 @@ void SpriteSheetIO::CalculateCoordsFromGridValsIfNeeded(std::string action)
 		return;
 
 	// Now morph since hasn't!!!
-	float width = _properties["sprites"]["sprite_sheet"]["render_width"].asFloat();
-	float height = _properties["sprites"]["sprite_sheet"]["render_height"].asFloat();
+	float width = 32, height = 32;
+	if (_properties["sprites"]["sprite_sheet"].isMember("render_width"))
+		width = _properties["sprites"]["sprite_sheet"]["render_width"].asFloat();
+	if (_properties["sprites"]["sprite_sheet"].isMember("render_height"))
+		height = _properties["sprites"]["sprite_sheet"]["render_height"].asFloat();
 
 	Json::Value& texCoords = _properties["sprites"][action]["images"];
 	for (int i = 0; i < texCoords.size(); i++)
