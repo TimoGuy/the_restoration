@@ -497,7 +497,7 @@ void TestGameObj::Update()
 
     // Check collision potential area
 	std::vector<Object*> tempCollisionsToCheck;
-	SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck);	// Inserts it into the 'tempCollisionsToCheck' variable
+	SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck, true);	// Inserts it into the 'tempCollisionsToCheck' variable
 
 
 

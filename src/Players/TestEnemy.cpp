@@ -233,17 +233,6 @@ void TestEnemy::Update()
 	std::vector<Object*> tempCollisionsToCheck;
 	SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck);
 
-	// Add other enemies too!
-    for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
-    {
-        Entity* ent;
-        if ((ent = room->getEntityList()->at(i)) != this)
-        {
-            // It's not me!!!
-            tempCollisionsToCheck.push_back(ent);
-        }
-    }
-
 	// Update the hsp and vsp
 	UpdateGroundCollisionVelocity(hsp, vsp, myWidth, myHeight, &tempCollisionsToCheck);
 }
