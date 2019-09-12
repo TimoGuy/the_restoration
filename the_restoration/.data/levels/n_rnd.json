@@ -1,4 +1,7 @@
 {
+    "music" : {
+        "0" : "test.ogg"
+    },
     "textures" : {
         "entities" : "rnd.png",
         "tileset_map" : null,
@@ -16,19 +19,15 @@
     },
     "backgrounds" : {
       "0": {
-        "image": "../images/znd_guard.png",
-        "xoff": 0,
-        "yoff": -50,
-        "x_divisor": 1.2,
+        "image": "../images/bg/prototype_background.png",
+        "xoff": -512,
+        "yoff": -512,
+        "x_divisor": 1.0,
         "y_divisor": 1.0
-      },
-      "1" : {
-        "image" : "../images/znd_guard.png",
-        "xoff" : 0,
-        "yoff" : 0,
-        "x_divisor" : 2.0,
-        "y_divisor" : 1.0
       }
     },
-    "propset" : "_level_propsets/lps_sheepShearing"
+    "propset" : "_level_propsets/lps_sheepShearing",
+    "modifications" : {
+      "enemy_158_27" : "properties/enemy/enemy_flying_spider.json"
+    }
 }

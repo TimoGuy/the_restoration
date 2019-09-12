@@ -6,6 +6,8 @@
 #include <SDL.h>
 #endif
 
+#include <string>
+
 class Room;
 
 
@@ -22,6 +24,9 @@ class GameLoop
 
         void SetRoom(Room* newRoom);
         Room* GetRoom();
+
+        void RequestNewMusic(std::string fileName, bool hardSet=false);
+        std::string GetMusicFname();
 
         void AddPause(int numTicks);
 

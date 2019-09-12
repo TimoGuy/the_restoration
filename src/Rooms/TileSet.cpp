@@ -444,7 +444,7 @@ void TileSet::RenderVerts()
 {
 	if (rendVectors.size() <= 0)
 	{
-		printf("ERROR: there are no tilesets loaded!\n");
+		// printf("ERROR: there are no tilesets loaded!\n");
 		return;
 	}
 

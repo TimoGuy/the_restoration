@@ -1,0 +1,225 @@
+{
+  "sprites" : {
+    "sprite_sheet" : {
+      "image" : ".data/images/enemy/flying_spider.png",
+      "width" : 512,
+      "height" : 512,
+      "render_width" : 64,
+      "render_height" : 64,
+      "render_off_x" : 0,
+      "render_off_y" : 0
+    },
+    "idle" : {
+      "ticks_per_frame" : 30,
+      "repeat" : true,
+      "images" : {
+        "0": {
+          "gx": 0,
+          "gy": 0
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 0
+        }
+      }
+    },
+    "target": null,
+    "attack_phase_0" : {
+      "ticks_per_frame" : 20,
+      "repeat" : false,
+      "images" : {
+        "0" : {
+          "gx": 0,
+          "gy": 1
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 1
+        },
+        "2" : {
+          "gx": 2,
+          "gy": 1
+        }
+      }
+    },
+    "attack_phase_1" : {
+      "ticks_per_frame" : 3,
+      "repeat" : true,
+      "images" : {
+        "0" : {
+          "gx": 0,
+          "gy": 2
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 2
+        }
+      }
+    },
+    "attack_phase_2" : {
+      "ticks_per_frame" : 3,
+      "repeat" : true,
+      "repeat_to_index" : 2,
+      "images" : {
+        "0" : {
+          "gx": 0,
+          "gy": 3
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 3
+        },
+        "2" : {
+          "gx": 0,
+          "gy": 4
+        },
+        "3" : {
+          "gx": 1,
+          "gy": 4
+        },
+        "4" : {
+          "gx": 2,
+          "gy": 4
+        },
+        "5" : {
+          "gx": 3,
+          "gy": 4
+        }
+      }
+    },
+    "attack_phase_3" : {
+      "ticks_per_frame" : 4,
+      "repeat" : false,
+      "images" : {
+        "0" : {
+          "gx": 0,
+          "gy": 5
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 5
+        },
+        "2" : {
+          "gx": 2,
+          "gy": 5
+        },
+        "3" : {
+          "gx": 3,
+          "gy": 5
+        },
+        "4" : {
+          "gx": 4,
+          "gy": 5
+        }
+      }
+    },
+    "attack_phase_4" : {
+      "ticks_per_frame" : 5,
+      "repeat" : true,
+      "images" : {
+        "0" : {
+          "gx": 0,
+          "gy": 6
+        },
+        "1" : {
+          "gx": 1,
+          "gy": 6
+        }
+      }
+    },
+    "die_ticks" : 250,
+    "die" : {
+      "ticks_per_frame" : 50,
+      "repeat" : false,
+      "images" : {
+        "0": {
+          "x" : 128,
+          "y" : 32,
+          "x2" : 159,
+          "y2" : 63
+        },
+        "1": {
+          "x" : 128,
+          "y" : 64,
+          "x2" : 159,
+          "y2" : 95
+        },
+        "2": {
+          "x" : 128,
+          "y" : 96,
+          "x2" : 159,
+          "y2" : 127
+        },
+        "3": {
+          "x" : 128,
+          "y" : 128,
+          "x2" : 159,
+          "y2" : 159
+        }
+      }
+    }
+  },
+  "actions" : {
+    "idle" : {
+      "action" : "none",
+      "hazardous" : false
+    },
+    "target" : null,
+    "attack_dist": 16,
+    "attack_phases" : {
+      "0" : {
+        "action": "none",
+        "hazardous": false,
+        "phase_time_ticks": 60
+      },
+      "1" : {
+        "action" : "jump_up",
+        "action_args" : {
+          "vsp" : -10
+        },
+        "hazardous" : true,
+        "phase_time_ticks" : 30
+      },
+      "2" : {
+        "action" : "move_towards_player",
+        "action_args" : {
+          "hsp" : 16,
+          "vsp" : 0.125,
+          "change_direction" : true,
+          "until_near" : {
+            "within_dist" : 3.5
+          }
+        },
+        "hazardous" : true,
+        "phase_time_ticks" : 250
+      },
+      "3" : {
+        "action" : "jump_up",
+        "action_args" : {
+          "vsp" : -1
+        },
+        "hazardous" : true,
+        "phase_time_ticks" : 20
+      },
+      "4" : {
+        "action" : "move",
+        "action_args" : {
+          "hsp" : 0,
+          "vsp" : 20
+        },
+        "hazardous" : true,
+        "phase_time_ticks" : 10
+      }
+    },
+    "die" : {
+      "action" : "explode",
+      "hazardous" : false
+    }
+  },
+  "collision_data" : {
+    "x_off" : 16,
+    "y_off" : 48,
+    "width" : 32,
+    "height" : 16
+  }
+}

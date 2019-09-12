@@ -42,7 +42,7 @@ Entity::~Entity()
 
 
 
-void Entity::SeeNeighborCollisionObjects(float centerX, float centerY, std::vector<Object*>& neighboringCollisions)
+void Entity::SeeNeighborCollisionObjects(float centerX, float centerY, std::vector<Object*>& neighboringCollisions, bool includeEntities)
 {
 	int gx = (int)centerX / GRID_SIZE,     // gx and gy mean that this is where
 		gy = (int)centerY / GRID_SIZE;     // the center of the obj lies in the collision grid
@@ -66,6 +66,20 @@ void Entity::SeeNeighborCollisionObjects(float centerX, float centerY, std::vect
 			if (tempColl != NULL)
 			{
 				neighboringCollisions.push_back(tempColl);
+			}
+		}
+	}
+
+	if (includeEntities)
+	{
+		// Add all the entities
+		for (unsigned int i = 0; i < room->getEntityList()->size(); i++)
+		{
+			Entity* ent;
+			if ((ent = room->getEntityList()->at(i)) != this)
+			{
+				// It's not me!!!
+				neighboringCollisions.push_back(ent);
 			}
 		}
 	}

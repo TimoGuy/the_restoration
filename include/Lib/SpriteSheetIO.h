@@ -17,8 +17,11 @@ public:
 	~SpriteSheetIO();
 
 	void Render(std::string action, float x, float y, float w, float h);
+	void Render(std::string action, float x, float y, float w, float h, int tickTime);
 
 private:
+	void CalculateCoordsFromGridValsIfNeeded(std::string action);
+
 	Json::Value _properties;
 	Texture* mySpriteSheet;
 	std::string previousAction;

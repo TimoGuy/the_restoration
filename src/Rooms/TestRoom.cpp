@@ -11,6 +11,8 @@
 #include "Quad.h"
 #include "Cutscene.h"
 #include "SerialManager.h"
+#include "LifeBar.h"
+#include "StaminaBar.h"
 
 
 #include "TestMiniboss_Enemy.h"
@@ -27,6 +29,8 @@
 #include "../../include/Shape/Quad.h"
 #include "../../include/Rooms/Cutscene/Cutscene.h"
 #include "../../include/SerialManager.h"
+#include "../../include/ui/LifeBar.h"
+#include "../../include/ui/StaminaBar.h"
 
 #include "../../include/Players/TestMiniboss_Enemy.h"
 #endif
@@ -56,9 +60,13 @@ struct _BackgroundParallaxObj
 Quad* screenTransition;			// This will be a fade in AND out thing, okay?
 
 Quad* oneStamina;
+LifeBar* lifeBar;
+StaminaBar* stamBar;
 
 TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY, bool fadeIn, SDL_Color fadeInColor) : Room(gloop)
 {
+	lifeBar = new LifeBar();
+    stamBar = new StaminaBar();
     roomTileSet = new TileSet();
 	roomPropSet = NULL;
 
@@ -145,6 +153,7 @@ TestRoom::~TestRoom()
 
 	delete screenTransition;
 	delete oneStamina;
+	delete stamBar;
 }
 
 
@@ -303,7 +312,7 @@ void TestRoom::Render()
 	glTranslatef(-camX, -camY, 0.0f);
 
 
-	
+
 	// Render the backgrounds
 	glColor4f(1, 1, 1, 1);
 	int w, h;
@@ -330,14 +339,14 @@ void TestRoom::Render()
 			offsetX -= backgrounds.at(i).backgroundTex->GetWidth();
 		}
 	}
-	
+
 
 
 
 
 	// And then the tileset underlay!!!!!
 	glColor4f(1, 1, 1, 1);
-	
+
 	if (roomPropSet != NULL)
 	{
 		roomPropSet->Render(false);
@@ -362,62 +371,9 @@ void TestRoom::Render()
 	// Reset stuff!
 	glLoadIdentity();
 
+	
+	
 	// Now render the HUD!!!
-	if (camFocusObj != NULL)
-	{
-#define ONE_STAMINA_SIZE 24
-#define ONE_STAMINA_PADDING 8
-		if (oneStamina == NULL)
-		{
-			oneStamina = new Quad(ONE_STAMINA_SIZE, ONE_STAMINA_SIZE);
-		}
-
-		// Render health!!!
-		int maxHealth = SerialManager::Instance().GetGameData_Int(
-			"player_max_health",
-			GAME_VAR_DEF_player_max_health
-		);
-		int currentHealth = SerialManager::Instance().GetGameData_Int(
-			"player_current_health",
-			GAME_VAR_DEF_player_current_health
-		);
-
-		for (int i = 0; i < maxHealth; i++)
-		{
-			if (i < currentHealth)
-				glColor3f(1, 0, 0);
-			else
-			{
-				glColor3f(0.3f, 0.3f, 0.3f);
-			}
-
-			// Draw!
-			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
-			int xPos = i * oneUnit;
-			oneStamina->Render(xPos - 508, -284);
-		}
-
-
-		// Render stamina!!!
-		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
-		for (int i = 0; i < stamGauges; i++)
-		{
-			// Start at the upper left corner and just start drawing them green!
-			glColor3f(0, 1, 0);
-
-			int oneUnit = ONE_STAMINA_SIZE + ONE_STAMINA_PADDING;
-
-			int originalX = i * oneUnit;
-
-			float xPos = float(originalX % 1024);
-			float yPos = float(originalX / 1024 * oneUnit);
-
-			oneStamina->Render(xPos - 508, yPos - 284 + oneUnit);
-		}
-	}
-
-
-
 
 	// Setup screen transitioner, if needed ;)
 	if (screenTransition == NULL ||
@@ -427,6 +383,41 @@ void TestRoom::Render()
 		_gloop->GetWindowDimensions(w, h);
 		screenTransition = new Quad((float)w, (float)h);
 	}
+
+
+
+	// Render health and stamina
+	if (camFocusObj != NULL)
+	{
+#define ONE_STAMINA_SIZE 24
+#define ONE_STAMINA_PADDING 8
+#define HUD_PADDING_SIZE 4
+
+		// Render health!!!
+		int currentHealth = SerialManager::Instance().GetGameData_Int(
+			"player_current_health",
+			GAME_VAR_DEF_player_current_health
+		);
+		lifeBar->Render(
+			currentHealth,
+			-screenTransition->GetWidth() / 2 + HUD_PADDING_SIZE,
+			-screenTransition->GetHeight() / 2 + HUD_PADDING_SIZE
+		);
+
+
+		// Render stamina!!!
+		int totalStaminas = SerialManager::Instance().GetGameData_Int(
+            "player_max_jumps",
+            GAME_VAR_DEF_player_max_jumps
+        );
+		float xoff = -16.0f * (totalStaminas + 1.3f) - HUD_PADDING_SIZE;		// 2 extra bc of the padding
+		float yoff = -16 - HUD_PADDING_SIZE;
+
+
+		int stamGauges = ((TestGameObj*)camFocusObj)->GetNumJumps();
+		stamBar->Render(stamGauges, screenTransition->GetWidth() / 2 + xoff, screenTransition->GetHeight() / 2 + yoff);
+	}
+
 
 
 	// If there's a screen transition, do it!
@@ -496,6 +487,16 @@ bool TestRoom::LoadLevelIO(std::string name)
 	Json::Value lvlData;
 	if (reader.parse(myfile, lvlData))
 	{
+		// Get the music rolling!!!
+		if (lvlData.isMember("music") &&
+			lvlData["music"].size() > 0)
+		{
+			_gloop->RequestNewMusic(
+				lvlData["music"][std::to_string(0)].asString()
+			);
+		}
+
+
 		// Load collision picture ("entities")
 		// (I'm expecting it's there!!!)
 		if (lvlData["textures"].isMember("entities") &&
@@ -546,7 +547,14 @@ bool TestRoom::LoadLevelIO(std::string name)
 					ss[1].str() + std::string(",") +
 					ss[2].str();
 
-				Object* _new = ObjectFactory::GetObjectFactory().Build(colorId.c_str(), (int)(i % gWidth), (int)(i / gWidth), this);
+				Object* _new =
+					ObjectFactory::GetObjectFactory().Build(
+						colorId.c_str(),
+						(int)(i % gWidth),
+						(int)(i / gWidth),
+						this,
+						lvlData
+					);
 				if (_new != NULL)
 					gameObjects.push_back(_new);        // Adds the returned built object!
 
@@ -620,7 +628,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 		printf("ERROR: Unable to switch levels... no file was found with the level name \"%s\"\n", name.c_str());
 		return false;
 	}
-	
+
 	// Setup all the triggers
 	if (lvlData.isMember("triggers") &&
 		lvlData["triggers"].size() > 0)
@@ -647,7 +655,7 @@ bool TestRoom::LoadLevelIO(std::string name)
 						tmpTrigger->DisableMe();
 
 						// Set up the trigger object to be a master, and it will find all its slaves.
-						tmpTrigger->SetEventIDAndSetMaster("null", false);	
+						tmpTrigger->SetEventIDAndSetMaster("null", false);
 					}
 					else
 					{

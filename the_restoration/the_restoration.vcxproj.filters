@@ -46,6 +46,12 @@
     <Filter Include="Header Files\json">
       <UniqueIdentifier>{6960ffb3-e324-44a7-a0d4-3d46703d3f52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ui">
+      <UniqueIdentifier>{cfde73fb-0b35-45cc-a615-2588e2f81cd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{c7a5ba0c-ff79-4f10-9a2a-90c1207b03e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\defs.h">
@@ -144,6 +150,12 @@
     <ClInclude Include="..\include\Lib\SpriteSheetIO.h">
       <Filter>Header Files\Lib</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ui\StaminaBar.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ui\LifeBar.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Lib\Texture.cpp">
@@ -232,6 +244,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Lib\SpriteSheetIO.cpp">
       <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\StaminaBar.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\LifeBar.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
