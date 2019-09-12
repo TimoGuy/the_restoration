@@ -199,7 +199,7 @@ void GameLoop::RequestNewMusic(std::string fileName, bool hardSet)
             mainMusic = newMus;
             
             // Start playing music
-            Mix_PlayMusic(mainMusic, -1);
+            //Mix_PlayMusic(mainMusic, -1);
         }
     }
 }
