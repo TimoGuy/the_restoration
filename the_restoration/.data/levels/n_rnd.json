@@ -28,6 +28,7 @@
     },
     "propset" : "_level_propsets/lps_sheepShearing",
     "modifications" : {
-      "enemy_158_27" : "properties/enemy/enemy_flying_spider.json"
+      "enemy_158_27" : "properties/enemy/enemy_flying_spider.json",
+      "enemy_47_115" : "properties/enemy/enemy_flying_spider.json"
     }
 }

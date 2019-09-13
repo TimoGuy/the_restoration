@@ -349,7 +349,7 @@ void TestGameObj::Update()
     }
 
 	bool forceMovement =
-		(isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK) ||
+		(isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK + 1) ||			// Now you will have the camera pop when you're done charging!
 		(isDoingRocketJump);
     if (forceMovement)
     {
