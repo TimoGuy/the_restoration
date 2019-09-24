@@ -76,7 +76,7 @@
             }
         },
         "fall" : {
-            "ticks_per_frame" : 2,
+            "ticks_per_frame" : 3,
             "repeat" : true,
             "images" : {
                 "0" : {
