@@ -79,7 +79,7 @@ void TestMiniboss_Enemy::Update()
         SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck);
 
         // Update the hsp and vsp (until stopping eh)
-	    UpdateGroundCollisionVelocity(hsp, vsp, MY_WIDTH, MY_HEIGHT, &tempCollisionsToCheck);
+	    UpdateGroundCollisionVelocity(hsp, vsp, MY_WIDTH, MY_HEIGHT, &tempCollisionsToCheck, room->GetGameLoop()->GetGlobalTime());
         return;
     }
 
@@ -124,7 +124,7 @@ void TestMiniboss_Enemy::Update()
     }
 
 	// Update the hsp and vsp
-	UpdateGroundCollisionVelocity(hsp, vsp, MY_WIDTH, MY_HEIGHT, &tempCollisionsToCheck);
+	UpdateGroundCollisionVelocity(hsp, vsp, MY_WIDTH, MY_HEIGHT, &tempCollisionsToCheck, room->GetGameLoop()->GetGlobalTime());
 
 
     // Check if on the ground

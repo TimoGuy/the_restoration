@@ -234,7 +234,7 @@ void TestEnemy::Update()
 	SeeNeighborCollisionObjects(centX, centY, tempCollisionsToCheck);
 
 	// Update the hsp and vsp
-	UpdateGroundCollisionVelocity(hsp, vsp, myWidth, myHeight, &tempCollisionsToCheck);
+	UpdateGroundCollisionVelocity(hsp, vsp, myWidth, myHeight, &tempCollisionsToCheck, room->GetGameLoop()->GetGlobalTime());
 }
 
 void TestEnemy::Render()

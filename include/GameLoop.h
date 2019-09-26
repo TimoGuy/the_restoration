@@ -29,6 +29,8 @@ class GameLoop
         std::string GetMusicFname();
 
         void AddPause(int numTicks);
+        void SetGlobalTime(float flag=1);
+        float GetGlobalTime();
 
         void SetWindowDimensions(int width, int height);
         void GetWindowDimensions(int& width, int& height);          // Dipstick function!!!!
@@ -41,6 +43,7 @@ class GameLoop
         bool _running = true;
 
         int waitTicks = 0;
+        float _game_time;
 
         int _windowWidth, _windowHeight;
 		bool _didJustResize;

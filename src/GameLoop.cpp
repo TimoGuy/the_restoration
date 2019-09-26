@@ -30,6 +30,7 @@ GameLoop::GameLoop(SDL_Window* window)
 {
     LoadGameVariables();
     _window = window;
+    _game_time = 1.5f;
 
     // Set the initial shape for the window
 	SetWindowDimensions(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -226,6 +227,15 @@ void GameLoop::AddPause(int numTicks)
 }
 
 
+void GameLoop::SetGlobalTime(float flag)
+{
+    _game_time = flag;
+}
+
+float GameLoop::GetGlobalTime()
+{
+    return _game_time;
+}
 
 
 

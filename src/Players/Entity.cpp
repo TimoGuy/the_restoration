@@ -90,19 +90,18 @@ void Entity::SeeNeighborCollisionObjects(float centerX, float centerY, std::vect
 // Well, really the thing above should be the maxest max_hsp, that way you can still go up the slant
 // Or you could try lowering this and then move the testing cursor closer (x-wise) to the prev. position
 // And if there's a free space, then SLOW the player down! (That's an idea, but wait wait wait to implement...)
-
-void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float width, float height, std::vector<Object*>* collisionsToCheck)
+void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float width, float height, std::vector<Object*>* collisionsToCheck, float time)
 {
 	// THIS IS COLLISION W/ GROUND SECTION
 
 
 	// Try updating x (from hsp)				// EDIT: we'll add the ability to see if collided into a slant or not! This only happens if you're RUBBING into it though!
-	int tHsp = (int)std::ceil(std::abs(hspeed));
+	int tHsp = (int)std::ceil(std::abs(hspeed * time));
 	std::vector<Object*> tempCollisions;
-	if (!CollideAtPos(x + tHsp * copysignf(1.0f, hspeed), y, width, height, collisionsToCheck, tempCollisions, true))
+	if (!CollideAtPos(x + hspeed * time, y, width, height, collisionsToCheck, tempCollisions, true))
 	{
 		// It's safe!
-		x += tHsp * copysignf(1.0f, hspeed);
+		x += hspeed * time;
 	}
 	else if (tHsp > 0)
 	{
@@ -163,11 +162,11 @@ void Entity::UpdateGroundCollisionVelocity(float& hspeed, float& vspeed, float w
 
 
 	// Try updating y (from vsp)										// NOTE: the value 'vsp' could be modified by the ramp climbing back here!
-	int tVsp = (int)std::ceil(std::abs(vspeed));
-	if (!CollideAtPos(x, y + tVsp * copysignf(1.0f, vspeed), width, height, collisionsToCheck, true))
+	int tVsp = (int)std::ceil(std::abs(vspeed * time));
+	if (!CollideAtPos(x, y + vspeed * time, width, height, collisionsToCheck, true))
 	{
 		// It's safe!
-		y += tVsp * copysignf(1.0f, vspeed);
+		y += vspeed * time;
 	}
 	else if (tVsp > 0)
 	{

@@ -381,15 +381,18 @@ void TestGameObj::Update()
 	if (!isDoingRocketJump)
 	{
 		// Add the input val if it was given!
-		hsp += inputX;
+		hsp += inputX * room->GetGameLoop()->GetGlobalTime();
 
 		if (inputX == 0 &&
 			hsp != 0)
 		{
-			if (std::abs(hsp) < FRICTION) { hsp = 0; }
+			if (std::abs(hsp * room->GetGameLoop()->GetGlobalTime()) <
+				FRICTION * room->GetGameLoop()->GetGlobalTime()) { hsp = 0; }
 			else
 			{
-				float chg = FRICTION * copysignf(1.0f, hsp);
+				float chg = FRICTION *
+					room->GetGameLoop()->GetGlobalTime() *
+					copysignf(1.0f, hsp);
 				hsp -= chg;
 			}
 		}
@@ -402,7 +405,7 @@ void TestGameObj::Update()
 
 
 		// Gravity!
-		vsp += GRAV;
+		vsp += GRAV * room->GetGameLoop()->GetGlobalTime();
 
 
 		// Jump!
@@ -654,7 +657,7 @@ void TestGameObj::Update()
     // Update vsp and hsp
 	hsp += outHsp;
 	vsp += outVsp;
-	UpdateGroundCollisionVelocity(hsp, vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck);
+	UpdateGroundCollisionVelocity(hsp, vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, room->GetGameLoop()->GetGlobalTime());
 	hsp -= outHsp;
 	vsp -= outVsp;
 
