@@ -144,6 +144,10 @@ void InputManager::ProcessInput(GameLoop* g)
 					_b3 = true;
 					break;
 
+				case SDLK_l:
+					_b5 = true;
+					break;
+
 				case SDLK_r:
 					_reloadRes = true;		// FOR DEBUG: there's no keyup event, btw.
 					break;
@@ -187,6 +191,10 @@ void InputManager::ProcessInput(GameLoop* g)
 
 				case SDLK_SPACE:
 					_b3 = false;
+					break;
+
+				case SDLK_l:
+					_b5 = false;
 					break;
                 }
             }

@@ -83,6 +83,9 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 	rjStoredHsp = 0;
 	rjStoredVsp = 0;
 
+	_isSlowMotion = false;
+	_wasSlowMotionTicks = 0;
+
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
@@ -147,6 +150,8 @@ float reqCamOffx = 0;
 
 void TestGameObj::Update()
 {
+	_SlowMotionUpdate();
+
 	// Adjust according to input
 	float inputX = 0;
 	bool inputJump = false;
@@ -906,4 +911,30 @@ bool TestGameObj::IsUsingSword()
     // This is what controls
     // if the sword is on!
     return swordTicksLeft > 0;
+}
+
+#define MAX_SLOW_MOTION_TICKS 45
+bool prevB5Down = false;
+void TestGameObj::_SlowMotionUpdate()
+{
+	bool wantSwitch = !prevB5Down && InputManager::Instance().b5();
+	if (wantSwitch || _wasSlowMotionTicks > MAX_SLOW_MOTION_TICKS)
+	{
+		_isSlowMotion = !_isSlowMotion;
+		_wasSlowMotionTicks = 0;
+	}
+
+	if (_isSlowMotion)
+	{
+		// If holding, probs wanna do slow motion eh
+		room->GetGameLoop()->SetGlobalTime(0.25f);
+		_wasSlowMotionTicks++;
+	}
+	else
+	{
+		// Reset global time haha
+		room->GetGameLoop()->SetGlobalTime();
+	}
+
+	prevB5Down = InputManager::Instance().b5();
 }

@@ -66,4 +66,8 @@ class TestGameObj : public Entity
 		int rjTicksInDeadzone;
 		int rjTicksDoingRocketJump;
 		float rjStoredHsp, rjStoredVsp;
+
+        void _SlowMotionUpdate();
+        bool _isSlowMotion;
+        int _wasSlowMotionTicks;
 };
