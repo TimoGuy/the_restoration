@@ -69,7 +69,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
     Json::Reader reader;
     Json::Value props;
     reader.parse(ifs, props);
-    sprSheet = new SpriteSheetIO(props);
+    sprSheet = new SpriteSheetIO(props, room->GetGameLoop());
 
     mySword = new Quad(PLAYER_SWORD_WIDTH, PLAYER_SWORD_HEIGHT);
     swordTicksLeft = 0;
@@ -928,7 +928,7 @@ void TestGameObj::_SlowMotionUpdate()
 	{
 		// If holding, probs wanna do slow motion eh
 		room->GetGameLoop()->SetGlobalTime(0.25f);
-		_wasSlowMotionTicks++;
+		// _wasSlowMotionTicks++;
 	}
 	else
 	{

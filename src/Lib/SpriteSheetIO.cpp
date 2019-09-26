@@ -2,10 +2,12 @@
 #include "Lib/SpriteSheetIO.h"
 #include "Lib/Texture.h"
 #include <SDL2/SDL_opengl.h>
+#include "GameLoop.h"
 #elif defined(_WIN32) || defined(WIN32)
 #include "../../include/Lib/SpriteSheetIO.h"
 #include "../../include/Lib/Texture.h"
 #include <SDL_opengl.h>
+#include "../../include/GameLoop.h"
 #endif
 
 #include <iostream>
@@ -23,9 +25,10 @@ struct _Vector4
 	}
 };
 
-SpriteSheetIO::SpriteSheetIO(Json::Value props)
+SpriteSheetIO::SpriteSheetIO(Json::Value props, GameLoop* gloop)
 {
 	_properties = props;
+	_gloop = gloop;
 
 	// Load up the sprite sheet
 	printf(
@@ -53,7 +56,7 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 	// Check if same action as previous time
 	if (action == previousAction)
 	{
-		ticksOnAction++;
+		ticksOnAction += _gloop != NULL ? _gloop->GetGlobalTime() : 1;
 	}
 	else
 	{

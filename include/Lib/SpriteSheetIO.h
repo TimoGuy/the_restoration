@@ -7,13 +7,14 @@
 #endif
 
 class Texture;
+class GameLoop;
 
 #include <string>
 
 class SpriteSheetIO
 {
 public:
-	SpriteSheetIO(Json::Value props);
+	SpriteSheetIO(Json::Value props, GameLoop* gloop=NULL);
 	~SpriteSheetIO();
 
 	void Render(std::string action, float x, float y, float w, float h);
@@ -25,5 +26,6 @@ private:
 	Json::Value _properties;
 	Texture* mySpriteSheet;
 	std::string previousAction;
-	int ticksOnAction;
+	GameLoop* _gloop;
+	float ticksOnAction;
 };
