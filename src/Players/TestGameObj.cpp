@@ -86,6 +86,8 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 	_isSlowMotion = false;
 	_wasSlowMotionTicks = 0;
 
+	_isRocketSpeed = false;
+
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
     image = new Quad(PLAYER_WIDTH, PLAYER_HEIGHT, tempTex);
@@ -125,8 +127,8 @@ TestGameObj::~TestGameObj()
 #define GRAV 0.5f
 #define FRICTION 0.5f
 
-// 33px (32)
-#define JUMP_HEIGHT 5.5f
+// 32px
+#define JUMP_HEIGHT 5.41f
 // 68px (64)
 #define JUMP_HEIGHT_2B 8.0f
 // 95px (96)
@@ -138,7 +140,9 @@ TestGameObj::~TestGameObj()
 // 189px (192)
 #define JUMP_HEIGHT_6B 13.5f
 
-#define MAX_HSP 35.0f
+#define MAX_HSP 10.0f
+#define MAX_HSP_FAST 35.0f
+#define MAX_FALL_SP 14.0f
 
 #define KNOCKBACK_HSP 10.0f
 #define KNOCKBACK_VSP -4.0f
@@ -150,7 +154,8 @@ float reqCamOffx = 0;
 
 void TestGameObj::Update()
 {
-	_SlowMotionUpdate();
+	// _SlowMotionUpdate();
+	_RocketSpeedUpdate();
 
 	// Adjust according to input
 	float inputX = 0;
@@ -403,14 +408,16 @@ void TestGameObj::Update()
 		}
 
 		// Limit hsp
-		hsp = std::min(std::max(hsp, -MAX_HSP), MAX_HSP);
+		float __maxHsp__ = _isRocketSpeed ? MAX_HSP_FAST : MAX_HSP;
+		hsp = std::min(std::max(hsp, -__maxHsp__), __maxHsp__);
 
 
 
 
 
 		// Gravity!
-		vsp += GRAV * room->GetGameLoop()->GetGlobalTime();
+		if (vsp < MAX_FALL_SP)
+			vsp += GRAV * room->GetGameLoop()->GetGlobalTime();
 
 
 		// Jump!
@@ -937,4 +944,27 @@ void TestGameObj::_SlowMotionUpdate()
 	}
 
 	prevB5Down = InputManager::Instance().b5();
+}
+
+void TestGameObj::_RocketSpeedUpdate()
+{
+	if (_isRocketSpeed)
+	{
+		// Cancel it out if too slow
+		// (into the regular range again eh!)
+		if (std::abs(hsp) <= MAX_HSP)
+		{
+			_isRocketSpeed = false;
+		}
+	}
+	else
+	{
+		// Look for the input for it eh!
+		if (InputManager::Instance().b5())
+		{
+			_isRocketSpeed = true;
+			int flipped = isSwordLeft ? -1 : 1;
+			hsp = MAX_HSP_FAST * flipped;
+		}
+	}
 }

@@ -30,7 +30,7 @@ GameLoop::GameLoop(SDL_Window* window)
 {
     LoadGameVariables();
     _window = window;
-    _game_time = 1.5f;
+    _game_time = 1.0f;
 
     // Set the initial shape for the window
 	SetWindowDimensions(SCREEN_WIDTH, SCREEN_HEIGHT);

@@ -70,4 +70,7 @@ class TestGameObj : public Entity
         void _SlowMotionUpdate();
         bool _isSlowMotion;
         int _wasSlowMotionTicks;
+
+        void _RocketSpeedUpdate();
+        bool _isRocketSpeed;
 };
