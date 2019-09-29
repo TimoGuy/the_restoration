@@ -125,7 +125,7 @@ TestGameObj::~TestGameObj()
 
 // Grav should be somewhere between 0.5 and 1.0
 #define GRAV 0.5f
-#define HSP_DELTA 1.5f
+#define HSP_DELTA 2.5f
 #define FRICTION 0.5f
 
 // 32px
