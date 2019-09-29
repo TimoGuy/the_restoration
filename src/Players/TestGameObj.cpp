@@ -125,6 +125,7 @@ TestGameObj::~TestGameObj()
 
 // Grav should be somewhere between 0.5 and 1.0
 #define GRAV 0.5f
+#define HSP_DELTA 1.5f
 #define FRICTION 0.5f
 
 // 32px
@@ -391,7 +392,7 @@ void TestGameObj::Update()
 	if (!isDoingRocketJump)
 	{
 		// Add the input val if it was given!
-		hsp += inputX * room->GetGameLoop()->GetGlobalTime();
+		hsp += inputX * HSP_DELTA * room->GetGameLoop()->GetGlobalTime();
 
 		if (inputX == 0 &&
 			hsp != 0)
