@@ -1,0 +1,153 @@
+{
+    "sprites" : {
+        "sprite_sheet" : {
+            "image" : ".data/images/heyhey.png",
+            "width" : 1024,
+            "height" : 1024,
+            "render_width" : 64,
+            "render_height" : 64,
+            "render_off_x" : 0,
+            "render_off_y" : 0
+        },
+        "idle" : {
+            "ticks_per_frame" : 6,
+            "repeat" : true,
+            "images" : {
+                "0" : {
+                    "gx" : 0,
+                    "gy" : 0
+                }
+            }
+        },
+        "run" : {
+            "ticks_per_frame" : 2,
+            "repeat" : true,
+            "images" : {
+                "0" : {
+                    "gx" : 0,
+                    "gy" : 2
+                },
+                "1" : {
+                    "gx" : 1,
+                    "gy" : 2
+                },
+                "2" : {
+                    "gx" : 2,
+                    "gy" : 2
+                },
+                "3" : {
+                    "gx" : 3,
+                    "gy" : 2
+                },
+                "4" : {
+                    "gx" : 4,
+                    "gy" : 2
+                },
+                "5" : {
+                    "gx" : 5,
+                    "gy" : 2
+                },
+                "6" : {
+                    "gx" : 6,
+                    "gy" : 2
+                },
+                "7" : {
+                    "gx" : 7,
+                    "gy" : 2
+                }
+            }
+        },
+        "jump" : {
+            "ticks_per_frame" : 3,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "gx" : 0,
+                    "gy" : 3
+                },
+                "1" : {
+                    "gx" : 1,
+                    "gy" : 3
+                },
+                "2" : {
+                    "gx" : 2,
+                    "gy" : 3
+                }
+            }
+        },
+        "fall" : {
+            "ticks_per_frame" : 3,
+            "repeat" : true,
+            "images" : {
+                "0" : {
+                    "gx" : 3,
+                    "gy" : 3
+                },
+                "1" : {
+                    "gx" : 4,
+                    "gy" : 3
+                }
+            }
+        },
+        "land" : {
+            "ticks_per_frame" : 3,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "x" : 72,
+                    "y" : 24,
+                    "x2" : 95,
+                    "y2" : 47
+                },
+                "1" : {
+                    "x" : 96,
+                    "y" : 24,
+                    "x2" : 119,
+                    "y2" : 47
+                }
+            }
+        },
+        "attack" : {
+            "ticks_per_frame" : 20,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "x" : 72,
+                    "y" : 48,
+                    "x2" : 95,
+                    "y2" : 71
+                },
+                "1" : {
+                    "x" : 24,
+                    "y" : 48,
+                    "x2" : 47,
+                    "y2" : 71
+                }
+            }
+        },
+        "hurt" : {
+            "ticks_per_frame" : 1,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "gx" : 0,
+                    "gy" : 5
+                }
+            }
+        },
+        "die" : {
+            "ticks_per_frame" : 30,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "gx" : 0,
+                    "gy" : 5
+                },
+                "1" : {
+                    "gx" : 1,
+                    "gy" : 5
+                }
+            }
+        }
+    }
+}
