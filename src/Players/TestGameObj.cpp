@@ -522,6 +522,7 @@ void TestGameObj::Render()
 
 
     // Set up the animation actions
+	float timePref = 1.0f;
     std::string action = "idle";
     if (hsp != 0) action = "run";
     if (isMidair)
@@ -531,9 +532,16 @@ void TestGameObj::Render()
     }
     if (isUsingMySword) action = "attack";
     int flipped = isSwordLeft ? -1 : 1;
+
     glTranslatef(x + 24 - 12, y, 0);
     glScalef(flipped, 1, 1);
-    sprSheet->Render(action, -24, 0, 48, 48);
+
+	if (action == "run")
+	{
+		timePref = std::abs(hsp) / MAX_HSP / 1.5f;
+	}
+    sprSheet->Render(action, -24, 0, 48, 48, timePref);
+
     glScalef(flipped, 1, 1);
     glTranslatef(-x - 24 + 12, -y, 0);
 

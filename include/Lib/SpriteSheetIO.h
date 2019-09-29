@@ -17,8 +17,8 @@ public:
 	SpriteSheetIO(Json::Value props, GameLoop* gloop=NULL);
 	~SpriteSheetIO();
 
-	void Render(std::string action, float x, float y, float w, float h);
-	void Render(std::string action, float x, float y, float w, float h, int tickTime);
+	void Render(std::string action, float x, float y, float w, float h, float speedMod=1.0f);
+	void Render(std::string action, float x, float y, float w, float h, float speedMod, int tickTime);
 
 private:
 	void CalculateCoordsFromGridValsIfNeeded(std::string action);

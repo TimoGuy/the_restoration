@@ -51,12 +51,12 @@ SpriteSheetIO::~SpriteSheetIO()
 	delete mySpriteSheet;
 }
 
-void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h)
+void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h, float speedMod)
 {
 	// Check if same action as previous time
 	if (action == previousAction)
 	{
-		ticksOnAction += _gloop != NULL ? _gloop->GetGlobalTime() : 1;
+		ticksOnAction += speedMod;
 	}
 	else
 	{
@@ -66,10 +66,10 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 	}
 
 	// Call the real render function eh
-	Render(action, x, y, w, h, ticksOnAction);
+	Render(action, x, y, w, h, 1, ticksOnAction);
 }
 
-void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h, int tickTime)
+void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h, float speedMod, int tickTime)
 {
 	CalculateCoordsFromGridValsIfNeeded(action);		// In case if 'x' or 'y' and such doesn't exist eh (and instead it was entered in as gx and gy)
 
