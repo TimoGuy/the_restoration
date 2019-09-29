@@ -143,6 +143,7 @@ TestGameObj::~TestGameObj()
 
 #define MAX_HSP 10.0f
 #define MAX_HSP_FAST 35.0f
+#define MAX_HSP_ATTACKING 2.5f
 #define MAX_FALL_SP 14.0f
 
 #define KNOCKBACK_HSP 10.0f
@@ -410,6 +411,10 @@ void TestGameObj::Update()
 
 		// Limit hsp
 		float __maxHsp__ = _isRocketSpeed ? MAX_HSP_FAST : MAX_HSP;
+		__maxHsp__ =
+			(isUsingMySword &&
+			swordTicksLeft == SWORD_DAMAGE_TICK + 1 &&
+			InputManager::Instance().b1()) ? MAX_HSP_ATTACKING : __maxHsp__;	// If charging/holding (doesn't slow down player if not holding the punch)
 		hsp = std::min(std::max(hsp, -__maxHsp__), __maxHsp__);
 
 
