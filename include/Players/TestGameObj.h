@@ -58,15 +58,6 @@ class TestGameObj : public Entity
 
 		int outHsp, outVsp;		// Outside forces will be int's, really!
 
-		// For 'rocket jump' component
-		bool isDoingRocketJump;
-		bool _freshRocketJump;				// This is only true on the first tick of a rocket jump (like ticket to enter)
-		int rjInputActivationPhase;			// 0 is nothing, 1 is holding a direction, 2 is go into deadzone, 3 is back to prev. direction (like a double tap!)
-		int rjInputDirection;				// Like the cardinal directions since this is only 4 directions eh
-		int rjTicksInDeadzone;
-		int rjTicksDoingRocketJump;
-		float rjStoredHsp, rjStoredVsp;
-
         void _SlowMotionUpdate();
         bool _isSlowMotion;
         int _wasSlowMotionTicks;
