@@ -42,11 +42,6 @@ void StaminaBar::Render(int currentStaminas, float x, float y)
         // First one
         currentStaminas_asFloat = currentStaminas;
     }
-    else if (currentStaminas_asFloat <= currentStaminas)
-    {
-        // When it's refilling, I want it to go full speed eh
-        currentStaminas_asFloat = currentStaminas;
-    }
     else
     {
         // LERP TO IT!!!!!

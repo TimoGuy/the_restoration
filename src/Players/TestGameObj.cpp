@@ -687,10 +687,12 @@ void TestGameObj::Update()
 	// Bc now it's more of a rocket-jumping game!
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
-		if (numJumps < SerialManager::Instance().GetGameData_Int(
-                "player_max_jumps", GAME_VAR_DEF_player_max_jumps) &&
-			!isUsingMySword)
-			numJumps++;						// Reset number of jumps you can do
+		if (!isUsingMySword)
+			numJumps =				// Reset number of jumps you can do
+				SerialManager::Instance().GetGameData_Int(
+                	"player_max_jumps",
+					GAME_VAR_DEF_player_max_jumps
+				);
 
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
 		UpdateStartCoords();
