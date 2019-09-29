@@ -55,7 +55,7 @@ class InputManager
         bool _b1 = false;       // Attack or Action
         bool _b2 = false;       // Dash or Jump?? (I dont really know...)
 		bool _b3 = false;		// Look around (hold to look around the level eh)
-		bool _b4 = false;		// DEBUG TAME: causes the original blocks to show up.		(NOTE: this TOGGLES too!!!)
+		bool _b4 = true;		// DEBUG TAME: causes the original blocks to show up.		(NOTE: this TOGGLES too!!!)
         bool _b5 = false;       // Slow motion
 
 		// TEST: For debugging
