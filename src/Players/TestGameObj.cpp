@@ -427,13 +427,18 @@ void TestGameObj::Update()
 
 
     // Update vsp and hsp
+    float prevHsp = hsp;
 	hsp += outHsp;
 	vsp += outVsp;
 	UpdateGroundCollisionVelocity(hsp, vsp, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, room->GetGameLoop()->GetGlobalTime());
 	hsp -= outHsp;
 	vsp -= outVsp;
 
-
+    if (std::abs(prevHsp) > MAX_HSP && hsp == 0)
+    {
+        // Hit a wall at fast speeds!
+        _Knockback(prevHsp > 0);
+    }
 
 
     // CHECK STATES
@@ -596,48 +601,13 @@ void TestGameObj::YouLose(Entity* accordingToMe)
 			return;
 	}
 
-    // Enemy won :====(
-    room->GetGameLoop()->AddPause(10);
-    float sign = 1;
-    if (x + hsp < accordingToMe->getX() ||
-        hsp > 0)
-    {
-        sign = -1;  // If mvng right, want to shoot left as an 'ouch!'
-    }
-
-    hsp = KNOCKBACK_HSP * sign;
-    vsp = KNOCKBACK_VSP;
-
-    // Take off 1hp
-    SerialManager::Instance().SetGameData_Int(
-        "player_current_health",
-        SerialManager::Instance().GetGameData_Int(
-            "player_current_health",
-            GAME_VAR_DEF_player_current_health
-        ) - 23
-    );
-    framesOfInvincibility = HURT_FRAMES;
-    
-
-    // Check if lives are out!
-    if (SerialManager::Instance().GetGameData_Int(
-            "player_current_health",
-            GAME_VAR_DEF_player_current_health
-        ) <= 0)
-    {
-        // Sowee, but you ded, son
-        room->GetGameLoop()->SetRoom(new Cutscene("c_dead", room->GetGameLoop()));
-    }
+    _Knockback(x + hsp < accordingToMe->getX() || hsp > 0);
 }
 
 int TestGameObj::GetNumJumps()
 {
 	return numJumps;
 }
-
-
-
-
 
 void TestGameObj::SetGridCoords(int gx, int gy)
 {
@@ -737,4 +707,39 @@ void TestGameObj::_RocketSpeedUpdate()
 			hsp = MAX_HSP_FAST * flipped;
 		}
 	}
+}
+
+void TestGameObj::_Knockback(bool toLeft)
+{
+    // Enemy won :====(
+    room->GetGameLoop()->AddPause(10);
+    float sign = 1;
+    if (toLeft)
+    {
+        sign = -1;  // If mvng right, want to shoot left as an 'ouch!'
+    }
+
+    hsp = KNOCKBACK_HSP * sign;
+    vsp = KNOCKBACK_VSP;
+
+    // Take off 1hp
+    SerialManager::Instance().SetGameData_Int(
+        "player_current_health",
+        SerialManager::Instance().GetGameData_Int(
+            "player_current_health",
+            GAME_VAR_DEF_player_current_health
+        ) - 23
+    );
+    framesOfInvincibility = HURT_FRAMES;
+    _isRocketSpeed = true;      // TEMP FIX
+
+    // Check if lives are out!
+    if (SerialManager::Instance().GetGameData_Int(
+            "player_current_health",
+            GAME_VAR_DEF_player_current_health
+        ) <= 0)
+    {
+        // Sowee, but you ded, son
+        room->GetGameLoop()->SetRoom(new Cutscene("c_dead", room->GetGameLoop()));
+    }
 }

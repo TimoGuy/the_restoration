@@ -64,4 +64,6 @@ class TestGameObj : public Entity
 
         void _RocketSpeedUpdate();
         bool _isRocketSpeed;
+
+        void _Knockback(bool toLeft);
 };
