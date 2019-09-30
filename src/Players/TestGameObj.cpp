@@ -140,7 +140,8 @@ TestGameObj::~TestGameObj()
 
 #define KNOCKBACK_HSP 10.0f
 #define KNOCKBACK_VSP -4.0f
-#define HURT_FRAMES 60
+#define HURT_FRAMES 90
+#define CAN_MOVE_FRAMES 60
 
 float reqCamOffx = 0;
 #define MAX_CAM_OFFSET_X 32.0f
@@ -156,7 +157,8 @@ void TestGameObj::Update()
 	bool inputJump = false;
 
     if (SerialManager::Instance().GetGameData_Bool("saw_tutorial", GAME_VAR_DEF_saw_tutorial) &&
-		!InputManager::Instance().b3())
+		!InputManager::Instance().b3() &&
+        framesOfInvincibility <= CAN_MOVE_FRAMES)
     {
         inputX = InputManager::Instance().x();
 		inputJump = InputManager::Instance().b2();
