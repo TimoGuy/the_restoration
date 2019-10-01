@@ -119,9 +119,11 @@ TestGameObj::~TestGameObj()
 #define GRAV 0.5f
 #define HSP_DELTA 2.5f
 #define FRICTION 0.5f
+#define FRICTION_SLOW 2.5f
+#define HSP_WHEN_CONSIDERED_SLOW 5.5f
 
 // 32px
-#define JUMP_HEIGHT 5.41f
+#define JUMP_HEIGHT 5.5f
 // 68px (64)
 #define JUMP_HEIGHT_2B 8.0f
 // 95px (96)
@@ -220,11 +222,13 @@ void TestGameObj::Update()
 	if (inputX == 0 &&
 		hsp != 0)
 	{
+        float friction =
+            std::abs(hsp) < HSP_WHEN_CONSIDERED_SLOW ? FRICTION_SLOW : FRICTION;
 		if (std::abs(hsp * room->GetGameLoop()->GetGlobalTime()) <
-			FRICTION * room->GetGameLoop()->GetGlobalTime()) { hsp = 0; }
+			friction * room->GetGameLoop()->GetGlobalTime()) { hsp = 0; }
 		else
 		{
-			float chg = FRICTION *
+			float chg = friction *
 				room->GetGameLoop()->GetGlobalTime() *
 				copysignf(1.0f, hsp);
 			hsp -= chg;
@@ -251,6 +255,7 @@ void TestGameObj::Update()
 	// Jump!
 	if (inputJump && numJumps > 0 && !wasJumpBtnAlreadyPressed)
 	{
+        sprSheet->ForceAnimationFrameReset();
 		vsp = -JUMP_HEIGHT - nerfer;
 		//vsp = -JUMP_HEIGHT_2B - nerfer;
 		//vsp = -JUMP_HEIGHT_3B - nerfer;
@@ -315,7 +320,7 @@ void TestGameObj::Update()
 			if (dynamic_cast<Hazard*>(tempCollisions.at(i)) != NULL)
 			{
 				// Awesome!    Now you die!
-				die = true;
+				_Knockback(hsp > 0);
 			}
 
 			// Check for exits
@@ -713,6 +718,8 @@ void TestGameObj::_RocketSpeedUpdate()
 
 void TestGameObj::_Knockback(bool toLeft)
 {
+    if (framesOfInvincibility > 0) return;
+
     // Enemy won :====(
     room->GetGameLoop()->AddPause(10);
     float sign = 1;

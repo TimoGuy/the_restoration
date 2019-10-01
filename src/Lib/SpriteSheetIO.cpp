@@ -51,6 +51,11 @@ SpriteSheetIO::~SpriteSheetIO()
 	delete mySpriteSheet;
 }
 
+void SpriteSheetIO::ForceAnimationFrameReset()
+{
+	ticksOnAction = 0;
+}
+
 void SpriteSheetIO::Render(std::string action, float x, float y, float w, float h, float speedMod)
 {
 	// Check if same action as previous time
@@ -60,8 +65,7 @@ void SpriteSheetIO::Render(std::string action, float x, float y, float w, float 
 	}
 	else
 	{
-		// New action set, eh!
-		ticksOnAction = 0;
+		ForceAnimationFrameReset();
 		previousAction = action;
 	}
 

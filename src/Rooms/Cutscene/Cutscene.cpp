@@ -402,8 +402,9 @@ void Cutscene::Render()
 
 void Cutscene::Render(bool resetViewMat)
 {
-	if (InputManager::Instance().b4())
-		printf("Ticks in cutscene: %i\n", ticks);
+    // TODO
+	// if (InputManager::Instance().b4())
+	// 	printf("Ticks in cutscene: %i\n", ticks);
 
 	if (resetViewMat)
 	{

@@ -17,6 +17,8 @@ public:
 	SpriteSheetIO(Json::Value props, GameLoop* gloop=NULL);
 	~SpriteSheetIO();
 
+	void ForceAnimationFrameReset();
+
 	void Render(std::string action, float x, float y, float w, float h, float speedMod=1.0f);
 	void Render(std::string action, float x, float y, float w, float h, float speedMod, int tickTime);
 

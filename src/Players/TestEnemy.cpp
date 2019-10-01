@@ -122,7 +122,8 @@ void TestEnemy::Update()
     else if (currentAction == STATE_TARGET ||
             (currentAction == STATE_IDLE && props["actions"]["target"].isNull()))
     {
-        printf("Spikking target!!\n");
+        // TODO
+        // printf("Spikking target!!\n");
         // See if want to attack
         if (IsTargetInBounds(props["actions"]["attack_dist"].asFloat()))
         {
