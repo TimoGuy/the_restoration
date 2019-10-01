@@ -155,7 +155,7 @@
     "attack_phases" : {
       "0" : {
         "action": "face_player",
-        "hazardous": true,
+        "hazardous": false,
         "phase_time_ticks": 120
       },
       "1" : {
@@ -175,7 +175,7 @@
     },
     "die" : {
       "action" : "explode",
-      "hazardous" : true
+      "hazardous" : false
     }
   },
   "collision_data" : {
