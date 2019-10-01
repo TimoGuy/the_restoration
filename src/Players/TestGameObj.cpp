@@ -742,13 +742,16 @@ void TestGameObj::_Knockback(bool toLeft)
     framesOfInvincibility = HURT_FRAMES;
     _isRocketSpeed = true;      // TEMP FIX
 
-    // Check if lives are out!
-    if (SerialManager::Instance().GetGameData_Int(
-            "player_current_health",
-            GAME_VAR_DEF_player_current_health
-        ) <= 0)
-    {
-        // Sowee, but you ded, son
-        room->GetGameLoop()->SetRoom(new Cutscene("c_dead", room->GetGameLoop()));
-    }
+    // Knock wind out of player!
+    numJumps = 0;
+
+    // // Check if lives are out!
+    // if (SerialManager::Instance().GetGameData_Int(
+    //         "player_current_health",
+    //         GAME_VAR_DEF_player_current_health
+    //     ) <= 0)
+    // {
+    //     // Sowee, but you ded, son
+    //     room->GetGameLoop()->SetRoom(new Cutscene("c_dead", room->GetGameLoop()));
+    // }
 }
