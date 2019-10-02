@@ -13,6 +13,7 @@
 #include "TestEnemy.h"
 #include "Npc.h"
 #include "FuelIncreaserItem.h"
+#include "Checkpoint.h"
 #include "json/json.h"
 
 
@@ -31,6 +32,7 @@
 #include "../include/Players/TestEnemy.h"
 #include "../include/Players/Npc.h"
 #include "../include/Players/FuelIncreaserItem.h"
+#include "../include/Players/Checkpoint.h"
 #include "../include/json/json.h"
 #endif
 
@@ -62,6 +64,8 @@ enum StringValue
 
 	evCollectable,
 
+	evCheckpoint,
+
     evEnd
 };
 static std::map<std::string, StringValue>* s_mapStringValues = NULL;
@@ -90,6 +94,7 @@ ObjectFactory::ObjectFactory()
     (*s_mapStringValues)["136,0,21"] = evMovingPlatGround;
 	(*s_mapStringValues)["239,228,176"] = evNpc;
 	(*s_mapStringValues)["127,0,55"] = evCollectable;
+	(*s_mapStringValues)["255,150,0"] = evCheckpoint;
     (*s_mapStringValues)["end"] = evEnd;
 
     printf("Init Object map!!\n");
@@ -219,6 +224,10 @@ Object* ObjectFactory::Build(std::string const& key, int gx, int gy, TestRoom* r
 
 	case evCollectable:
 		retObj = new FuelIncreaserItem(gx, gy, rm);
+		break;
+
+	case evCheckpoint:
+		retObj = new Checkpoint(gx, gy, rm);
 		break;
 
     default:
