@@ -111,6 +111,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 	// To set up the player
 	currentChkpt = NULL;
+
 	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
 		// Look for the player!!!

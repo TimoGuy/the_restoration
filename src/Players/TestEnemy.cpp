@@ -256,7 +256,6 @@ void TestEnemy::Render()
 
 bool TestEnemy::IsColliding(BoundBox* box)
 {
-	// Use 'image' as the bounding box and test collision!
 	return x + myBoundBox->x < box->x + box->width &&
 		x + myBoundBox->x + myBoundBox->width > box->x &&
 		y + myBoundBox->y < box->y + box->height &&

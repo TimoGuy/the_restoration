@@ -26,11 +26,17 @@ Checkpoint::Checkpoint(int gx, int gy, TestRoom* rm)
     Json::Value props;
     reader.parse(ifs, props);
     sprSheet = new SpriteSheetIO(props, room->GetGameLoop());
+
+    myBoundBox = new BoundBox();
+    myBoundBox->x = 0;
+    myBoundBox->y = 0;
+    myBoundBox->width = 32;
+    myBoundBox->height = 32;
 }
 
 Checkpoint::~Checkpoint()
 {
-    
+
 }
 
 void Checkpoint::Update() {}
@@ -39,26 +45,16 @@ void Checkpoint::Render()
     glColor4f(1, 1, 1, 1);
 
     std::string action =
-        room->GetCheckpoint() == this ? "off" : "on";
-    sprSheet->Render(action, 0, 0, 32, 32);
+        room->GetCheckpoint() == this ? "on" : "off";
+    sprSheet->Render(action, x, y, 32, 32);
 }
 
 bool Checkpoint::IsColliding(BoundBox* box)
 {
-    if (!active) return false;
-
-    // Use 'icon' as the bounding box and test collision!
-	return x < box->x + box->width &&
-		x + icon->GetWidth() > box->x &&
-		y < box->y + box->height &&
-		y + icon->GetHeight() > box->y;
+    return x + myBoundBox->x < box->x + box->width &&
+		x + myBoundBox->x + myBoundBox->width > box->x &&
+		y + myBoundBox->y < box->y + box->height &&
+		y + myBoundBox->y + myBoundBox->height > box->y;
 }
 
-void Checkpoint::YouLose(Entity* accordingToMe)
-{
-    // Okay, I go away now
-    // but, register as taken!
-    SerialManager::Instance().GetJsonData()["serialized_data"][serial] = true;
-    SerialManager::Instance().SaveData();
-    delete this;
-}
+void Checkpoint::YouLose(Entity* accordingToMe) {}

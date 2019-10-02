@@ -24,4 +24,5 @@ class Checkpoint : public Entity
 
     private:
         SpriteSheetIO* sprSheet;
+        BoundBox* myBoundBox;
 };

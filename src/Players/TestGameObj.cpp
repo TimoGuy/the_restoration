@@ -6,6 +6,7 @@
 #include "Trigger.h"
 #include "MovingPlatGround.h"
 #include "FuelIncreaserItem.h"
+#include "Checkpoint.h"
 #include "InputManager.h"
 #include "SerialManager.h"
 #include "Textbox.h"
@@ -24,6 +25,7 @@
 #include "../../include/Players/Trigger.h"
 #include "../../include/Players/MovingPlatGround.h"
 #include "../../include/Players/FuelIncreaserItem.h"
+#include "../../include/Players/Checkpoint.h"
 #include "../../include/InputManager.h"
 #include "../../include/SerialManager.h"
 #include "../../include/Players/Textbox.h"
@@ -322,6 +324,14 @@ void TestGameObj::Update()
 				_Knockback(hsp > 0);
 			}
 
+            // Check for checkpoints
+            else if (dynamic_cast<Checkpoint*>(tempCollisions.at(i)) != NULL)
+            {
+                // Set the checkpoint to this!
+                UpdateStartCoords();
+                room->SetCheckpoint((Checkpoint*)tempCollisions.at(i));
+            }
+
 			// Check for exits
 			else if (dynamic_cast<Trigger*>(tempCollisions.at(i)) != NULL)
 			{
@@ -398,6 +408,7 @@ void TestGameObj::Update()
                         );
                         ent->YouLose(this);
                     }
+                    else if (dynamic_cast<Checkpoint*>(ent) != NULL) {}
                     else
                     {
                         // You got hit???
@@ -569,12 +580,13 @@ void TestGameObj::Render()
         glColor3f(1, 1, 1);
 	}
 
-    if (InputManager::Instance().b4())
-    {
-        // Draw startcoords marker
-        glColor4f(0.5f, 0, 0, 1);
-        startCoords->Render(startX, startY);
-    }
+    // TODO startcoords maroon box
+    // if (InputManager::Instance().b4())
+    // {
+    //     // Draw startcoords marker
+    //     glColor4f(0.5f, 0, 0, 1);
+    //     startCoords->Render(startX, startY);
+    // }
 
 
     // Render any message boxes!!!
