@@ -92,6 +92,7 @@
 		<Unit filename="include/Lib/stb_image.h" />
 		<Unit filename="include/Object.h" />
 		<Unit filename="include/ObjectFactory.h" />
+		<Unit filename="include/Players/Checkpoint.h" />
 		<Unit filename="include/Players/Entity.h" />
 		<Unit filename="include/Players/FuelIncreaserItem.h" />
 		<Unit filename="include/Players/Ground.h" />
@@ -128,6 +129,7 @@
 		</Unit>
 		<Unit filename="src/Object.cpp" />
 		<Unit filename="src/ObjectFactory.cpp" />
+		<Unit filename="src/Players/Checkpoint.cpp" />
 		<Unit filename="src/Players/Entity.cpp" />
 		<Unit filename="src/Players/FuelIncreaserItem.cpp" />
 		<Unit filename="src/Players/Ground.cpp" />

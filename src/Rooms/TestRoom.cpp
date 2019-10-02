@@ -3,6 +3,7 @@
 #include "TestRoom.h"
 #include "Players/TestGameObj.h"
 #include "Trigger.h"
+#include "Checkpoint.h"
 #include "Lib/Texture.h"
 #include "ObjectFactory.h"
 #include <SDL2/SDL_opengl.h>
@@ -21,6 +22,7 @@
 #include "../../include/Rooms/TestRoom.h"
 #include "../../include/Players/TestGameObj.h"
 #include "../../include/Players/Trigger.h"
+#include "../../include/Players/Checkpoint.h"
 #include "../../include/Lib/Texture.h"
 #include "../../include/ObjectFactory.h"
 #include <SDL_opengl.h>
@@ -108,6 +110,7 @@ TestRoom::TestRoom(std::string name, GameLoop* gloop, int playerGX, int playerGY
 
 
 	// To set up the player
+	currentChkpt = NULL;
 	for (unsigned int i = 0; i < gameObjects.size(); i++)
 	{
 		// Look for the player!!!
@@ -733,5 +736,15 @@ void TestRoom::AddCamOffCoords(float offx, float offy)
 std::string TestRoom::GetLevelName()
 {
     return currentLvl;
+}
+
+void TestRoom::SetCheckpoint(Checkpoint* chkPt)
+{
+	this->currentChkpt = chkPt;
+}
+
+Checkpoint* TestRoom::GetCheckpoint()
+{
+	return currentChkpt;
 }
 

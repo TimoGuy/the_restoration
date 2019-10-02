@@ -1,0 +1,33 @@
+{
+    "sprites" : {
+        "sprite_sheet" : {
+            "image" : ".data/images/checkpoint.png",
+            "width" : 64,
+            "height" : 64,
+            "render_width" : 32,
+            "render_height" : 32,
+            "render_off_x" : 0,
+            "render_off_y" : 0
+        },
+        "off" : {
+            "ticks_per_frame" : 1,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "gx": 0,
+                    "gy": 0
+                }
+            }
+        },
+        "on" : {
+            "ticks_per_frame" : 1,
+            "repeat" : false,
+            "images" : {
+                "0" : {
+                    "gx": 1,
+                    "gy": 0
+                }
+            }
+        }
+    }
+}

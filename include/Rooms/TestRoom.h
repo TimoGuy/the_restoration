@@ -14,6 +14,7 @@ class Object;
 class Entity;
 class TileSet;
 class Cutscene;
+class Checkpoint;
 
 #include <stdio.h>
 #include <iostream>
@@ -46,6 +47,9 @@ class TestRoom : public Room
         void AddCamOffCoords(float offx, float offy);
 
         std::string GetLevelName();
+
+        void SetCheckpoint(Checkpoint* chkPt);
+        Checkpoint* GetCheckpoint();
 
     protected:
 
@@ -88,4 +92,7 @@ class TestRoom : public Room
 		float camOffX = 0,						// For moving the cam manually
 			camOffY = 0;
 		float camScale = 1;						// For setting size of cam view
+
+        // Checkpoint
+        Checkpoint* currentChkpt;
 };
