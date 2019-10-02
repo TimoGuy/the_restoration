@@ -14,7 +14,7 @@
 #include "../../include/Shape/Quad.h"
 #endif
 
-Hazard::Hazard(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, false)
+Hazard::Hazard(int gx, int gy, TestRoom* rm) : Object(gx, gy, rm, true)
 {
     // Init
     image = new Quad(GRID_SIZE, GRID_SIZE, new Texture(std::string(".data/textures/hazard_test.png"), STBI_rgb_alpha));
