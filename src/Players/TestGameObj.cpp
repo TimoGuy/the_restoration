@@ -175,6 +175,13 @@ void TestGameObj::Update()
             else if (inputX > 0) isSwordLeft = false;
         }
 	}
+    // TODO if wanted eh
+    // else
+    // {
+    //     // Undo any delayed requests
+    //     requestJump = false;
+    // }
+
 
 
 
@@ -253,9 +260,18 @@ void TestGameObj::Update()
 		vsp += GRAV * room->GetGameLoop()->GetGlobalTime();
 
 
-	// Jump!
+
+
+    // Jump input
 	if (inputJump && numJumps > 0 && !wasJumpBtnAlreadyPressed)
+    {
+        requestJump = true;
+    }
+
+	// Jump!
+    if (requestJump && vsp >= 0)
 	{
+        requestJump = false;
         sprSheet->ForceAnimationFrameReset();
 		vsp = -JUMP_HEIGHT - nerfer;
 		//vsp = -JUMP_HEIGHT_2B - nerfer;
@@ -465,8 +481,6 @@ void TestGameObj::Update()
 	// even after you fall off of the world,
 	// you can still jump once (or how many
 	// jumps you have unlocked))
-	//
-	// Bc now it's more of a rocket-jumping game!
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
 		if (!isUsingMySword)

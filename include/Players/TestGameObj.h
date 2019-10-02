@@ -48,6 +48,7 @@ class TestGameObj : public Entity
 
 		int numJumps = 0;
 		bool wasJumpBtnAlreadyPressed = false;
+        bool requestJump = false;
 
 		int framesOfInvincibility = 0;      // This counts down until 0, wherewith you are not invincible anymore
 
