@@ -104,8 +104,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 	y += PLAYER_YOFF;
 
 
-    startX = x;
-    startY = y;
+    UpdateStartCoords();
     outHsp = outVsp = 0;
     lifeRechargeTicks = 0;
 }
@@ -466,7 +465,6 @@ void TestGameObj::Update()
 				);
 
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
-		UpdateStartCoords();
         isMidair = false;
 	}
     else
