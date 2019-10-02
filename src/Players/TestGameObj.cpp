@@ -423,9 +423,10 @@ void TestGameObj::Update()
 
 
 
-    if (y > room->getGHeight() * GRID_SIZE)
+    if (InputManager::Instance().b6())
     {
-        // Fell out of the screen!!?!?!?
+        // I'm dying?!?!?!?!?
+        // (NOTE: player must forfeit their life... there is no automagic reset)
         die = true;
     }
 

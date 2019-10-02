@@ -31,6 +31,7 @@ class InputManager
 		const bool& b3() const { return _b3; }
 		const bool& b4() const { return _b4; }
 		const bool& b5() const { return _b5; }
+		const bool& b6() const { return _b6; }
 
 
 		// Only beta eh!
@@ -57,6 +58,7 @@ class InputManager
 		bool _b3 = false;		// Look around (hold to look around the level eh)
 		bool _b4 = true;		// DEBUG TAME: causes the original blocks to show up.		(NOTE: this TOGGLES too!!!)
         bool _b5 = false;       // Slow motion
+        bool _b6 = false;       // Reset player (forfeit.. only way to restart a level)
 
 		// TEST: For debugging
 		bool _reloadRes = false;	// This is the 'r' button which will trigger a 'reload the room' signal
