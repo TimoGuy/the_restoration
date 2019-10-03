@@ -118,6 +118,7 @@
 		<Unit filename="include/json/json-forwards.h" />
 		<Unit filename="include/json/json.h" />
 		<Unit filename="include/ui/LifeBar.h" />
+		<Unit filename="include/ui/Minimap.h" />
 		<Unit filename="include/ui/StaminaBar.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/GameLoop.cpp" />
@@ -152,6 +153,7 @@
 		<Unit filename="src/Shape/Quad.cpp" />
 		<Unit filename="src/jsoncpp.cpp" />
 		<Unit filename="src/ui/LifeBar.cpp" />
+		<Unit filename="src/ui/Minimap.cpp" />
 		<Unit filename="src/ui/StaminaBar.cpp" />
 		<Extensions>
 			<code_completion />
