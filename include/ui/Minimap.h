@@ -2,18 +2,16 @@
 
 class Texture;
 
+#include <string>
 
 class Minimap
 {
     public:
-        Minimap();
+        Minimap(std::string picFname);
         virtual ~Minimap();
 
-        void Render(int currentStaminas, float x, float y);
+        void Render(float rendX, float rendY, int centGX, int centGY);
     protected:
     private:
-        // For rendering
-        float currentStaminas_asFloat;      // This is to animate the object
-        Texture* spriteSheetBorder;
-        Texture* spriteSheetFilling;
+        Texture* mapTexture;
 };

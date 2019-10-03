@@ -14,6 +14,7 @@
 #include "SerialManager.h"
 #include "LifeBar.h"
 #include "StaminaBar.h"
+#include "Minimap.h"
 
 
 #include "TestMiniboss_Enemy.h"
@@ -33,6 +34,7 @@
 #include "../../include/SerialManager.h"
 #include "../../include/ui/LifeBar.h"
 #include "../../include/ui/StaminaBar.h"
+#include "../../include/ui/Minimap.h"
 
 #include "../../include/Players/TestMiniboss_Enemy.h"
 #endif
@@ -375,9 +377,7 @@ void TestRoom::Render()
 	// Reset stuff!
 	glLoadIdentity();
 
-	
-	
-	// Now render the HUD!!!
+
 
 	// Setup screen transitioner, if needed ;)
 	if (screenTransition == NULL ||
@@ -389,13 +389,28 @@ void TestRoom::Render()
 	}
 
 
+	// Now render the HUD!!!
 
-	// Render health and stamina
+	// Render minimap, health, and stamina
 	if (camFocusObj != NULL)
 	{
 #define ONE_STAMINA_SIZE 24
 #define ONE_STAMINA_PADDING 8
 #define HUD_PADDING_SIZE 4
+
+
+        // Render minimap
+        {
+            #define MM_SIZE 250
+            float xoff = -HUD_PADDING_SIZE - MM_SIZE;
+            float yoff = -16 - HUD_PADDING_SIZE - HUD_PADDING_SIZE - MM_SIZE;
+            minimap->Render(
+                screenTransition->GetWidth() / 2 + xoff,
+                screenTransition->GetHeight() / 2 + yoff,
+                camFocusObj->getX() / GRID_SIZE,
+                camFocusObj->getY() / GRID_SIZE
+            );
+        }
 
 		// Render health!!!
 		int currentHealth = SerialManager::Instance().GetGameData_Int(
@@ -501,6 +516,13 @@ bool TestRoom::LoadLevelIO(std::string name)
 		}
 
 
+		// Load minimap
+        const std::string& fileName =
+                    currentDir +
+                        lvlData["textures"]["entities"].asString();
+        minimap = new Minimap(fileName);
+
+
 		// Load collision picture ("entities")
 		// (I'm expecting it's there!!!)
 		if (lvlData["textures"].isMember("entities") &&
@@ -509,9 +531,6 @@ bool TestRoom::LoadLevelIO(std::string name)
 #pragma region Load Collision Picture
 			// Load a picture of the level
 			int comp;
-			const std::string& fileName =
-				currentDir +
-					lvlData["textures"]["entities"].asString();
 			int req = STBI_rgb;
 			unsigned char* imgData = stbi_load(fileName.c_str(), &gWidth, &gHeight, &comp, req);
 

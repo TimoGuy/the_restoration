@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
+//#include <SDL2/SDL_mixer.h>
 #include "GameLoop.h"
 #include "InputManager.h"
 #include "defs.h"
@@ -47,11 +47,11 @@ bool Setup()
         return false;
     }
 
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-    {
-        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-        return false;
-    }
+//    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+//    {
+//        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+//        return false;
+//    }
 
 
     // Create window!
@@ -99,7 +99,7 @@ void Destruct()
     SDL_Quit();
 
     TTF_Quit();
-    Mix_Quit();
+//    Mix_Quit();
 
     window = NULL;
 }

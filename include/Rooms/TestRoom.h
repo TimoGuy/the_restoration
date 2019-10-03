@@ -15,6 +15,7 @@ class Entity;
 class TileSet;
 class Cutscene;
 class Checkpoint;
+class Minimap;
 
 #include <stdio.h>
 #include <iostream>
@@ -74,7 +75,7 @@ class TestRoom : public Room
         // Level-loading
         std::string currentLvl;
 		std::string currentLvlFilename;
-        
+
 
 		bool LoadLevelIO(std::string name);       // This is the thing after the "n_"
 
@@ -95,4 +96,7 @@ class TestRoom : public Room
 
         // Checkpoint
         Checkpoint* currentChkpt;
+
+        // Minimap
+        Minimap* minimap;
 };
