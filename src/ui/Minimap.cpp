@@ -33,12 +33,10 @@ void Minimap::Render(float rendX, float rendY, int centGX, int centGY)
     stretchX -= stretchW / 2.0f;
     stretchY -= stretchH / 2.0f;
 
-//    stretchW = stretchH = true;
-
     // Setup render
     glEnable(GL_TEXTURE_2D);
     mapTexture->Bind(0);
-    glColor4f(1, 1, 1, 1);
+    glColor4f(1, 1, 1, 0.5f);
 
     // Render
     glBegin(GL_QUADS);
@@ -60,7 +58,19 @@ void Minimap::Render(float rendX, float rendY, int centGX, int centGY)
     // Undo this mess eh!
     glDisable(GL_TEXTURE_2D);
 
+    
+    // Render crosshairs
+    glColor4f(1, 0.5f, 0, 1);
 
+    glBegin(GL_LINES);
+
+    glVertex2f(rendX, rendY + MM_SIZE / 2.0f);
+    glVertex2f(rendX + MM_SIZE, rendY + MM_SIZE / 2.0f);
+
+    glVertex2f(rendX + MM_SIZE / 2.0f, rendY);
+    glVertex2f(rendX + MM_SIZE / 2.0f, rendY + MM_SIZE);
+
+    glEnd();
 
 
 
