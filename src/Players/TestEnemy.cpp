@@ -28,6 +28,7 @@ TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm)
 TestEnemy::TestEnemy(int gx, int gy, TestRoom* rm, std::string fname)
     : Entity(gx, gy, rm, true)
 {
+    actionChanged = false;
     currentAction = 0;
 	isHazardous = false;
 	isFacingLeft = true;
@@ -107,7 +108,7 @@ void TestEnemy::Update()
     if (currentAction == 0)
     {
         // Init
-        currentAction = STATE_IDLE;
+        SetAction(STATE_IDLE);
     }
     else if (currentAction == STATE_IDLE &&
             !props["actions"]["target"].isNull())
@@ -116,7 +117,7 @@ void TestEnemy::Update()
         if (IsTargetInBounds(props["actions"]["target_dist"].asFloat()))
         {
             // That means at least targeted!
-			currentAction = STATE_TARGET;
+            SetAction(STATE_TARGET);
         }
     }
     else if (currentAction == STATE_TARGET ||
@@ -128,14 +129,14 @@ void TestEnemy::Update()
         if (IsTargetInBounds(props["actions"]["attack_dist"].asFloat()))
         {
             // Let's start the attack sequence!!!
-			currentAction = STATE_ATTACK;
+            SetAction(STATE_ATTACK);
             attackPhase = 0;        // First attack phase!
             attackPhase_tick = 0;
         }
         else if (!IsTargetInBounds(props["actions"]["target_dist"].asFloat()))
         {
             // Target bounds,,, left them :(
-			currentAction = STATE_IDLE;
+            SetAction(STATE_IDLE);
         }
     }
     else if (currentAction == STATE_ATTACK)
@@ -293,13 +294,21 @@ void TestEnemy::ProcessAction(std::string actionName, Json::Value actionArgs, bo
 	// Assign movement behavior eh
 	if (actionName == "none")
 	{
-		// Do nothing eh
-		hsp = vsp = 0;
+        if (actionChanged)
+        {
+		    // Do nothing eh
+            actionChanged = false;
+		    hsp = vsp = 0;
+        }
 	}
 	else if (actionName == "face_player")
 	{
 		isFacingLeft = targetEnt->getX() < x;
-		hsp = vsp = 0;
+        if (actionChanged)
+        {
+            actionChanged = false;
+		    hsp = vsp = 0;
+        }
 	}
 	else if (actionName == "move_towards_player")
 	{
@@ -378,4 +387,10 @@ bool TestEnemy::IsTargetInBounds(float gridRadius)
     // The distance would be smaller (in
     // bounds) than the expected distance
     return distanceBound * distanceBound > deltX * deltX + deltY * deltY;
+}
+
+void TestEnemy::SetAction(int action)
+{
+    currentAction = action;
+    actionChanged = true;
 }

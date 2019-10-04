@@ -38,7 +38,10 @@ private:
 	Entity* targetEnt;
     float life;
 
+	bool actionChanged;
 	int currentAction;
+	void SetAction(int action);
+
 	int attackPhase;
 	int attackPhase_tick;
 	bool requestToNextAttackPhase;

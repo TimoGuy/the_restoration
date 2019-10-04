@@ -184,7 +184,7 @@
         "action" : "move_towards_player",
         "action_args" : {
           "hsp" : 16,
-          "vsp" : 0.125,
+          "vsp" : 1,
           "change_direction" : true,
           "until_near" : {
             "within_dist" : 3.5
