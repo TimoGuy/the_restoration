@@ -59,6 +59,12 @@ struct _RenderingBounds
     #define SS_CELL_HEIGHT 64.0
 
     float s, t, s2, t2;
+	
+	_RenderingBounds()
+	{
+		s = t = s2 = t2 = 0;
+	}
+
     void SetBoundsFromGridPos(float gx, float gy)
     {
         s = (gx * SS_CELL_WIDTH) / SS_WIDTH;

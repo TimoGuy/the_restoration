@@ -156,6 +156,12 @@
     <ClInclude Include="..\include\ui\LifeBar.h">
       <Filter>Header Files\ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ui\Minimap.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Players\Checkpoint.h">
+      <Filter>Header Files\Players</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Lib\Texture.cpp">
@@ -249,6 +255,12 @@
       <Filter>Source Files\ui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\LifeBar.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Players\Checkpoint.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\Minimap.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>

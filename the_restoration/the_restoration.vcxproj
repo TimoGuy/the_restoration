@@ -133,6 +133,7 @@
     <ClInclude Include="..\include\Lib\Texture.h" />
     <ClInclude Include="..\include\Object.h" />
     <ClInclude Include="..\include\ObjectFactory.h" />
+    <ClInclude Include="..\include\Players\Checkpoint.h" />
     <ClInclude Include="..\include\Players\Entity.h" />
     <ClInclude Include="..\include\Players\FuelIncreaserItem.h" />
     <ClInclude Include="..\include\Players\Ground.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="..\include\SerialManager.h" />
     <ClInclude Include="..\include\Shape\Quad.h" />
     <ClInclude Include="..\include\ui\LifeBar.h" />
+    <ClInclude Include="..\include\ui\Minimap.h" />
     <ClInclude Include="..\include\ui\StaminaBar.h" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +169,7 @@
     <ClCompile Include="..\src\Lib\Texture.cpp" />
     <ClCompile Include="..\src\Object.cpp" />
     <ClCompile Include="..\src\ObjectFactory.cpp" />
+    <ClCompile Include="..\src\Players\Checkpoint.cpp" />
     <ClCompile Include="..\src\Players\Entity.cpp" />
     <ClCompile Include="..\src\Players\FuelIncreaserItem.cpp" />
     <ClCompile Include="..\src\Players\Ground.cpp" />
@@ -188,6 +191,7 @@
     <ClCompile Include="..\src\Rooms\TileSet.cpp" />
     <ClCompile Include="..\src\Shape\Quad.cpp" />
     <ClCompile Include="..\src\ui\LifeBar.cpp" />
+    <ClCompile Include="..\src\ui\Minimap.cpp" />
     <ClCompile Include="..\src\ui\StaminaBar.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
