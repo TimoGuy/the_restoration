@@ -202,6 +202,7 @@ void TestRoom::ScreenFadeIn(SDL_Color fadeOutColor)
 
 
 float camHsp = 0, camVsp = 0;
+float actCamOffX = 0, actCamOffY = 0;
 
 void TestRoom::Update()
 {
@@ -226,8 +227,12 @@ void TestRoom::Update()
     // DEBUG:: do a fancy camera trick!
     if (InputManager::Instance().b4())
     {
-        camX = camFocusObj->getX() + camReqOffX;
-        camY = camFocusObj->getY() + camReqOffY;
+        actCamOffX += (camReqOffX - actCamOffX) / 20.0f;
+        actCamOffY += (camReqOffY - actCamOffY) / 20.0f;
+
+		// Lerp
+		camX = camFocusObj->getX() + actCamOffX;
+        camY = camFocusObj->getY() + actCamOffY;
     }
     else
     {

@@ -222,8 +222,7 @@ void TestGameObj::Update()
         if (std::abs(hsp) > MAX_HSP)
         {
             // Dash refocus cam!
-            int w, h;
-            room->GetGameLoop()->GetWindowDimensions(w, h);
+            int w = SCREEN_WIDTH;
             room->AddCamOffCoords(w / 2.5f * multiplier, 0);
         }
     }
