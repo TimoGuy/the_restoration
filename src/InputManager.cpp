@@ -132,7 +132,7 @@ void InputManager::ProcessInput(GameLoop* g)
 
 
 
-                case SDLK_j:
+                case SDLK_SPACE:
                     _b1 = true;
                     break;
 
@@ -140,11 +140,11 @@ void InputManager::ProcessInput(GameLoop* g)
                     _b2 = true;
                     break;
 
-				case SDLK_SPACE:
-					_b3 = true;
-					break;
+				// case SDLK_SPACE:
+				// 	_b3 = true;
+				// 	break;
 
-				case SDLK_l:
+				case SDLK_j:
 					_b5 = true;
 					break;
 
@@ -185,7 +185,7 @@ void InputManager::ProcessInput(GameLoop* g)
 
 
 
-                case SDLK_j:
+                case SDLK_SPACE:
                     _b1 = false;
                     break;
 
@@ -193,11 +193,11 @@ void InputManager::ProcessInput(GameLoop* g)
                     _b2 = false;
                     break;
 
-				case SDLK_SPACE:
-					_b3 = false;
-					break;
+				// case SDLK_SPACE:
+				// 	_b3 = false;
+				// 	break;
 
-				case SDLK_l:
+				case SDLK_j:
 					_b5 = false;
 					break;
 
