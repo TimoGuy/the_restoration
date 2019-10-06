@@ -731,7 +731,8 @@ void TestGameObj::_SlowMotionUpdate()
 void TestGameObj::_RocketSpeedUpdate()
 {
     // Look for the input for it eh!
-    if (InputManager::Instance().b5())
+    if (InputManager::Instance().b5() &&
+        framesOfInvincibility <= CAN_MOVE_FRAMES)
     {
         _isRocketSpeed = true;
         int flipped = isSwordLeft ? -1 : 1;
