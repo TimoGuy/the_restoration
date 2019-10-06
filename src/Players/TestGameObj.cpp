@@ -167,7 +167,8 @@ void TestGameObj::Update()
 		inputJump = InputManager::Instance().b2();
 		isUsingMySword = IsUsingSword();
 
-		if (!isUsingMySword)
+		if (!isUsingMySword &&
+            !_isRocketSpeed)
         {
             // Thus you can't change facing direction
             // while you're holding out your sword!
@@ -196,26 +197,36 @@ void TestGameObj::Update()
         multiplier = 1;
     }
 
-	bool forceMovement =
-		(isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK + 1);			// Now you will have the camera pop when you're done charging!
-    if (forceMovement)
+    if (!InputManager::Instance().b4())
     {
-        // If you use the sword (and it's the attacking frame), it just 'pops' out!
-        reqCamOffx = MAX_CAM_OFFSET_X * multiplier;
+        bool forceMovement =
+            (isUsingMySword && swordTicksLeft == SWORD_DAMAGE_TICK + 1);			// Now you will have the camera pop when you're done charging!
+        if (forceMovement)
+        {
+            // If you use the sword (and it's the attacking frame), it just 'pops' out!
+            reqCamOffx = MAX_CAM_OFFSET_X * multiplier;
+        }
+        else
+        {
+            reqCamOffx += CAM_X_MVTMENT_SPEED * multiplier + hsp / 10.0f;
+            if (reqCamOffx > MAX_CAM_OFFSET_X)
+                reqCamOffx = MAX_CAM_OFFSET_X;
+            else if (reqCamOffx < -MAX_CAM_OFFSET_X)
+                reqCamOffx = -MAX_CAM_OFFSET_X;
+        }
+
+        room->AddCamOffCoords(reqCamOffx, 0);
     }
     else
     {
-        reqCamOffx += CAM_X_MVTMENT_SPEED * multiplier + hsp / 10.0f;
-        if (reqCamOffx > MAX_CAM_OFFSET_X)
-            reqCamOffx = MAX_CAM_OFFSET_X;
-        else if (reqCamOffx < -MAX_CAM_OFFSET_X)
-            reqCamOffx = -MAX_CAM_OFFSET_X;
+        if (std::abs(hsp) > MAX_HSP)
+        {
+            // Dash refocus cam!
+            int w, h;
+            room->GetGameLoop()->GetWindowDimensions(w, h);
+            room->AddCamOffCoords(w / 2.5f * multiplier, 0);
+        }
     }
-
-    room->AddCamOffCoords(reqCamOffx, 0);
-
-
-
 
 
 
@@ -720,25 +731,20 @@ void TestGameObj::_SlowMotionUpdate()
 
 void TestGameObj::_RocketSpeedUpdate()
 {
-	if (_isRocketSpeed)
-	{
-		// Cancel it out if too slow
-		// (into the regular range again eh!)
-		if (std::abs(hsp) <= MAX_HSP)
-		{
-			_isRocketSpeed = false;
-		}
-	}
-	else
-	{
-		// Look for the input for it eh!
-		if (InputManager::Instance().b5())
-		{
-			_isRocketSpeed = true;
-			int flipped = isSwordLeft ? -1 : 1;
-			hsp = MAX_HSP_FAST * flipped;
-		}
-	}
+    // Look for the input for it eh!
+    if (InputManager::Instance().b5())
+    {
+        _isRocketSpeed = true;
+        int flipped = isSwordLeft ? -1 : 1;
+        hsp = MAX_HSP_FAST * flipped;
+    }
+    // Cancel it out if too slow
+    // (into the regular range again eh!)
+    else if (!InputManager::Instance().b5() ||
+        std::abs(hsp) <= MAX_HSP)
+    {
+        _isRocketSpeed = false;
+    }
 }
 
 void TestGameObj::_Knockback(bool toLeft)

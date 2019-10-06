@@ -226,8 +226,8 @@ void TestRoom::Update()
     // DEBUG:: do a fancy camera trick!
     if (InputManager::Instance().b4())
     {
-        camX = camFocusObj->getX();
-        camY = camFocusObj->getY();
+        camX = camFocusObj->getX() + camReqOffX;
+        camY = camFocusObj->getY() + camReqOffY;
     }
     else
     {
@@ -266,39 +266,40 @@ void TestRoom::Update()
 		camY = std::max(h / 2.0f, std::min(camY, (float)gHeight * GRID_SIZE - h / 2.0f));
 	}
 
-
-	// Offset the camera!!!
+	if (!InputManager::Instance().b4())
+	{
+		// Offset the camera!!!
 #define CAM_MOVE_MULTIPLIER 2.5
 #define CAM_SCALE_MULTIPLIER 0.05f
-	if (InputManager::Instance().b3())
-	{
-		// Move!!!!
-		camOffX += InputManager::Instance().x() / camScale * CAM_MOVE_MULTIPLIER;
-		camOffY += InputManager::Instance().y() / camScale * CAM_MOVE_MULTIPLIER;
-
-		// Scale!!
-		if (InputManager::Instance().b1())
+		if (InputManager::Instance().b3())
 		{
-			camScale -= CAM_SCALE_MULTIPLIER;	// Zoom out
+			// Move!!!!
+			camOffX += InputManager::Instance().x() / camScale * CAM_MOVE_MULTIPLIER;
+			camOffY += InputManager::Instance().y() / camScale * CAM_MOVE_MULTIPLIER;
+
+			// Scale!!
+			if (InputManager::Instance().b1())
+			{
+				camScale -= CAM_SCALE_MULTIPLIER;	// Zoom out
+			}
+			else if (InputManager::Instance().b2())
+			{
+				camScale += CAM_SCALE_MULTIPLIER;	// Zoom in
+			}
+
+			camScale = std::max(0.01f, camScale);
 		}
-		else if (InputManager::Instance().b2())
+		else
 		{
-			camScale += CAM_SCALE_MULTIPLIER;	// Zoom in
+			// Reset the camera since you let go of manipulation button
+			camOffX = camOffY = 0;
+			camScale = 1;
 		}
 
-		camScale = std::max(0.01f, camScale);
+		// Update the debug mvtment camera
+		camX += camOffX;
+		camY += camOffY;
 	}
-	else
-	{
-		// Reset the camera since you let go of manipulation button
-		camOffX = camOffY = 0;
-		camScale = 1;
-	}
-
-	// Update the debug mvtment camera
-	camX += camOffX;
-    camY += camOffY;
-
 
 
 
