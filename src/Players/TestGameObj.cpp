@@ -493,12 +493,11 @@ void TestGameObj::Update()
 	// jumps you have unlocked))
 	if (CollideAtPos(round(x), round(y) + 1, image->GetWidth(), image->GetHeight(), &tempCollisionsToCheck, true))
 	{
-		if (!isUsingMySword)
-			numJumps =				// Reset number of jumps you can do
-				SerialManager::Instance().GetGameData_Int(
-                	"player_max_jumps",
-					GAME_VAR_DEF_player_max_jumps
-				);
+        numJumps =				// Reset number of jumps you can do
+            SerialManager::Instance().GetGameData_Int(
+                "player_max_jumps",
+                GAME_VAR_DEF_player_max_jumps
+            );
 
 		wasJumpBtnAlreadyPressed = false;	// This allows for hold-button-jumping!
         isMidair = false;
@@ -682,14 +681,13 @@ bool TestGameObj::IsUsingSword()
 	}
 
     // Can we start another cycle of sword?
-    if (numJumps > 0 && swordTicksLeft <= 0)		// Sword has to be finished for that eh!
+    if (swordTicksLeft <= 0)		// Sword has to be finished for that eh!
     {
         // Check if JUST pressed it!
         if (!prevB1Down && currentDown)
         {
-            // Go! But it uses a jump's worth of stamina eh
+            // Go!
             swordTicksLeft = SWORD_TICKS_HOLDING;
-            numJumps--;
         }
     }
 
