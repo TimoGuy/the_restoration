@@ -81,6 +81,7 @@ TestGameObj::TestGameObj(int gx, int gy, TestRoom* rm) : Entity(gx, gy, rm)
 	_wasSlowMotionTicks = 0;
 
 	_isRocketSpeed = false;
+    _rocketHoldTicks = 0;
 
     // Make image
     Texture* tempTex = new Texture(std::string(".data/test.png"), STBI_rgb_alpha);
@@ -118,10 +119,10 @@ TestGameObj::~TestGameObj()
 
 // Grav should be somewhere between 0.5 and 1.0
 #define GRAV 0.5f
-#define HSP_DELTA 2.5f
+#define HSP_DELTA 1.5f
 #define FRICTION 0.5f
-#define FRICTION_SLOW 2.5f
-#define HSP_WHEN_CONSIDERED_SLOW 5.5f
+#define FRICTION_SLOW 1.5f
+#define HSP_WHEN_CONSIDERED_SLOW 7.5f
 
 // 32px
 #define JUMP_HEIGHT 5.5f
@@ -136,8 +137,8 @@ TestGameObj::~TestGameObj()
 // 189px (192)
 #define JUMP_HEIGHT_6B 13.5f
 
-#define MAX_HSP 10.0f
-#define MAX_HSP_FAST 35.0f
+#define MAX_HSP 7.5f
+#define MAX_HSP_FAST 25.0f
 #define MAX_HSP_ATTACKING 2.5f
 #define MAX_FALL_SP 14.0f
 
@@ -219,7 +220,7 @@ void TestGameObj::Update()
     }
     else
     {
-        if (std::abs(hsp) > MAX_HSP)
+        if (std::abs(hsp) > MAX_HSP || _rocketHoldTicks > 0)
         {
             // Dash refocus cam!
             int w = SCREEN_WIDTH;
@@ -726,15 +727,23 @@ void TestGameObj::_SlowMotionUpdate()
 	prevB5Down = InputManager::Instance().b5();
 }
 
+#define NUM_TICKS_FOR_ROCKET_SPEED_ACTIVATE 30
 void TestGameObj::_RocketSpeedUpdate()
 {
     // Look for the input for it eh!
     if (InputManager::Instance().b5() &&
         framesOfInvincibility <= CAN_MOVE_FRAMES)
     {
-        _isRocketSpeed = true;
-        int flipped = isSwordLeft ? -1 : 1;
-        hsp = MAX_HSP_FAST * flipped;
+        if (_rocketHoldTicks < NUM_TICKS_FOR_ROCKET_SPEED_ACTIVATE)
+        {
+            _rocketHoldTicks++;
+        }
+        else
+        {
+            _isRocketSpeed = true;
+            int flipped = isSwordLeft ? -1 : 1;
+            hsp = MAX_HSP_FAST * flipped;
+        }
     }
     // Cancel it out if too slow
     // (into the regular range again eh!)
@@ -742,6 +751,7 @@ void TestGameObj::_RocketSpeedUpdate()
         std::abs(hsp) <= MAX_HSP)
     {
         _isRocketSpeed = false;
+        _rocketHoldTicks = 0;
     }
 }
 
